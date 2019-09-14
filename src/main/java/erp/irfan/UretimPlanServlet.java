@@ -78,7 +78,7 @@ public class UretimPlanServlet extends HttpServlet implements Serializable {
             }
         }
 
-        excelsql = "SELECT * FROM irfan.uretimplantum_plan WHERE tamamlandi=1 " + filter0;
+        excelsql = "SELECT * FROM " + BaseDao.V_URETIMPLAN_TUM_PLAN + " WHERE tamamlandi=1 " + filter0;
         logger.info("planservlet: " + excelsql);
 
         List<HataSebep> hatasebep = hataDao.hataSebepListeGetir();
@@ -88,7 +88,7 @@ public class UretimPlanServlet extends HttpServlet implements Serializable {
         List<Firma> firma =  firmaDao.firmaListeGetirTum(0);
         List<Mamul> mamul = mamulDao.mamulListeGetir(null, 0);
         
-        int totalrecord = daoFunctions.recordCount("uretimplantum"," where tamamlandi=1 " + filter0);
+        int totalrecord = daoFunctions.recordCount(BaseDao.V_URETIMPLAN_TUM," where tamamlandi=1 " + filter0);
         int page = 1;
         if(request.getParameter("page") != null)
             page = Integer.parseInt(request.getParameter("page"));

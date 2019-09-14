@@ -1,8 +1,10 @@
 package erp.dao;
 
+import com.sun.xml.internal.rngom.parse.host.Base;
 import erp.irfan.ConnectionManager;
 import erp.irfan.entity.Calisan;
 import erp.irfan.entity.Genel;
+import erp.util.Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,16 +24,55 @@ public class CalisanDao implements Serializable, BaseDao {
     ConnectionManager connectionManager;
     private static final Logger logger = LoggerFactory.getLogger(CalisanDao.class);
 
-    public String calisanGuncelle(String id, String ad, String soyad, String gorev, String durum) {
-        Connection conn = connectionManager.getConnection();
-        String result = "0";
-        String updateQuery = "update irfan.calisan " + "set " + "ad = ? ," + "soyad  = ? ," + "gorev  = ? ,"
-                + "durum  = ? " + "where id = ?";
+    public List<Calisan> calisanListeGetirTum(int offset, Integer durum) {
+        List<Calisan> temp = new ArrayList<Calisan>();
+        String pageFilter = Util.getPageFilter (offset);
+        String durumFilter = (durum != null && durum == 1) ? " where durum = 1 " : "";
+        String searchQuery = "select * from " + BaseDao.CALISAN + durumFilter + " order by ad " + pageFilter;
 
         // connect to DB
-        PreparedStatement pstmt = null;
-        try {
-            pstmt = conn.prepareStatement(updateQuery);
+        ResultSet rs = null;
+        try (Connection conn = connectionManager.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(searchQuery)) {
+            logger.info(searchQuery);
+            rs = pstmt.executeQuery();
+            while (rs.next()) {
+                temp.add(new Calisan(rs));
+            }
+        } catch (SQLException e) {
+            logger.error("Error: " + e);
+        }
+        return temp;
+    }
+
+    public String calisanEkle(String ad, String soyad, String gorev) {
+        String retVal = "0";
+        String insertQuery = "insert into " + BaseDao.CALISAN + " (ad, soyad, gorev) values (?,?,?)";
+
+        // connect to DB
+        try (Connection conn = connectionManager.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(insertQuery)) {
+            pstmt.setString(1, ad);
+            pstmt.setString(2, soyad);
+            pstmt.setString(3, gorev);
+            logger.info(pstmt.toString());
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            logger.error("Error: " + e);
+            retVal = e.getMessage();
+        }
+        return retVal;
+    }
+
+    public String calisanGuncelle(String id, String ad, String soyad, String gorev, String durum) {
+        String result = "0";
+        String updateQuery = "update " + BaseDao.CALISAN
+                + " set ad =?, soyad =?, gorev =?, durum =?"
+                + " where id =?";
+
+        // connect to DB
+        try (Connection conn = connectionManager.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(updateQuery)) {
             pstmt.setString(1, ad);
             pstmt.setString(2, soyad);
             pstmt.setString(3, gorev);
@@ -42,89 +83,17 @@ public class CalisanDao implements Serializable, BaseDao {
         } catch (SQLException e) {
             logger.error("Error: " + e);
             result = e.getMessage();
-        } finally {
-            try {
-                if (pstmt != null) {
-                    pstmt.close();
-                }
-            } catch (SQLException e) {
-                logger.error("Error: " + e);
-            }
         }
         return result;
     }
 
-    public List<Calisan> calisanListeGetirTum(int offset, Integer durum) {
-        Connection conn = connectionManager.getConnection();
-        List<Calisan> temp = new ArrayList<Calisan>();
-
-        String pageFilter = (offset == 0) ? "" : " offset " + (offset - 1) * Genel.ROWPERPAGE + " limit " + Genel.ROWPERPAGE;
-        String durumFilter = (durum != null && durum == 1) ? " where durum = 1 " : "";
-        String searchQuery = "select * from irfan.calisan " + durumFilter + " order by ad ASC " + pageFilter;
-
-        // connect to DB
-        PreparedStatement pstmt = null;
-        ResultSet rs = null;
-        try {
-            logger.info(searchQuery);
-            pstmt = conn.prepareStatement(searchQuery);
-            rs = pstmt.executeQuery();
-            while (rs.next()) {
-                temp.add(new Calisan(rs.getInt("id"), rs.getString("ad"), rs.getString("soyad"), rs.getString("gorev"),
-                        rs.getInt("durum")));
-            }
-        } catch (SQLException e) {
-            logger.error("Error: " + e);
-        } finally {
-            try {
-                if (rs != null) {
-                    rs.close();
-                }
-            } catch (SQLException e) {
-                logger.error("Error: " + e);
-            }
-        }
-        return temp;
-    }
-
-    public String calisanEkle(String ad, String soyad, String gorev) {
-        Connection conn = connectionManager.getConnection();
-        String retVal = "0";
-        String insertQuery = "insert into irfan.calisan (ad, soyad, gorev) values (?,?,?) ";
-
-        // connect to DB
-        PreparedStatement pstmt = null;
-        try {
-            pstmt = conn.prepareStatement(insertQuery);
-            pstmt.setString(1, ad);
-            pstmt.setString(2, soyad);
-            pstmt.setString(3, gorev);
-            logger.info(pstmt.toString());
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            logger.error("Error: " + e);
-            retVal = e.getMessage();
-        } finally {
-            try {
-                if (pstmt != null) {
-                    pstmt.close();
-                }
-            } catch (SQLException e) {
-                logger.error("Error: " + e);
-            }
-        }
-        return retVal;
-    }
-
     public String calisanSil(String id) {
-        Connection conn = connectionManager.getConnection();
         String result = "0";
-        String updateQuery = "select irfan.calisan_sil(?)";
+        String updateQuery = "select " + BaseDao.F_CALISAN_SIL + "(?)";
         // connect to DB
-        PreparedStatement pstmt = null;
         ResultSet rs = null;
-        try {
-            pstmt = conn.prepareStatement(updateQuery);
+        try (Connection conn = connectionManager.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(updateQuery)) {
             pstmt.setInt(1, Integer.valueOf(id));
             logger.info(pstmt.toString());
 
@@ -135,14 +104,6 @@ public class CalisanDao implements Serializable, BaseDao {
         } catch (SQLException e) {
             logger.error("Error: " + e);
             result = e.getMessage();
-        } finally {
-            try {
-                if (pstmt != null) {
-                    pstmt.close();
-                }
-            } catch (SQLException e) {
-                logger.error("Error: " + e);
-            }
         }
         return result;
     }

@@ -20,40 +20,25 @@ public class LoginDao implements Serializable, BaseDao {
 
     public User login(String username, String password) {
         ResultSet rs = null;
-        PreparedStatement pstmt = null;
         User user = null;
-        String searchQuery = "select * from irfan.login where username=? and password=?";
+        String searchQuery = "select * from " + BaseDao.LOGIN + " where username=? and password=?";
 
-        try {
-            Connection currentCon = connectionManager.getConnection();
-            pstmt = currentCon.prepareStatement(searchQuery);
+        try (Connection currentCon = connectionManager.getConnection();
+             PreparedStatement pstmt = currentCon.prepareStatement(searchQuery)) {
             pstmt.setString(1, username);
             pstmt.setString(2, md5Dao(password));
             rs = pstmt.executeQuery();
             boolean more = rs.next();
-
             // if user does not exist set the isValid variable to false
             if (!more) {
                 System.out.println("Sorry, you are not a registered user! Please sign up first");
             }
             // if user exists set the isValid variable to true
             else {
-                user = new User(
-                        rs.getString("name"),
-                        rs.getString("surname"),
-                        rs.getString("username"),
-                        rs.getString("password"),
-                        rs.getInt("admin"),
-                        rs.getString("role")
-                );
+                user = new User(rs);
             }
         } catch (Exception ex) {
             ex.printStackTrace();
-        }
-        // some exception handling
-        finally {
-            rs = null;
-            pstmt = null;
         }
         return user;
     }

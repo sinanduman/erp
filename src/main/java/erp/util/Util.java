@@ -1,6 +1,7 @@
 package erp.util;
 
 import erp.irfan.entity.Aylar;
+import erp.irfan.entity.Genel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,6 +11,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Map;
 
 public class Util {
 
@@ -21,17 +23,16 @@ public class Util {
         if (bileseninfo == null)
             return null;
         else {
-            String[] returnValue = null;
+            String[] returnValue = bileseninfo.split("\\|");
             // 1: mamul ad, 2: mamul kod, 3: mamul agirlik 4: GKR No
-            returnValue = bileseninfo.split("\\|");
             return returnValue[type - 1].toString();
         }
     }
 
     public static String splitLine(String line, String delimeter, String newLineChar) {
         String[] tempArray = line.split(delimeter);
-        String retVal = "";
 
+        String retVal = "";
         String newLine = "";
         for (String word : tempArray) {
             retVal = retVal + newLine + word;
@@ -150,5 +151,14 @@ public class Util {
         } else {
             return null;
         }
+    }
+
+    public static String getPageFilter(int offset, Map<String, String> param) {
+        int rowperpage = (param == null || param.get("rowperpage") == null) ? Genel.ROWPERPAGE : Integer.valueOf(param.get("rowperpage"));
+        return (offset == 0) ? "" : " offset " + (offset - 1) * rowperpage + " limit " + rowperpage;
+    }
+
+    public static String getPageFilter(int offset){
+        return getPageFilter(offset, null);
     }
 }

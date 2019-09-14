@@ -31,7 +31,7 @@ public class BekleyenSiparisServlet extends HttpServlet implements Serializable 
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        List<Bilesen> bilesen = bilesenDao.bilesenListeGetirTum( BilesenTip.MAMUL,0 , null);
+        List<Bilesen> bilesen = bilesenDao.bilesenListeGetirTum( BilesenTip.MAMUL,0, null);
         List<Siparis> siparis = siparisDao.siparisListeGetir(SiparisTip.BEKLEYEN);
 
         request.setAttribute("bilesen", bilesen);

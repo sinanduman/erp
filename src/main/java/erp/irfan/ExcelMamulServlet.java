@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import erp.dao.BaseDao;
 import erp.dao.StokDao;
 import erp.irfan.entity.BilesenTip;
 import erp.util.Util;
@@ -56,7 +57,7 @@ public class ExcelMamulServlet extends HttpServlet implements Serializable {
         
         if(excelegonder!=null && excelegonder.equals("1")) {
 
-            int sumagg      = daoFunctions.recordAgg("stokmiktar", "sum", "miktar", " where bilesenid= " +  Integer.valueOf(excelsql));
+            int sumagg      = daoFunctions.recordAgg(BaseDao.V_STOKMIKTAR, "sum", "miktar", " where bilesenid= " +  Integer.valueOf(excelsql));
             List<Stok> stok = new ArrayList<Stok>();            
             stok   = stokDao.stokListeGetirTum(BilesenTip.MAMUL, Integer.valueOf(excelsql), 0, null);
             
@@ -64,8 +65,8 @@ public class ExcelMamulServlet extends HttpServlet implements Serializable {
             Sheet sheet = workbook.createSheet();
             
             int cnt         = 0;
-            Integer giren   = null;
-            Integer cikan   = null;
+            Long giren   = null;
+            Long cikan   = null;
             String not      = "";
             String urunkodu = "";
             String urunadi  = "";
@@ -106,10 +107,10 @@ public class ExcelMamulServlet extends HttpServlet implements Serializable {
                 not = (s.getNot()==null)?"":s.getNot();
                 if(s.getIslemyonu()==1){
                     giren = null;
-                    cikan = Integer.valueOf(s.getMiktar());
+                    cikan = Long.valueOf(s.getMiktar());
                 }
                 else{
-                    giren = Integer.valueOf(s.getMiktar());
+                    giren = Long.valueOf(s.getMiktar());
                     cikan = null;
                 }
                 data.put(++cnt, new Object[] {

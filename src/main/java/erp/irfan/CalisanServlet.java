@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import erp.dao.BaseDao;
 import erp.dao.CalisanDao;
 import erp.irfan.entity.Calisan;
 import erp.irfan.entity.Genel;
@@ -73,7 +74,7 @@ public class CalisanServlet extends HttpServlet implements Serializable {
         }
         if(!ajaxIncluded) {
             
-            int totalrecord = daoFunctions.recordCount("calisan","");
+            int totalrecord = daoFunctions.recordCount(BaseDao.CALISAN,"");
             int page = 1;
             if(request.getParameter("page") != null)
                 page = Integer.parseInt(request.getParameter("page"));

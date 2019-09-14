@@ -9,7 +9,6 @@ import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-@Singleton
 public class ConnectionManager implements Serializable {
 
     private Connection conn = null;

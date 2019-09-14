@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import erp.dao.BaseDao;
 import erp.dao.FirmaDao;
 import erp.dao.MamulDao;
 import erp.dao.StokDao;
@@ -40,7 +41,7 @@ public class MamulStokServlet extends HttpServlet implements Serializable {
     
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         
-        List<Mamul> mamul = mamulDao.mamulListeGetir(null, 0);
+        List<Mamul> mamul = mamulDao.mamulListeStokGetir(null, 0);
         List<Firma> firma = firmaDao.firmaListeGetirTum(0);
         
         List<Stok> stok = new ArrayList<Stok>();
@@ -57,9 +58,8 @@ public class MamulStokServlet extends HttpServlet implements Serializable {
             // PAGING
             // totalrecord = DAOFunctions.recordCount("stok"," where id= " +
             // stoklisteid);
-            totalrecord = daoFunctions.recordAgg("stok", "count", "*", " where bilesenid= " + Integer.valueOf(mamulid));
-            sumagg = daoFunctions.recordAgg("stokmiktar", "sum", "miktar",
-                            " where bilesenid= " + Integer.valueOf(mamulid));
+            totalrecord = daoFunctions.recordAgg(BaseDao.STOK, "count", "*", " where bilesenid= " + Integer.valueOf(mamulid));
+            sumagg = daoFunctions.recordAgg(BaseDao.V_STOKMIKTAR, "sum", "miktar"," where bilesenid= " + Integer.valueOf(mamulid));
             if (request.getParameter("page") != null)
                 page = Integer.parseInt(request.getParameter("page"));
             noofpages = (int) Math.ceil(totalrecord * 1.0 / Genel.ROWPERPAGE);
@@ -151,8 +151,8 @@ public class MamulStokServlet extends HttpServlet implements Serializable {
 
             // if(stoklisteid!=null && stoklisteid==1) {
             
-            totalrecord = daoFunctions.recordAgg("stok", "count", "*", " where bilesenid= " + Integer.valueOf(mamulid));
-            sumagg      = daoFunctions.recordAgg("stokmiktar", "sum", "miktar", " where bilesenid= " + Integer.valueOf(mamulid));
+            totalrecord = daoFunctions.recordAgg(BaseDao.STOK, "count", "*", " where bilesenid= " + Integer.valueOf(mamulid));
+            sumagg      = daoFunctions.recordAgg(BaseDao.V_STOKMIKTAR, "sum", "miktar", " where bilesenid= " + Integer.valueOf(mamulid));
             if (request.getParameter("page") != null)
                 page = Integer.parseInt(request.getParameter("page"));
             noofpages   = (int) Math.ceil(totalrecord * 1.0 / Genel.ROWPERPAGE);
@@ -160,7 +160,7 @@ public class MamulStokServlet extends HttpServlet implements Serializable {
             // }
             
             List<Mamul> mamul = new ArrayList<Mamul>();
-            mamul = mamulDao.mamulListeGetir(null, 0);
+            mamul = mamulDao.mamulListeStokGetir(null, 0);
             
             List<Firma> firma = new ArrayList<Firma>();
             firma = firmaDao.firmaListeGetirTum(0);

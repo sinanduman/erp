@@ -129,7 +129,7 @@ public class UretimTakipServlet extends HttpServlet implements Serializable {
             List<Mamul> mamul = new ArrayList<Mamul>();
             mamul = mamulDao.mamulListeGetir(null, 0);
             
-            int totalrecord = daoFunctions.recordAgg("uretimplantum_takip","count","*"," where tamamlandi=0 ");
+            int totalrecord = daoFunctions.recordAgg(BaseDao.V_URETIMPLAN_TUM_TAKIP,"count","*"," where tamamlandi=0 ");
             int page = 1;
             if(request.getParameter("page") != null)
                 page = Integer.parseInt(request.getParameter("page"));

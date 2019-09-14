@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import erp.dao.BaseDao;
 import erp.dao.FirmaDao;
 import erp.dao.IrsaliyeDao;
 import erp.dao.MamulDao;
@@ -66,7 +67,7 @@ public class SevkRaporServlet extends HttpServlet implements Serializable {
         List<IrsaliyeBilesen> irsaliyebilesenonaylandi = new ArrayList<IrsaliyeBilesen>();
 
         if (raporgetirid != null || page != null) {
-            String tablename = "irsaliye";
+            String tablename = BaseDao.IRSALIYE;
             String filter0 = "";
             String filter1 = "";
             String filter2 = "";
@@ -87,7 +88,7 @@ public class SevkRaporServlet extends HttpServlet implements Serializable {
                 filter3 = andYes + " ( date(gonderimtarihi) BETWEEN '" + Util.date_tr_to_eng(bas_tarih) + "' AND '" + Util.date_tr_to_eng(bit_tarih) + "')";
             }
             if (mamulid != null && Util.isNumeric(mamulid)) {
-                filter4 = andYes + " exists (select 1 from irfan.irsaliyebilesen ib where irsaliye.id = ib.irsaliyeid and ib.mamulid = " + Integer.valueOf(mamulid) + ")";
+                filter4 = andYes + " exists (select 1 from " + BaseDao.IRSALIYEBILESEN + " ib where irsaliye.id = ib.irsaliyeid and ib.mamulid = " + Integer.valueOf(mamulid) + ")";
             } else {
                 mamulid = null;
             }

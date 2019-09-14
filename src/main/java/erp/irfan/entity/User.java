@@ -4,6 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,5 +20,14 @@ public class User {
 
     public String getFullName() {
         return this.name + " " + this.surname;
+    }
+
+    public User(ResultSet rs) throws SQLException {
+        this.name = rs.getString("name");
+        this.surname = rs.getString("surname");
+        this.username = rs.getString("username");
+        this.username = rs.getString("password");
+        this.admin = rs.getInt("admin");
+        this.role = rs.getString("role");
     }
 }

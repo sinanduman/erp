@@ -1,10 +1,13 @@
 package erp.irfan;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import erp.dao.BaseDao;
+import erp.dao.BilesenDao;
+import erp.dao.FirmaDao;
+import erp.dao.StokDao;
+import erp.irfan.entity.*;
+import erp.util.Util;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import javax.servlet.ServletException;
@@ -12,18 +15,11 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import erp.dao.BilesenDao;
-import erp.dao.FirmaDao;
-import erp.dao.StokDao;
-import erp.irfan.entity.BilesenTip;
-import erp.irfan.entity.Bilesen;
-import erp.irfan.entity.Firma;
-import erp.irfan.entity.Genel;
-import erp.irfan.entity.Stok;
-import erp.util.Util;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @WebServlet("/hammaddestok")
 public class HammaddeStokServlet extends HttpServlet implements Serializable {
@@ -54,8 +50,8 @@ public class HammaddeStokServlet extends HttpServlet implements Serializable {
         
         if(stoklisteid != null && Integer.parseInt(stoklisteid) == 1) {
             // PAGING
-            totalrecord = daoFunctions.recordCount("stokbilesen"," where bilesenid= " + Integer.valueOf(bilesenid) );
-            sumagg      = daoFunctions.recordAgg("stokmiktar", "sum", "miktar", " where bilesenid= " + Integer.valueOf(bilesenid));
+            totalrecord = daoFunctions.recordCount(BaseDao.V_STOKBILESEN," where bilesenid= " + Integer.valueOf(bilesenid) );
+            sumagg      = daoFunctions.recordAgg(BaseDao.V_STOKMIKTAR, "sum", "miktar", " where bilesenid= " + Integer.valueOf(bilesenid));
             if(request.getParameter("page") != null)
                 page    = Integer.parseInt(request.getParameter("page"));        
             noofpages   = (int) Math.ceil(totalrecord * 1.0 / Genel.ROWPERPAGE);
@@ -136,8 +132,8 @@ public class HammaddeStokServlet extends HttpServlet implements Serializable {
             }
             
             // PAGING
-            totalrecord = daoFunctions.recordCount("stokbilesen"," where bilesenid= " +  Integer.valueOf(bilesenid));
-            sumagg      = daoFunctions.recordAgg("stokmiktar", "sum", "miktar", " where bilesenid= " +  Integer.valueOf(bilesenid));
+            totalrecord = daoFunctions.recordCount(BaseDao.V_STOKBILESEN," where bilesenid= " +  Integer.valueOf(bilesenid));
+            sumagg      = daoFunctions.recordAgg(BaseDao.V_STOKMIKTAR, "sum", "miktar", " where bilesenid= " +  Integer.valueOf(bilesenid));
             if(request.getParameter("page") != null)
                 page = Integer.parseInt(request.getParameter("page"));        
             noofpages = (int) Math.ceil(totalrecord * 1.0 / Genel.ROWPERPAGE);

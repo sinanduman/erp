@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 
@@ -17,6 +19,15 @@ public class Irsaliye {
     private Timestamp gonderimtarihi;
     private Integer firmaid;
     private String firmaad;
+
+    public Irsaliye(ResultSet rs) throws SQLException {
+        this.id = rs.getInt("id");
+        this.irsaliyeno = rs.getString("irsaliyeno");
+        this.olusturmatarihi = rs.getTimestamp("olusturmatarihi");
+        this.gonderimtarihi = rs.getTimestamp("gonderimtarihi");
+        this.firmaid = rs.getInt("firmaid");
+        this.firmaad = rs.getString("firmaad");
+    }
 
     public String getOlusturmatarihiTR() {
         String date = (this.olusturmatarihi != null) ? (new SimpleDateFormat("dd-MM-yyyy").format(olusturmatarihi)) : "";

@@ -48,17 +48,14 @@ public class DAOFunctions implements Serializable {
     }
 
     public int gkrnoGetir() {
-        Connection conn = connectionManager.getConnection();
         int result = -1;
-
         String selectQuery = "select irfan.gkrno_next()";
         logger.info(selectQuery);
 
         // connect to DB
-        PreparedStatement pstmt = null;
         ResultSet rs = null;
-        try {
-            pstmt = conn.prepareStatement(selectQuery);
+        try (Connection conn = connectionManager.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(selectQuery)) {
             logger.info(pstmt.toString());
             rs = pstmt.executeQuery();
 
@@ -67,31 +64,19 @@ public class DAOFunctions implements Serializable {
             }
         } catch (SQLException e) {
             logger.error("Error: " + e);
-        } finally {
-            pstmt = null;
-            try {
-                if (pstmt != null) {
-                    pstmt.close();
-                }
-            } catch (SQLException e) {
-                logger.error("Error: " + e);
-            }
         }
         return result;
     }
 
     public int recordCount(String tablename, String filter) {
-        Connection conn = connectionManager.getConnection();
         int result = 0;
-
-        String selectQuery = "select count(*) from irfan." + tablename + filter;
+        String selectQuery = "select count(*) from " + tablename + filter;
         logger.info(selectQuery);
 
         // connect to DB
-        PreparedStatement pstmt = null;
         ResultSet rs = null;
-        try {
-            pstmt = conn.prepareStatement(selectQuery);
+        try (Connection conn = connectionManager.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(selectQuery)) {
             rs = pstmt.executeQuery();
 
             if (rs.next()) {
@@ -99,44 +84,24 @@ public class DAOFunctions implements Serializable {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            try {
-                if (pstmt != null) {
-                    pstmt.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
         return result;
     }
 
     public int recordAgg(String tablename, String aggfunc, String aggfield, String filter) {
-        Connection conn = connectionManager.getConnection();
         int result = 0;
-
-        String selectQuery = "select " + aggfunc + "(" + aggfield + ")" + " from irfan." + tablename + filter;
+        String selectQuery = "select " + aggfunc + "(" + aggfield + ")" + " from " + tablename + filter;
         logger.info(selectQuery);
         // connect to DB
-        PreparedStatement pstmt = null;
         ResultSet rs = null;
-        try {
-            pstmt = conn.prepareStatement(selectQuery);
+        try (Connection conn = connectionManager.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(selectQuery)) {
             rs = pstmt.executeQuery();
-
             if (rs.next()) {
                 result = rs.getInt(1);
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            try {
-                if (pstmt != null) {
-                    pstmt.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
         return result;
     }

@@ -255,8 +255,7 @@
                     Aktar
                 </button>
                 <input type="hidden" value="0" name="excelegonder" id="excelegonder">
-                <input type="hidden" name="excelirsaliyeid" id="excelirsaliyeid"
-                       value="<%=(irsaliyeid==null)?"":irsaliyeid%>">
+                <input type="hidden" name="excelirsaliyeid" id="excelirsaliyeid" value="<%=(irsaliyeid==null)?"":irsaliyeid%>">
                 <input type="hidden" name="excelfirmaid" id="excelfirmaid" value="<%=(firmaid==null)?"":firmaid%>">
                 <input type="hidden" name="excelmamulid" id="excelmamulid" value="<%=(mamulid==null)?"":mamulid%>">
                 <input type="hidden" name="exceltarih" id="exceltarih" value="<%=(tarih==null)?"":tarih%>">

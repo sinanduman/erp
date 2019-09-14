@@ -69,7 +69,7 @@ public class UretimRaporServlet extends HttpServlet implements Serializable {
         List<UretimPlan> stokrapor = new ArrayList<UretimPlan>();
 
         if(raporgetirid!=null || page != null ) {
-            String tablename        = "irfan.uretimplantum_plan";
+            String tablename        = BaseDao.V_URETIMPLAN_TUM_PLAN;
             String filter0          = "";
             String filter1          = "";
             String filter2          = "";

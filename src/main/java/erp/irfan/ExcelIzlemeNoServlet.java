@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import erp.dao.BaseDao;
 import erp.dao.IzlemeNoDao;
 import erp.util.Util;
 import org.apache.poi.hssf.util.HSSFColor;
@@ -49,7 +50,7 @@ public class ExcelIzlemeNoServlet extends HttpServlet implements Serializable {
         String excelbastarih= request.getParameter("excelbastarih");
         String excelbittarih= request.getParameter("excelbittarih");
         String excelsql     = request.getParameter("excelsql");
-        String tablename    = "izlemeno_tum";
+        String tablename    = BaseDao.V_IZLEMENO_TUM;
                 
         logger.info("excelsql: " + excelsql);
         

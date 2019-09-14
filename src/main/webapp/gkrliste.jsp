@@ -83,23 +83,21 @@
         <form class="form-inline" name="gkrlisteform" id="gkrlisteform" method="post" action="gkrliste">
 
             <div class="form-group">
-                <label for="tarih" class="text-baslik">Başlangıç Tarihi</label>
+                <label for="bas_tarih" class="text-baslik">Başlangıç Tarihi</label>
                 <div>
-                    <input type="text" style="width:120px;" class="form-control" name="bas_tarih" id="bas_tarih"
-                           placeholder="Tarih">
+                    <input type="text" style="width:120px;" class="form-control" name="bas_tarih" id="bas_tarih" placeholder="Tarih">
                 </div>
             </div>
 
             <div class="form-group">
-                <label for="tarih" class="text-baslik">Bitiş Tarihi</label>
+                <label for="bit_tarih" class="text-baslik">Bitiş Tarihi</label>
                 <div>
-                    <input type="text" style="width:120px;" class="form-control" name="bit_tarih" id="bit_tarih"
-                           placeholder="Tarih">
+                    <input type="text" style="width:120px;" class="form-control" name="bit_tarih" id="bit_tarih" placeholder="Tarih">
                 </div>
             </div>
 
             <div class="form-group">
-                <label for="mamulkod" class="text-baslik">Malzeme Kodu</label>
+                <label for="bilesenkod" class="text-baslik">Malzeme Kodu</label>
                 <div>
                     <input type="text" class="form-control normal" name="bilesenkod" id="bilesenkod" autocomplete="off">
                     <input type="hidden" name="bilesenid" id="bilesenid" value='<%= (bilesenid!=null)?bilesenid:"" %>'>
@@ -114,7 +112,7 @@
             </div>
 
             <div class="form-group">
-                <label for="mamulkod" class="text-success bgsaydam">&nbsp;&nbsp;</label>
+                <label for="raporgetir" class="text-success bgsaydam">&nbsp;&nbsp;</label>
                 <div>
                     <button type="button" class="btn btn-danger" name="raporgetir" id="raporgetir">Rapor Getir</button>
                     <input type="hidden" name="raporgetirid" id="raporgetirid" value="0">
@@ -163,13 +161,13 @@
                 <%
                     String smiktar = "";
                     Double dmkitar = 0.0;
-                    Integer imiktar = 0;
+                    Long imiktar = 0L;
                     if (s.getBilesentipid() == BilesenTip.HAMMADDE.value()) {
-                        if ((Integer.valueOf(s.getMiktar()) / 1000.0) > (Integer.valueOf(s.getMiktar()) / 1000)) {
-                            dmkitar = (Integer.valueOf(s.getMiktar())) / 1000.0;
+                        if ((Long.valueOf(s.getMiktar()) / 1000.0) > (Long.valueOf(s.getMiktar()) / 1000)) {
+                            dmkitar = (Long.valueOf(s.getMiktar())) / 1000.0;
                             smiktar = dmkitar.toString() + " Kg.";
                         } else {
-                            imiktar = (Integer.valueOf(s.getMiktar())) / 1000;
+                            imiktar = (Long.valueOf(s.getMiktar())) / 1000;
                             smiktar = imiktar.toString() + " Kg.";
                         }
                     } else {

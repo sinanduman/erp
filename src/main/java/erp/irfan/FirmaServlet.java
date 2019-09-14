@@ -1,5 +1,6 @@
 package erp.irfan;
 
+import erp.dao.BaseDao;
 import erp.dao.FirmaDao;
 import erp.irfan.entity.Firma;
 import erp.irfan.entity.Genel;
@@ -69,7 +70,7 @@ public class FirmaServlet extends HttpServlet implements Serializable {
         }
 
         if(!ajaxIncluded) {
-            int totalrecord = daoFunctions.recordCount("firma","");
+            int totalrecord = daoFunctions.recordCount(BaseDao.FIRMA,"");
             int page = 1;
             if(request.getParameter("page") != null)
                 page = Integer.parseInt(request.getParameter("page"));

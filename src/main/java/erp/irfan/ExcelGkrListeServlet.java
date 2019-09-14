@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import erp.dao.BaseDao;
 import erp.dao.StokDao;
 import erp.irfan.entity.BilesenTip;
 import erp.util.Util;
@@ -50,7 +51,7 @@ public class ExcelGkrListeServlet extends HttpServlet implements Serializable {
         String excelbastarih= request.getParameter("excelbastarih");
         String excelbittarih= request.getParameter("excelbittarih");
         String excelsql     = request.getParameter("excelsql");
-        String tablename    = "stokbilesen";
+        String tablename    = BaseDao.V_STOKBILESEN;
                 
         logger.info("excelsql: " + excelsql);
         
@@ -80,14 +81,14 @@ public class ExcelGkrListeServlet extends HttpServlet implements Serializable {
             for(Stok sr: stokrapor) {
                 String smiktar  = "";
                 Double dmkitar  = 0.0;
-                Integer imiktar = 0;
+                Long imiktar = 0L;
                 if (sr.getBilesentipid() == BilesenTip.HAMMADDE.value()) {
-                    if ((Integer.valueOf(sr.getMiktar()) / 1000.0) > (Integer.valueOf(sr.getMiktar()) / 1000)) {
-                        dmkitar = (Integer.valueOf(sr.getMiktar())) / 1000.0;
+                    if ((Long.valueOf(sr.getMiktar()) / 1000.0) > (Long.valueOf(sr.getMiktar()) / 1000)) {
+                        dmkitar = (Long.valueOf(sr.getMiktar())) / 1000.0;
                         smiktar = dmkitar.toString() + " Kg.";
                     }
                     else {
-                        imiktar = (Integer.valueOf(sr.getMiktar())) / 1000;
+                        imiktar = (Long.valueOf(sr.getMiktar())) / 1000;
                         smiktar = imiktar.toString() + " Kg.";
                     }
                 }

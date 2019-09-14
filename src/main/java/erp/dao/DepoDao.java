@@ -22,31 +22,20 @@ public class DepoDao implements Serializable, BaseDao {
     private static final Logger logger = LoggerFactory.getLogger(DepoDao.class);
 
     public List<Depo> depoListeGetirTum() {
-        Connection conn = connectionManager.getConnection();
         List<Depo> temp = new ArrayList<Depo>();
-        String searchQuery = "select * from irfan.depo order by ad";
+        String searchQuery = "select * from " + BaseDao.DEPO + " order by ad";
 
         // connect to DB
-        PreparedStatement pstmt = null;
         ResultSet rs = null;
-        try {
-            pstmt = conn.prepareStatement(searchQuery);
+        try (Connection conn = connectionManager.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(searchQuery)){
             logger.info(pstmt.toString());
             rs = pstmt.executeQuery();
             while (rs.next()) {
-                temp.add(new Depo(rs.getInt("id"), rs.getString("ad")));
+                temp.add(new Depo(rs));
             }
-
         } catch (SQLException e) {
             logger.error("Error: " + e);
-        } finally {
-            try {
-                if (rs != null) {
-                    rs.close();
-                }
-            } catch (SQLException e) {
-                logger.error("Error: " + e);
-            }
         }
         return temp;
     }

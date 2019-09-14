@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import erp.dao.BaseDao;
 import erp.dao.BilesenDao;
 import erp.dao.FirmaDao;
 import erp.dao.StokDao;
@@ -85,7 +86,7 @@ public class GkrListeServlet extends HttpServlet implements Serializable {
         excelsql= filter0;
         
         // PAGING        
-        totalrecord = daoFunctions.recordAgg("stokbilesen","count","*"," where bilesentipid IN (1,2) and islemyonu=" + Genel.IslemYonuGiris + filter0);
+        totalrecord = daoFunctions.recordAgg(BaseDao.V_STOKBILESEN,"count","*"," where bilesentipid IN (1,2) and islemyonu=" + Genel.IslemYonuGiris + filter0);
         if(request.getParameter("page") != null)
             page0   = Integer.parseInt(page);        
         noofpages   = (int) Math.ceil(totalrecord * 1.0 / Genel.ROWPERLONGPAGE);

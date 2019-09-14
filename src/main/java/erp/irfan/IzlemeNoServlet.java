@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import erp.dao.BaseDao;
 import erp.dao.IzlemeNoDao;
 import erp.dao.MamulDao;
 import erp.irfan.entity.Genel;
@@ -74,7 +75,7 @@ public class IzlemeNoServlet extends HttpServlet implements Serializable {
         String filter1      = "";
         String filter2      = "";
         String andYes       = " AND ";
-        String tablename    = "izlemeno_tum";
+        String tablename    = BaseDao.V_IZLEMENO_TUM;
         Boolean ajaxInAction= false;
         
         if(request.getParameter("islemid")!=null) {
@@ -130,7 +131,7 @@ public class IzlemeNoServlet extends HttpServlet implements Serializable {
             excelsql= filter0;
             
             // PAGING        
-            totalrecord = daoFunctions.recordAgg("izlemeno_tum","count","*"," where 1=1" + filter0);
+            totalrecord = daoFunctions.recordAgg(BaseDao.V_IZLEMENO_TUM,"count","*"," where 1=1" + filter0);
             if(request.getParameter("page") != null)
                 page0   = Integer.parseInt(page);        
             noofpages   = (int) Math.ceil(totalrecord * 1.0 / Genel.ROWPERLONGPAGE);

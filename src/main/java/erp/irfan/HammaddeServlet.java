@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import erp.dao.BaseDao;
 import erp.dao.BilesenDao;
 import erp.dao.FirmaDao;
 import erp.dao.HammaddeDao;
@@ -46,7 +47,7 @@ public class HammaddeServlet extends HttpServlet implements Serializable {
         firma = firmaDao.firmaListeGetirTum(0);
         
         
-        int totalrecord = daoFunctions.recordCount("bilesen"," ");
+        int totalrecord = daoFunctions.recordCount(BaseDao.BILESEN," ");
         int page = 1;
         if(request.getParameter("page") != null)
             page = Integer.parseInt(request.getParameter("page"));
@@ -122,13 +123,13 @@ public class HammaddeServlet extends HttpServlet implements Serializable {
             }
             
             /* PAGING */
-            int totalrecord = daoFunctions.recordAgg("bilesen", "COUNT", "*", ((bilesenid==null)?"":" where id=" + bilesenid));
+            String filter = ((bilesenid==null) ? "" : " where id=" + bilesenid);
+            int totalrecord = daoFunctions.recordAgg(BaseDao.BILESEN, "COUNT", "*", filter);
             int page = 1;
             if(request.getParameter("page") != null)
                 page = Integer.parseInt(request.getParameter("page"));            
             int noofpages = (int) Math.ceil(totalrecord * 1.0 / Genel.ROWPERPAGE);
             /* PAGING */
-            
                         
             List<Bilesen> hammadde      = new ArrayList<Bilesen>();
             List<Bilesen> hammaddetum   = new ArrayList<Bilesen>();

@@ -3,7 +3,7 @@ package erp.dao;
 import erp.irfan.ConnectionManager;
 import erp.irfan.entity.Bilesen;
 import erp.irfan.entity.BilesenTip;
-import erp.irfan.entity.Genel;
+import erp.util.Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,67 +21,41 @@ public class BilesenDao implements Serializable, BaseDao {
     private static final Logger logger = LoggerFactory.getLogger(BilesenDao.class);
 
     public List<Bilesen> bilesenListeGetirTum(BilesenTip bilesentip, int offset, Integer bilesenid) {
-        Connection conn = connectionManager.getConnection();
         List<Bilesen> temp = new ArrayList<Bilesen>();
-
-        String pageFilter = (offset == 0) ? "" : " offset " + (offset - 1) * Genel.ROWPERPAGE + " limit " + Genel.ROWPERPAGE;
-
-        String filter1 = (bilesentip == null) ? "" : " and bilesentipid IN (" + bilesentip.id() + ") ";
-        String filter2 = (bilesenid == null) ? "" : " and b.id = " + bilesenid + " ";
-        String filter0 = " where 1=1 " + filter1 + filter2;
+        String pageFilter = Util.getPageFilter (offset);
+        String filter1 = (bilesentip == null) ? "" : " and bilesentipid in (" + bilesentip.id() + ")";
+        String filter2 = (bilesenid == null) ? "" : " and b.id = " + bilesenid;
+        String filter0 = " where 1=1" + filter1 + filter2;
 
         String searchQuery = "select b.*, bt.ad bilesentipad, f.ad firmaad, bm.ad birimad "
-                + "from irfan.bilesen b "
-                + "join irfan.bilesentip bt on bt.id = b.bilesentipid "
-                + "left join irfan.birim bm on bm.id = b.birimid "
-                + "join irfan.firma f on f.id = b.firmaid " + filter0
-                + "order by b.kod ASC " + pageFilter;
+                + " from " + BaseDao.BILESEN + " b"
+                + " join " + BaseDao.BILESENTIP + " bt on bt.id = b.bilesentipid"
+                + " left join " + BaseDao.BIRIM + " bm on bm.id = b.birimid"
+                + " join " + BaseDao.FIRMA + " f on f.id = b.firmaid" + filter0
+                + " order by b.kod " + pageFilter;
 
         // connect to DB
-        PreparedStatement pstmt = null;
         ResultSet rs = null;
-        try {
-            pstmt = conn.prepareStatement(searchQuery);
+        try (Connection conn = connectionManager.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(searchQuery)) {
             logger.info(pstmt.toString());
             rs = pstmt.executeQuery();
-
             while (rs.next()) {
-                temp.add(
-                        new Bilesen(
-                                rs.getInt("id"),
-                                rs.getString("ad"),
-                                rs.getString("kod"),
-                                rs.getInt("bilesentipid"),
-                                rs.getString("bilesentipad"),
-                                rs.getInt("birimid"),
-                                rs.getString("birimad"),
-                                rs.getInt("firmaid"),
-                                rs.getString("firmaad"),
-                                rs.getDate("eklemetarihi")));
+                temp.add(new Bilesen(rs));
             }
         } catch (SQLException e) {
             logger.error("Error: " + e);
-        } finally {
-            try {
-                if (rs != null) {
-                    rs.close();
-                }
-            } catch (SQLException e) {
-                logger.error("Error: " + e);
-            }
         }
         return temp;
     }
 
     public String bilesenSil(String bilesenid) {
-        Connection conn = connectionManager.getConnection();
         String result = "0";
-        String updateQuery = "select irfan.bilesen_sil(?)";
+        String updateQuery = "select " + BaseDao.F_BILESEN_SIL + "(?)";
         // connect to DB
-        PreparedStatement pstmt = null;
         ResultSet rs = null;
-        try {
-            pstmt = conn.prepareStatement(updateQuery);
+        try (Connection conn = connectionManager.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(updateQuery)) {
             pstmt.setInt(1, Integer.valueOf(bilesenid));
             logger.info(pstmt.toString());
 
@@ -92,31 +66,23 @@ public class BilesenDao implements Serializable, BaseDao {
         } catch (SQLException e) {
             logger.error("Error: " + e);
             result = e.getMessage();
-        } finally {
-            try {
-                if (pstmt != null) {
-                    pstmt.close();
-                }
-            } catch (SQLException e) {
-                logger.error("Error: " + e);
-            }
         }
         return result;
     }
 
     public String bilesenGuncelle(String bilesenid, String birimid, String firmaid, String bilesenkod, String bilesenad) {
-        Connection conn = connectionManager.getConnection();
         String result = "0";
-        String updateQuery = "update irfan.bilesen "
-                + "set birimid = ?, firmaid = ?, kod = ?, ad = ? "
-                + "where id = ?";
+        String updateQuery = "update " + BaseDao.BILESEN
+                + " set birimid =?, firmaid =?, kod =?, ad =? "
+                + " where id =?";
 
         // connect to DB
-        PreparedStatement pstmt = null;
-        try {
-            pstmt = conn.prepareStatement(updateQuery);
-            if (birimid != null) pstmt.setInt(1, Integer.parseInt(birimid));
-            else pstmt.setNull(1, Types.INTEGER);
+        try (Connection conn = connectionManager.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(updateQuery)) {
+            if (birimid != null)
+                pstmt.setInt(1, Integer.parseInt(birimid));
+            else
+                pstmt.setNull(1, Types.INTEGER);
             pstmt.setInt(2, Integer.parseInt(firmaid));
             pstmt.setString(3, bilesenkod);
             pstmt.setString(4, bilesenad);
@@ -127,14 +93,6 @@ public class BilesenDao implements Serializable, BaseDao {
         } catch (SQLException e) {
             logger.error("Error: " + e);
             result = e.getMessage();
-        } finally {
-            try {
-                if (pstmt != null) {
-                    pstmt.close();
-                }
-            } catch (SQLException e) {
-                logger.error("Error: " + e);
-            }
         }
         return result;
     }

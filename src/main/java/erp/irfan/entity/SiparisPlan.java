@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -28,6 +30,25 @@ public class SiparisPlan {
     private Integer hatamiktar;
     private Integer durusid;
     private String not;
+
+    public SiparisPlan(ResultSet rs) throws SQLException {
+        this.id = rs.getInt("id");
+        this.siparisid = rs.getInt("siparisid");
+        this.bilesenad = rs.getString("bilesenad");
+        this.miktar = rs.getInt("miktar");
+        this.makinaid = rs.getInt("makinaid");
+        this.makinaad = rs.getString("makinaad");
+        this.calisanid = rs.getInt("calisanid");
+        this.calisanad = rs.getString("calisanad");
+        this.calisansoyad = rs.getString("calisansoyad");
+        this.tarih = rs.getDate("tarih");
+        this.baszaman = rs.getTime("bassaat");
+        this.bitzaman = rs.getTime("bitsaat");
+        this.hataid = rs.getInt("hataid");
+        this.hatamiktar = rs.getInt("hatamiktar");
+        this.durusid = rs.getInt("durusid");
+        this.not = rs.getString("not");
+    }
 
     public String getCalisanFullName() {
         return calisanad + " " + calisansoyad;

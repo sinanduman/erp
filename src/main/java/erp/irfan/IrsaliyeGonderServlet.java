@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import erp.dao.BaseDao;
 import erp.dao.FirmaDao;
 import erp.dao.IrsaliyeDao;
 import erp.irfan.entity.Birim;
@@ -40,7 +41,7 @@ public class IrsaliyeGonderServlet extends HttpServlet implements Serializable {
         List<Firma> firma = firmaDao.firmaListeGetirTum(0);
         
         // PAGING
-        int totalrecord = daoFunctions.recordAgg("irsaliye", "COUNT", "*", " WHERE onaylandi=1" );
+        int totalrecord = daoFunctions.recordAgg(BaseDao.IRSALIYE, "COUNT", "*", " WHERE onaylandi=1" );
         int page = 1;
         if(request.getParameter("page") != null)
             page = Integer.parseInt(request.getParameter("page"));        
@@ -69,7 +70,7 @@ public class IrsaliyeGonderServlet extends HttpServlet implements Serializable {
         List<Firma> firma = firmaDao.firmaListeGetirTum(0);
         
         // PAGING
-        int totalrecord = daoFunctions.recordCount("irsaliye"," where onaylandi=1 ");
+        int totalrecord = daoFunctions.recordCount(BaseDao.IRSALIYE," where onaylandi=1 ");
         int page = 1;
         if(request.getParameter("page") != null)
             page = Integer.parseInt(request.getParameter("page"));        

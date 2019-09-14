@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import erp.dao.BaseDao;
 import erp.dao.BilesenDao;
 import erp.dao.FirmaDao;
 import erp.dao.MamulDao;
@@ -55,7 +56,7 @@ public class MamulServlet extends HttpServlet implements Serializable {
         yarimamul = bilesenDao.bilesenListeGetirTum(BilesenTip.YARIMAMUL, 0, null);
         
         // PAGING
-        int totalrecord = daoFunctions.recordAgg("mamultum", "COUNT", "*", ((mamulid==null)?"":" where id=" + mamulid));
+        int totalrecord = daoFunctions.recordAgg(BaseDao.V_MAMUL_TUM, "COUNT", "*", ((mamulid==null)?"":" where id=" + mamulid));
         int page = 1;
         if(request.getParameter("page") != null)
             page = Integer.parseInt(request.getParameter("page"));        
@@ -173,7 +174,7 @@ public class MamulServlet extends HttpServlet implements Serializable {
             yarimamul = bilesenDao.bilesenListeGetirTum(BilesenTip.YARIMAMUL, 0, null);
             
             // PAGING
-            int totalrecord = daoFunctions.recordAgg("mamultum", "COUNT", "*", ((mamulid==null)?"":" where id=" + mamulid));
+            int totalrecord = daoFunctions.recordAgg(BaseDao.V_MAMUL_TUM, "COUNT", "*", ((mamulid==null)?"":" where id=" + mamulid));
             int page = 1;
             if(request.getParameter("page") != null)
                 page = Integer.parseInt(request.getParameter("page"));        

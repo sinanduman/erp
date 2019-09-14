@@ -125,7 +125,7 @@ public class ExcelStokServlet extends HttpServlet implements Serializable {
                 }
                 
                 if(cnt==2) {
-                    logger.info("tipid" + sr.getBilesentipid());
+                    logger.info("tipid " + sr.getBilesentipid());
                     int i = sr.getBilesentipid();
                     switch (i) {
                         case 1:

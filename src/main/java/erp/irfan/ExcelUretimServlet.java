@@ -1,5 +1,6 @@
 package erp.irfan;
 
+import erp.dao.BaseDao;
 import erp.dao.UretimDao;
 import erp.irfan.entity.UretimPlan;
 import erp.util.Util;
@@ -38,7 +39,7 @@ public class ExcelUretimServlet extends HttpServlet implements Serializable {
         String excelbastarih= request.getParameter("excelbastarih");
         String excelbittarih= request.getParameter("excelbittarih");
         String excelsql     = request.getParameter("excelsql");
-        String tablename    = "uretimplantum_plan";
+        String tablename    = BaseDao.V_URETIMPLAN_TUM_PLAN;
         
         
         logger.info("excelsql: " + excelsql);

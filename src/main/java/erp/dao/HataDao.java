@@ -23,32 +23,21 @@ public class HataDao implements Serializable, BaseDao {
     private static final Logger logger = LoggerFactory.getLogger(HataDao.class);
 
     public List<DurusSebep> durusSebepListeGetir() {
-        Connection conn = connectionManager.getConnection();
-        List<DurusSebep> temp = new ArrayList<DurusSebep>();
 
-        String searchQuery = "select * from irfan.durussebep order by ad";
+        List<DurusSebep> temp = new ArrayList<DurusSebep>();
+        String searchQuery = "select * from " + BaseDao.DURUSSEBEP + " order by ad";
 
         // connect to DB
-        PreparedStatement pstmt = null;
         ResultSet rs = null;
-        try {
-            pstmt = conn.prepareStatement(searchQuery);
+        try (Connection conn = connectionManager.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(searchQuery)) {
             logger.info(pstmt.toString());
             rs = pstmt.executeQuery();
             while (rs.next()) {
-                temp.add(new DurusSebep(rs.getInt("id"), rs.getString("ad"), rs.getString("kod")));
+                temp.add(new DurusSebep(rs));
             }
-
         } catch (SQLException e) {
             logger.error("Error: " + e);
-        } finally {
-            try {
-                if (rs != null) {
-                    rs.close();
-                }
-            } catch (SQLException e) {
-                logger.error("Error: " + e);
-            }
         }
         return temp;
     }
@@ -57,7 +46,7 @@ public class HataDao implements Serializable, BaseDao {
         Connection conn = connectionManager.getConnection();
         List<HataSebep> temp = new ArrayList<HataSebep>();
 
-        String searchQuery = "select * from irfan.hatasebep order by ad";
+        String searchQuery = "select * from " + BaseDao.HATASEBEP + " order by ad";
 
         // connect to DB
         PreparedStatement pstmt = null;
@@ -67,7 +56,7 @@ public class HataDao implements Serializable, BaseDao {
             logger.info(pstmt.toString());
             rs = pstmt.executeQuery();
             while (rs.next()) {
-                temp.add(new HataSebep(rs.getInt("id"), rs.getString("ad"), rs.getString("kod")));
+                temp.add(new HataSebep(rs));
             }
         } catch (SQLException e) {
             logger.error("Error: " + e);

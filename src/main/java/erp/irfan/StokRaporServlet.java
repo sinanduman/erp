@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import erp.dao.BaseDao;
 import erp.dao.BilesenDao;
 import erp.dao.MamulDao;
 import erp.dao.StokDao;
@@ -52,7 +53,7 @@ public class StokRaporServlet extends HttpServlet implements Serializable {
         String tarih = request.getParameter("tarih");
         String page = request.getParameter("page");
         String excelsql = "";
-        String tablename = "mamul";
+        String tablename = BaseDao.MAMUL;
 
         int totalrecord = 0;
         int noofpages = 0;
@@ -73,26 +74,27 @@ public class StokRaporServlet extends HttpServlet implements Serializable {
             DateTime datetime = new DateTime(Util.date_tr_to_eng(tarih)).plusDays(1);
             if (bilesentip != null) {
                 if (Integer.parseInt(bilesentip) == 1) {
-                    tablename = "irfan.bilesen m";
+                    tablename = BaseDao.BILESEN;
                     filter0 = " AND bilesentipid IN (1) ";
                     bilesentipenum = BilesenTip.HAMMADDE;
                 } else if (Integer.parseInt(bilesentip) == 2) {
-                    tablename = "irfan.bilesen m";
+                    tablename = BaseDao.BILESEN;
                     filter0 = " AND bilesentipid IN (2) ";
                     bilesentipenum = BilesenTip.YARIMAMUL;
                 } else {
-                    tablename = "irfan.mamul m";
+                    tablename = BaseDao.MAMUL;
                     filter0 = " AND bilesentipid IN (3) ";
                     bilesentipenum = BilesenTip.MAMUL;
                 }
                 filter2 += " AND (case when islemyonu=0 then giristarihi else cikistarihi end)<'" + datetime.toString() + "' ";
             }
             if (Util.isNotEmptyOrNull(bilesenid)) {
-                filter1 = " AND m.id = " + Integer.valueOf(bilesenid);
+                filter1 = " AND " + tablename + ".id = " + Integer.valueOf(bilesenid);
             }
             filter = filter0 + filter1 + filter2;
-            filterIn = " AND id in (select bilesenid from irfan.stok where (case when islemyonu=0 then giristarihi else cikistarihi end) <'" + datetime.toString() + "') ";
+            filterIn = " AND id in (select bilesenid from " + BaseDao.STOK + " where (case when islemyonu=0 then giristarihi else cikistarihi end) <'" + datetime.toString() + "') ";
             // PAGING
+            System.out.println("islem: " +tablename + "count" + "*" +filter0 + filter1 + filterIn);
             totalrecord = daoFunctions.recordAgg(tablename, "COUNT", "*", " WHERE 1=1 " + filter0 + filter1 + filterIn);
             if (request.getParameter("page") != null)
                 page0 = Integer.parseInt(request.getParameter("page"));
@@ -103,7 +105,7 @@ public class StokRaporServlet extends HttpServlet implements Serializable {
             /* Eger bir urunde detay isteniyorsa*/
             if (Util.isNotEmptyOrNull(bilesenid)) {
                 stokdetay = stokDao.stokBilesenDetayRapor(tablename, filter, page0, Integer.valueOf(bilesenid));
-                totalrecord = daoFunctions.recordAgg("stok", "COUNT", "*", " WHERE 1=1 " + "AND bilesenid = " + bilesenid);
+                totalrecord = daoFunctions.recordAgg(BaseDao.STOK, "COUNT", "*", " WHERE 1=1 " + "AND bilesenid = " + bilesenid);
                 noofpages = (int) Math.ceil(totalrecord * 1.0 / Genel.ROWPERPAGE);
             }
 

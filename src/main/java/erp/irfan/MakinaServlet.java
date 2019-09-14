@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import erp.dao.BaseDao;
 import erp.dao.MakinaDao;
 import erp.irfan.entity.Genel;
 import erp.irfan.entity.Makina;
@@ -70,7 +71,7 @@ public class MakinaServlet extends HttpServlet implements Serializable {
         if(!ajaxIncluded) {
             List<Makina> makina = new ArrayList<Makina>();
             
-            int totalrecord = daoFunctions.recordCount("makina","");
+            int totalrecord = daoFunctions.recordCount(BaseDao.MAKINA,"");
             int page = 1;
             if(request.getParameter("page") != null)
                 page = Integer.parseInt(request.getParameter("page"));
