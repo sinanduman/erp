@@ -3,6 +3,7 @@ function updateFirmaGo(url,id,action_form,islem){
     var f_firmaad		= $.trim(action_form.liste_firmaad.value);
     var f_firmatel		= $.trim(action_form.liste_firmatel.value);
     var f_firmaadres	= $.trim(action_form.liste_firmaadres.value);
+    var f_firmaemail	= $.trim(action_form.liste_firmaemail.value);
     var f_islemid		= islem;
     var alert_mesaj		= f_firmaad + "" + "";
     if(is_empty(f_firmaad)){
@@ -18,6 +19,7 @@ function updateFirmaGo(url,id,action_form,islem){
                 ad:		f_firmaad,
                 tel:	f_firmatel,
                 adres:	f_firmaadres,
+                email:	f_firmaemail,
                 islemid:f_islemid
             },
             dataType: 'html',

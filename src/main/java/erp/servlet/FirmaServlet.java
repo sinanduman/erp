@@ -48,7 +48,8 @@ public class FirmaServlet extends HttpServlet implements Serializable {
                                     new String(request.getParameter("id").getBytes("UTF-8")),
                                     new String(request.getParameter("ad").getBytes("UTF-8")),
                                     new String(request.getParameter("tel").getBytes("UTF-8")),
-                                    new String(request.getParameter("adres").getBytes("UTF-8"))
+                                    new String(request.getParameter("adres").getBytes("UTF-8")),
+                                    new String(request.getParameter("email").getBytes("UTF-8"))
                                     );
                     break;
                 case 3:
@@ -64,7 +65,8 @@ public class FirmaServlet extends HttpServlet implements Serializable {
                 message = firmaDao.firmaEkle(
                             new String(request.getParameter("firma_ad").getBytes("UTF-8")),
                             new String(request.getParameter("firma_tel").getBytes("UTF-8")),
-                            new String(request.getParameter("firma_adres").getBytes("UTF-8"))
+                            new String(request.getParameter("firma_adres").getBytes("UTF-8")),
+                            new String(request.getParameter("firma_email").getBytes("UTF-8"))
                             );
             }
         }

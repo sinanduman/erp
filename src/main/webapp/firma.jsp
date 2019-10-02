@@ -47,24 +47,31 @@
     <div class="row">
         <form class="form-horizontal" method="post" action="firma">
             <div class="form-group col-xs-8">
-                <label for="adsoy" class="col-xs-3 control-label text-baslik">Firma Ekleme: </label>
+                <label for="firma_ad" class="col-xs-3 control-label text-baslik">Firma Adı: </label>
                 <div>
                     <input type="text" class="form-control big" name="firma_ad" id="firma_ad" placeholder="Firma Adı"
                            autocomplete="off">
                 </div>
             </div>
             <div class="form-group col-xs-8">
-                <label for="gorev" class="col-xs-3 control-label text-baslik">Telefonu: </label>
+                <label for="firma_tel" class="col-xs-3 control-label text-baslik">Telefonu: </label>
                 <div>
                     <input type="text" class="form-control big" name="firma_tel" id="firma_tel"
                            placeholder="Firma Telefonu" autocomplete="off">
                 </div>
             </div>
             <div class="form-group col-xs-8">
-                <label for="gorev" class="col-xs-3 control-label text-baslik">Adresi: </label>
+                <label for="firma_adres" class="col-xs-3 control-label text-baslik">Adresi: </label>
                 <div>
                     <input type="text" class="form-control big" name="firma_adres" id="firma_adres"
                            placeholder="Firma Adresi" autocomplete="off">
+                </div>
+            </div>
+            <div class="form-group col-xs-8">
+                <label for="firma_email" class="col-xs-3 control-label text-baslik">Email Adresi: </label>
+                <div>
+                    <input type="text" class="form-control big" name="firma_email" id="firma_email"
+                           placeholder="Firma Email Adresi" autocomplete="off">
                 </div>
             </div>
             <%
@@ -108,6 +115,7 @@
                     <td><label class="text-success">Firma Ad</label></td>
                     <td><label class="text-success">Telefon</label></td>
                     <td><label class="text-success">Adres</label></td>
+                    <td><label class="text-success">Email</label></td>
                     <%
                         if (admin != null && admin.equals("1")) {
                     %>
@@ -115,22 +123,28 @@
                     <% } %>
                 </tr>
                 <% } %>
-                <form name="action_form<%=f.getId()%>" id="action_form<%=f.getId()%>">
+                <form name=action_form<%=f.getId()%> id="action_form<%=f.getId()%>">
                     <tr id="tr<%=f.getId() %>">
                         <td><input type="text" class="form-control" value="<%= f.getAd() %>" name="liste_firmaad"
                                    id="liste_firmaad" autocomplete="off"></td>
-                        <td><input type="text" class="form-control" value="<%= f.getTelefon() %>" name="liste_firmatel"
+                        <td><input type="text" class="form-control" value="<%= (f.getTelefon() == null ? "" :
+                        f.getTelefon().trim()) %>" name="liste_firmatel"
                                    id="liste_firmatel" autocomplete="off"></td>
-                        <td><input type="text" class="form-control" value="<%= f.getAdres() %>" name="liste_firmaadres"
+                        <td><input type="text" class="form-control" value="<%= (f.getAdres() == null ? "" :
+                        f.getAdres().trim()) %>" name="liste_firmaadres"
                                    id="liste_firmaadres" autocomplete="off"></td>
+                        <td><input type="text" class="form-control" value="<%= (f.getEmail() == null ? "" :
+                        f.getEmail().trim()) %>"
+                                   name="liste_firmaemail"
+                                   id="liste_firmaemail" autocomplete="off"></td>
                         <%
                             if (admin != null && admin.equals("1")) {
                         %>
                         <td>
                             <div id="div<%= f.getId() %>" class="text-center">
-                                <a href="javascript:updateFirmaGo('firma',<%=f.getId()%>,document.action_form<%=f.getId()%>,1);"
+                                <a href="javascript:updateFirmaGo('firma','<%=f.getId()%>',document.action_form<%=f.getId()%>,1);"
                                    title="Güncelle"><span class="fa fa-refresh fa-lg text-warning"></span></a>
-                                <a href="javascript:deleteFirmaGo('firma',<%=f.getId()%>,document.action_form<%=f.getId()%>,3);"
+                                <a href="javascript:deleteFirmaGo('firma','<%=f.getId()%>',document.action_form<%=f.getId()%>,3);"
                                    title="Sil"><span class="fa fa-minus-circle fa-lg text-danger"></span></a>
                             </div>
                         </td>

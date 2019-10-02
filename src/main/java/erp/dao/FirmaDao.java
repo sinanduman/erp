@@ -41,15 +41,16 @@ public class FirmaDao implements Serializable, BaseDao {
         return temp;
     }
 
-    public String firmaEkle(String ad, String telefon, String adres) {
+    public String firmaEkle(String ad, String telefon, String adres, String email) {
         String retVal = "0";
-        String insertQuery = "insert into " + BaseDao.FIRMA + " (ad, telefon, adres) values (?,?,?)";
+        String insertQuery = "insert into " + BaseDao.FIRMA + " (ad, telefon, adres, email) values (?,?,?,?)";
         // connect to DB
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(insertQuery)) {
             pstmt.setString(1, ad);
             pstmt.setString(2, telefon);
             pstmt.setString(3, adres);
+            pstmt.setString(4, email);
             logger.info(pstmt.toString());
             pstmt.executeUpdate();
         } catch (SQLException e) {
@@ -59,10 +60,10 @@ public class FirmaDao implements Serializable, BaseDao {
         return retVal;
     }
 
-    public String firmaGuncelle(String id, String ad, String tel, String adres) {
+    public String firmaGuncelle(String id, String ad, String tel, String adres, String email) {
         String result = "0";
         String updateQuery = "update " + BaseDao.FIRMA
-                + " set ad =? , telefon =? , adres =?"
+                + " set ad =? , telefon =? , adres =?, email =?"
                 + " where id =?";
         // connect to DB
         try (Connection conn = connectionManager.getConnection();
@@ -70,7 +71,8 @@ public class FirmaDao implements Serializable, BaseDao {
             pstmt.setString(1, ad);
             pstmt.setString(2, tel);
             pstmt.setString(3, adres);
-            pstmt.setInt(4, Integer.valueOf(id));
+            pstmt.setString(4, email);
+            pstmt.setInt(5, Integer.valueOf(id));
             logger.info(pstmt.toString());
             pstmt.executeUpdate();
         } catch (SQLException e) {

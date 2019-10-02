@@ -15,11 +15,13 @@ public class Firma {
     private String ad;
     private String telefon;
     private String adres;
+    private String email;
 
     public Firma(ResultSet rs) throws SQLException {
         this.id = rs.getInt("id");
         this.ad = rs.getString("ad");
         this.telefon = rs.getString("telefon");
         this.adres = rs.getString("adres");
+        this.email = rs.getString("email");
     }
 }
