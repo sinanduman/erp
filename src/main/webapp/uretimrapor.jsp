@@ -1,6 +1,6 @@
 <%@ page import="erp.util.Util" %>
-<%@ page import="erp.irfan.entity.*" %>
 <%@ page import="java.util.List" %>
+<%@ page import="erp.entity.*" %>
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!doctype html>
@@ -22,7 +22,7 @@
     <link rel="stylesheet/less" type="text/css" href="less/datepicker.less">
 
     <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/bootstrap.css?<%=Util.nanoTime%>">
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -83,7 +83,7 @@
     <div class="row">
         <form class="form-inline" role="form" name="raporform" id="raporform" method="post" action="uretimrapor">
             <div class="form-group">
-                <label for="tarih" class="text-baslik">Başlangıç Tarihi</label>
+                <label for="bas_tarih" class="text-baslik">Başlangıç Tarihi</label>
                 <div>
                     <input type="text" style="width:120px;" class="form-control" name="bas_tarih" id="bas_tarih"
                            placeholder="Tarih">
@@ -91,7 +91,7 @@
             </div>
 
             <div class="form-group">
-                <label for="tarih" class="text-baslik">Bitiş Tarihi</label>
+                <label for="bit_tarih" class="text-baslik">Bitiş Tarihi</label>
                 <div>
                     <input type="text" style="width:120px;" class="form-control" name="bit_tarih" id="bit_tarih"
                            placeholder="Tarih">
@@ -229,38 +229,22 @@
                 }
             %>
             <tr id="tr<%=u.getId()%>">
-                <td nowrap><%=u.getTarihTRShort()%>
-                </td>
-                <td><%=u.getBasZaman()%>
-                </td>
-                <td><%=u.getBitZaman()%>
-                </td>
-                <td nowrap><%=u.getMakinaad()%>
-                </td>
-                <td><%=u.getCalisanShortName()%>
-                </td>
-                <td><%=u.getFirmaad()%>
-                </td>
-                <td><%=Util.splitLine(u.getHammaddead(), ";", "<br>")%>
-                </td>
-                <td><%=Util.splitLine(u.getHammaddeizlno(), ";", "<br>")%>
-                </td>
-                <td><%= u.getMamulkod() %>
-                </td>
-                <td><%= u.getMamulad() %>
-                </td>
-                <td><%= (u.getMamulizlno() == 0) ? "" : u.getMamulizlno() %>
-                </td>
-                <td class="text-right"><%= (u.getPlanlananmiktar() == 0) ? "" : u.getPlanlananmiktar() + " Ad." %>
-                </td>
-                <td class="text-right"><%= u.getUretilenmiktar() + " Ad." %>
-                </td>
-                <td class="text-right" nowrap><%= (u.getFark() == 0) ? "" : u.getFark() + " Ad." %>
-                </td>
-                <td class="text-right"><%= (u.getSapma() == 0) ? "" : "% " + u.getSapma() %>
-                </td>
-                <td><%= u.getHataad() %>
-                </td>
+                <td nowrap><%=u.getTarihTRShort()%></td>
+                <td><%=u.getBasZaman()%></td>
+                <td><%=u.getBitZaman()%></td>
+                <td nowrap><%=u.getMakinaad()%></td>
+                <td><%=u.getCalisanShortName()%></td>
+                <td><%=u.getFirmaad()%></td>
+                <td><%=Util.splitLine(u.getHammaddead(), ";", "<br>")%></td>
+                <td><%=Util.splitLine(u.getHammaddeizlno(), ";", "<br>")%></td>
+                <td><%= u.getMamulkod() %></td>
+                <td><%= u.getMamulad() %></td>
+                <td><%= (u.getMamulizlno() == 0) ? "" : u.getMamulizlno() %></td>
+                <td class="text-right"><%= (u.getPlanlananmiktar() == 0) ? "" : u.getPlanlananmiktar() + " Ad." %></td>
+                <td class="text-right"><%= u.getUretilenmiktar() + " Ad." %></td>
+                <td class="text-right" nowrap><%= (u.getFark() == 0) ? "" : u.getFark() + " Ad." %></td>
+                <td class="text-right"><%= (u.getSapma() == 0) ? "" : "% " + u.getSapma() %></td>
+                <td><%= u.getHataad() %></td>
             </tr>
             <% } %>
         </table>

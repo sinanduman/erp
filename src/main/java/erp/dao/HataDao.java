@@ -1,8 +1,8 @@
 package erp.dao;
 
-import erp.irfan.ConnectionManager;
-import erp.irfan.entity.DurusSebep;
-import erp.irfan.entity.HataSebep;
+import erp.servlet.ConnectionManager;
+import erp.entity.DurusSebep;
+import erp.entity.HataSebep;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,7 +23,6 @@ public class HataDao implements Serializable, BaseDao {
     private static final Logger logger = LoggerFactory.getLogger(HataDao.class);
 
     public List<DurusSebep> durusSebepListeGetir() {
-
         List<DurusSebep> temp = new ArrayList<DurusSebep>();
         String searchQuery = "select * from " + BaseDao.DURUSSEBEP + " order by ad";
 
@@ -43,16 +42,13 @@ public class HataDao implements Serializable, BaseDao {
     }
 
     public List<HataSebep> hataSebepListeGetir() {
-        Connection conn = connectionManager.getConnection();
         List<HataSebep> temp = new ArrayList<HataSebep>();
-
         String searchQuery = "select * from " + BaseDao.HATASEBEP + " order by ad";
 
         // connect to DB
-        PreparedStatement pstmt = null;
         ResultSet rs = null;
-        try {
-            pstmt = conn.prepareStatement(searchQuery);
+        try (Connection conn = connectionManager.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(searchQuery)) {
             logger.info(pstmt.toString());
             rs = pstmt.executeQuery();
             while (rs.next()) {
@@ -60,14 +56,6 @@ public class HataDao implements Serializable, BaseDao {
             }
         } catch (SQLException e) {
             logger.error("Error: " + e);
-        } finally {
-            try {
-                if (rs != null) {
-                    rs.close();
-                }
-            } catch (SQLException e) {
-                logger.error("Error: " + e);
-            }
         }
         return temp;
     }

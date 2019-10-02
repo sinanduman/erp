@@ -1,9 +1,7 @@
 package erp.dao;
 
-import com.sun.xml.internal.rngom.parse.host.Base;
-import erp.irfan.ConnectionManager;
-import erp.irfan.entity.Calisan;
-import erp.irfan.entity.Genel;
+import erp.servlet.ConnectionManager;
+import erp.entity.Calisan;
 import erp.util.Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

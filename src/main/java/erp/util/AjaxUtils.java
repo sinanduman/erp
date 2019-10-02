@@ -1,7 +1,8 @@
 package erp.util;
 
-import erp.irfan.ConnectionManager;
-import erp.irfan.entity.Calisan;
+import erp.dao.BaseDao;
+import erp.servlet.ConnectionManager;
+import erp.entity.Calisan;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,44 +46,26 @@ public class AjaxUtils extends HttpServlet implements Serializable {
     }
 
     protected List<Calisan> calisanEkle(String adsoy, String gorev) {
-        Connection conn = connectionManager.getConnection();
         List<Calisan> temp = new ArrayList<Calisan>();
-
-        String insertQuery = "insert into irfan.calisan (adsoy, gorev) values (?,?) ";
-        String searchQuery = "select * from irfan.calisan order by id ";
-
+        String insertQuery = "insert into " + BaseDao.CALISAN + " (adsoy, gorev) values (?,?) ";
+        String searchQuery = "select * from " + BaseDao.CALISAN + " order by id ";
         // connect to DB
-        PreparedStatement pstmt = null;
         ResultSet rs = null;
-        try {
-            pstmt = conn.prepareStatement(insertQuery);
+        try (Connection conn = connectionManager.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(insertQuery)) {
             pstmt.setString(1, adsoy);
             pstmt.setString(2, gorev);
             pstmt.executeUpdate();
 
-            pstmt = conn.prepareStatement(searchQuery);
-            rs = pstmt.executeQuery();
+            PreparedStatement pstmt2 = conn.prepareStatement(searchQuery);
+            rs = pstmt2.executeQuery();
 
             while (rs.next()) {
-                temp.add(new Calisan(
-                                rs.getInt("id"), 
-                                rs.getString("ad"), 
-                                rs.getString("soyad"), 
-                                rs.getString("gorev"),
-                                rs.getInt("durum")
-                                )
+                temp.add(new Calisan(rs)
                 );
             }
         } catch (SQLException e) {
             logger.error("Error: " + e);
-        } finally {
-            try {
-                if (rs != null) {
-                    rs.close();
-                }
-            } catch (SQLException e) {
-                logger.error("Error: " + e);
-            }
         }
         return temp;
     }

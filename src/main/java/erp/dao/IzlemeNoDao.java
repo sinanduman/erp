@@ -1,8 +1,8 @@
 package erp.dao;
 
-import erp.irfan.ConnectionManager;
-import erp.irfan.entity.Genel;
-import erp.irfan.entity.IzlemeNo;
+import erp.entity.Genel;
+import erp.servlet.ConnectionManager;
+import erp.entity.IzlemeNo;
 import erp.util.Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,7 +65,7 @@ public class IzlemeNoDao implements Serializable, BaseDao {
             pstmt.setInt(1, Integer.valueOf(mamulid));
             logger.info(pstmt.toString());
             pstmt.executeUpdate();
-            temp = izlemeNoKontrol(mamulid, kullanildi);
+            temp = izlemeNoKontrol(mamulid, kullanildi, null);
         } catch (SQLException e) {
             logger.error("Error: " + e);
         }
@@ -83,19 +83,20 @@ public class IzlemeNoDao implements Serializable, BaseDao {
             pstmt.setInt(2, Integer.valueOf(gkrno));
             pstmt.executeUpdate();
             logger.info(pstmt.toString());
-            temp = izlemeNoKontrol(mamulid, kullanildi);
+            temp = izlemeNoKontrol(mamulid, kullanildi, null);
         } catch (SQLException e) {
             logger.error("Error: " + e);
         }
         return temp;
     }
 
-    public List<IzlemeNo> izlemeNoKontrol(String mamulid, String kullanildi) {
+    public List<IzlemeNo> izlemeNoKontrol(String mamulid, String kullanildi, Integer rownumber) {
+        rownumber = (rownumber == null) ? Genel.ROWPERPAGE : rownumber;
         List<IzlemeNo> temp = new ArrayList<IzlemeNo>();
         String updateQuery = "select i.*, m.ad mamulad, m.kod mamulkod"
                 + " from " + BaseDao.IZLEMENO + " i"
                 + " join " + BaseDao.MAMUL + " m on m.id=i.mamulid"
-                + " where mamulid = ? and kullanildi <= ? order by gkrno desc limit 10";
+                + " where mamulid = ? and kullanildi <= ? order by gkrno desc limit ?";
 
         // connect to DB
         ResultSet rs = null;
@@ -103,6 +104,7 @@ public class IzlemeNoDao implements Serializable, BaseDao {
              PreparedStatement pstmt = conn.prepareStatement(updateQuery)) {
             pstmt.setInt(1, Integer.valueOf(mamulid));
             pstmt.setInt(2, Integer.valueOf(kullanildi));
+            pstmt.setInt(3, rownumber);
             logger.info(pstmt.toString());
             rs = pstmt.executeQuery();
             while (rs.next()) {

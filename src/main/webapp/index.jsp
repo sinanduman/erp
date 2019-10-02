@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page import="erp.irfan.entity.Genel" %>
+<%@ page import="erp.entity.Genel" %>
 <%@ page import="erp.util.Util" %>
 <!doctype html>
 <html lang="en">
@@ -14,12 +14,12 @@
     </title>
 
     <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/bootstrap.css?<%=Util.nanoTime%>">
 
     <!-- Custom styles for this template -->
     <link rel="stylesheet" href="css/irfan.css?<%=Util.nanoTime%>">
-    <link rel="stylesheet" href="css/fonts.css">
-    <link rel="stylesheet" href="css/font-awesome.css">
+    <link rel="stylesheet" href="css/fonts.css?<%=Util.nanoTime%>">
+    <link rel="stylesheet" href="css/font-awesome.css?<%=Util.nanoTime%>">
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>

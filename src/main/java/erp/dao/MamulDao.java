@@ -1,9 +1,9 @@
 package erp.dao;
 
-import erp.irfan.ConnectionManager;
-import erp.irfan.entity.BilesenTip;
-import erp.irfan.entity.Mamul;
-import erp.irfan.entity.MamulBilesen;
+import erp.servlet.ConnectionManager;
+import erp.entity.BilesenTip;
+import erp.entity.Mamul;
+import erp.entity.MamulBilesen;
 import erp.util.Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -82,9 +82,9 @@ public class MamulDao implements Serializable, BaseDao {
         return result;
     }
 
-    public String mamulGuncelle(String mamulid, String firmaid, String kod, String ad, String figur, String cevrimsuresi) {
+    public String mamulGuncelle(String mamulid, String firmaid, String kod, String ad, String figur, String cevrimsuresi, String esmamulid) {
         String result = "0";
-        String updateQuery = "update " + BaseDao.MAMUL + " set firmaid =?, kod =?, ad =?, figur =?, cevrimsuresi =? where id =?";
+        String updateQuery = "update " + BaseDao.MAMUL + " set firmaid =?, kod =?, ad =?, figur =?, cevrimsuresi =?, esmamulid =? where id =?";
         // connect to DB
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(updateQuery)) {
@@ -93,7 +93,11 @@ public class MamulDao implements Serializable, BaseDao {
             pstmt.setString(3, ad);
             pstmt.setInt(4, Integer.valueOf(figur));
             pstmt.setInt(5, Integer.valueOf(cevrimsuresi));
-            pstmt.setInt(6, Integer.valueOf(mamulid));
+            if(esmamulid == null || esmamulid.isEmpty() || esmamulid.equals("0"))
+                pstmt.setNull(6, Types.INTEGER);
+            else
+                pstmt.setInt(6, Integer.valueOf(esmamulid));
+            pstmt.setInt(7, Integer.valueOf(mamulid));
             logger.info(pstmt.toString());
             pstmt.executeUpdate();
         } catch (SQLException e) {

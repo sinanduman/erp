@@ -1,7 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page import="erp.irfan.entity.*, java.util.List" %>
+<%@ page import="java.util.List" %>
 <%@ page import="erp.util.Util" %>
+<%@ page import="erp.entity.*" %>
 <!doctype html>
 <html lang="en" ng-app="mamulApp">
 <head>
@@ -14,7 +15,7 @@
     </title>
 
     <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/bootstrap.css?<%=Util.nanoTime%>">
 
     <!-- Custom styles for this template -->
     <link rel="stylesheet" href="css/irfan.css?<%=Util.nanoTime%>">
@@ -52,6 +53,9 @@
         + ",mamulid:" + m.getId()
         + ",mamulad:'" + m.getAd().replaceAll("'", "") + "'"
         + ",mamulkod:'" + m.getKod() + "'"
+        + ",esmamulid:" + m.getEsmamulid()
+        + ",esmamulad:'" + m.getEsmamulad().replaceAll("'", "") + "'"
+        + ",esmamulkod:'" + m.getEsmamulkod() + "'"
         + ",hammadde:'" + m.getHammadde().replaceAll("'", "") + "'"
         + ",hammaddegkrno:'" + m.getHammaddegkrno() + "'"
         + ",yarimamul:'" + m.getYarimamul().replaceAll("'", "") + "'"
@@ -248,9 +252,7 @@
             </div>
 
             <div class="col-xs-2">
-                <button type="button" class="btn btn-danger" name="stokliste" id="stokliste" disabled="disabled">Mamül
-                    Getir
-                </button>
+                <button type="button" class="btn btn-danger" name="stokliste" id="stokliste" disabled="disabled">Mamül Getir</button>
                 <input type="hidden" name="stoklisteid" id="stoklisteid" value="0">
             </div>
 
@@ -261,19 +263,17 @@
     <!-- ALERT BOX -->
     <%
         if (message.equals("-1")) {
+        } else if (message.equals("0")) {
     %>
+        <div class="row alert alert-success">
+            <strong>Başarılı</strong> olarak eklendi!
+        </div>
     <%
-    } else if (message.equals("0")) {
+        } else if (!message.equals("") && message.length() > 1) {
     %>
-    <div class="row alert alert-success">
-        <strong>Başarılı</strong> olarak eklendi!
-    </div>
-    <%
-    } else if (!message.equals("") && message.length() > 1) {
-    %>
-    <div class="row alert alert-danger">
-        <strong>Hata! </strong><%= message %>
-    </div>
+        <div class="row alert alert-danger">
+            <strong>Hata! </strong><%= message %>
+        </div>
     <%
         }
     %>
@@ -290,21 +290,20 @@
                     <td><label class="text-success">Mamül Adı</label></td>
                     <td><label class="text-success">Çevrim Süresi</label></td>
                     <td><label class="text-success">Figür Adedi</label></td>
+                    <td><label class="text-success">Eş Mamül Kod</label></td>
+                    <td><label class="text-success">Eş Mamül Ad</label></td>
                     <td><label class="text-success">Firma</label></td>
                     <td class="text-center"><label class="text-success">Aksiyon</label></td>
                 </tr>
                 <% } %>
-                <form name="action_form<%=m.getId()%>" id="action_form<%=m.getId()%>">
+                <form name=action_form<%=m.getId()%> id=action_form<%=m.getId()%>>
                     <tr id="tr<%=m.getId()%>">
-                        <td><input type="text" class="form-control" value="<%= m.getKod() %>" name="liste_kod"
-                                   id="liste_kod"></td>
-                        <td><input type="text" class="form-control" value="<%= m.getAd().replaceAll("\"", "") %>"
-                                   name="liste_ad" id="liste_ad"></td>
-                        <td><input type="text" class="form-control xs" value="<%= m.getCevrimsuresi() %>"
-                                   name="liste_cevrimsuresi" id="liste_cevrimsuresi"></td>
+                        <td><input type="text" class="form-control small" value="<%= m.getKod() %>" name=liste_kod<%=m.getId()%> id="liste_kod<%=m.getId()%>"></td>
+                        <td><input type="text" class="form-control" value="<%= m.getAd().replaceAll("\"", "") %>" name=liste_ad<%=m.getId()%> id="liste_ad<%=m.getId()%>"></td>
+                        <td><input type="text" class="form-control xs" value="<%= m.getCevrimsuresi() %>" name=liste_cevrimsuresi<%=m.getId()%> id="liste_cevrimsuresi<%=m.getId()%>"></td>
                         <td>
                             <div>
-                                <select class="form-control xs" name="liste_figurid" id="liste_figurid">
+                                <select class="form-control xs" name=liste_figurid<%=m.getId()%> id="liste_figurid<%=m.getId()%>">
                                     <%
                                         for (int i = 1; i <= 32; i++) {
                                             if (i == m.getFigur()) {
@@ -317,8 +316,16 @@
                                 </select>
                             </div>
                         </td>
+                        <td><input type="text" class="form-control small" value="<%= m.getEsmamulid()>0 ?
+                        m.getEsmamulkod() : "" %>" id="liste_esmamulkod<%= m.getId() %>" autocomplete="off"
+                                   onfocus="javascript:changeFocusId(<%=m.getId()%>);"
+                                   onblur="javascript:clearId(<%=m.getId()%>);"></td>
+                        <td style="vertical-align: middle;"><span id="liste_esmamulad<%= m.getId() %>"><%=
+                        m.getEsmamulid()>0 ? m.getEsmamulad() : "" %></span><input type="hidden" id="autocompleted<%=
+                        m.getId()%>" value="0"/><input type="hidden" value="<%= m.getEsmamulid()>0 ? m.getEsmamulid()
+                        : "0" %>" id="liste_esmamulid<%= m.getId() %>"></td>
                         <td>
-                            <select class="form-control" id="liste_firmaid" name="liste_firmaid">
+                            <select class="form-control" name=liste_firmaid<%=m.getId()%> id="liste_firmaid<%=m.getId()%>">
                                 <%
                                     for (Firma f : firma) {
                                         if (f.getId() == m.getFirmaid()) {
@@ -336,11 +343,11 @@
                             <%
                                 if (admin != null && admin.equals("1")) {
                             %>
-                            <a href="javascript:updateMamulGo('mamul',<%=m.getId()%>,document.action_form<%=m.getId()%>,1);"
+                            <a href="javascript:updateMamulGo('mamul','<%=m.getId()%>','document.action_form<%=m.getId()%>',1);"
                                title="Güncelle"><span class="fa fa-refresh fa-lg text-warning"></span></a>
-                            <a href="javascript:deleteMamulGo('mamul',<%=m.getId()%>,document.action_form<%=m.getId()%>,3);"
+                            <a href="javascript:deleteMamulGo('mamul','<%=m.getId()%>','document.action_form<%=m.getId()%>',3);"
                                title="Sil"><span class="fa fa-minus-circle fa-lg text-danger"></span></a>
-                            <% } %>
+                            <%  } %>
                         </td>
                     </tr>
                     <tr id="tr_mam_detay<%= m.getId() %>" style="display:none;">
@@ -363,16 +370,11 @@
                                 </tr>
                                 <% } %><%-- if tablo baslik --%>
                                 <tr id="tr_mam_bilesen_detay_<%= m.getId() %>_<%= j.getBilesenid() %>">
-                                    <td><%= sayacbilesen %>
-                                    </td>
-                                    <td><%= j.getBilesenad() %>
-                                    </td>
-                                    <td><%= j.getBilesenkod() %>
-                                    </td>
-                                    <td><%= j.getBilesentipad() %>
-                                    </td>
-                                    <td><%= j.getBirimad() %>
-                                    </td>
+                                    <td><%= sayacbilesen %></td>
+                                    <td><%= j.getBilesenad() %></td>
+                                    <td><%= j.getBilesenkod() %></td>
+                                    <td><%= j.getBilesentipad() %></td>
+                                    <td><%= j.getBirimad() %></td>
                                     <td>
                                         <%
                                             /* Hammadde Gramaj Guncelleme*/
@@ -387,7 +389,7 @@
                                                 }
                                         %>
                                         <% if (admin != null && admin.equals("1")) { %>
-                                        <input type="text" class="form-control xs" value="<%= val %>"
+                                            <input type="text" class="form-control xs" value="<%= val %>"
                                                name="mamulbilesen_miktar<%= j.getBilesenid() %>"
                                                id="mamulbilesen_miktar<%= j.getBilesenid() %>">
                                         <% } else { %>
@@ -414,7 +416,7 @@
                                         <%= j.getMiktar().intValue() %>
                                         <% } %>
                                         <%
-                                            }
+                                        }
                                         %>
                                     </td>
                                     <% if (admin != null && admin.equals("1")) { %>
@@ -450,6 +452,7 @@
 <script src="js/bootstrap.min.js"></script>
 <script src="js/irfan.js?<%=Util.nanoTime%>" type="text/javascript"></script>
 <script src="js/mamul.js?<%=Util.nanoTime%>" type="text/javascript"></script>
+<script src="js/mamul-helper.js?<%=Util.nanoTime%>" type="text/javascript"></script>
 
 <script type="text/javascript">
     $(function () {

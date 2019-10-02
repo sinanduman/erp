@@ -453,6 +453,10 @@ cite {
 	color: #630059;
 }
 
+.text-orange{
+	color: #fb8c00;
+}
+
 .text-success {
 	color: #468847;
 }
@@ -2369,6 +2373,15 @@ fieldset[disabled] .btn-warning.active {
 	/* 3- 470040 - border */
 }
 
+.btn-orange {
+	color: #ffffff;
+	background-color: #fb8c00;
+	border-color: #f57c00;
+	/* 1- fb8c00 - acik */
+	/* 2- ef6c00 - hover  */
+	/* 3- f57c00 - border */
+}
+
 .btn-turkuaz {
 	color: #ffffff;
 	background-color: #1ABC9C;
@@ -2395,6 +2408,16 @@ fieldset[disabled] .btn-warning.active {
 	border-color: #470040;
 }
 
+.btn-orange:hover,
+.btn-orange:focus,
+.btn-orange:active,
+.btn-orange.active,
+.open .dropdown-toggle.btn-orange {
+	color: #ffffff;
+	background-color: #ef6c00;
+	border-color: #e65100;
+}
+
 .btn-turkuaz:hover,
 .btn-turkuaz:focus,
 .btn-turkuaz:active,
@@ -2414,6 +2437,12 @@ fieldset[disabled] .btn-warning.active {
 .btn-sevk:active,
 .btn-sevk.active,
 .open .dropdown-toggle.btn-sevk {
+	background-image: none;
+}
+
+.btn-orange:active,
+.btn-orange.active,
+.open .dropdown-toggle.btn-orange {
 	background-image: none;
 }
 
@@ -2478,6 +2507,26 @@ fieldset[disabled] .btn-sevk:active,
 fieldset[disabled] .btn-sevk.active {
 	background-color: #54004B;
 	border-color: #470040;
+}
+
+
+.btn-orange.disabled,
+.btn-orange[disabled],
+fieldset[disabled] .btn-orange,
+.btn-orange.disabled:hover,
+.btn-orange[disabled]:hover,
+fieldset[disabled] .btn-orange:hover,
+.btn-orange.disabled:focus,
+.btn-orange[disabled]:focus,
+fieldset[disabled] .btn-orange:focus,
+.btn-orange.disabled:active,
+.btn-orange[disabled]:active,
+fieldset[disabled] .btn-orange:active,
+.btn-orange.disabled.active,
+.btn-orange[disabled].active,
+fieldset[disabled] .btn-orange.active {
+	background-color: #fb8c00;
+	border-color: #f57c00;
 }
 
 .btn-success {
@@ -3634,6 +3683,7 @@ input[type="button"].btn-block {
 .btn-warning .caret,
 .btn-danger .caret,
 .btn-sevk .caret,
+.btn-orange .caret,
 .btn-info .caret {
 	border-top-color: #fff;
 }
@@ -3647,6 +3697,7 @@ input[type="button"].btn-block {
 .dropup .btn-warning .caret,
 .dropup .btn-danger .caret,
 .dropup .btn-sevk .caret,
+.dropup .btn-orange .caret,
 .dropup .btn-info .caret {
 	border-bottom-color: #fff;
 }
@@ -5176,6 +5227,17 @@ textarea.input-group-sm > .input-group-btn > .btn {
 	background-color: #630059;
 }
 
+.label-orange {
+	background-color: #fb8c00;
+}
+/*
+#fb8c00 orange darken-1
+
+#f57c00 orange darken-2
+
+#ef6c00 orange darken-3
+*/
+
 .label-danger[href]:hover,
 .label-danger[href]:focus {
 	background-color: #c9302c;
@@ -5184,6 +5246,11 @@ textarea.input-group-sm > .input-group-btn > .btn {
 .label-sevk[href]:hover,
 .label-sevk[href]:focus {
 	background-color: #470040;
+}
+
+.label-orange[href]:hover,
+.label-orange[href]:focus {
+	background-color: #ef6c00;
 }
 
 .badge {

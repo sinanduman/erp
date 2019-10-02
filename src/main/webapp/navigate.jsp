@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page import="erp.irfan.entity.User" %>
+<%@ page import="erp.entity.User" %>
 <%
     User user = (User) request.getSession().getAttribute("user");
 %>
@@ -46,32 +46,32 @@
         </div>
         <!-- /btn-group -->
         <div class="btn-group">
-            <button type="button" class="btn btn-warning">Tanımlar</button>
-            <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown">
+            <button type="button" class="btn btn-orange">Tanımlar</button>
+            <button type="button" class="btn btn-orange dropdown-toggle" data-toggle="dropdown">
                 <span class="caret"></span>
                 <span class="sr-only">Toggle Dropdown</span>
             </button>
             <ul class="dropdown-menu">
                 <li>
                     <a href="hammadde">
-                        <span class="fa fa-dot-circle-o text-warning"></span> Hammadde ve Yarı Mamül</a>
+                        <span class="fa fa-dot-circle-o text-orange"></span> Hammadde ve Yarı Mamül</a>
                 </li>
                 <li>
                     <a href="mamul">
-                        <span class="fa fa-dot-circle-o text-warning"></span> Mamül</a>
+                        <span class="fa fa-dot-circle-o text-orange"></span> Mamül</a>
                 </li>
                 <li class="divider"></li>
                 <li>
                     <a href="calisan">
-                        <span class="fa fa-dot-circle-o text-warning"></span> Çalışan</a>
+                        <span class="fa fa-dot-circle-o text-orange"></span> Çalışan</a>
                 </li>
                 <li>
                     <a href="makina">
-                        <span class="fa fa-dot-circle-o text-warning"></span> Makina/Bant</a>
+                        <span class="fa fa-dot-circle-o text-orange"></span> Makina/Bant</a>
                 </li>
                 <li>
                     <a href="firma">
-                        <span class="fa fa-dot-circle-o text-warning"></span> Firma</a>
+                        <span class="fa fa-dot-circle-o text-orange"></span> Firma</a>
                 </li>
             </ul>
         </div>

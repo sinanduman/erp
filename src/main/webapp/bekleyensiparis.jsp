@@ -26,7 +26,7 @@
     <![endif]-->
 </head>
 <body>
-<%@ page import="erp.irfan.entity.Genel, erp.irfan.entity.ResultTip, erp.irfan.entity.Siparis" %>
+<%@ page import="erp.entity.Genel, erp.entity.ResultTip, erp.entity.Siparis" %>
 <%@ page import="java.util.List" %>
 <%@ page import="erp.util.Util" %>
 

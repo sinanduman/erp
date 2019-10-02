@@ -1,8 +1,8 @@
 package erp.dao;
 
-import erp.irfan.ConnectionManager;
-import erp.irfan.entity.Bilesen;
-import erp.irfan.entity.BilesenTip;
+import erp.servlet.ConnectionManager;
+import erp.entity.Bilesen;
+import erp.entity.BilesenTip;
 import erp.util.Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +27,7 @@ public class BilesenDao implements Serializable, BaseDao {
         String filter2 = (bilesenid == null) ? "" : " and b.id = " + bilesenid;
         String filter0 = " where 1=1" + filter1 + filter2;
 
-        String searchQuery = "select b.*, bt.ad bilesentipad, f.ad firmaad, bm.ad birimad "
+        String searchQuery = "select b.*, bt.ad bilesentipad, f.ad firmaad, bm.ad birimad"
                 + " from " + BaseDao.BILESEN + " b"
                 + " join " + BaseDao.BILESENTIP + " bt on bt.id = b.bilesentipid"
                 + " left join " + BaseDao.BIRIM + " bm on bm.id = b.birimid"
@@ -70,10 +70,10 @@ public class BilesenDao implements Serializable, BaseDao {
         return result;
     }
 
-    public String bilesenGuncelle(String bilesenid, String birimid, String firmaid, String bilesenkod, String bilesenad) {
+    public String bilesenGuncelle(String bilesenid, String birimid, String firmaid, String bilesenkod, String bilesenad, String durum) {
         String result = "0";
         String updateQuery = "update " + BaseDao.BILESEN
-                + " set birimid =?, firmaid =?, kod =?, ad =? "
+                + " set birimid =?, firmaid =?, kod =?, ad =?, durum =?"
                 + " where id =?";
 
         // connect to DB
@@ -86,7 +86,8 @@ public class BilesenDao implements Serializable, BaseDao {
             pstmt.setInt(2, Integer.parseInt(firmaid));
             pstmt.setString(3, bilesenkod);
             pstmt.setString(4, bilesenad);
-            pstmt.setInt(5, Integer.parseInt(bilesenid));
+            pstmt.setInt(5, Integer.parseInt(durum));
+            pstmt.setInt(6, Integer.parseInt(bilesenid));
             logger.info(pstmt.toString());
 
             pstmt.executeUpdate();

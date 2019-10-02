@@ -1,4 +1,4 @@
 $("#raporgetir").click(function(){
-	$("#raporgetirid").val("1");
-	$("#gkrlisteform").submit();
+    $("#raporgetirid").val("1");
+    $("#gkrlisteform").submit();
 });

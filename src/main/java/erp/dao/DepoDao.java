@@ -1,7 +1,7 @@
 package erp.dao;
 
-import erp.irfan.ConnectionManager;
-import erp.irfan.entity.Depo;
+import erp.servlet.ConnectionManager;
+import erp.entity.Depo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -27,7 +27,7 @@
     <![endif]-->
 </head>
 <body>
-<%@ page import="erp.irfan.entity.Firma, erp.irfan.entity.Genel, java.util.List" %>
+<%@ page import="erp.entity.Firma, erp.entity.Genel, java.util.List" %>
 <%@ page import="erp.util.Util" %>
 
 <%@ include file="logincheck.jsp" %>

@@ -1,6 +1,6 @@
 <%@ page import="erp.util.Util" %>
-<%@ page import="erp.irfan.entity.*" %>
 <%@ page import="java.util.Date,java.util.List" %>
+<%@ page import="erp.entity.*" %>
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!doctype html>
@@ -22,7 +22,7 @@
     <link rel="stylesheet/less" type="text/css" href="less/datepicker.less">
 
     <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/bootstrap.css?<%=Util.nanoTime%>">
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>

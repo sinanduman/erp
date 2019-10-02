@@ -1,11 +1,8 @@
 package erp.dao;
 
-import erp.irfan.ConnectionManager;
-import erp.irfan.entity.Genel;
-import erp.irfan.entity.Siparis;
-import erp.irfan.entity.SiparisPlan;
-import erp.irfan.entity.SiparisTip;
-import erp.util.Util;
+import erp.servlet.ConnectionManager;
+import erp.entity.Siparis;
+import erp.entity.SiparisTip;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

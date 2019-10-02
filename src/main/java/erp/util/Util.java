@@ -1,11 +1,13 @@
 package erp.util;
 
-import erp.irfan.entity.Aylar;
-import erp.irfan.entity.Genel;
+import erp.entity.Aylar;
+import erp.entity.Genel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Singleton;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -102,7 +104,7 @@ public class Util {
     }
 
     public static long getToken() {
-        return System.currentTimeMillis();
+        return System.nanoTime();
     }
 
     public static Timestamp date_tr_to_timestamp(String dateinfo) {
@@ -160,5 +162,31 @@ public class Util {
 
     public static String getPageFilter(int offset){
         return getPageFilter(offset, null);
+    }
+
+    public static String md5Dao(String temp) {
+        String digest = temp;
+        if (temp != null) {
+            MessageDigest md;
+            try {
+                md = MessageDigest.getInstance("MD5");
+                md.update(temp.getBytes());
+                BigInteger hash = new BigInteger(1, md.digest());
+                digest = hash.toString(16);
+                while (digest.length() < 32) { // 40 for SHA-1
+                    digest = "0" + digest;
+                }
+            } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+            }
+        }
+        return digest;
+    }
+
+    public static String nullToEmpty(String val){
+        if (val == null)
+            return "";
+        else
+            return val;
     }
 }

@@ -1,9 +1,8 @@
 package erp.dao;
 
-import erp.irfan.ConnectionManager;
-import erp.irfan.entity.Genel;
-import erp.irfan.entity.UretimDurum;
-import erp.irfan.entity.UretimPlan;
+import erp.servlet.ConnectionManager;
+import erp.entity.UretimDurum;
+import erp.entity.UretimPlan;
 import erp.util.Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,13 +21,11 @@ public class UretimDao implements Serializable, BaseDao {
     private static final Logger logger = LoggerFactory.getLogger(UretimDao.class);
 
     public String uretimPlanSil(Integer uretimplanid) {
-        Connection conn = connectionManager.getConnection();
         String retVal = "0";
-        String deleteQuery = "select irfan.plan_sil(?)";
+        String deleteQuery = "select " + BaseDao.F_PLAN_SIL + "(?)";
         // connect to DB
-        PreparedStatement pstmt = null;
-        try {
-            pstmt = conn.prepareStatement(deleteQuery);
+        try (Connection conn = connectionManager.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(deleteQuery)) {
             pstmt.setInt(1, uretimplanid);
             logger.info(pstmt.toString());
 
@@ -38,26 +35,16 @@ public class UretimDao implements Serializable, BaseDao {
             }
         } catch (SQLException e) {
             logger.error("Error: " + e);
-        } finally {
-            try {
-                if (pstmt != null) {
-                    pstmt.close();
-                }
-            } catch (SQLException e) {
-                logger.error("Error: " + e);
-            }
         }
         return retVal;
     }
 
     public String uretimPlanOk(Integer uretimplanid) {
-        Connection conn = connectionManager.getConnection();
         String retVal = "0";
-        String planQuery = "SELECT irfan.plan_ok(?) ";
+        String planQuery = "SELECT " + BaseDao.F_PLAN_OK + "(?) ";
         // connect to DB
-        PreparedStatement pstmt = null;
-        try {
-            pstmt = conn.prepareStatement(planQuery);
+        try (Connection conn = connectionManager.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(planQuery)) {
             pstmt.setInt(1, uretimplanid);
             logger.info(pstmt.toString());
 
@@ -67,20 +54,11 @@ public class UretimDao implements Serializable, BaseDao {
             }
         } catch (SQLException e) {
             logger.error("Error: " + e);
-        } finally {
-            try {
-                if (pstmt != null) {
-                    pstmt.close();
-                }
-            } catch (SQLException e) {
-                logger.error("Error: " + e);
-            }
         }
         return retVal;
     }
 
-    public int uretimTakipEkleGuncelle(String mamulid, String uretilenmiktar, String hatalimiktar, String makinaid, String calisanid, String tarih, String baszaman, String bitzaman, String hataid, String durusid, String duruszaman, Integer uretimplanid, Integer mamulizleno) {
-        Connection conn = connectionManager.getConnection();
+    public int uretimTakipEkleGuncelle(String mamulid, String uretilenmiktar, String hatalimiktar, String makinaid, String calisanid, String tarih, String baszaman, String bitzaman, String hataid, String durusid, String duruszaman, Integer mamulizleno, Integer uretimplanid) {
         int result = -1;
         String insertQuery = null;
 
@@ -96,30 +74,37 @@ public class UretimDao implements Serializable, BaseDao {
                     + " where id =?";
         }
         // connect to DB
-        PreparedStatement pstmt = null;
-        try {
-            pstmt = conn.prepareStatement(insertQuery);
-            pstmt.setInt(1, Integer.valueOf(mamulid));
-            pstmt.setInt(2, Integer.valueOf(uretilenmiktar));
+        try (Connection conn = connectionManager.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(insertQuery)) {
+            pstmt.setInt(1, Integer.parseInt(mamulid));
+            pstmt.setInt(2, Integer.parseInt(uretilenmiktar));
 
-            if (hatalimiktar == null || hatalimiktar.trim().isEmpty()) pstmt.setNull(3, Types.INTEGER);
-            else pstmt.setInt(3, Integer.valueOf(hatalimiktar));
+            if (hatalimiktar == null || hatalimiktar.trim().isEmpty())
+                pstmt.setNull(3, Types.INTEGER);
+            else
+                pstmt.setInt(3, Integer.parseInt(hatalimiktar));
 
-            pstmt.setInt(4, Integer.valueOf(makinaid));
-            pstmt.setInt(5, Integer.valueOf(calisanid));
+            pstmt.setInt(4, Integer.parseInt(makinaid));
+            pstmt.setInt(5, Integer.parseInt(calisanid));
 
             pstmt.setDate(6, Date.valueOf(Util.date_tr_to_eng(tarih)));
             pstmt.setTime(7, Time.valueOf(baszaman));
             pstmt.setTime(8, Time.valueOf(bitzaman));
 
-            if (hataid == null || hataid.trim().isEmpty()) pstmt.setNull(9, Types.INTEGER);
-            else pstmt.setInt(9, Integer.valueOf(hataid));
+            if (hataid == null || hataid.trim().isEmpty())
+                pstmt.setNull(9, Types.INTEGER);
+            else
+                pstmt.setInt(9, Integer.parseInt(hataid));
 
-            if (durusid == null || durusid.trim().isEmpty()) pstmt.setNull(10, Types.INTEGER);
-            else pstmt.setInt(10, Integer.valueOf(durusid));
+            if (durusid == null || durusid.trim().isEmpty())
+                pstmt.setNull(10, Types.INTEGER);
+            else
+                pstmt.setInt(10, Integer.parseInt(durusid));
 
-            if (duruszaman == null || duruszaman.trim().isEmpty()) pstmt.setNull(11, Types.INTEGER);
-            else pstmt.setInt(11, Integer.valueOf(duruszaman));
+            if (duruszaman == null || duruszaman.trim().isEmpty())
+                pstmt.setNull(11, Types.INTEGER);
+            else
+                pstmt.setInt(11, Integer.parseInt(duruszaman));
 
             if (uretimplanid != 0) { /* Guncelleme */
                 pstmt.setInt(12, mamulizleno);
@@ -132,28 +117,18 @@ public class UretimDao implements Serializable, BaseDao {
             result = pstmt.executeUpdate();
         } catch (SQLException e) {
             logger.error("Error: " + e);
-        } finally {
-            try {
-                if (pstmt != null) {
-                    pstmt.close();
-                }
-            } catch (SQLException e) {
-                logger.error("Error: " + e);
-            }
         }
         return result;
     }
 
     public String uretimPlanGuncelle(Integer gerceklesenmiktar, Integer planlananmiktar, Integer hatalimiktar, Integer hataid, Integer uretimplanid) {
-        Connection conn = connectionManager.getConnection();
         String result = "0";
         String updateQuery = "update " + BaseDao.URETIMPLAN
                 + " set uretilenmiktar =?, planlananmiktar =?, hatalimiktar =?, hataid =?"
                 + " where id =?";
         // connect to DB
-        PreparedStatement pstmt = null;
-        try {
-            pstmt = conn.prepareStatement(updateQuery);
+        try (Connection conn = connectionManager.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(updateQuery)) {
             pstmt.setInt(1, gerceklesenmiktar);
             pstmt.setInt(2, planlananmiktar);
 
@@ -170,34 +145,25 @@ public class UretimDao implements Serializable, BaseDao {
         } catch (SQLException e) {
             result = e.getMessage();
             logger.error("Error: " + e);
-        } finally {
-            try {
-                if (pstmt != null) {
-                    pstmt.close();
-                }
-            } catch (SQLException e) {
-                logger.error("Error: " + e);
-            }
         }
         return result;
     }
 
     public List<UretimPlan> uretimPlanListeGetir(UretimDurum uretimdurum, int offset, String filter, String view) {
-
         List<UretimPlan> temp = new ArrayList<UretimPlan>();
 
         String pageFilter = Util.getPageFilter (offset);
-        String filter0 = null;
+        String filter0 = "";
         if (uretimdurum == UretimDurum.BEKLEYEN) {
             filter0 = " where tamamlandi=0 " + filter;
         } else if (uretimdurum == UretimDurum.TAMAMLANMIS) {
             filter0 = " where tamamlandi=1 " + filter;
-        } else {
-            filter0 = " ";
         }
 
         String searchQuery = "select * from irfan.uretimplantum_" + view /* view */
-                + filter0 + " order by id " + pageFilter;
+                + filter0
+                + " order by id "
+                + pageFilter;
         ResultSet rs = null;
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(searchQuery)) {
@@ -212,24 +178,33 @@ public class UretimDao implements Serializable, BaseDao {
                         rs.getString("mamulkod"),
                         Util.mamulInfoDecompose(rs.getString("hammadde"),1), /* -- 1: hammadde adi icin */
                         rs.getString("yarimamul"),
-                        rs.getInt("planlananmiktar"), rs.getInt("uretilenmiktar"), rs.getInt("hatalimiktar"),
-                        rs.getInt("makinaid"), rs.getString("makinaad"),
-                        rs.getInt("firmaid"), rs.getString("firmaad"),
-                        rs.getInt("calisanid"), rs.getString("calisanad"), rs.getString("calisansoyad"),
-                        rs.getInt("hataid"), rs.getString("hataad"),
-                        (rs.getString("hatakodu") == null) ? "" : (rs.getString("hatakodu")), rs.getInt("durusid"),
-                        rs.getString("durusad"), (rs.getString("duruskodu") == null) ? "" : (rs.getString("duruskodu")),
+                        rs.getInt("planlananmiktar"),
+                        rs.getInt("uretilenmiktar"),
+                        rs.getInt("hatalimiktar"),
+                        rs.getInt("makinaid"),
+                        rs.getString("makinaad"),
+                        rs.getInt("firmaid"),
+                        rs.getString("firmaad"),
+                        rs.getInt("calisanid"),
+                        rs.getString("calisanad"),
+                        rs.getString("calisansoyad"),
+                        rs.getInt("hataid"),
+                        rs.getString("hataad"),
+                        (rs.getString("hatakodu") == null) ? "" : (rs.getString("hatakodu")),
+                        rs.getInt("durusid"),
+                        rs.getString("durusad"),
+                        (rs.getString("duruskodu") == null) ? "" : (rs.getString("duruskodu")),
                         rs.getInt("duruszaman"),
-                        rs.getDate("tarih"), rs.getTime("baszaman"), rs.getTime("bitzaman"),
+                        rs.getDate("tarih"),
+                        rs.getTime("baszaman"),
+                        rs.getTime("bitzaman"),
                         rs.getInt("mamulizleno"),
-                        (rs.getString("hammadde") == null) ? "" : Util.mamulInfoDecompose(rs.getString("hammadde"),4), /*
-                 * -- 1: hammadde izle no adi icin */
-                        (rs.getString("yarimamul") == null) ? "" : Util.mamulInfoDecompose(rs.getString("yarimamul"),4), /*
-                 * -- 1: yarimamul izle no adi icin */
+                        (rs.getString("hammadde") == null) ? "" : Util.mamulInfoDecompose(rs.getString("hammadde"),4), /** -- 1: hammadde izle no adi icin */
+                        (rs.getString("yarimamul") == null) ? "" : Util.mamulInfoDecompose(rs.getString("yarimamul"),4), /** -- 1: yarimamul izle no adi icin */
                         rs.getInt("tamamlandi"),
-                        (rs.getString("yarimamul") == null) ? "" : Util.mamulInfoDecompose(rs.getString("hammadde"),3), /*
-                 * -- 3: hammadde toplam agirlik icin */
-                        rs.getInt("cevrimsuresi")));
+                        (rs.getString("yarimamul") == null) ? "" : Util.mamulInfoDecompose(rs.getString("hammadde"),3), /** -- 3: hammadde toplam agirlik icin */
+                        rs.getInt("cevrimsuresi"))
+                );
             }
         } catch (SQLException e) {
             logger.error("Error: " + e);
@@ -280,13 +255,12 @@ public class UretimDao implements Serializable, BaseDao {
                         rs.getTime("baszaman"),
                         rs.getTime("bitzaman"),
                         rs.getInt("mamulizleno"),
-                        (rs.getString("hammadde") == null) ? "" : Util.mamulInfoDecompose(rs.getString("hammadde"),4), /*
-                 * -- 1: hammadde izle no adi icin */
-                        (rs.getString("yarimamul") == null) ? "" : Util.mamulInfoDecompose(rs.getString("yarimamul"),4), /*
-                 * -- 1: yarimamul izle no adi icin */
-                        rs.getInt("tamamlandi"), (rs.getString("yarimamul") == null) ? "" : Util.mamulInfoDecompose(rs.getString("hammadde"),3), /*
-                 * -- 3: hammadde toplam agirlik icin */
-                        rs.getInt("cevrimsuresi")));
+                        (rs.getString("hammadde") == null) ? "" : Util.mamulInfoDecompose(rs.getString("hammadde"),4), /** -- 1: hammadde izle no adi icin */
+                        (rs.getString("yarimamul") == null) ? "" : Util.mamulInfoDecompose(rs.getString("yarimamul"),4), /** -- 1: yarimamul izle no adi icin */
+                        rs.getInt("tamamlandi"),
+                        (rs.getString("yarimamul") == null) ? "" : Util.mamulInfoDecompose(rs.getString("hammadde"),3), /** -- 3: hammadde toplam agirlik icin */
+                        rs.getInt("cevrimsuresi"))
+                );
             }
         } catch (SQLException e) {
             logger.error("Error: " + e);
@@ -338,14 +312,12 @@ public class UretimDao implements Serializable, BaseDao {
                         rs.getTime("baszaman"),
                         rs.getTime("bitzaman"),
                         rs.getInt("mamulizleno"),
-                        (rs.getString("hammadde") == null) ? "" : Util.mamulInfoDecompose(rs.getString("hammadde"), 4),
-                        /** -- 1: hammadde izle no adi icin */
-                        (rs.getString("yarimamul") == null) ? "" : Util.mamulInfoDecompose(rs.getString("yarimamul"), 4),
-                        /** -- 1: yarimamul izle no adi icin */
+                        (rs.getString("hammadde") == null) ? "" : Util.mamulInfoDecompose(rs.getString("hammadde"), 4), /** -- 1: hammadde izle no adi icin */
+                        (rs.getString("yarimamul") == null) ? "" : Util.mamulInfoDecompose(rs.getString("yarimamul"), 4), /** -- 1: yarimamul izle no adi icin */
                         rs.getInt("tamamlandi"),
-                        (rs.getString("yarimamul") == null) ? "" : Util.mamulInfoDecompose(rs.getString("hammadde"), 3),
-                        /** -- 3: hammadde toplam agirlik icin */
-                        rs.getInt("cevrimsuresi")));
+                        (rs.getString("yarimamul") == null) ? "" : Util.mamulInfoDecompose(rs.getString("hammadde"), 3), /** -- 3: hammadde toplam agirlik icin */
+                        rs.getInt("cevrimsuresi"))
+                );
             }
         } catch (SQLException e) {
             logger.error(e.getMessage());

@@ -1,10 +1,9 @@
 package erp.dao;
 
-import erp.irfan.ConnectionManager;
-import erp.irfan.entity.BilesenTip;
-import erp.irfan.entity.Genel;
-import erp.irfan.entity.Stok;
-import erp.irfan.entity.StokRapor;
+import erp.servlet.ConnectionManager;
+import erp.entity.BilesenTip;
+import erp.entity.Stok;
+import erp.entity.StokRapor;
 import erp.util.Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,23 +23,20 @@ public class StokDao implements Serializable, BaseDao {
     ConnectionManager connectionManager;
     private static final Logger logger = LoggerFactory.getLogger(StokDao.class);
 
-    public String stokKontrol(String tarih, String gkrno, String miktar, String iade, String bilesentipid) {
+    public String stokKontrol(String tarih, String gkrno, String miktar, String iade, String bilesenid, String bilesentipid) {
         Integer sum = null;
         String result = "0";
-        String selectQuery = "select sum(case when islemyonu = 0 then miktar else -1*miktar end)"
+        String selectQuery = "select sum(case when islemyonu =0 then miktar else -1*miktar end)"
                 + " from " + BaseDao.STOK
-                + " where gkrno =? and exists"
-                + " (select 1 from " + BaseDao.STOK + " where gkrno =? and islemyonu =0 and (date(giristarihi) = ? or date(cikistarihi) = ?))"
+                + " where bilesenid =? and gkrno =?"
                 + " group by gkrno";
 
         // connect to DB
         ResultSet rs = null;
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(selectQuery)) {
-            pstmt.setInt(1, Integer.valueOf(gkrno));
+            pstmt.setInt(1, Integer.valueOf(bilesenid));
             pstmt.setInt(2, Integer.valueOf(gkrno));
-            pstmt.setDate(3, Date.valueOf(Util.date_tr_to_eng(tarih)));
-            pstmt.setDate(4, Date.valueOf(Util.date_tr_to_eng(tarih)));
             rs = pstmt.executeQuery();
             logger.info(pstmt.toString());
             if (rs.next()) {
@@ -81,16 +77,26 @@ public class StokDao implements Serializable, BaseDao {
             pstmt.setNull(1, Types.INTEGER); // planid
             pstmt.setInt(2, Integer.valueOf(bilesenid));
             pstmt.setBigDecimal(3, BigDecimal.valueOf(Double.valueOf(miktar)));
-            if (gkrno != null) pstmt.setInt(4, Integer.valueOf(gkrno));
-            else pstmt.setNull(4, Types.INTEGER);
-            if (irsaliyeno != null) pstmt.setString(5, irsaliyeno);
-            else pstmt.setNull(5, Types.VARCHAR);
-            if (lot != null) pstmt.setString(6, lot);
-            else pstmt.setNull(6, Types.VARCHAR);
-            if (not != null) pstmt.setString(7, not);
-            else pstmt.setNull(7, Types.VARCHAR);
-            if (tarih != null) pstmt.setTimestamp(8, Util.date_tr_to_timestamp(tarih));
-            else pstmt.setNull(8, Types.TIMESTAMP);
+            if (gkrno != null)
+                pstmt.setInt(4, Integer.valueOf(gkrno));
+            else
+                pstmt.setNull(4, Types.INTEGER);
+            if (irsaliyeno != null)
+                pstmt.setString(5, irsaliyeno);
+            else
+                pstmt.setNull(5, Types.VARCHAR);
+            if (lot != null)
+                pstmt.setString(6, lot);
+            else
+                pstmt.setNull(6, Types.VARCHAR);
+            if (not != null)
+                pstmt.setString(7, not);
+            else
+                pstmt.setNull(7, Types.VARCHAR);
+            if (tarih != null)
+                pstmt.setTimestamp(8, Util.date_tr_to_timestamp(tarih));
+            else
+                pstmt.setNull(8, Types.TIMESTAMP);
             logger.info(pstmt.toString());
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
@@ -112,16 +118,26 @@ public class StokDao implements Serializable, BaseDao {
             pstmt.setNull(1, Types.INTEGER); // Planid
             pstmt.setInt(2, Integer.valueOf(bilesenid));
             pstmt.setBigDecimal(3, BigDecimal.valueOf(Double.valueOf(miktar)));
-            if (gkrno != null) pstmt.setInt(4, Integer.valueOf(gkrno));
-            else pstmt.setNull(4, Types.INTEGER);
-            if (irsaliyeno != null) pstmt.setString(5, irsaliyeno);
-            else pstmt.setNull(5, Types.VARCHAR);
-            if (lot != null) pstmt.setString(6, lot);
-            else pstmt.setNull(6, Types.VARCHAR);
-            if (not != null) pstmt.setString(7, not);
-            else pstmt.setNull(7, Types.VARCHAR);
-            if (tarih != null) pstmt.setTimestamp(8, Util.date_tr_to_timestamp(tarih));
-            else pstmt.setNull(8, Types.TIMESTAMP);
+            if (gkrno != null)
+                pstmt.setInt(4, Integer.valueOf(gkrno));
+            else
+                pstmt.setNull(4, Types.INTEGER);
+            if (irsaliyeno != null)
+                pstmt.setString(5, irsaliyeno);
+            else
+                pstmt.setNull(5, Types.VARCHAR);
+            if (lot != null)
+                pstmt.setString(6, lot);
+            else
+                pstmt.setNull(6, Types.VARCHAR);
+            if (not != null)
+                pstmt.setString(7, not);
+            else
+                pstmt.setNull(7, Types.VARCHAR);
+            if (tarih != null)
+                pstmt.setTimestamp(8, Util.date_tr_to_timestamp(tarih));
+            else
+                pstmt.setNull(8, Types.TIMESTAMP);
 
             logger.info(pstmt.toString());
             ResultSet rs = pstmt.executeQuery();

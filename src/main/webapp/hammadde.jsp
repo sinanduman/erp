@@ -12,7 +12,7 @@
     </title>
 
     <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/bootstrap.css?<%=Util.nanoTime%>">
 
     <!-- Custom styles for this template -->
     <link rel="stylesheet" href="css/irfan.css?<%=Util.nanoTime%>">
@@ -28,8 +28,9 @@
     <![endif]-->
 </head>
 <body>
-<%@ page import="erp.irfan.entity.*, java.util.List" %>
+<%@ page import="erp.servlet.entity.*, java.util.List" %>
 <%@ page import="erp.util.Util" %>
+<%@ page import="erp.entity.*" %>
 
 <%@ include file="logincheck.jsp" %>
 
@@ -46,7 +47,6 @@
     Integer noofpages = (Integer) request.getAttribute("noofpages");
     String bilesenid = (String) request.getAttribute("bilesenid");
     String stoklisteid = (String) request.getAttribute("stoklisteid");
-
 %>
 
 <script type="text/javascript">
@@ -75,26 +75,24 @@
 <div class="container">
     <form class="form-horizontal" name="hammadde_form" id="hammadde_form" method="post" action="hammadde">
         <div class="row text-warning" style="text-align:center;">
-            <div class="col-xs-8">
+            <div class="col-xs-10">
                 <label class="text-danger rounded">Hammadde ve Yarı Mamül Tanımı</label>
             </div>
         </div>
 
         <div class="row">
-            <div class="col-xs-8">
+            <div class="col-xs-10">
                 <div class="form-group">
                     <label for="hamkod" class="col-xs-3 control-label text-baslik">Malzeme Kodu: </label>
                     <div>
-                        <input type="text" class="form-control big" name="hamkod" id="hamkod" placeholder="Malzeme Kodu"
-                               autocomplete="off">
+                        <input type="text" class="form-control big" name="hamkod" id="hamkod" placeholder="Malzeme Kodu" autocomplete="off">
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label for="hamad" class="col-xs-3 control-label text-baslik">Malzeme Adı: </label>
                     <div>
-                        <input type="text" class="form-control big" name="hamad" id="hamad" placeholder="Malzeme Adı"
-                               autocomplete="off">
+                        <input type="text" class="form-control big" name="hamad" id="hamad" placeholder="Malzeme Adı" autocomplete="off">
                     </div>
                 </div>
 
@@ -145,7 +143,7 @@
                 <%
                     if (admin != null && admin.equals("1")) {
                 %>
-                <div class="row col-xs-12" sytle="margin-bottom:5px;">
+                <div class="row col-xs-10" sytle="margin-bottom:5px;border:1px solid #ccc;">
                     <label class="col-xs-3 control-label">&nbsp;</label>
                     <div class="col-xs-1">
                         <button type="button" class="btn btn-danger" onclick="hammaddeEkle()">Ekle</button>
@@ -153,15 +151,12 @@
                     </div>
 
                     <div class="col-xs-6 text-right">
-                        <input type="text" class="form-control big" name="bilesenkodara" id="bilesenkodara"
-                               placeholder="Malzeme Kodu" autocomplete="off">
-                        <input type="hidden" name="bilesenidara" id="bilesenidara">
+                        <input type="text" class="form-control big" name="bilesenkodara" id="bilesenkodara" placeholder="Malzeme Kodu" autocomplete="off">
+                        <input type="hidden" name="bilesenidara" id="bilesenidara" value="<%=bilesenid%>">
                     </div>
 
                     <div class="col-xs-2">
-                        <button type="button" class="btn btn-danger" name="stokliste" id="stokliste"
-                                disabled="disabled">Malzeme Getir
-                        </button>
+                        <button type="button" class="btn btn-danger" name="stokliste" id="stokliste" disabled="disabled">Malzeme Getir</button>
                         <input type="hidden" name="stoklisteid" id="stoklisteid" value="0">
                     </div>
 
@@ -177,15 +172,15 @@
         if (message.equals("-1")) {
     %>
     <%
-    } else if (message.equals("0")) {
+        } else if (message.equals("0")) {
     %>
-    <div class="row col-sm-8 alert alert-success">
+    <div class="row col-sm-10 alert alert-success">
         <strong>Başarılı</strong> olarak eklendi!
     </div>
     <%
-    } else if (!message.equals("") && message.length() > 1) {
+        } else if (!message.equals("") && message.length() > 1) {
     %>
-    <div class="row col-sm-8 alert alert-danger">
+    <div class="row col-sm-10 alert alert-danger">
         <strong>Hata! </strong><%= message %>
     </div>
     <%
@@ -194,7 +189,7 @@
     <!-- ALERT BOX -->
 
     <div class="row" style="font-size:12px;">
-        <div class="col-sm-8">
+        <div class="col-sm-10">
             <table class="tableplan">
                 <% int sayac = 0; %>
                 <% for (Bilesen h : hammadde) { %>
@@ -205,22 +200,21 @@
                     <td nowrap><label class="text-success">Malzeme Tipi</label></td>
                     <td><label class="text-success">Birim</label></td>
                     <td><label class="text-success">Tedarikçi</label></td>
+                    <td><label class="text-success">Aktif</label></td>
                     <%
                         if (admin != null && admin.equals("1")) {
                     %>
                     <td><label class="text-success">Aksiyon</label></td>
-                    <% } %>
+                    <%  } %>
                 </tr>
                 <% } %>
-                <form name="action_form<%=h.getId()%>" id="action_form<%=h.getId()%>">
-                    <tr id="tr<%=h.getId()%>">
-                        <td><input type="text" class="form-control small" value="<%= h.getKod() %>" name="liste_kod"
-                                   id="liste_kod" autocomplete="off"></td>
-                        <td><input type="text" class="form-control" value="<%= h.getAd().replaceAll("\"", "") %>"
-                                   name="liste_ad" id="liste_ad" autocomplete="off"></td>
-                        <td><span><%= h.getBilesentipad() %></span></td>
+                <form name=action_form<%= h.getId()%> id="action_form<%= h.getId()%>">
+                    <tr id="tr<%=h.getId()%>" <%= (h.getDurum()==0 ? "style='background-color:darkKhaki;'" : "") %>>
+                        <td><input type="text" class="form-control small" value="<%= h.getKod() %>" id="liste_kod<%=h.getId()%>" autocomplete="off"></td>
+                        <td><input type="text" class="form-control" value="<%= h.getAd().replaceAll("\"", "") %>" id="liste_ad<%=h.getId()%>" autocomplete="off"></td>
+                        <td style="vertical-align: center;"><span><%= h.getBilesentipad() %></span><input type="hidden" id="liste_bilesentipid<%=h.getId()%>" value="<%=h.getBilesentipid()%>"/></td>
                         <td>
-                            <select class="form-control xs" id="liste_birimid" name="liste_birimid">
+                            <select class="form-control xs" name="liste_birimid" id="liste_birimid">
                                 <%
                                     for (BirimTip bt : BirimTip.values()) {
                                         if (bt.value() == h.getBirimid()) {
@@ -236,7 +230,7 @@
                             <%-- h.getBirimad() --%>
                         </td>
                         <td>
-                            <select class="form-control" id="liste_firmaid" name="liste_firmaid">
+                            <select class="form-control" name="liste_firmaid" id="liste_firmaid">
                                 <%
                                     for (Firma f : firma) {
                                         if (f.getId() == h.getFirmaid()) {
@@ -248,18 +242,29 @@
                                 %>
                             </select>
                         </td>
+                        <td>
+                            <select class="form-control xs" name="liste_bilesendurum" id="liste_bilesendurum">
+                                <%
+                                    if (h.getDurum() == 1) {
+                                        out.println("<option value='" + 1 + "' selected>Aktif</option>");
+                                        out.println("<option value='" + 0 + "'>Pasif</option>");
+                                    } else {
+                                        out.println("<option value='" + 0 + "' selected>Pasif</option>");
+                                        out.println("<option value='" + 1 + "'>Aktif</option>");
+                                    }
+                                %>
+                            </select>
+                        </td>
                         <%
                             if (admin != null && admin.equals("1")) {
                         %>
                         <td>
                             <div id="div<%= h.getId() %>" class="text-center">
-                                <a href="javascript:updateHammaddeGo('hammadde',<%=h.getId()%>,document.action_form<%=h.getId()%>,1);"
-                                   title="Güncelle"><span class="fa fa-refresh fa-lg text-warning"></span></a>
-                                <a href="javascript:deleteHammaddeGo('hammadde',<%=h.getId()%>,document.action_form<%=h.getId()%>,3);"
-                                   title="Sil"><span class="fa fa-minus-circle fa-lg text-danger"></span></a>
+                                <a href='javascript:updateHammaddeGo("hammadde", "<%=h.getId()%>", document.action_form<%=h.getId()%>,1);' title="Güncelle"><span class="fa fa-refresh fa-lg text-warning"></span></a>
+                                <a href='javascript:deleteHammaddeGo("hammadde", "<%=h.getId()%>", document.action_form<%=h.getId()%>,3);' title="Sil"><span class="fa fa-minus-circle fa-lg text-danger"></span></a>
                             </div>
                         </td>
-                        <% } %>
+                        <%  } %>
                     </tr>
                 </form>
                 <% } %>
@@ -285,79 +290,7 @@
 <script src="js/bootstrap.min.js" type="text/javascript"></script>
 <script src="js/irfan.js?<%=Util.nanoTime%>" type="text/javascript"></script>
 <script src="js/hammadde.js?<%=Util.nanoTime%>" type="text/javascript"></script>
+<script src="js/hammadde-helper.js?<%=Util.nanoTime%>" type="text/javascript"></script>
 
-<script type="text/javascript">
-    $("#bilesenkodara").autocomplete({
-        source: bilesen2,
-        minLength: 1,
-        select: function (event, ui) {
-            changefun(ui.item);
-        }
-    });
-    $("#bilesenkodara").change(function () {
-        changefun(this);
-    });
-
-    function changefun(elem) {
-        var found = false;
-        if (elem != null) {
-            for (i in bilesen) {
-                /* autocomplete alanina birden fazla alan ekler */
-                var b = elem.value.split("[");
-                if (b[0].trim() == bilesen[i].bilesenkod) {
-                    //console.log("elem: " + elem.value);
-                    //console.log("bilesen: " + bilesen[i]);
-                    found = true;
-                    $("#bilesenidara").val(bilesen[i].bilesenid);
-                    $("#bilesenkodara").val(bilesen[i].bilesenkod);
-                    $("#stokliste").removeAttr("disabled");
-                }
-            }
-        }
-        if (!found) {
-            $("#bilesenidara").val("");
-            $("#bilesenkodara").val("");
-            $("#stokliste").attr("disabled", "disabled");
-        }
-    }
-</script>
-
-<script type="text/javascript">
-    $("#stokliste").click(function () {
-        $("#stoklisteid").val("1");
-        $("#hammadde_form").submit();
-    });
-
-    $(function () {
-        <%
-        if(bilesenid!=null){
-        %>
-        $("#bilesenidara").val("<%=bilesenid%>");
-        //console.log("mamulid frist: " + $("#mamulid").val());
-        findbilesenkod($("#bilesenidara").val());
-        $("#bilesenkodara").change(function () {
-            changefun(this);
-        });
-        <%
-        }
-        %>
-    });
-
-    function findbilesenkod(elemval) {
-        //console.log("bilesenid : " + elemval);
-        if (elemval != null) {
-            for (i in bilesen) {
-                if (elemval == bilesen[i].bilesenid) {
-                    //console.log("elem: " + elemval);
-                    //console.log("bilesen: " + bilesen[i]);
-                    found = true;
-                    $("#bilesenidara").val(bilesen[i].bilesenid);
-                    $("#bilesenkodara").val(bilesen[i].bilesenkod);
-                    $("#stokliste").removeAttr("disabled");
-                }
-            }
-        }
-    }
-</script>
 </body>
 </html>

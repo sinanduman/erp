@@ -1,6 +1,6 @@
 <%@page import="erp.util.Util" %>
-<%@page import="erp.irfan.entity.*" %>
 <%@page import="java.util.Date, java.util.List" %>
+<%@ page import="erp.entity.*" %>
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!doctype html>
@@ -15,7 +15,7 @@
     </title>
 
     <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/bootstrap.css?<%=Util.nanoTime%>">
 
     <!-- Custom styles for this template -->
     <link rel="stylesheet" href="css/irfan.css?<%=Util.nanoTime%>">
@@ -105,7 +105,7 @@
                 <div class="clearfix"></div>
 
                 <div class="form-group">
-                    <label for="mamulad" class="text-baslik">Malzeme Adı: </label>
+                    <label for="bilesenad" class="text-baslik">Malzeme Adı: </label>
                     <div>
                         <input type="text" class="form-control big" name="bilesenad" id="bilesenad"
                                placeholder="Malzeme Adı" readonly="readonly">
@@ -114,7 +114,7 @@
                 <div class="clearfix"></div>
 
                 <div class="form-group">
-                    <label for="mamulad" class="text-baslik">Tedarikçi Adı: </label>
+                    <label for="firmaad" class="text-baslik">Tedarikçi Adı: </label>
                     <div>
                         <input type="text" class="form-control big" name="firmaad" id="firmaad"
                                placeholder="Tedarikçi Adı" readonly="readonly">

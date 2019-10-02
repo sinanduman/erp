@@ -25,10 +25,12 @@ function updateHammaddeGo(url,id,action_form,islem){
 	var f_bilesenid	= id;
 	var f_birimid	= action_form.liste_birimid.value;
 	var f_firmaid	= action_form.liste_firmaid.value;
-	var f_kod		= $.trim(action_form.liste_kod.value);
-	var f_ad		= $.trim(action_form.liste_ad.value);
+	var f_kod		= $.trim($("#liste_kod"+id).val());
+	var f_ad		= $.trim($("#liste_ad"+id).val());
 	var f_islemid	= islem;
+	var f_durum		= action_form.liste_bilesendurum.value;
 	var alert_mesaj	= f_kod + " Kodlu " + f_ad;
+	//console.log(f_esid);
 	if(f_kod=="" || f_ad=="" ){
 		alert("Malzeme ADI veya KODU boş olamaz!");
 		return false;
@@ -43,7 +45,8 @@ function updateHammaddeGo(url,id,action_form,islem){
 				firmaid: f_firmaid, 
 				bilesenkod: f_kod,
 				bilesenad: f_ad,
-				islemid: f_islemid
+				islemid: f_islemid,
+				durum: f_durum
 			},
 			dataType: 'html',
 			beforeSend: function ( xhr ) {

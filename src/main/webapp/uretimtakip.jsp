@@ -1,6 +1,6 @@
 <%@ page import="erp.util.Util" %>
-<%@ page import="erp.irfan.entity.*" %>
 <%@ page import="java.util.List" %>
+<%@ page import="erp.entity.*" %>
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!doctype html>
@@ -22,7 +22,7 @@
     <link rel="stylesheet/less" type="text/css" href="less/datepicker.less">
 
     <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/bootstrap.css?<%=Util.nanoTime%>">
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -34,24 +34,39 @@
 <%@ include file="logincheck.jsp" %>
 <%
     List<Mamul> mamul = (List<Mamul>) request.getAttribute("mamul");
+    List<Bilesen> bilesen = (List<Bilesen>) request.getAttribute("bilesen");
     List<Makina> makina = (List<Makina>) request.getAttribute("makina");
     List<Calisan> calisan = (List<Calisan>) request.getAttribute("calisan");
     List<HataSebep> hatasebep = (List<HataSebep>) request.getAttribute("hatasebep");
     List<DurusSebep> durussebep = (List<DurusSebep>) request.getAttribute("durussebep");
     List<UretimPlan> uretimplan = (List<UretimPlan>) request.getAttribute("uretimplan");
-    List<SiparisPlan> siparisplan = (List<SiparisPlan>) request.getAttribute("siparisplan");
     String admin = (String) session.getAttribute("admin");
 %>
 
-<script>
-    var mamul = [
+<script type="text/javascript">
+    var bilesen = [
         <%String delimeter = "";
+        for (Bilesen b : bilesen) {
+            out.println(delimeter
+        + " { id:" + b.getId()
+        + ",bilesenid:" + b.getId()
+        + ",bilesenad:'" + b.getAd().replaceAll("'", "") + "'"
+        + ",bilesenkod:'" + b.getKod() + "'"
+        + ",bilesentipid:" + b.getBilesentipid()
+        + ",bilesentipad:'" + b.getBilesentipad() + "'" + "}");
+            delimeter = ",";
+        }%>];
+    var mamul = [
+        <%delimeter = "";
         for (Mamul m : mamul) {
             out.println(delimeter
         + " { id:" + m.getId()
         + ",mamulid:" + m.getId()
         + ",mamulad:'" + m.getAd().replaceAll("'", "") + "'"
         + ",mamulkod:'" + m.getKod() + "'"
+        + ",esmamulid:" + m.getEsmamulid()
+        + ",esmamulad:'" + m.getEsmamulad().replaceAll("'", "") + "'"
+        + ",esmamulkod:'" + m.getEsmamulkod() + "'"
         + ",hammadde:'" + m.getHammadde().replaceAll("'", "") + "'"
         + ",hammaddegkrno:'" + m.getHammaddegkrno() + "'"
         + ",hammaddeagir:'" + m.getHammaddemiktar() + "'"
@@ -90,7 +105,7 @@
             </div>
 
             <div class="form-group">
-                <label for="bas_zaman" class="text-baslik">Başlangıç</label>
+                <label for="bassaat" class="text-baslik">Başlangıç</label>
                 <div>
                     <div>
                         <select class="form-control time" name="bassaat" id="bassaat">
@@ -119,7 +134,7 @@
             </div>
 
             <div class="form-group">
-                <label for="bit_zaman" class="text-baslik">Bitiş</label>
+                <label for="bitsaat" class="text-baslik">Bitiş</label>
                 <div>
                     <div>
                         <select class="form-control time" name="bitsaat" id="bitsaat">
@@ -172,14 +187,6 @@
                     </select>
                 </div>
             </div>
-            <!--
-            <div class="form-group">
-                <label for="tarih" class="text-baslik">Mamül İzl.No.</label>
-                <div>
-                    <input type="text" class="form-control xm" name="mamulizleno" id="mamulizleno" placeholder="Mamül Izl. No" autocomplete="off">
-                </div>
-            </div>
-             -->
 
             <div class="form-group">
                 <label for="mamulizleno" class="text-baslik">Mamül İzl.No</label>
@@ -220,6 +227,16 @@
                 <label for="yarimamul" class="text-baslik">Yarımamül / Kalan Miktar / Mamül Başı</label>
                 <div>
                     <select class="form-control big" name="yarimamul" id="yarimamul" readonly="readonly"></select>
+                </div>
+            </div>
+
+            <div class="form-group" id="div_esmamul" style="display: none;">
+                <label for="cxb_esmamul" class="text-baslik" id="lbl_esmamul">Eş Mamül</label>
+                <div>
+                    <input type="checkbox" name="cxb_esmamul" id="cxb_esmamul" aria-label="Eş Mamül de üretilsin mi?">
+                    <span id="esmamulad"></span>
+                    <input type="hidden" name="esmamulid" id="esmamulid" value="">
+                    <input type="hidden" name="esmamulid_shadow" id="esmamulid_shadow" value="">
                 </div>
             </div>
 
@@ -297,29 +314,26 @@
                     <input type="hidden" name="uretimplanid" id="uretimplanid" value="0">
                     <input type="hidden" name="islemid" id="islemid" value="0">
                     <button type="button" class="btn btn-danger" name="uretimekle" id="uretimekle"> Ekle</button>
-                    <button type="button" class="btn btn-danger" name="uretimiptal" id="uretimiptal"
-                            style="display:none;">İptal
-                    </button>
+                    <button type="button" class="btn btn-danger" name="uretimiptal" id="uretimiptal" style="display:none;">İptal</button>
                 </div>
             </div>
             <div class="form-group">
-                <label for="firmaad" class="text-baslik">ÇS/Fg.</label>
+                <label for="cevrimsure" class="text-baslik">ÇS/Fg.</label>
                 <div>
                     <input type="text" class="form-control xs" name="cevrimsure" id="cevrimsure" readonly="readonly">
                 </div>
             </div>
             <div class="form-group">
-                <label for="firmaad" class="text-baslik">Toplam Süre</label>
+                <label for="toplamsure" class="text-baslik">Toplam Süre</label>
                 <div>
                     <input type="text" class="form-control xm" name="toplamsure" id="toplamsure" readonly="readonly">
                 </div>
             </div>
 
             <div class="form-group">
-                <label for="firmaad" class="text-baslik">Tahmini Üretim</label>
+                <label for="tahminiuretim" class="text-baslik">Tahmini Üretim</label>
                 <div>
-                    <input type="text" class="form-control xm" name="tahminiuretim" id="tahminiuretim"
-                           readonly="readonly"><span class="birim"> Adet</span>
+                    <input type="text" class="form-control xm" name="tahminiuretim" id="tahminiuretim" readonly="readonly"><span class="birim"> Adet</span>
                 </div>
             </div>
             <div class="clearfix"></div>
@@ -398,48 +412,28 @@
                 }
             %>
             <tr id="tr<%=u.getId()%>">
-                <td class="text-right"><%=u.getId()%>
-                </td>
-                <td nowrap><%=u.getTarihTRShort()%>
-                </td>
-                <td><%=u.getBasZaman()%>
-                </td>
-                <td><%=u.getBitZaman()%>
-                </td>
-                <td nowrap><%=u.getMakinaad()%>
-                </td>
-                <td><%=u.getCalisanShortName()%>
-                </td>
-                <td><%=u.getFirmaad()%>
-                </td>
-                <td><%=Util.splitLine(u.getHammaddead(), ";", "<br>")%>
-                </td>
-                <td><%=Util.splitLine(u.getHammaddeizlno(), ";", "<br>")%>
-                </td>
-                <td><%= u.getMamulkod() %>
-                </td>
-                <td><%= u.getMamulad() %>
-                </td>
-                <td><%= u.getMamulizlno() %>
-                </td>
-                <td class="text-right"><%= u.getUretilenmiktar() %>
-                </td>
-                <td class="text-right"><%= (u.getHatalimiktar() == 0) ? "" : u.getHatalimiktar() %>
-                </td>
-                <td><%= u.getHatakodu() %>
-                </td>
-                <td><%= (u.getDuruszaman() == 0) ? "" : u.getDuruszaman() + " Dk."%>
-                </td>
-                <td><%= u.getDuruskodu() %>
-                </td>
+                <td class="text-right"><%=u.getId()%></td>
+                <td nowrap><%=u.getTarihTRShort()%></td>
+                <td><%=u.getBasZaman()%></td>
+                <td><%=u.getBitZaman()%></td>
+                <td nowrap><%=u.getMakinaad()%></td>
+                <td><%=u.getCalisanShortName()%></td>
+                <td><%=u.getFirmaad()%></td>
+                <td><%=Util.splitLine(u.getHammaddead(), ";", "<br>")%></td>
+                <td><%=Util.splitLine(u.getHammaddeizlno(), ";", "<br>")%></td>
+                <td><%= u.getMamulkod() %></td>
+                <td><%= u.getMamulad() %></td>
+                <td><%= u.getMamulizlno() %></td>
+                <td class="text-right"><%= u.getUretilenmiktar() %></td>
+                <td class="text-right"><%= (u.getHatalimiktar() == 0) ? "" : u.getHatalimiktar() %></td>
+                <td><%= u.getHatakodu() %></td>
+                <td><%= (u.getDuruszaman() == 0) ? "" : u.getDuruszaman() + " Dk."%></td>
+                <td><%= u.getDuruskodu() %></td>
                 <td>
                     <div id="div<%= u.getId() %>">
-                        <a href="javascript:uretimtakipguncelle('#tr<%= u.getId() %>',<%= u.getId() %>);"
-                           title="Güncelle"><span class="fa fa-refresh fa-lg text-warning"></span></a>
-                        <a href="javascript:uretimtakipok(<%= u.getId() %>);" title="Onayla"><span
-                                class="fa fa-check-circle fa-lg text-success"></span></a>
-                        <a href="javascript:uretimtakipsil(<%= u.getId() %>);" title="Sil"><span
-                                class="fa fa-minus-circle fa-lg text-danger"></span></a>
+                        <a href="javascript:uretimtakipguncelle('#tr<%= u.getId() %>','<%= u.getId() %>');" title="Güncelle"><span class="fa fa-refresh fa-lg text-warning"></span></a>
+                        <a href="javascript:uretimtakipok(<%= u.getId() %>);" title="Onayla"><span class="fa fa-check-circle fa-lg text-success"></span></a>
+                        <a href="javascript:uretimtakipsil(<%= u.getId() %>);" title="Sil"><span class="fa fa-minus-circle fa-lg text-danger"></span></a>
                     </div>
                 </td>
             </tr>
@@ -477,7 +471,22 @@
 <script src="js/moment.min.js" type="text/javascript"></script>
 <script src="js/irfan.js?<%=Util.nanoTime%>" type="text/javascript"></script>
 <script src="js/siparis.js?<%=Util.nanoTime%>" type="text/javascript"></script>
-<script>
+<script type="text/javascript">
+    $("#cxb_esmamul").on("change", function () {
+        if ($(this).prop("checked")) {
+            $("#esmamulad").css("color", "indianred");
+            $("#lbl_esmamul").text("Eş Mamül [Üretilsin]");
+            $("#esmamulid").val($("#esmamulid_shadow").val());
+        }
+        else{
+            $("#esmamulad").css("color", "#333333");
+            $("#lbl_esmamul").text("Eş Mamül");
+            $("#esmamulid").val("");
+        }
+    });
+
+    //$("#tr"+planid).attr("disabled","disabled").css( "background-color", "darkkhaki");
+
     var globalMamul = new Object();
     $(function () {
         $('#tarih').datepicker({
@@ -494,12 +503,16 @@
             //console.log(ui.item.id);
             //console.log(ui.item.value);
             //console.log(event);
-            changefun(ui.item);
+            changefun_uretim(ui.item);
             $(this).val(ui.item.value);
         }
     });
-    $("#mamulkod").change(function () {
-        changefun(this);
+
+    $("#mamulkod").on("change", function () {
+        changefun_uretim(this);
+    });
+    $("#mamulkod").on("blur", function () {
+        clearFields(this);
     });
 
     $("#bassaat, #basdakika, #bitsaat, #bitdakika").change(function () {
@@ -509,7 +522,7 @@
         ;
     });
 
-    function changefun(elem) {
+    function changefun_uretim(elem, guncelle) {
         var found = false;
         var option = "";
         if (elem != null) {
@@ -517,10 +530,20 @@
             $("#yarimamul option").remove();
             for (i in mamul) {
                 // var b = elem.value.split("[");
-                if (elem.value == mamul[i].mamulkod) {
+                if (elem.value === mamul[i].mamulkod && !found) {
+                    $("#div_esmamul").show();
                     globalMamul = mamul[i];
-                    //console.log(globalMamul);
                     found = true;
+                    if (guncelle == undefined) {
+                        var esmamulid = mamul[i].esmamulid;
+                        if (esmamulid > 0) {
+                            findmamulkod(esmamulid);
+                        }
+                    }
+                    else{
+                        clearEsMamul();
+                    }
+
                     var ham_name_ar = mamul[i].hammadde.split(";");
                     var ham_gkrno_ar = mamul[i].hammaddegkrno.split(";");
                     var ham_agir_ar = mamul[i].hammaddeagir.split(";");
@@ -540,19 +563,6 @@
                     document.uretimtakipform.hammadde.value = mamul[i].hammadde;
 
                     dateDiff(); /* Difference in Minutes */
-
-                    /*
-                    diffHour = Math.floor(diff / 60);
-                    diffMin  = diff - diffHour * 60;
-
-                    diffHourStr = (diffHour == 0 ) ? "" : diffHour + " saat ";
-                    diffMinStr = (diffMin == 0 ) ? "" : diffMin + " dakika";
-
-
-                    document.uretimtakipform.cevrimsure.value	= mamul[i].cevrimsure + "/" + mamul[i].figur;
-                    document.uretimtakipform.toplamsure.value	= diffHourStr + diffMinStr;
-                    document.uretimtakipform.tahminiuretim.value= Math.floor(diff*60/mamul[i].cevrimsure)*mamul[i].figur;
-                    */
 
                     option = "";
                     var ham_name = "";
@@ -601,17 +611,12 @@
 
                     /* Mamul Izleme No Kutusu Doldurma */
                     /* MamulId, Uret/Kontrol(1,6), Kullanildi/Kullanilmadi(0:1), SelectBox */
-                    izlemeNoKontrol(document.uretimtakipform.mamulid.value, 6, 1, "#mamulizleno", 0);
+                    izlemeNoKontrol($("#mamulid").val(), 6, 1, "#mamulizleno", 0);
                 }
             }
         }
         if (!found) {
-            document.uretimtakipform.mamulad.value = "";
-            document.uretimtakipform.mamulid.value = "";
-            document.uretimtakipform.firmaad.value = "";
-            document.uretimtakipform.hammadde.value = "";
-            document.uretimtakipform.toplamsure.value = "";
-            document.uretimtakipform.tahminiuretim.value = "";
+            clearFields();
             $("#hammadde option").remove();
             $("#yarimamul option").remove();
             $("#mamulizleno option").remove();
@@ -642,7 +647,6 @@
 
         diffHourStr = (diffHour == 0) ? "" : diffHour + " saat ";
         diffMinStr = (diffMin == 0) ? "" : diffMin + " dakika";
-
 
         document.uretimtakipform.cevrimsure.value = globalMamul.cevrimsure + "/" + globalMamul.figur;
         document.uretimtakipform.toplamsure.value = diffHourStr + diffMinStr;

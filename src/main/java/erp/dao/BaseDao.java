@@ -47,8 +47,9 @@ public interface BaseDao {
     public static final String F_IRSALIYE_SIL = "irfan.irsaliye_sil";
     public static final String F_MAKINA_SIL = "irfan.makina_sil";
     public static final String F_MAMUL_SIL = "irfan.mamul_sil";
-    public static final String F_STOK_EKLE = "irfan.stok_ekle";
+    public static final String F_PLAN_OK = "irfan.plan_ok";
+    public static final String F_PLAN_SIL = "irfan.plan_sil";
     public static final String F_STOK_DUS = "irfan.stok_dus";
+    public static final String F_STOK_EKLE = "irfan.stok_ekle";
     public static final String F_STOK_YETERLI = "irfan.stok_yeterli";
-
 }

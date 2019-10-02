@@ -1,7 +1,7 @@
 <%@ page import="erp.util.Util" %>
-<%@ page import="erp.irfan.entity.*" %>
 <%@ page import="java.util.Date" %>
 <%@ page import="java.util.List" %>
+<%@ page import="erp.entity.*" %>
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!doctype html>
@@ -16,7 +16,7 @@
     </title>
 
     <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/bootstrap.css?<%=Util.nanoTime%>">
 
     <!-- Custom styles for this template -->
     <link rel="stylesheet" href="css/irfan.css?<%=Util.nanoTime%>">
@@ -86,8 +86,7 @@
                 <div class="form-group">
                     <label for="mamulkod" class="text-baslik">Mamül Kodu: </label>
                     <div>
-                        <input type="text" class="form-control big" name="mamulkod" id="mamulkod"
-                               placeholder="Mamül Kodu" autocomplete="off">
+                        <input type="text" class="form-control big" name="mamulkod" id="mamulkod" placeholder="Mamül Kodu" autocomplete="off">
                         <input type="hidden" name="mamulid" id="mamulid">
                     </div>
                 </div>
@@ -95,9 +94,7 @@
                 <div class="form-group">
                     <label for="stokliste" class="text-success bgsaydam">&nbsp;&nbsp;</label>
                     <div>
-                        <button type="button" class="btn btn-danger" name="stokliste" id="stokliste"
-                                disabled="disabled">Stok Kartı Getir
-                        </button>
+                        <button type="button" class="btn btn-danger" name="stokliste" id="stokliste" disabled="disabled">Stok Kartı Getir</button>
                         <input type="hidden" name="stoklisteid" id="stoklisteid" value="0">
                     </div>
                 </div>
@@ -305,12 +302,12 @@
         source: mamul2,
         minLength: 1,
         select: function (event, ui) {
-            changefun(ui.item);
+            changefun_mamulstok(ui.item);
             $(this).val(ui.item.value);
         }
     });
     $("#mamulkod").change(function () {
-        changefun(this);
+        changefun_mamulstok(this);
     });
 
     $("#stokliste").click(function () {
@@ -318,7 +315,7 @@
         $("#mamulstokform").submit();
     });
 
-    function changefun(elem) {
+    function changefun_mamulstok(elem) {
         //console.log("fun: " + elem);
         //console.log("fun val: " + elem.value);
         var found = false;
@@ -348,18 +345,18 @@
         <%
         if(mamulid!=null){
         %>
-        $("#mamulid").val("<%=mamulid%>");
-        //console.log("mamulid frist: " + $("#mamulid").val());
-        findmamulkod($("#mamulid").val());
-        $("#mamulkod").change(function () {
-            changefun(this);
-        });
+            $("#mamulid").val("<%=mamulid%>");
+            //console.log("mamulid frist: " + $("#mamulid").val());
+            findmamulkod_mamulstok($("#mamulid").val());
+            $("#mamulkod").change(function () {
+                changefun_mamulstok(this);
+            });
         <%
         }
         %>
     });
 
-    function findmamulkod(elemval) {
+    function findmamulkod_mamulstok(elemval) {
         //console.log("mamulid : " + elemval);
         if (elemval != null) {
             for (i in mamul) {
