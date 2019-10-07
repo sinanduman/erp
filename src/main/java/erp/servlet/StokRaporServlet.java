@@ -16,7 +16,7 @@ import erp.dao.BaseDao;
 import erp.dao.BilesenDao;
 import erp.dao.MamulDao;
 import erp.dao.StokDao;
-import erp.entity.BilesenTip;
+import erp.model.BilesenTip;
 import erp.util.Util;
 import org.joda.time.DateTime;
 
@@ -59,8 +59,8 @@ public class StokRaporServlet extends HttpServlet implements Serializable {
         int noofpages = 0;
         int page0 = 1;
 
-        List<Mamul> mamul = mamulDao.mamulListeGetir(null, 0);
-        List<Bilesen> bilesen = bilesenDao.bilesenListeGetirTum(BilesenTip.HAMMADDEYARIMAMUL, 0, null);
+        List<Mamul> mamul = mamulDao.mamulListeGetir(null, 0, null);
+        List<Bilesen> bilesen = bilesenDao.bilesenListeGetirTum(BilesenTip.HAMMADDEYARIMAMUL, 0, null, null);
 
         List<StokRapor> stokrapor = new ArrayList<StokRapor>();
         List<StokRapor> stokdetay = new ArrayList<StokRapor>();

@@ -1,7 +1,7 @@
 package erp.dao;
 
 import erp.servlet.ConnectionManager;
-import erp.entity.BilesenTip;
+import erp.model.BilesenTip;
 import erp.entity.Mamul;
 import erp.entity.MamulBilesen;
 import erp.util.Util;
@@ -82,9 +82,9 @@ public class MamulDao implements Serializable, BaseDao {
         return result;
     }
 
-    public String mamulGuncelle(String mamulid, String firmaid, String kod, String ad, String figur, String cevrimsuresi, String esmamulid) {
+    public String mamulGuncelle(String mamulid, String firmaid, String kod, String ad, String figur, String cevrimsuresi, String esmamulid, String durum) {
         String result = "0";
-        String updateQuery = "update " + BaseDao.MAMUL + " set firmaid =?, kod =?, ad =?, figur =?, cevrimsuresi =?, esmamulid =? where id =?";
+        String updateQuery = "update " + BaseDao.MAMUL + " set firmaid =?, kod =?, ad =?, figur =?, cevrimsuresi =?, esmamulid =?, durum =? where id =?";
         // connect to DB
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(updateQuery)) {
@@ -97,7 +97,8 @@ public class MamulDao implements Serializable, BaseDao {
                 pstmt.setNull(6, Types.INTEGER);
             else
                 pstmt.setInt(6, Integer.valueOf(esmamulid));
-            pstmt.setInt(7, Integer.valueOf(mamulid));
+            pstmt.setInt(7, Integer.valueOf(durum));
+            pstmt.setInt(8, Integer.valueOf(mamulid));
             logger.info(pstmt.toString());
             pstmt.executeUpdate();
         } catch (SQLException e) {
@@ -125,10 +126,13 @@ public class MamulDao implements Serializable, BaseDao {
         return result;
     }
 
-    public List<Mamul> mamulListeGetir(Integer mamulid, int offset) {
+    public List<Mamul> mamulListeGetir(Integer mamulid, int offset, Integer durum) {
         List<Mamul> temp = new ArrayList<Mamul>();
         String pageFilter = Util.getPageFilter(offset);
-        String queryFilter = (mamulid == null) ? "" : " where id = " + mamulid;
+        String baseFilter = " where 1=1";
+        String queryFilter0 = (mamulid == null) ? "" : " and id = " + mamulid;
+        String queryFilter1 = (durum == null) ? "" : " and durum = " + durum;
+        String queryFilter = baseFilter + queryFilter0 + queryFilter1;
         String searchQuery = "select * from " + BaseDao.V_MAMUL_TUM + queryFilter + " ORDER BY kod " + pageFilter; /* view */
 
         // connect to DB
@@ -147,10 +151,13 @@ public class MamulDao implements Serializable, BaseDao {
         return temp;
     }
 
-    public List<Mamul> mamulListeStokGetir(Integer mamulid, int offset) {
+    public List<Mamul> mamulListeStokGetir(Integer mamulid, int offset, Integer durum) {
         List<Mamul> temp = new ArrayList<Mamul>();
         String pageFilter = Util.getPageFilter(offset);
-        String queryFilter = (mamulid == null) ? "" : " where id = " + mamulid;
+        String baseFilter = " where 1=1";
+        String queryFilter0 = (mamulid == null) ? "" : " and id = " + mamulid;
+        String queryFilter1 = (durum == null) ? "" : " and durum = " + durum;
+        String queryFilter = baseFilter + queryFilter0 + queryFilter1;
         String searchQuery = "select * from " + BaseDao.V_MAMUL_STOK + queryFilter + " ORDER BY kod " + pageFilter; /* view */
 
         // connect to DB

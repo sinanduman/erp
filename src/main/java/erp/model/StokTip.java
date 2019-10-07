@@ -1,7 +1,8 @@
-package erp.entity;
+package erp.model;
 
 public enum StokTip {
-    Giris(1, "Giriş"), Cikis(2, "Çıkış");
+    Giris(1, "Giriş"),
+    Cikis(2, "Çıkış");
     private Integer stokTipId;
     private String  stokTipAd;
     

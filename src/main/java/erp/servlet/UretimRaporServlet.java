@@ -65,7 +65,7 @@ public class UretimRaporServlet extends HttpServlet implements Serializable {
         int noofpages   = 0;
         int page0       = 1;
         
-        List<Mamul> mamul = mamulDao.mamulListeGetir(null, 0);
+        List<Mamul> mamul = mamulDao.mamulListeGetir(null, 0, null);
         List<UretimPlan> stokrapor = new ArrayList<UretimPlan>();
 
         if(raporgetirid!=null || page != null ) {

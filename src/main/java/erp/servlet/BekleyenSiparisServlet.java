@@ -4,6 +4,9 @@ import erp.dao.BilesenDao;
 import erp.dao.FirmaDao;
 import erp.dao.SiparisDao;
 import erp.entity.*;
+import erp.model.BilesenTip;
+import erp.model.ResultTip;
+import erp.model.SiparisTip;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,7 +33,7 @@ public class BekleyenSiparisServlet extends HttpServlet implements Serializable 
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        List<Bilesen> bilesen = bilesenDao.bilesenListeGetirTum( BilesenTip.MAMUL,0, null);
+        List<Bilesen> bilesen = bilesenDao.bilesenListeGetirTum( BilesenTip.MAMUL,0, null, null);
         List<Siparis> siparis = siparisDao.siparisListeGetir(SiparisTip.BEKLEYEN);
 
         request.setAttribute("bilesen", bilesen);
@@ -43,7 +46,7 @@ public class BekleyenSiparisServlet extends HttpServlet implements Serializable 
 
         response.setContentType("text/html; charset=UTF-8");
 
-        List<Bilesen> bilesen = bilesenDao.bilesenListeGetirTum( BilesenTip.MAMUL,0, null );
+        List<Bilesen> bilesen = bilesenDao.bilesenListeGetirTum( BilesenTip.MAMUL,0, null, null);
         List<Siparis> siparis = siparisDao.siparisEkle (
                 new String(request.getParameter("bilesen").getBytes("UTF-8")),
                 new String(request.getParameter("miktar").getBytes("UTF-8")),

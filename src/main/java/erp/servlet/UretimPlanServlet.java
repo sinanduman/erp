@@ -2,6 +2,7 @@ package erp.servlet;
 
 import erp.dao.*;
 import erp.entity.*;
+import erp.model.UretimDurum;
 import erp.util.Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -86,7 +87,7 @@ public class UretimPlanServlet extends HttpServlet implements Serializable {
         List<Makina> makina = makinaDao.makinaListeGetirTum(0);
         List<Calisan> calisan = calisanDao.calisanListeGetirTum(0, null);
         List<Firma> firma =  firmaDao.firmaListeGetirTum(0);
-        List<Mamul> mamul = mamulDao.mamulListeGetir(null, 0);
+        List<Mamul> mamul = mamulDao.mamulListeGetir(null, 0, null);
         
         int totalrecord = daoFunctions.recordCount(BaseDao.V_URETIMPLAN_TUM," where tamamlandi=1 " + filter0);
         int page = 1;

@@ -422,16 +422,19 @@ function uretimplanguncelle(sender,planid){
     $("#uretimplaniptal").css("display","");
 
     //changefun_uretim(plan[planid].mamulkod);
-    document.uretimplanform.tarih.value			= plan[planid].tarihtr;
-    document.uretimplanform.calisanid.value		= plan[planid].calisanid;
-    document.uretimplanform.makinaid.value		= plan[planid].makinaid;
-    document.uretimplanform.mamulkod.value		= plan[planid].mamulkod;
-    document.uretimplanform.hedefuretim.value		= plan[planid].hedefuretim;
-    document.uretimplanform.hedefuretimhidden.value	= plan[planid].hedefuretim;
-    document.uretimplanform.gercekuretim.value		= plan[planid].uretimadet;
-    document.uretimplanform.gercekuretim_hidden.value= plan[planid].uretimadet;
-    document.uretimplanform.fark.value				= plan[planid].fark;
-    document.uretimplanform.sapma.value				= plan[planid].sapma;
+    $("#tarih").val(plan[planid].tarihtr);
+    $("#calisanid").val(plan[planid].calisanid);
+    $("#makinaid").val(plan[planid].makinaid);
+
+    $("#mamulkod").val(plan[planid].mamulkod);
+    $("#hedefuretim").val(plan[planid].hedefuretim);
+    $("#hedefuretimhidden").val(plan[planid].hedefuretim);
+
+    $("#gercekuretim").val(plan[planid].uretimadet);
+    $("#gercekuretim_hidden").val(plan[planid].uretimadet);
+    $("#fark").val(plan[planid].fark);
+    $("#sapma").val(plan[planid].sapma);
+
 
     if(!is_number(plan[planid].hedefuretim)){
         if(is_number(plan[planid].fark)){
@@ -452,12 +455,11 @@ function uretimplanguncelle(sender,planid){
             }
         });
     }
-    document.uretimplanform.hatasebepid.value = plan[planid].hataid;
+    $("#hatasebepid").val(plan[planid].hataid);
 
     /* 1:update, 2:insert */
     $("#uretimplanid").val(planid);
-    changefun_uretim(document.uretimplanform.mamulkod);
-
+    changefun($("#mamulkod"));
 }
 
 $("#uretimiptal").click(function(){
@@ -561,8 +563,7 @@ $("#uretimplaniptal").click(function(){
 
     $("#mamulkod").val("");
     $("#mamulizleno").val("");
-    changefun_uretim(document.uretimplanform.mamulkod);
-
+    changefun_uretim (document.uretimplanform.mamulkod);
     //hedefuretim_change();
 });
 
@@ -582,14 +583,13 @@ $("#uretimplanguncelle").click(function(){
         alert("Açıklama seçili!\n\Hedeflenen üretim, Gerçekleşen üretimden yüksek olmalı!\n");
     }
     else{
-        console.log("tetstststs");
         if(parseInt($("#gercekuretim").val())!=parseInt($("#gercekuretim_hidden").val()) ){
             if(!confirm("Gerçekleşen Üretim DEĞİŞTİ, Onaylıyor musun?")){
                 return false;
             }
         }
-        console.log("gercekuretim: " + parseInt($("#gercekuretim").val()));
-        console.log("gercekuretim_hidden: " + parseInt($("#gercekuretim_hidden").val()));
+        //console.log("gercekuretim: " + parseInt($("#gercekuretim").val()));
+        //console.log("gercekuretim_hidden: " + parseInt($("#gercekuretim_hidden").val()));
         var uretimfark = (parseInt($("#gercekuretim").val()) - parseInt($("#gercekuretim_hidden").val()));
         console.log(uretimfark);
         /* Malzeme yeterli mi*/
@@ -693,19 +693,122 @@ function findmamulkod(elemval) {
 
 function clearFields(elem) {
     if($("#mamulkod").val() == "") {
-        document.uretimtakipform.mamulad.value = "";
-        document.uretimtakipform.mamulid.value = "";
-        document.uretimtakipform.firmaad.value = "";
-        document.uretimtakipform.hammadde.value = "";
-        document.uretimtakipform.toplamsure.value = "";
-        document.uretimtakipform.tahminiuretim.value = "";
-        document.uretimtakipform.cevrimsure.value = "";
+        $("#mamulad").val("");
+        $("#mamulid").val("");
+        $("#firmaad").val("");
+        $("#hammadde").val("");
+        $("#toplamsure").val("");
+        $("#tahminiuretim").val("");
+        $("#cevrimsure").val("");
         clearEsMamul();
     }
 }
 
 function clearEsMamul() {
-    document.uretimtakipform.esmamulid.value = "";
-    document.uretimtakipform.esmamulid_shadow.value = "";
+    $("#esmamulid").val("");
+    $("#esmamulid_shadow").val("");
     $("#div_esmamul").hide();
+}
+
+
+function changefun_uretim(elem, guncelle) {
+    var found = false;
+    var option = "";
+    if (elem != null) {
+        $("#hammadde option").remove();
+        $("#yarimamul option").remove();
+        for (i in mamul) {
+            // var b = elem.value.split("[");
+            if (elem.value === mamul[i].mamulkod && !found) {
+                $("#div_esmamul").show();
+                globalMamul = mamul[i];
+                found = true;
+                if (guncelle == undefined) {
+                    var esmamulid = mamul[i].esmamulid;
+                    if (esmamulid > 0) {
+                        findmamulkod(esmamulid);
+                    }
+                }
+                else{
+                    clearEsMamul();
+                }
+
+                var ham_name_ar = mamul[i].hammadde.split(";");
+                var ham_gkrno_ar = mamul[i].hammaddegkrno.split(";");
+                var ham_agir_ar = mamul[i].hammaddeagir.split(";");
+                var ham_mamulbasi_ar = mamul[i].hammaddemamulbasi.split(";");
+
+                var yari_name_ar = mamul[i].yarimamul.split(";");
+                var yari_gkrno_ar = mamul[i].yarimamulgkrno.split(";");
+                var yari_agir_ar = mamul[i].yarimamulagir.split(";");
+                var yari_mamulbasi_ar = mamul[i].yarimamulmamulbasi.split(";");
+
+                var gkrno = mamul[i].gkrno;
+                var cevrimsure = mamul[i].cevrimsure;
+
+                document.uretimtakipform.mamulad.value = mamul[i].mamulad;
+                document.uretimtakipform.mamulid.value = mamul[i].mamulid;
+                document.uretimtakipform.firmaad.value = mamul[i].firmaad;
+                document.uretimtakipform.hammadde.value = mamul[i].hammadde;
+
+                dateDiff(); /* Difference in Minutes */
+
+                option = "";
+                var ham_name = "";
+                var ham_gkrno = "";
+                var ham_miktar = 0;
+                var ham_mamulbasi = 0;
+                for (i in ham_name_ar) {
+
+                    ham_name = ham_name_ar[i];
+                    ham_gkrno = ham_gkrno_ar[i];
+                    ham_miktar = parseInt(ham_agir_ar[i], 10);
+                    ham_mamulbasi = parseFloat(ham_mamulbasi_ar[i]);
+
+                    option += "<option>" + ham_name + " (" + ham_gkrno + ") / " + ham_miktar / 1000.0 + " Kg / " + ham_mamulbasi + " Gr</option>";
+                }
+
+                if (ham_name_ar == "-1") {
+                    //$("#div_hammadde").hide();
+                } else {
+                    //$("#div_hammadde").show();
+                    $("#hammadde").append(option);
+                }
+
+                option = "";
+                var yari_name = "";
+                var yari_gkrno = "";
+                var yari_miktar = 0;
+                var yari_mamulbasi = 0;
+                for (i in yari_name_ar) {
+                    //console.log(i +" : " +yari_name_ar[i]);
+
+                    yari_name = yari_name_ar[i];
+                    yari_gkrno = yari_gkrno_ar[i];
+                    yari_miktar = parseInt(yari_agir_ar[i], 10);
+                    yari_mamulbasi = parseInt(yari_mamulbasi_ar[i], 10);
+
+                    option += "<option>" + yari_name + " (" + yari_gkrno + ") / " + yari_miktar + " Ad / " + yari_mamulbasi + " Ad</option>";
+                }
+                //console.log("yari_name: " +yari_name+ " yari_miktar: " + yari_miktar + " yari_mamulbasi: " + yari_mamulbasi );
+                if (yari_name == "-1") {
+                    $("#div_yarimamul").hide();
+                } else {
+                    $("#div_yarimamul").show();
+                    $("#yarimamul").append(option);
+                }
+
+                /* Mamul Izleme No Kutusu Doldurma */
+                /* MamulId, Uret/Kontrol(1,6), Kullanildi/Kullanilmadi(0:1), SelectBox */
+                izlemeNoKontrol($("#mamulid").val(), 6, 1, "#mamulizleno", 0);
+            }
+        }
+    }
+    if (!found) {
+        clearFields();
+        $("#hammadde option").remove();
+        $("#yarimamul option").remove();
+        $("#mamulizleno option").remove();
+        globalMamul = null;
+    }
 }

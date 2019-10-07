@@ -29,7 +29,7 @@ import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import erp.entity.IrsaliyeBilesen;
-import erp.entity.IrsaliyeTip;
+import erp.model.IrsaliyeTip;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

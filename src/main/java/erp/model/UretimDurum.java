@@ -1,10 +1,12 @@
-package erp.entity;
+package erp.model;
 
-public enum ResultTip {
-    NORESULT(0), OK(1), ERROR(2);
+public enum UretimDurum {
+    BEKLEYEN(0),
+    TAMAMLANMIS(1),
+    TUM(2);
     private Integer value;
     
-    ResultTip(Integer value) {
+    UretimDurum(Integer value) {
         this.value = value;
     }
     

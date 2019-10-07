@@ -1,7 +1,8 @@
-package erp.entity;
+package erp.model;
 
 public enum UretimTip {
-    Makina(1), Montaj(2);
+    Makina(1),
+    Montaj(2);
     private Integer value;
     
     UretimTip(Integer value) {

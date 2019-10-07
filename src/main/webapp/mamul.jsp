@@ -3,6 +3,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="erp.util.Util" %>
 <%@ page import="erp.entity.*" %>
+<%@ page import="erp.model.BirimTip" %>
 <!doctype html>
 <html lang="en" ng-app="mamulApp">
 <head>
@@ -222,13 +223,10 @@
                         <a href="#" ng-click="del(bilesen.id)" title="Sil"><span
                                 class="fa fa-minus-circle fa-lg text-danger"></span></a>
 
-                        <input type="hidden" id="uretimtip_{{$index}}" name="uretimtip_{{$index}}"
-                               value="{{bilesen.uretimtipid}}">
-                        <input type="hidden" id="bilesenid_{{$index}}" name="bilesenid_{{$index}}"
-                               value="{{bilesen.bilesenid}}">
+                        <input type="hidden" id="uretimtip_{{$index}}" name="uretimtip_{{$index}}" value="{{bilesen.uretimtipid}}">
+                        <input type="hidden" id="bilesenid_{{$index}}" name="bilesenid_{{$index}}" value="{{bilesen.bilesenid}}">
                         <input type="hidden" id="miktar_{{$index}}" name="miktar_{{$index}}" value="{{bilesen.miktar}}">
-                        <input type="hidden" id="birimid_{{$index}}" name="birimid_{{$index}}"
-                               value="{{bilesen.birimid}}">
+                        <input type="hidden" id="birimid_{{$index}}" name="birimid_{{$index}}" value="{{bilesen.birimid}}">
                     </td>
                 </tr>
             </table>
@@ -292,12 +290,14 @@
                     <td><label class="text-success">Figür Adedi</label></td>
                     <td><label class="text-success">Eş Mamül Kod</label></td>
                     <td><label class="text-success">Eş Mamül Ad</label></td>
+                    <td><label class="text-success">Aktif</label></td>
                     <td><label class="text-success">Firma</label></td>
                     <td class="text-center"><label class="text-success">Aksiyon</label></td>
                 </tr>
                 <% } %>
                 <form name=action_form<%=m.getId()%> id=action_form<%=m.getId()%>>
-                    <tr id="tr<%=m.getId()%>">
+                    <tr id="tr<%=m.getId()%>"
+                            <%= (m.getDurum() == 0 ? " style='background-color:darkKhaki;'" : "") %> >
                         <td><input type="text" class="form-control small" value="<%= m.getKod() %>" name=liste_kod<%=m.getId()%> id="liste_kod<%=m.getId()%>"></td>
                         <td><input type="text" class="form-control" value="<%= m.getAd().replaceAll("\"", "") %>" name=liste_ad<%=m.getId()%> id="liste_ad<%=m.getId()%>"></td>
                         <td><input type="text" class="form-control xs" value="<%= m.getCevrimsuresi() %>" name=liste_cevrimsuresi<%=m.getId()%> id="liste_cevrimsuresi<%=m.getId()%>"></td>
@@ -324,6 +324,23 @@
                         m.getEsmamulid()>0 ? m.getEsmamulad() : "" %></span><input type="hidden" id="autocompleted<%=
                         m.getId()%>" value="0"/><input type="hidden" value="<%= m.getEsmamulid()>0 ? m.getEsmamulid()
                         : "0" %>" id="liste_esmamulid<%= m.getId() %>"></td>
+                        <td>
+                            <div class="form-group">
+                                <div>
+                                    <select class="form-control xs" name=liste_mamuldurum<%=m.getId()%> id="liste_mamuldurum<%=m.getId()%>">
+                                        <%
+                                            if (m.getDurum() == 1) {
+                                                out.println("<option value='" + 1 + "' selected>Aktif</option>");
+                                                out.println("<option value='" + 0 + "'>Pasif</option>");
+                                            } else {
+                                                out.println("<option value='" + 0 + "' selected>Pasif</option>");
+                                                out.println("<option value='" + 1 + "'>Aktif</option>");
+                                            }
+                                        %>
+                                    </select>
+                                </div>
+                            </div>
+                        </td>
                         <td>
                             <select class="form-control" name=liste_firmaid<%=m.getId()%> id="liste_firmaid<%=m.getId()%>">
                                 <%

@@ -1,11 +1,12 @@
-package erp.entity;
+package erp.model;
 
-public enum BirimTip {
-    GRAM(1,"Gram"), ADET(2,"Adet"), KILOGRAM(3,"Kg");
+public enum MakinaTip {
+    MAKINA(1,"Makina"),
+    BANT(2, "Bant");
     private Integer value;
     private String ad;
     
-    BirimTip(Integer value, String ad) {
+    MakinaTip(Integer value, String ad) {
         this.value = value;
         this.ad = ad;
     }
@@ -16,5 +17,4 @@ public enum BirimTip {
     public String ad() {
         return ad;
     }
-    
 }

@@ -17,7 +17,7 @@ import erp.dao.BaseDao;
 import erp.dao.FirmaDao;
 import erp.dao.MamulDao;
 import erp.dao.StokDao;
-import erp.entity.BilesenTip;
+import erp.model.BilesenTip;
 import erp.entity.Firma;
 import erp.entity.Genel;
 import erp.entity.Mamul;
@@ -41,7 +41,7 @@ public class MamulStokServlet extends HttpServlet implements Serializable {
     
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         
-        List<Mamul> mamul = mamulDao.mamulListeStokGetir(null, 0);
+        List<Mamul> mamul = mamulDao.mamulListeStokGetir(null, 0, 1);
         List<Firma> firma = firmaDao.firmaListeGetirTum(0);
         
         List<Stok> stok = new ArrayList<Stok>();
@@ -160,7 +160,7 @@ public class MamulStokServlet extends HttpServlet implements Serializable {
             // }
             
             List<Mamul> mamul = new ArrayList<Mamul>();
-            mamul = mamulDao.mamulListeStokGetir(null, 0);
+            mamul = mamulDao.mamulListeStokGetir(null, 0, 1);
             
             List<Firma> firma = new ArrayList<Firma>();
             firma = firmaDao.firmaListeGetirTum(0);

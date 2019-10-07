@@ -55,8 +55,8 @@ public class HammaddeServlet extends HttpServlet implements Serializable {
 
         List<Bilesen> hammaddetum   = new ArrayList<Bilesen>();
         List<Bilesen> hammadde      = new ArrayList<Bilesen>();
-        hammaddetum = bilesenDao.bilesenListeGetirTum(null, 0, null);
-        hammadde = bilesenDao.bilesenListeGetirTum(null, page, (Util.isNotEmptyOrNull(bilesenid))? Integer.valueOf(bilesenid): null);
+        hammaddetum = bilesenDao.bilesenListeGetirTum(null, 0, null, null);
+        hammadde = bilesenDao.bilesenListeGetirTum(null, page, (Util.isNotEmptyOrNull(bilesenid))? Integer.valueOf(bilesenid): null, null);
 
         token  = Util.getToken();
         request.setAttribute("token", token);
@@ -130,8 +130,8 @@ public class HammaddeServlet extends HttpServlet implements Serializable {
 
             List<Bilesen> hammaddetum   = new ArrayList<Bilesen>();
             List<Bilesen> hammadde      = new ArrayList<Bilesen>();
-            hammaddetum = bilesenDao.bilesenListeGetirTum(null, 0, null);
-            hammadde = bilesenDao.bilesenListeGetirTum(null, page, (Util.isNotEmptyOrNull(bilesenid))? Integer.valueOf(bilesenid): null );
+            hammaddetum = bilesenDao.bilesenListeGetirTum(null, 0, null, null);
+            hammadde = bilesenDao.bilesenListeGetirTum(null, page, (Util.isNotEmptyOrNull(bilesenid))? Integer.valueOf(bilesenid): null, null);
 
             List<Firma> firma = new ArrayList<Firma>();
             firma = firmaDao.firmaListeGetirTum(0);

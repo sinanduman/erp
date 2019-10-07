@@ -1,6 +1,6 @@
 package erp.util;
 
-import erp.entity.Aylar;
+import erp.model.Aylar;
 import erp.entity.Genel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

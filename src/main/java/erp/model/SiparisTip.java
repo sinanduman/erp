@@ -1,7 +1,9 @@
-package erp.entity;
+package erp.model;
 
 public enum SiparisTip {
-    BEKLEYEN(0), TAMAMLANMIS(1), TUM(2);
+    BEKLEYEN(0),
+    TAMAMLANMIS(1),
+    TUM(2);
     private Integer value;
     
     SiparisTip(Integer value) {

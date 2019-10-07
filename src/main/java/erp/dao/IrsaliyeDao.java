@@ -3,7 +3,7 @@ package erp.dao;
 import erp.servlet.ConnectionManager;
 import erp.entity.Irsaliye;
 import erp.entity.IrsaliyeBilesen;
-import erp.entity.IrsaliyeTip;
+import erp.model.IrsaliyeTip;
 import erp.util.Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

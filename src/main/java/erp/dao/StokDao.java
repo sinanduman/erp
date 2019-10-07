@@ -1,7 +1,7 @@
 package erp.dao;
 
 import erp.servlet.ConnectionManager;
-import erp.entity.BilesenTip;
+import erp.model.BilesenTip;
 import erp.entity.Stok;
 import erp.entity.StokRapor;
 import erp.util.Util;
@@ -190,10 +190,12 @@ public class StokDao implements Serializable, BaseDao {
         return retVal;
     }
 
-    public List<Stok> stokMamulListeGetirTum(Integer mamulid) {
+    public List<Stok> stokMamulListeGetirTum(Integer mamulid, Integer durum) {
         List<Stok> temp = new ArrayList<Stok>();
-        String filter = (mamulid == null) ? "" : " where bilesenid = " + mamulid;
-        String searchQuery = "select * from " + BaseDao.V_STOKMAMUL_TUM + filter;
+        String filter0 = " where 1=1";
+        String filter1 = (mamulid == null) ? "" : " and bilesenid = " + mamulid;
+        String filter2 = (durum == null) ? "" : " and durum = " + durum;
+        String searchQuery = "select * from " + BaseDao.V_STOKMAMUL_TUM + filter0 + filter1 + filter2;
         logger.info(searchQuery);
         // connect to DB
         ResultSet rs = null;

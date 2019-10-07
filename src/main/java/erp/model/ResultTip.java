@@ -1,10 +1,12 @@
-package erp.entity;
+package erp.model;
 
-public enum IrsaliyeTip {
-    OPEN(0), COMPLETED(1), ONAYLANDI(1);
+public enum ResultTip {
+    NORESULT(0),
+    OK(1),
+    ERROR(2);
     private Integer value;
     
-    IrsaliyeTip(Integer value) {
+    ResultTip(Integer value) {
         this.value = value;
     }
     

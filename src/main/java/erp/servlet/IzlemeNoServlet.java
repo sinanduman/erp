@@ -125,7 +125,7 @@ public class IzlemeNoServlet extends HttpServlet implements Serializable {
             }
             
             List<Mamul> mamul = new ArrayList<Mamul>();
-            mamul   = mamulDao.mamulListeGetir(null, 0);
+            mamul   = mamulDao.mamulListeGetir(null, 0, null);
             
             filter0 = filter1 + filter2;
             excelsql= filter0;

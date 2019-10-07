@@ -1,7 +1,7 @@
 package erp.dao;
 
 import erp.servlet.ConnectionManager;
-import erp.entity.UretimDurum;
+import erp.model.UretimDurum;
 import erp.entity.UretimPlan;
 import erp.util.Util;
 import org.slf4j.Logger;

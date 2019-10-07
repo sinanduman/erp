@@ -1,4 +1,4 @@
-package erp.entity;
+package erp.model;
 
 import erp.dao.BaseDao;
 

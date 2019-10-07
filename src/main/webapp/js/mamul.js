@@ -170,9 +170,6 @@ function YariMamulEkleCtrl($scope) {
 }
 
 function updateMamulGo(url,id,action_form,islem){
-
-
-
     var f_bilesenid	= id;
     var f_esmamulid	= $.trim($("#liste_esmamulid"+id).val());
     var f_firmaid	= $.trim($("#liste_firmaid"+id).val());
@@ -180,6 +177,7 @@ function updateMamulGo(url,id,action_form,islem){
     var f_ad		= $.trim($("#liste_ad"+id).val());
     var f_figur		= $.trim($("#liste_figurid"+id).val());
     var f_cevrimsure= $.trim($("#liste_cevrimsuresi"+id).val());
+    var f_durum     = $.trim($("#liste_mamuldurum"+id).val());
     var f_islemid	= islem;
     var alert_mesaj	= f_kod + " Kodlu " + f_ad;
     if(f_kod=="" || f_ad==""  || f_cevrimsure=="" ){
@@ -202,7 +200,8 @@ function updateMamulGo(url,id,action_form,islem){
                 islemid		: f_islemid,
                 figur		: f_figur,
                 cevrimsuresi: f_cevrimsure,
-                esmamulid	: f_esmamulid
+                esmamulid	: f_esmamulid,
+                durum       : f_durum
             },
             dataType: 'html',
             beforeSend: function ( xhr ) {

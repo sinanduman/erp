@@ -5,6 +5,7 @@ import erp.dao.BilesenDao;
 import erp.dao.FirmaDao;
 import erp.dao.StokDao;
 import erp.entity.*;
+import erp.model.BilesenTip;
 import erp.util.Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,7 +37,7 @@ public class HammaddeStokServlet extends HttpServlet implements Serializable {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         
-        List<Bilesen> hammadde = bilesenDao.bilesenListeGetirTum(null, 0, null);
+        List<Bilesen> hammadde = bilesenDao.bilesenListeGetirTum(null, 0, null, null);
         List<Firma> firma = firmaDao.firmaListeGetirTum(0);
         List<Stok> stok = new ArrayList<Stok>();
 
@@ -140,7 +141,7 @@ public class HammaddeStokServlet extends HttpServlet implements Serializable {
             // PAGING
             stok = stokDao.stokListeGetirTum(BilesenTip.HAMMADDEYARIMAMUL, Integer.valueOf(bilesenid), page, null);
             
-            List<Bilesen> hammadde = bilesenDao.bilesenListeGetirTum(null, 0, null);
+            List<Bilesen> hammadde = bilesenDao.bilesenListeGetirTum(null, 0, null, null);
             List<Firma> firma = firmaDao.firmaListeGetirTum(0);
             
             request.setAttribute("hammadde", hammadde);

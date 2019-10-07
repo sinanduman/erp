@@ -17,7 +17,7 @@ import erp.dao.BaseDao;
 import erp.dao.BilesenDao;
 import erp.dao.FirmaDao;
 import erp.dao.MamulDao;
-import erp.entity.BilesenTip;
+import erp.model.BilesenTip;
 import erp.entity.Bilesen;
 import erp.entity.Firma;
 import erp.entity.Genel;
@@ -110,7 +110,8 @@ public class MamulServlet extends HttpServlet implements Serializable {
                                     new String(request.getParameter("bilesenad").getBytes("UTF-8")),
                                     new String(request.getParameter("figur").getBytes("UTF-8")),
                                     new String(request.getParameter("cevrimsuresi").getBytes("UTF-8")),
-                                    new String(request.getParameter("esmamulid").getBytes("UTF-8"))
+                                    new String(request.getParameter("esmamulid").getBytes("UTF-8")),
+                                    new String(request.getParameter("durum").getBytes("UTF-8"))
                                     );
                     break;
                 case 2:
@@ -171,10 +172,10 @@ public class MamulServlet extends HttpServlet implements Serializable {
             firma = firmaDao.firmaListeGetirTum(0);
             
             List<Bilesen> hammadde = new ArrayList<Bilesen>();
-            hammadde = bilesenDao.bilesenListeGetirTum(BilesenTip.HAMMADDE, 0, null);
+            hammadde = bilesenDao.bilesenListeGetirTum(BilesenTip.HAMMADDE, 0, null, 1); /// Aktif
             
             List<Bilesen> yarimamul = new ArrayList<Bilesen>();
-            yarimamul = bilesenDao.bilesenListeGetirTum(BilesenTip.YARIMAMUL, 0, null);
+            yarimamul = bilesenDao.bilesenListeGetirTum(BilesenTip.YARIMAMUL, 0, null, 1); /// Aktif
             
             // PAGING
             int totalrecord = daoFunctions.recordAgg(BaseDao.V_MAMUL_TUM, "COUNT", "*", ((mamulid==null)?"":" where id=" + mamulid));
@@ -186,8 +187,8 @@ public class MamulServlet extends HttpServlet implements Serializable {
             
             List<Mamul> mamul   = new ArrayList<Mamul>();
             List<Mamul> mamultum= new ArrayList<Mamul>();
-            mamul   = mamulDao.mamulListeGetir(mamulid, page);
-            mamultum= mamulDao.mamulListeGetir(null, 0);
+            mamul   = mamulDao.mamulListeGetir(mamulid, page, null);
+            mamultum= mamulDao.mamulListeGetir(null, 0, null);
             
             List<MamulBilesen> mamulbilesen = new ArrayList<MamulBilesen>();
             mamulbilesen = mamulDao.mamulBilesenListeGetirTum(mamulid);

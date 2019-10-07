@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import erp.dao.BaseDao;
 import erp.dao.StokDao;
-import erp.entity.BilesenTip;
+import erp.model.BilesenTip;
 import erp.util.Util;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.Cell;

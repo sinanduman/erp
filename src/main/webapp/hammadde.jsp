@@ -31,6 +31,8 @@
 <%@ page import="erp.servlet.entity.*, java.util.List" %>
 <%@ page import="erp.util.Util" %>
 <%@ page import="erp.entity.*" %>
+<%@ page import="erp.model.BilesenTip" %>
+<%@ page import="erp.model.BirimTip" %>
 
 <%@ include file="logincheck.jsp" %>
 

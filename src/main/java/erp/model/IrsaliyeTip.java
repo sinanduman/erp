@@ -1,10 +1,12 @@
-package erp.entity;
+package erp.model;
 
-public enum UretimDurum {
-    BEKLEYEN(0), TAMAMLANMIS(1), TUM(2);
+public enum IrsaliyeTip {
+    OPEN(0),
+    COMPLETED(1),
+    ONAYLANDI(1);
     private Integer value;
     
-    UretimDurum(Integer value) {
+    IrsaliyeTip(Integer value) {
         this.value = value;
     }
     

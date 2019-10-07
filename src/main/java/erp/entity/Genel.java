@@ -1,5 +1,7 @@
 package erp.entity;
 
+import erp.model.LogMod;
+
 public final class Genel {
     final static public int ROWPERPAGE = 10;
     final static public int ROWPERLONGPAGE = 20;

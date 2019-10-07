@@ -2,7 +2,7 @@ package erp.dao;
 
 import erp.servlet.ConnectionManager;
 import erp.entity.Bilesen;
-import erp.entity.BilesenTip;
+import erp.model.BilesenTip;
 import erp.util.Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,12 +20,13 @@ public class BilesenDao implements Serializable, BaseDao {
     ConnectionManager connectionManager;
     private static final Logger logger = LoggerFactory.getLogger(BilesenDao.class);
 
-    public List<Bilesen> bilesenListeGetirTum(BilesenTip bilesentip, int offset, Integer bilesenid) {
+    public List<Bilesen> bilesenListeGetirTum(BilesenTip bilesentip, int offset, Integer bilesenid, Integer durum) {
         List<Bilesen> temp = new ArrayList<Bilesen>();
         String pageFilter = Util.getPageFilter (offset);
         String filter1 = (bilesentip == null) ? "" : " and bilesentipid in (" + bilesentip.id() + ")";
         String filter2 = (bilesenid == null) ? "" : " and b.id = " + bilesenid;
-        String filter0 = " where 1=1" + filter1 + filter2;
+        String filter3 = (durum == null) ? "" : " and b.durum = " + durum;
+        String filter0 = " where 1=1" + filter1 + filter2 + filter3;
 
         String searchQuery = "select b.*, bt.ad bilesentipad, f.ad firmaad, bm.ad birimad"
                 + " from " + BaseDao.BILESEN + " b"

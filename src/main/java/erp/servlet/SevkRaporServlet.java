@@ -20,7 +20,7 @@ import erp.entity.Firma;
 import erp.entity.Genel;
 import erp.entity.Irsaliye;
 import erp.entity.IrsaliyeBilesen;
-import erp.entity.IrsaliyeTip;
+import erp.model.IrsaliyeTip;
 import erp.entity.Mamul;
 import erp.util.Util;
 import org.slf4j.Logger;
@@ -62,7 +62,7 @@ public class SevkRaporServlet extends HttpServlet implements Serializable {
         int noofpages = 0;
         int page0 = 1;
 
-        List<Mamul> mamul = mamulDao.mamulListeGetir(null, 0);
+        List<Mamul> mamul = mamulDao.mamulListeGetir(null, 0, null);
         List<Irsaliye> irsaliyejson = irsaliyeDao.irsaliyeListeGetirTum(IrsaliyeTip.ONAYLANDI, 0, null, null, null);
         List<IrsaliyeBilesen> irsaliyebilesenonaylandi = new ArrayList<IrsaliyeBilesen>();
 

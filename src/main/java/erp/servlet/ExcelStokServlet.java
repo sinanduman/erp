@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import erp.dao.StokDao;
-import erp.entity.BilesenTip;
+import erp.model.BilesenTip;
 import erp.entity.StokRapor;
 import erp.util.Util;
 import org.apache.poi.hssf.util.HSSFColor;

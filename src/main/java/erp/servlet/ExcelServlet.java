@@ -1,7 +1,7 @@
 package erp.servlet;
 
 import erp.dao.UretimDao;
-import erp.entity.UretimDurum;
+import erp.model.UretimDurum;
 import erp.entity.UretimPlan;
 
 import erp.util.Util;

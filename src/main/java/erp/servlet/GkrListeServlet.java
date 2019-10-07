@@ -17,7 +17,7 @@ import erp.dao.BaseDao;
 import erp.dao.BilesenDao;
 import erp.dao.FirmaDao;
 import erp.dao.StokDao;
-import erp.entity.BilesenTip;
+import erp.model.BilesenTip;
 import erp.entity.Bilesen;
 import erp.entity.Firma;
 import erp.entity.Genel;
@@ -64,7 +64,7 @@ public class GkrListeServlet extends HttpServlet implements Serializable {
             bilesenid   = Integer.parseInt(request.getParameter("bilesenid"));
         }
 
-        List<Bilesen> hammadde = bilesenDao.bilesenListeGetirTum( BilesenTip.HAMMADDEYARIMAMUL, 0, null );
+        List<Bilesen> hammadde = bilesenDao.bilesenListeGetirTum( BilesenTip.HAMMADDEYARIMAMUL, 0, null, null);
         List<Firma> firma = firmaDao.firmaListeGetirTum(0);
         
         Map<String,String> param = new HashMap<String, String>();

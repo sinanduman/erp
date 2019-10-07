@@ -1,11 +1,14 @@
-package erp.entity;
+package erp.model;
 
-public enum MakinaTip {
-    MAKINA(1,"Makina"), BANT(2, "Bant");
+public enum FigurTip {
+    Goz4(1,"4 Göz"),
+    Goz8(2,"8 Göz"),
+    Goz12(3,"12 Göz"),
+    Goz16(4,"16 Göz");
     private Integer value;
     private String ad;
     
-    MakinaTip(Integer value, String ad) {
+    FigurTip(Integer value, String ad) {
         this.value = value;
         this.ad = ad;
     }

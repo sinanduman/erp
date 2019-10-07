@@ -19,7 +19,7 @@ import erp.entity.Firma;
 import erp.entity.Genel;
 import erp.entity.Irsaliye;
 import erp.entity.IrsaliyeBilesen;
-import erp.entity.IrsaliyeTip;
+import erp.model.IrsaliyeTip;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

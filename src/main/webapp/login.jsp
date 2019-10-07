@@ -64,8 +64,8 @@
 
 
         <div>
-            <button class="btn btn-sm btn-success" type="submit" name="submit"
-                    style="background-color: #5fb336">Giriş Yap
+            <button class="btn btn-success" type="submit" name="submit"
+                    style="background-color: #5fb336"><i class="fa fa-sign-in iki-bosluk"></i>Giriş Yap
             </button>
         </div>
 
@@ -74,7 +74,7 @@
     <%
         String message = (String) request.getSession().getAttribute("message");
         String submit = request.getParameter("submit");
-        if (message != null && message != "" && submit != null) {
+        if (message != null && !message.trim().equals("") && submit != null) {
     %>
     <div class="form-signin text-center alert alert-danger"
          style="margin-top: 10px;">

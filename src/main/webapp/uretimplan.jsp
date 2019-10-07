@@ -475,25 +475,25 @@
     function changefun(elem) {
         var found = false;
         if (elem != null) {
-            for (i in mamul) {
-                if (elem.value == mamul[i].mamulkod) {
+            for (var j=0; j < mamul.length && !found; j++) {
+                if ($(elem).val() == mamul[j].mamulkod) {
                     found = true;
-                    document.uretimplanform.mamulad.value = mamul[i].mamulad;
-                    document.uretimplanform.mamulid.value = mamul[i].mamulid;
-                    document.uretimplanform.firmaad.value = mamul[i].firmaad;
-                    document.uretimplanform.hammadde.value = mamul[i].hammadde;
-                    document.uretimplanform.agirlik.value = mamul[i].agirlik;
-                    document.uretimplanform.cevrimsure.value = mamul[i].cevrimsure;
+                    $("#mamulad").val(mamul[j].mamulad);
+                    $("#mamulid").val(mamul[j].mamulid);
+                    $("#firmaad").val(mamul[j].firmaad);
+                    $("#hammadde").val(mamul[j].hammadde);
+                    $("#agirlik").val(mamul[j].agirlik);
+                    $("#cevrimsure").val(mamul[j].cevrimsure);
                 }
             }
         }
         if (!found) {
-            document.uretimplanform.mamulad.value = "";
-            document.uretimplanform.mamulid.value = "";
-            document.uretimplanform.firmaad.value = "";
-            document.uretimplanform.hammadde.value = "";
-            document.uretimplanform.agirlik.value = "";
-            document.uretimplanform.cevrimsure.value = "";
+            $("#mamulad").val("");
+            $("#mamulid").val("");
+            $("#firmaad").val("");
+            $("#hammadde").val("");
+            $("#agirlik").val("");
+            $("#cevrimsure").val("");
         }
     }
 </script>
