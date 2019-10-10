@@ -225,6 +225,7 @@
 
                 <label for="irsaliye_yukle_form" class="text-baslik">Excel'den Yükle</label>
                 <div>
+                    <input type="hidden" name="irsaliyeid" id="irsaliye_id_form" value="<%=acikirsaliyeid%>">
 
                     <input type="file" class="form-control-file normal" name="irsaliye_yukle"
                            id="irsaliye_yukle" required pattern=".*\.xls[x]?" /><button type="submit"

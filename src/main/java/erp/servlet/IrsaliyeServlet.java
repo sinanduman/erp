@@ -29,6 +29,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 @WebServlet("/irsaliye")
 public class IrsaliyeServlet extends HttpServlet implements Serializable {
@@ -109,28 +110,8 @@ public class IrsaliyeServlet extends HttpServlet implements Serializable {
                     logger.info("irsaliyeid :" + irsaliyeid);
                     /* 0:Insert */
                     if (IrsaliyeEnum.IRSALIYE_EKLE.getValue() == irsaliyeid) {
-                        String irsaliyeno = request.getParameter("irsaliyeno");
-                        String tarih      = request.getParameter("tarih");
-                        String firmaid    = request.getParameter("firmaid");
-                        int newIrsaliyeId = irsaliyeDao.irsaliyeEkle(irsaliyeno, tarih, firmaid);
-
-                        /* if Error occured */
-                        if (newIrsaliyeId == -1) {
-                            logger.info("Hata Olustu!..");
-                        }
-                        else {
-                            irsaliyeid = newIrsaliyeId;
-                        }
+                        irsaliyeEkle(request);
                     }
-                    String mamulid     = request.getParameter("mamulid");
-                    String miktar      = request.getParameter("miktar");
-                    String not         = request.getParameter("not");
-
-                    message = irsaliyeDao.irsaliyeBilesenEkle(
-                            irsaliyeid,
-                            Integer.valueOf(mamulid),
-                            Integer.valueOf(miktar),
-                            not);
                 }
             }
         }
@@ -160,6 +141,31 @@ public class IrsaliyeServlet extends HttpServlet implements Serializable {
 
             request.getRequestDispatcher("irsaliye.jsp").forward(request, response);
         }
+    }
+
+    private String irsaliyeEkle(HttpServletRequest request){
+        String message = "";
+        String irsaliyeno = request.getParameter("irsaliyeno");
+        String tarih      = request.getParameter("tarih");
+        String firmaid    = request.getParameter("firmaid");
+        int newIrsaliyeId = irsaliyeDao.irsaliyeEkle(irsaliyeno, tarih, firmaid);
+
+        /* if Error occured */
+        if (newIrsaliyeId == -1) {
+            logger.info("Hata Olustu!..");
+        }
+        else{
+            String mamulid     = request.getParameter("mamulid");
+            String miktar      = request.getParameter("miktar");
+            String not         = request.getParameter("not");
+
+            message = irsaliyeDao.irsaliyeBilesenEkle(
+                    newIrsaliyeId,
+                    Integer.valueOf(mamulid),
+                    Integer.valueOf(miktar),
+                    not);
+        }
+        return message;
     }
 
     protected void processUploadRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -194,10 +200,16 @@ public class IrsaliyeServlet extends HttpServlet implements Serializable {
             List<FileItem> formItems = upload.parseRequest(request);
 
             if (formItems != null && formItems.size() > 0) {
+                String irsaliyeId = "0";
                 // iterates over form's fields
                 for (FileItem item : formItems) {
+                    if(item.isFormField()){
+                        if (item.getFieldName().equals("irsaliye_id_form")) {
+                            irsaliyeId = item.getString();
+                        }
+                    }
                     // processes only fields that are not form fields
-                    if (!item.isFormField()) {
+                    else {
                         String fileName = new File(item.getName()).getName();
                         String filePath = uploadPath + File.separator + fileName;
                         File storeFile = new File(filePath);
@@ -209,7 +221,7 @@ public class IrsaliyeServlet extends HttpServlet implements Serializable {
 
                         logger.info("MimeType: " + mimeType + " ? " + (mimeType.equals(EXCEL_MIME_TYPE)));
                         if(mimeType.equals(EXCEL_MIME_TYPE)){
-                            processExcelFile(storeFile);
+                            processExcelFile(storeFile, irsaliyeId);
                         }
                         request.getSession().setAttribute("message","Dosya başarıyla yüklendi.");
                     }
@@ -222,7 +234,7 @@ public class IrsaliyeServlet extends HttpServlet implements Serializable {
         // request.getRequestDispatcher("irsaliye.jsp").forward(request, response);
     }
 
-    public void processExcelFile(File storeFile){
+    public void processExcelFile(File storeFile, String irsaliyeId){
         int count = 0;
         try {
             // Creating Input Stream
@@ -244,7 +256,6 @@ public class IrsaliyeServlet extends HttpServlet implements Serializable {
                     continue;
 
                 IrsaliyeUploadData uploadData = new IrsaliyeUploadData();
-
                 Iterator<Cell> cellIter = myRow.cellIterator();
                 while(cellIter.hasNext()){
 
@@ -263,7 +274,7 @@ public class IrsaliyeServlet extends HttpServlet implements Serializable {
                             break;
                         case 3:
                             uploadData.setNot(cellValue);
-                            System.out.println(uploadData);
+                            uploadData.setIrsaliyeId(irsaliyeId);
                     }
                     /*
                     //get cell index
@@ -286,6 +297,15 @@ public class IrsaliyeServlet extends HttpServlet implements Serializable {
                     System.out.println("---");
                      */
                 }
+                System.out.println(uploadData);
+
+                String message = irsaliyeDao.irsaliyeBilesenEkle(
+                        Integer.valueOf(uploadData.getIrsaliyeId()),
+                        Integer.valueOf(uploadData.getMamulId()),
+                        Integer.valueOf(uploadData.getMiktar()),
+                        uploadData.getNot());
+                System.out.println(message);
+
             }
         }
         catch ( Exception e){

@@ -251,6 +251,14 @@ input[type="submit"]:invalid {
 	border: 2px dashed red;
 }
 
+input[type="file"]:valid,
+input[type="button"]:valid,
+input[type="reset"]:valid,
+input[type="submit"]:valid {
+	padding: 3px;
+	border: 2px dashed green;
+}
+
 i.iki-bosluk {
 	padding-right: 8px;
 }
