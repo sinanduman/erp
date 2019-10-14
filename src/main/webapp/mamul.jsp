@@ -1,9 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page import="java.util.List" %>
-<%@ page import="erp.util.Util" %>
 <%@ page import="erp.entity.*" %>
 <%@ page import="erp.model.BirimTip" %>
+<%@ page import="erp.util.Util" %>
+<%@ page import="java.util.List" %>
 <!doctype html>
 <html lang="en" ng-app="mamulApp">
 <head>

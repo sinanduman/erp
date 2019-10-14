@@ -1,5 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ page import="erp.entity.Bilesen" %>
+<%@ page import="erp.entity.Firma" %>
+<%@ page import="erp.entity.Genel" %>
+<%@ page import="erp.model.BilesenTip" %>
+<%@ page import="erp.model.BirimTip" %>
+<%@ page import="erp.util.Util" %>
+<%@ page import="java.util.List" %>
 <!doctype html>
 <html lang="en">
 <head>
@@ -28,12 +35,6 @@
     <![endif]-->
 </head>
 <body>
-<%@ page import="erp.servlet.entity.*, java.util.List" %>
-<%@ page import="erp.util.Util" %>
-<%@ page import="erp.entity.*" %>
-<%@ page import="erp.model.BilesenTip" %>
-<%@ page import="erp.model.BirimTip" %>
-
 <%@ include file="logincheck.jsp" %>
 
 <%

@@ -8,8 +8,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class IrsaliyeUploadData {
-    String irsaliyeId;
-    String mamulId;
+    String mamulKodu;
+    Integer mamulId;
     String miktar;
     String not;
 }

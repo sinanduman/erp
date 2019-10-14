@@ -1,7 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page import="erp.entity.Bilesen, erp.model.BilesenTip, erp.entity.Genel" %>
-<%@ page import="erp.entity.Mamul, erp.entity.IzlemeNo" %>
+<%@ page import="erp.entity.Genel" %>
+<%@ page import="erp.entity.IzlemeNo" %>
+<%@ page import="erp.entity.Mamul" %>
 <%@ page import="erp.util.Util" %>
 <%@ page import="java.util.List" %>
 <!doctype html>

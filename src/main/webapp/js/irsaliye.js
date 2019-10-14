@@ -4,24 +4,41 @@ $( "#irsaliyeno" ).change(function() {
             irsaliyeNoKontrol( $.trim( $("#irsaliyeno").val() ));
         }
     }
+    checkFileUploadEnabled();
 });
 
-$("#irsaliyeekle").click(function(){
-    var message	= "";
-    if($("#firmaid").val()==0){
-        message += "Müşteri adı giriniz!\n";
+$("#firmaid").change(function() {
+    checkFileUploadEnabled();
+});
+
+function checkFileUploadEnabled(){
+    if($("#firmaid").val()!="0" && !is_empty($("#irsaliyeno").val())){
+        $("#irsaliye_yukle").prop("disabled", false);
+        return true;
+    } else{
+        $("#irsaliye_yukle").prop("disabled", true);
+        return false;
     }
-    if($("#mamulid").val()==""){
-        message += "Mamül kodu giriniz!\n";
-    }
-    if(!is_positive($("#miktar").val())){
-        message += "Sevk miktarı giriniz!\n";
-    }
-    if(is_empty($("#irsaliyeno").val())){
-        message += "İrsaliye No giriniz!\n";
-    }
-    if(is_positive($("#miktar").val()) && parseInt($("#miktarbox").val()) < parseInt($("#miktar").val()) ){
-        message += "Sevk miktarı " + parseInt($("#miktarbox").val())+ " ADET'ten büyük olamaz!\n";
+}
+
+$("#irsaliyeekle").click(function() {
+    var message = "";
+    if (!checkFileUploadEnabled() || $("#irsaliye_yukle").val()=="" ) {
+        if ($("#firmaid").val() == 0) {
+            message += "Müşteri adı giriniz!\n";
+        }
+        if ($("#mamulid").val() == "") {
+            message += "Mamül kodu giriniz!\n";
+        }
+        if (!is_positive($("#miktar").val())) {
+            message += "Sevk miktarı giriniz!\n";
+        }
+        if (is_empty($("#irsaliyeno").val())) {
+            message += "İrsaliye No giriniz!\n";
+        }
+        if (is_positive($("#miktar").val()) && parseInt($("#miktarbox").val()) < parseInt($("#miktar").val())) {
+            message += "Sevk miktarı " + parseInt($("#miktarbox").val()) + " ADET'ten büyük olamaz!\n";
+        }
     }
     if(message!=""){
         alert(message);

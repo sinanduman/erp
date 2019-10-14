@@ -1,8 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page import="erp.util.Util,java.util.List" %>
+<%@ page import="erp.entity.*,erp.util.Util" %>
 <%@ page import="java.text.SimpleDateFormat,java.util.Date" %>
-<%@ page import="erp.entity.*" %>
+<%@ page import="java.util.List" %>
 <!doctype html>
 <html lang="en">
 <head>
@@ -94,7 +94,7 @@
         <label class="text-danger rounded">Ürün Sevkiyatı</label>
     </div>
     <div class="row">
-        <form class="form-inline" name="irsaliyeform" id="irsaliyeform" method="post" action="irsaliye">
+        <form class="form-inline" name="irsaliyeform" id="irsaliyeform" method="post" action="irsaliye" enctype="multipart/form-data">
             <%
                 String disabled = "";
                 String readonly = "";
@@ -113,7 +113,8 @@
             <div class="form-group">
                 <label for="firmaid" class="text-baslik">Müşteri</label>
                 <div>
-                    <select class="form-control big" name="firmaid" id="firmaid" <%=disabled%> <%=readonly%>>
+                    <select class="form-control big" name="firmaid" id="firmaid" <%=disabled%> <%=readonly%> required
+                            pattern="^[1-9][0-9]*$">
                         <%
                             out.println("<option value='0'>... Müşteri Seçiniz ...</option>");
                             for (Firma f : firma) {
@@ -131,7 +132,7 @@
             <div class="form-group">
                 <label for="irsaliyeno" class="text-baslik">İrsaliye No</label>
                 <div>
-                    <input type="text" class="form-control xm" name="irsaliyeno" id="irsaliyeno"
+                    <input type="number" required class="form-control xm" name="irsaliyeno" id="irsaliyeno"
                            value="<%=acikirsaliyeno%>" <%=readonly%> placeholder="İrsaliye No" autocomplete="off">
                     <input type="hidden" name="acikirsaliyeno" id="acikirsaliyeno" value="<%=acikirsaliyeno%>">
                 </div>
@@ -196,12 +197,24 @@
             </div>
 
             <div class="clearfix"></div>
+            <div class="form-group">
+
+                <label for="irsaliye_yukle" class="text-baslik">Excel'den Yükle</label>
+                <div>
+                    <input type="file" class="form-control-file normal" name="irsaliye_yukle"
+                           id="irsaliye_yukle" required pattern=".*\.xls[x]?"
+                            <%= (acikirsaliyeid == 0)? "disabled" : "" %> />
+                </div>
+
+            </div>
+            <div class="clearfix"></div>
             <%
                 if (admin != null && (admin.equals("1") || (admin.equals("3")))) {
             %>
             <div class="form-group" style="margin:20px 0;">
                 <div>
-                    <button type="button" class="btn btn-danger" name="irsaliyeekle" id="irsaliyeekle">İrsaliyeye Ekle
+                    <button type="button" class="btn btn-danger" name="irsaliyeekle" id="irsaliyeekle"><i
+                            class="fa fa-upload iki-bosluk"></i>İrsaliyeye Ekle
                     </button>
                     <button type="button" class="btn btn-danger" name="irsaliyeiptal" id="irsaliyeiptal"
                             style="display:none;">İptal
@@ -211,31 +224,10 @@
                     <input type="hidden" name="irsaliyebilesenid" id="irsaliyebilesenid" value="0">
                 </div>
             </div>
-
             <div class="clearfix"></div>
             <%
                 }
             %>
-
-        </form>
-
-        <form class="form-inline" name="irsaliye_yukle_form" id="irsaliye_yukle_form" method="post" action="irsaliye"
-              enctype="multipart/form-data">
-            <div class="form-group">
-
-                <label for="irsaliye_yukle_form" class="text-baslik">Excel'den Yükle</label>
-                <div>
-                    <input type="hidden" name="irsaliyeid" id="irsaliye_id_form" value="<%=acikirsaliyeid%>">
-
-                    <input type="file" class="form-control-file normal" name="irsaliye_yukle"
-                           id="irsaliye_yukle" required pattern=".*\.xls[x]?" /><button type="submit"
-                                                                              class="btn btn-sm btn-danger"
-                                                        style="margin-left: 10px;"><i
-                        class="fa fa-upload iki-bosluk"></i>Yükle
-                </button>
-                </div>
-
-            </div>
         </form>
     </div>
 

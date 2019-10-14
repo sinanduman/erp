@@ -1,5 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ page import="erp.entity.Genel, erp.entity.Makina" %>
+<%@ page import="erp.model.MakinaTip" %>
+<%@ page import="erp.util.Util" %>
+<%@ page import="java.util.List" %>
 <!doctype html>
 <html lang="en">
 <head>
@@ -26,10 +30,6 @@
 	<![endif]-->
 </head>
 <body>
-<%@ page import="erp.entity.Genel, erp.entity.Makina, erp.model.MakinaTip" %>
-<%@ page import="java.util.List" %>
-<%@ page import="erp.util.Util" %>
-
 <%@ include file="logincheck.jsp" %>
 <%
 	List<Makina> makina = (List<Makina>) request.getAttribute("makina");

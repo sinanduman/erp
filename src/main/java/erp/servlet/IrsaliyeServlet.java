@@ -29,7 +29,6 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 @WebServlet("/irsaliye")
 public class IrsaliyeServlet extends HttpServlet implements Serializable {
@@ -48,9 +47,22 @@ public class IrsaliyeServlet extends HttpServlet implements Serializable {
     private static final String EXCEL_MIME_TYPE = "application/octet-stream";
 
     // upload settings
-    private static final int MEMORY_THRESHOLD   = 1024 * 1024 * 3;  // 3MB
-    private static final int MAX_FILE_SIZE      = 1024 * 1024 * 40; // 40MB
-    private static final int MAX_REQUEST_SIZE   = 1024 * 1024 * 50; // 50MB
+    private static final int MEMORY_THRESHOLD = 1024 * 1024 * 3;  // 3MB
+    private static final int MAX_FILE_SIZE = 1024 * 1024 * 40; // 40MB
+    private static final int MAX_REQUEST_SIZE = 1024 * 1024 * 50; // 50MB
+
+    private String r_islemid;
+    private String r_irsaliyeid;
+    private String r_irsaliyebilesenid;
+    private String r_irsaliyeno;
+    private String r_mamulid;
+    private String r_gkrno;
+    private String r_miktar;
+    private String r_not;
+    private String r_tarih;
+    private String r_firmaid;
+
+    List<Stok> stok = null;
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doPost(request, response);
@@ -58,77 +70,73 @@ public class IrsaliyeServlet extends HttpServlet implements Serializable {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html; charset=UTF-8");
+        String message = "";
+        Boolean ajaxInAction = false;
+        stok = stokDao.stokMamulListeGetirTum(null, 1);
 
-        String message        = "";
-        Boolean ajaxInAction  = false;
+        if (ServletFileUpload.isMultipartContent(request)) {
+            processUploadRequest(request, response);
+        } else {
+            getFormFieldsWithoutFile(request);
+        }
 
-        if(request.getParameter("islemid")!=null) {
-            Integer islemid = Integer.valueOf(request.getParameter("islemid"));
+        if (r_islemid != null) {
+            Integer islemid = Integer.valueOf(r_islemid);
             /* with ajax */
             if (islemid == IrsaliyeEnum.IRSALIYE_SIL.getValue()) {
-                ajaxInAction  = true;
-                String result = irsaliyeDao.irsaliyeSil(request.getParameter("irsaliyeid"));
+                ajaxInAction = true;
+                String result = irsaliyeDao.irsaliyeSil(r_irsaliyeid);
                 PrintWriter out = response.getWriter();
                 out.print(result);
-            }
-            /* with ajax */
-            else if (islemid == IrsaliyeEnum.IRSALIYE_ONAYLA.getValue()) {
-                ajaxInAction  = true;
-                String result = irsaliyeDao.irsaliyeOnayla(request.getParameter("irsaliyeid"));
+            } else if (islemid == IrsaliyeEnum.IRSALIYE_ONAYLA.getValue()) {
+                ajaxInAction = true;
+                String result = irsaliyeDao.irsaliyeOnayla(r_irsaliyeid);
                 PrintWriter out = response.getWriter();
                 out.print(result);
-            }
-            else if (islemid == IrsaliyeEnum.IRSALIYE_BILESEN_SIL.getValue()) {
-                ajaxInAction  = true;
-                Integer result  = irsaliyeDao.irsaliyeBilesenSil(request.getParameter("irsaliyebilesenid"));
+            } else if (islemid == IrsaliyeEnum.IRSALIYE_BILESEN_SIL.getValue()) {
+                ajaxInAction = true;
+                Integer result = irsaliyeDao.irsaliyeBilesenSil(r_irsaliyebilesenid);
                 PrintWriter out = response.getWriter();
                 out.print(result);
-            }
-            else if (islemid == IrsaliyeEnum.IRSALIYE_NO_KONTROL.getValue()) {
-                ajaxInAction  = true;
-                String result   = irsaliyeDao.irsaliyeNoKontrol(request.getParameter("irsaliyeno"));
+            } else if (islemid == IrsaliyeEnum.IRSALIYE_NO_KONTROL.getValue()) {
+                ajaxInAction = true;
+                String result = irsaliyeDao.irsaliyeNoKontrol(r_irsaliyeno);
                 PrintWriter out = response.getWriter();
                 out.print(result);
-            }
-            else {
+            } else {
+                /* no ajax */
                 logger.info("islemid :" + islemid);
                 if (islemid == IrsaliyeEnum.IRSALIYE_BILESEN_GUNCELLE.getValue()) {
-                    int irsaliyeid         = Integer.valueOf(request.getParameter("irsaliyeid"));
-                    int irsaliyebilesenid  = Integer.valueOf(request.getParameter("irsaliyebilesenid"));
-                    int mamulid            = Integer.valueOf(request.getParameter("mamulid"));
-                    int gkrno              = Integer.valueOf(request.getParameter("gkrno"));
-                    int miktar             = Integer.valueOf(request.getParameter("miktar"));
-                    String not             = request.getParameter("not");
+                    int irsaliyeid = Integer.valueOf(r_irsaliyeid);
+                    int irsaliyebilesenid = Integer.valueOf(r_irsaliyebilesenid);
+                    int mamulid = Integer.valueOf(r_mamulid);
+                    int gkrno = Integer.valueOf(r_gkrno);
+                    int miktar = Integer.valueOf(r_miktar);
+                    String not = r_not;
 
-                    irsaliyeDao.irsaliyeBilesenGuncelle(irsaliyeid, irsaliyebilesenid, mamulid, gkrno, miktar, not );
-                }
-                else if (islemid == IrsaliyeEnum.IRSALIYE_KAPAT.getValue()) {
-                    irsaliyeDao.irsaliyeKapat(request.getParameter("irsaliyeid"));
-                }
-                else {
-                    int irsaliyeid = Integer.valueOf(request.getParameter("irsaliyeid"));
+                    irsaliyeDao.irsaliyeBilesenGuncelle(irsaliyeid, irsaliyebilesenid, mamulid, gkrno, miktar, not);
+                } else if (islemid == IrsaliyeEnum.IRSALIYE_KAPAT.getValue()) {
+                    irsaliyeDao.irsaliyeKapat(r_irsaliyeid);
+                } else {
+                    int irsaliyeid = Integer.valueOf(r_irsaliyeid);
                     logger.info("irsaliyeid :" + irsaliyeid);
                     /* 0:Insert */
                     if (IrsaliyeEnum.IRSALIYE_EKLE.getValue() == irsaliyeid) {
-                        irsaliyeEkle(request);
+                        irsaliyeEkle();
                     }
                 }
             }
         }
-        if(!ajaxInAction) {
+        if (!ajaxInAction) {
+            //stok = stokDao.stokMamulListeGetirTum(null, 1);
             List<Birim> birim = daoFunctions.birimListeGetirTum();
             List<Firma> firma = firmaDao.firmaListeGetirTum(0);
-            List<Stok> stok = stokDao.stokMamulListeGetirTum(null, 1);
             List<Irsaliye> irsaliye = irsaliyeDao.irsaliyeListeGetirTum(IrsaliyeTip.OPEN, 0, null, null, null);
 
             /* Son eklenen irsaliyeyi getir */
             List<Irsaliye> irsaliyekapali = irsaliyeDao.irsaliyeListeGetirKapaliTum(IrsaliyeTip.COMPLETED, 1);
-            List<IrsaliyeBilesen> irsaliyebilesenopen = irsaliyeDao.irsaliyeBilesenListeGetirTum(IrsaliyeTip.OPEN, 0, null, null, null,0);
-            List<IrsaliyeBilesen> irsaliyebilesencompleted = irsaliyeDao.irsaliyeBilesenListeGetirTum(IrsaliyeTip.COMPLETED, 0, null, null, null,0);
-
-            if (ServletFileUpload.isMultipartContent(request)) {
-                processUploadRequest(request, response);
-            }
+            List<IrsaliyeBilesen> irsaliyebilesenopen = irsaliyeDao.irsaliyeBilesenListeGetirTum(IrsaliyeTip.OPEN, 0, null, null, null, 0);
+            List<IrsaliyeBilesen> irsaliyebilesencompleted = irsaliyeDao.irsaliyeBilesenListeGetirTum(IrsaliyeTip.COMPLETED, 0, null, null, null, 0);
 
             request.setAttribute("birim", birim);
             request.setAttribute("firma", firma);
@@ -143,32 +151,7 @@ public class IrsaliyeServlet extends HttpServlet implements Serializable {
         }
     }
 
-    private String irsaliyeEkle(HttpServletRequest request){
-        String message = "";
-        String irsaliyeno = request.getParameter("irsaliyeno");
-        String tarih      = request.getParameter("tarih");
-        String firmaid    = request.getParameter("firmaid");
-        int newIrsaliyeId = irsaliyeDao.irsaliyeEkle(irsaliyeno, tarih, firmaid);
-
-        /* if Error occured */
-        if (newIrsaliyeId == -1) {
-            logger.info("Hata Olustu!..");
-        }
-        else{
-            String mamulid     = request.getParameter("mamulid");
-            String miktar      = request.getParameter("miktar");
-            String not         = request.getParameter("not");
-
-            message = irsaliyeDao.irsaliyeBilesenEkle(
-                    newIrsaliyeId,
-                    Integer.valueOf(mamulid),
-                    Integer.valueOf(miktar),
-                    not);
-        }
-        return message;
-    }
-
-    protected void processUploadRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void processUploadRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // configures upload settings
         DiskFileItemFactory factory = new DiskFileItemFactory();
         // sets memory threshold - beyond which files are stored in disk
@@ -195,21 +178,13 @@ public class IrsaliyeServlet extends HttpServlet implements Serializable {
         }
 
         try {
-            // parses the request's content to extract file data
-            @SuppressWarnings("unchecked")
             List<FileItem> formItems = upload.parseRequest(request);
-
+            /*First form fields, later file part*/
             if (formItems != null && formItems.size() > 0) {
-                String irsaliyeId = "0";
-                // iterates over form's fields
+                getFormFieldsWithFile(formItems);
+
                 for (FileItem item : formItems) {
-                    if(item.isFormField()){
-                        if (item.getFieldName().equals("irsaliye_id_form")) {
-                            irsaliyeId = item.getString();
-                        }
-                    }
-                    // processes only fields that are not form fields
-                    else {
+                    if (!item.isFormField()) {
                         String fileName = new File(item.getName()).getName();
                         String filePath = uploadPath + File.separator + fileName;
                         File storeFile = new File(filePath);
@@ -220,21 +195,20 @@ public class IrsaliyeServlet extends HttpServlet implements Serializable {
                         String mimeType = fileTypeMap.getContentType(storeFile);
 
                         logger.info("MimeType: " + mimeType + " ? " + (mimeType.equals(EXCEL_MIME_TYPE)));
-                        if(mimeType.equals(EXCEL_MIME_TYPE)){
-                            processExcelFile(storeFile, irsaliyeId);
+                        if (mimeType.equals(EXCEL_MIME_TYPE)) {
+                            processExcelFile(storeFile, r_irsaliyeid);
                         }
-                        request.getSession().setAttribute("message","Dosya başarıyla yüklendi.");
+                        request.getSession().setAttribute("message", "Dosya başarıyla yüklendi.");
                     }
                 }
             }
         } catch (Exception ex) {
-            request.getSession().setAttribute("message","There was an error: " + ex.getMessage());
+            request.getSession().setAttribute("message", "There was an error: " + ex.getMessage());
         }
-        // redirects client to message page
         // request.getRequestDispatcher("irsaliye.jsp").forward(request, response);
     }
 
-    public void processExcelFile(File storeFile, String irsaliyeId){
+    private void processExcelFile(File storeFile, String irsaliyeId) {
         int count = 0;
         try {
             // Creating Input Stream
@@ -250,66 +224,120 @@ public class IrsaliyeServlet extends HttpServlet implements Serializable {
 
             /** We now need something to iterate through the cells.**/
             Iterator<Row> rowIter = mySheet.rowIterator();
-            while(rowIter.hasNext()){
+            while (rowIter.hasNext()) {
                 XSSFRow myRow = (XSSFRow) rowIter.next();
+                /*Ilk satiri almamak icin*/
                 if (count++ == 0)
                     continue;
 
                 IrsaliyeUploadData uploadData = new IrsaliyeUploadData();
                 Iterator<Cell> cellIter = myRow.cellIterator();
-                while(cellIter.hasNext()){
+                while (cellIter.hasNext()) {
 
                     XSSFCell myCell = (XSSFCell) cellIter.next();
 
                     String cellValue = myCell.getCellType() == XSSFCell.CELL_TYPE_NUMERIC ? String.valueOf(myCell.getRawValue()) : myCell.getStringCellValue();
-                    switch (myCell.getColumnIndex()){
+                    switch (myCell.getColumnIndex()) {
                         case 0:
-                            uploadData.setIrsaliyeId(cellValue);
-                            break;
-                        case 1:
-                            uploadData.setMamulId(cellValue);
+                            uploadData.setMamulKodu(cellValue);
+                            uploadData.setMamulId(getMamuldIdFromMamulKod(cellValue));
                             break;
                         case 2:
                             uploadData.setMiktar(cellValue);
                             break;
                         case 3:
                             uploadData.setNot(cellValue);
-                            uploadData.setIrsaliyeId(irsaliyeId);
                     }
-                    /*
-                    //get cell index
-                    System.out.println("Cell column index: " + myCell.getColumnIndex());
-                    //get cell type
-                    System.out.println("Cell Type: " + myCell.getCellType());
-
-                    //get cell value
-                    switch (myCell.getCellType()) {
-                        case XSSFCell.CELL_TYPE_NUMERIC :
-                            System.out.println("Cell Value: " + myCell.getNumericCellValue());
-                            break;
-                        case XSSFCell.CELL_TYPE_STRING:
-                            System.out.println("Cell Value: " + myCell.getStringCellValue());
-                            break;
-                        default:
-                            System.out.println("Cell Value: " + myCell.getRawValue());
-                            break;
-                    }
-                    System.out.println("---");
-                     */
                 }
                 System.out.println(uploadData);
 
-                String message = irsaliyeDao.irsaliyeBilesenEkle(
-                        Integer.valueOf(uploadData.getIrsaliyeId()),
-                        Integer.valueOf(uploadData.getMamulId()),
-                        Integer.valueOf(uploadData.getMiktar()),
-                        uploadData.getNot());
+                int newIrsaliyeId = 0;
+                if (Integer.parseInt(r_irsaliyeid) == 0) {
+                    newIrsaliyeId = irsaliyeEkle();
+                    r_irsaliyeid = String.valueOf(newIrsaliyeId);
+                }
+                else {
+                    newIrsaliyeId = Integer.valueOf(r_irsaliyeid);
+                }
+
+                String message = irsaliyeBilesenEkle(uploadData, newIrsaliyeId);
                 System.out.println(message);
 
             }
-        }
-        catch ( Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    private int irsaliyeEkle() {
+        String irsaliyeno = r_irsaliyeno;
+        String tarih = r_tarih;
+        String firmaid = r_firmaid;
+        int newIrsaliyeId = irsaliyeDao.irsaliyeEkle(irsaliyeno, tarih, firmaid);
+
+        /* if Error occured */
+        if (newIrsaliyeId == -1) {
+            logger.info("Hata Olustu!..");
+        }
+        return newIrsaliyeId;
+    }
+
+    private String irsaliyeBilesenEkle(IrsaliyeUploadData uploadData, int newIrsaliyeId) {
+        return irsaliyeDao.irsaliyeBilesenEkle(
+                            newIrsaliyeId,
+                            Integer.valueOf(uploadData.getMamulId()),
+                            Integer.valueOf(uploadData.getMiktar()),
+                            uploadData.getNot());
+    }
+
+    private int getMamuldIdFromMamulKod(String mamulKodu) {
+        for (Stok s : stok) {
+            String str = s.getBilesenkod();
+            str = str.replaceFirst("^0+", "");
+            if (str.equals(String.valueOf(Long.valueOf(mamulKodu))))
+                return s.getBilesenid();
+        }
+        return 0;
+    }
+
+    private void getFormFieldsWithoutFile(HttpServletRequest request){
+        r_islemid = request.getParameter("islemid");
+        r_irsaliyeid = request.getParameter("irsaliyeid");
+        r_irsaliyebilesenid = request.getParameter("irsaliyebilesenid");
+        r_irsaliyeno = request.getParameter("irsaliyeno");
+        r_mamulid = request.getParameter("mamulid");
+        r_gkrno = request.getParameter("gkrno");
+        r_miktar = request.getParameter("miktar");
+        r_not = request.getParameter("not");
+        r_tarih = request.getParameter("tarih");
+        r_firmaid = request.getParameter("firmaid");
+    }
+
+    private void getFormFieldsWithFile(List<FileItem> formItems){
+        for (FileItem item : formItems) {
+            if (item.isFormField()) {
+                if (item.getFieldName().equals("islemid")) {
+                    r_islemid = item.getString();
+                } else if (item.getFieldName().equals("irsaliyeid")) {
+                    r_irsaliyeid = item.getString();
+                } else if (item.getFieldName().equals("irsaliyebilesenid")) {
+                    r_irsaliyebilesenid = item.getString();
+                } else if (item.getFieldName().equals("irsaliyeno")) {
+                    r_irsaliyeno = item.getString();
+                } else if (item.getFieldName().equals("mamulid")) {
+                    r_mamulid = item.getString();
+                } else if (item.getFieldName().equals("gkrno")) {
+                    r_gkrno = item.getString();
+                } else if (item.getFieldName().equals("miktar")) {
+                    r_miktar = item.getString();
+                } else if (item.getFieldName().equals("not")) {
+                    r_not = item.getString();
+                } else if (item.getFieldName().equals("tarih")) {
+                    r_tarih = item.getString();
+                } else if (item.getFieldName().equals("firmaid")) {
+                    r_firmaid = item.getString();
+                }
+            }
         }
     }
 }

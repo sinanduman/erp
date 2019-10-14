@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ page import="erp.entity.Bilesen, erp.entity.Genel, erp.model.BirimTip" %>
+<%@ page import="erp.util.Util" %>
+<%@ page import="java.util.List" %>
 <!doctype html>
 <html lang="en" ng-app>
 <head>
@@ -26,10 +29,6 @@
     <![endif]-->
 </head>
 <body>
-<%@ page import="erp.entity.Bilesen, erp.model.BirimTip, erp.entity.Genel" %>
-<%@ page import="java.util.List" %>
-<%@ page import="erp.util.Util" %>
-
 <%@ include file="logincheck.jsp" %>
 
 <div class="container">
