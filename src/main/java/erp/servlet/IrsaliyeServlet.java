@@ -62,8 +62,6 @@ public class IrsaliyeServlet extends HttpServlet implements Serializable {
     private String r_tarih;
     private String r_firmaid;
 
-    List<Stok> stok = null;
-
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doPost(request, response);
     }
@@ -72,11 +70,15 @@ public class IrsaliyeServlet extends HttpServlet implements Serializable {
         response.setContentType("text/html; charset=UTF-8");
         String message = "";
         Boolean ajaxInAction = false;
-        stok = stokDao.stokMamulListeGetirTum(null, 1);
+        Boolean excelRowsProcessed = false;
+        List<Stok> stok = null;
 
         if (ServletFileUpload.isMultipartContent(request)) {
-            processUploadRequest(request, response);
-        } else {
+            if(stok == null)
+                stok = stokDao.stokMamulListeGetirTum(null, 1);
+            excelRowsProcessed = processUploadRequest(request, response, stok);
+        }
+        else {
             getFormFieldsWithoutFile(request);
         }
 
@@ -124,11 +126,17 @@ public class IrsaliyeServlet extends HttpServlet implements Serializable {
                     if (IrsaliyeEnum.IRSALIYE_EKLE.getValue() == irsaliyeid) {
                         irsaliyeEkle();
                     }
+                    else{
+                        if(!excelRowsProcessed)
+                            message = irsaliyeBilesenEkle(r_mamulid, r_miktar, r_not, irsaliyeid);
+                    }
                 }
             }
         }
+
         if (!ajaxInAction) {
-            //stok = stokDao.stokMamulListeGetirTum(null, 1);
+            if(stok == null)
+                stok = stokDao.stokMamulListeGetirTum(null, 1);
             List<Birim> birim = daoFunctions.birimListeGetirTum();
             List<Firma> firma = firmaDao.firmaListeGetirTum(0);
             List<Irsaliye> irsaliye = irsaliyeDao.irsaliyeListeGetirTum(IrsaliyeTip.OPEN, 0, null, null, null);
@@ -151,7 +159,8 @@ public class IrsaliyeServlet extends HttpServlet implements Serializable {
         }
     }
 
-    private void processUploadRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private boolean processUploadRequest(HttpServletRequest request, HttpServletResponse response, List<Stok> stok) throws ServletException, IOException {
+        boolean retVal = false;
         // configures upload settings
         DiskFileItemFactory factory = new DiskFileItemFactory();
         // sets memory threshold - beyond which files are stored in disk
@@ -182,7 +191,7 @@ public class IrsaliyeServlet extends HttpServlet implements Serializable {
             /*First form fields, later file part*/
             if (formItems != null && formItems.size() > 0) {
                 getFormFieldsWithFile(formItems);
-
+                /*Binary excel file*/
                 for (FileItem item : formItems) {
                     if (!item.isFormField()) {
                         String fileName = new File(item.getName()).getName();
@@ -196,7 +205,7 @@ public class IrsaliyeServlet extends HttpServlet implements Serializable {
 
                         logger.info("MimeType: " + mimeType + " ? " + (mimeType.equals(EXCEL_MIME_TYPE)));
                         if (mimeType.equals(EXCEL_MIME_TYPE)) {
-                            processExcelFile(storeFile, r_irsaliyeid);
+                            retVal = processExcelFile(storeFile, r_irsaliyeid, stok);
                         }
                         request.getSession().setAttribute("message", "Dosya başarıyla yüklendi.");
                     }
@@ -206,9 +215,12 @@ public class IrsaliyeServlet extends HttpServlet implements Serializable {
             request.getSession().setAttribute("message", "There was an error: " + ex.getMessage());
         }
         // request.getRequestDispatcher("irsaliye.jsp").forward(request, response);
+        return retVal;
     }
 
-    private void processExcelFile(File storeFile, String irsaliyeId) {
+    private boolean processExcelFile(File storeFile, String irsaliyeId, List<Stok> stok) {
+        boolean retVal = false;
+        String message = "";
         int count = 0;
         try {
             // Creating Input Stream
@@ -240,7 +252,7 @@ public class IrsaliyeServlet extends HttpServlet implements Serializable {
                     switch (myCell.getColumnIndex()) {
                         case 0:
                             uploadData.setMamulKodu(cellValue);
-                            uploadData.setMamulId(getMamuldIdFromMamulKod(cellValue));
+                            uploadData.setMamulId(getMamuldIdFromMamulKod(cellValue, stok));
                             break;
                         case 2:
                             uploadData.setMiktar(cellValue);
@@ -259,14 +271,18 @@ public class IrsaliyeServlet extends HttpServlet implements Serializable {
                 else {
                     newIrsaliyeId = Integer.valueOf(r_irsaliyeid);
                 }
-
-                String message = irsaliyeBilesenEkle(uploadData, newIrsaliyeId);
+                if(uploadData.getMamulId().equals("0"))
+                    message += uploadData.getMamulKodu() + " icin kayit bulunamadi!";
+                else
+                    message += irsaliyeBilesenEkle(uploadData.getMamulId(), uploadData.getMiktar(), uploadData.getNot(), newIrsaliyeId);
                 System.out.println(message);
+                retVal = true;
 
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return retVal;
     }
 
     private int irsaliyeEkle() {
@@ -282,22 +298,22 @@ public class IrsaliyeServlet extends HttpServlet implements Serializable {
         return newIrsaliyeId;
     }
 
-    private String irsaliyeBilesenEkle(IrsaliyeUploadData uploadData, int newIrsaliyeId) {
+    private String irsaliyeBilesenEkle(String mamulId, String miktar, String not, int newIrsaliyeId) {
         return irsaliyeDao.irsaliyeBilesenEkle(
                             newIrsaliyeId,
-                            Integer.valueOf(uploadData.getMamulId()),
-                            Integer.valueOf(uploadData.getMiktar()),
-                            uploadData.getNot());
+                            Integer.valueOf(mamulId),
+                            Integer.valueOf(miktar),
+                not);
     }
 
-    private int getMamuldIdFromMamulKod(String mamulKodu) {
+    private String getMamuldIdFromMamulKod(String mamulKodu, List<Stok> stok) {
         for (Stok s : stok) {
             String str = s.getBilesenkod();
             str = str.replaceFirst("^0+", "");
             if (str.equals(String.valueOf(Long.valueOf(mamulKodu))))
-                return s.getBilesenid();
+                return String.valueOf(s.getBilesenid());
         }
-        return 0;
+        return "0";
     }
 
     private void getFormFieldsWithoutFile(HttpServletRequest request){

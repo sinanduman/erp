@@ -1,8 +1,8 @@
 package erp.dao;
 
 import erp.entity.Genel;
-import erp.servlet.ConnectionManager;
 import erp.entity.IzlemeNo;
+import erp.servlet.ConnectionManager;
 import erp.util.Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +15,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Singleton
 public class IzlemeNoDao implements Serializable, BaseDao {
@@ -26,7 +28,10 @@ public class IzlemeNoDao implements Serializable, BaseDao {
     public List<IzlemeNo> izlemeNoTum(String tablename, String filter, int offset) {
         List<IzlemeNo> temp = new ArrayList<IzlemeNo>();
 
-        String pageFilter = Util.getPageFilter (offset);
+        Map<String, String> param = new HashMap<>();
+        param.put("rowperpage", String.valueOf(Genel.ROWPERLONGPAGE));
+
+        String pageFilter = Util.getPageFilter (offset, param);
         String searchQuery = "SELECT * FROM (SELECT * FROM " + tablename + ") e"
                 + " WHERE 1=1 " + filter
                 + " ORDER BY e.kullanildi_tarih DESC, e.gkrno DESC " + pageFilter;

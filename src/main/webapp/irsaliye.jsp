@@ -15,7 +15,7 @@
     </title>
 
     <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/bootstrap.css?<%=Util.nanoTime%>">
 
     <!-- Custom styles for this template -->
     <link rel="stylesheet" href="css/irfan.css?<%=Util.nanoTime%>">
@@ -207,6 +207,16 @@
                 </div>
 
             </div>
+
+            <div class="form-group">
+                <label for="irsaliye_reset" class="text-baslik">&nbsp;</label>
+                <div>
+                    <button type="button" class="btn btn-success xs" name="irsaliye_reset" id="irsaliye_reset"
+                            style="margin-left:4px; display:none;">Reset
+                    </button>
+                </div>
+            </div>
+
             <div class="clearfix"></div>
             <%
                 if (admin != null && (admin.equals("1") || (admin.equals("3")))) {

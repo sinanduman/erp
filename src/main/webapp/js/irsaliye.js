@@ -11,6 +11,20 @@ $("#firmaid").change(function() {
     checkFileUploadEnabled();
 });
 
+$("#irsaliye_reset").click(function() {
+    $("#irsaliye_reset").css("display","none");
+    $("#irsaliye_yukle").val("");
+});
+
+$("#irsaliye_yukle").change(function() {
+    if(!is_empty($("#irsaliye_yukle").val())){
+        $("#irsaliye_reset").css("display", "");
+    }
+    else{
+        $("#irsaliye_reset").css("display", "none");
+    }
+});
+
 function checkFileUploadEnabled(){
     if($("#firmaid").val()!="0" && !is_empty($("#irsaliyeno").val())){
         $("#irsaliye_yukle").prop("disabled", false);

@@ -4,5 +4,5 @@
               type="javax.sql.DataSource" driverClassName="org.postgresql.Driver"
               url="jdbc:postgresql://localhost:5432/erp"
               username="postgres" password="postgres" maxTotal="100" maxIdle="-1"
-              maxWaitMillis="10" validationQuery="select 1"/>
+              maxWaitMillis="1000" validationQuery="select 1"/>
 </Context>

@@ -500,9 +500,9 @@
         minLength: 1,
         select: function (event, ui) {
             //$("#go").removeAttr("disabled");
-            //console.log(ui.item.id);
-            //console.log(ui.item.value);
-            //console.log(event);
+            console.log(ui.item.id);
+            console.log(ui.item.value);
+            console.log(event);
             changefun_uretim(ui.item);
             $(this).val(ui.item.value);
         }

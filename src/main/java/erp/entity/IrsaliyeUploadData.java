@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class IrsaliyeUploadData {
     String mamulKodu;
-    Integer mamulId;
+    String mamulId;
     String miktar;
     String not;
 }
