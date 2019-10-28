@@ -89,13 +89,13 @@ public class StokRaporServlet extends HttpServlet implements Serializable {
                 filter2 += " AND (case when islemyonu=0 then giristarihi else cikistarihi end)<'" + datetime.toString() + "' ";
             }
             if (Util.isNotEmptyOrNull(bilesenid)) {
-                filter1 = " AND " + tablename + ".id = " + Integer.valueOf(bilesenid);
+                filter1 = " AND m.id = " + Integer.valueOf(bilesenid);
             }
             filter = filter0 + filter1 + filter2;
             filterIn = " AND id in (select bilesenid from " + BaseDao.STOK + " where (case when islemyonu=0 then giristarihi else cikistarihi end) <'" + datetime.toString() + "') ";
             // PAGING
-            System.out.println("islem: " +tablename + "count" + "*" +filter0 + filter1 + filterIn);
-            totalrecord = daoFunctions.recordAgg(tablename, "COUNT", "*", " WHERE 1=1 " + filter0 + filter1 + filterIn);
+            System.out.println("islem: " +tablename + " count" + " * " + filter0 + filter1 + filterIn);
+            totalrecord = daoFunctions.recordAgg2(tablename, "COUNT", "*", " WHERE 1=1 " + filter0 + filter1 + filterIn, " m ");
             if (request.getParameter("page") != null)
                 page0 = Integer.parseInt(request.getParameter("page"));
             noofpages = (int) Math.ceil(totalrecord * 1.0 / Genel.ROWPERPAGE);

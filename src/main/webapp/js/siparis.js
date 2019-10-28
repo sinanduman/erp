@@ -708,8 +708,21 @@ function clearEsMamul() {
     $("#esmamulid").val("");
     $("#esmamulid_shadow").val("");
     $("#div_esmamul").hide();
+    $("#cxb_esmamul").prop("checked", false);
+    es_mamul_checkbox_off();
 }
 
+function es_mamul_checkbox_on() {
+    $("#esmamulad").css("color", "indianred");
+    $("#lbl_esmamul").text("Eş Mamül [Üretilsin]");
+    $("#esmamulid").val($("#esmamulid_shadow").val());
+}
+
+function es_mamul_checkbox_off() {
+    $("#esmamulad").css("color", "#333333");
+    $("#lbl_esmamul").text("Eş Mamül");
+    $("#esmamulid").val("");
+}
 
 function changefun_uretim(elem, guncelle) {
     var found = false;
@@ -727,6 +740,9 @@ function changefun_uretim(elem, guncelle) {
                     var esmamulid = mamul[i].esmamulid;
                     if (esmamulid > 0) {
                         findmamulkod(esmamulid);
+                    }
+                    else{
+                        clearEsMamul();
                     }
                 }
                 else{

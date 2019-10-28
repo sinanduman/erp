@@ -78,8 +78,12 @@ public class DAOFunctions implements Serializable {
     }
 
     public int recordAgg(String tablename, String aggfunc, String aggfield, String filter) {
+        return recordAgg2(tablename, aggfunc, aggfield, filter, null);
+    }
+
+    public int recordAgg2(String tablename, String aggfunc, String aggfield, String filter, String prefix) {
         int result = 0;
-        String selectQuery = "select " + aggfunc + "(" + aggfield + ")" + " from " + tablename + filter;
+        String selectQuery = "select " + aggfunc + "(" + aggfield + ")" + " from " + tablename +(prefix!=null?prefix:"")+ filter;
         logger.info(selectQuery);
         // connect to DB
         ResultSet rs = null;

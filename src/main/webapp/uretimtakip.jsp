@@ -474,14 +474,10 @@
 <script type="text/javascript">
     $("#cxb_esmamul").on("change", function () {
         if ($(this).prop("checked")) {
-            $("#esmamulad").css("color", "indianred");
-            $("#lbl_esmamul").text("Eş Mamül [Üretilsin]");
-            $("#esmamulid").val($("#esmamulid_shadow").val());
+            es_mamul_checkbox_on();
         }
         else{
-            $("#esmamulad").css("color", "#333333");
-            $("#lbl_esmamul").text("Eş Mamül");
-            $("#esmamulid").val("");
+            es_mamul_checkbox_off();
         }
     });
 
