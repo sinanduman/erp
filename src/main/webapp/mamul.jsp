@@ -354,7 +354,7 @@
                                 %>
                             </select>
                         </td>
-                        <td class="text-center">
+                        <td class="text-center" nowrap="nowrap">
                             <a href="javascript:hideshow('#tr_mam_detay<%= m.getId() %>');" title="İçerik"><span
                                     class="fa fa-chevron-down fa-lg text-success"></span></a>
                             <%

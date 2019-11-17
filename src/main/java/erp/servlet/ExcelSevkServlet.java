@@ -50,21 +50,19 @@ public class ExcelSevkServlet extends HttpServlet implements Serializable {
         String excelirsaliyeid  = request.getParameter("excelirsaliyeid");
         String excelfirmaid     = request.getParameter("excelfirmaid");
         String excelmamulid     = request.getParameter("excelmamulid");
-        String excelbastarih    = request.getParameter("excelbastarih");
-        String excelbittarih    = request.getParameter("excelbittarih");
+        String exceltarih       = request.getParameter("exceltarih");
         String excelsql         = request.getParameter("excelsql");
         
         excelirsaliyeid = (Util.isNotEmptyOrNull(excelirsaliyeid))?excelirsaliyeid:null;
         excelfirmaid    = (Util.isNotEmptyOrNull(excelfirmaid))?excelfirmaid:null;
-        excelbastarih   = (Util.isNotEmptyOrNull(excelbastarih))?excelbastarih:null;
-        excelbittarih   = (Util.isNotEmptyOrNull(excelbittarih))?excelbittarih:null;
+        exceltarih      = (Util.isNotEmptyOrNull(exceltarih))?exceltarih:null;
         excelmamulid    = (Util.isNotEmptyOrNull(excelmamulid))?excelmamulid:null;
 
         logger.info("excelsql: " + excelsql);
         
         if(excelegonder!=null && excelegonder.equals("1")) {
             
-            List<IrsaliyeBilesen> irsaliyebilesen = irsaliyeDao.irsaliyeBilesenListeTum(IrsaliyeTip.ONAYLANDI, 1, excelirsaliyeid, excelfirmaid, excelbastarih, excelbittarih, 0, excelmamulid);
+            List<IrsaliyeBilesen> irsaliyebilesen = irsaliyeDao.irsaliyeBilesenListeTum(IrsaliyeTip.ONAYLANDI, 1, excelirsaliyeid, excelfirmaid, exceltarih, exceltarih, 0, excelmamulid);
             
             Workbook workbook = new XSSFWorkbook();
             //Sheet sheeti    = workbook.createSheet("Irsaliye");
@@ -149,7 +147,7 @@ public class ExcelSevkServlet extends HttpServlet implements Serializable {
             response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
             response.setHeader("Expires:", "0"); // eliminates browser caching
             response.setContentLength(outArray.length);
-            response.setHeader("Content-Disposition", "attachment; filename="+ "excel_sevk_" + excelbastarih +"_"+  excelbittarih + ".xls");
+            response.setHeader("Content-Disposition", "attachment; filename="+ "excel_sevk_" + exceltarih + ".xls");
             OutputStream outStream = response.getOutputStream();
             outStream.write(outArray);
             outStream.flush();

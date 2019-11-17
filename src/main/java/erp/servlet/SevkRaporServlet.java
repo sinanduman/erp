@@ -50,8 +50,7 @@ public class SevkRaporServlet extends HttpServlet implements Serializable {
         String irsaliyeid = request.getParameter("irsaliyeid");
         String irsaliyeno = request.getParameter("irsaliyeno");
         String firmaid = request.getParameter("firmaid");
-        String bas_tarih = request.getParameter("bas_tarih");
-        String bit_tarih = request.getParameter("bit_tarih");
+        String tarih = request.getParameter("tarih");
         String mamulid = request.getParameter("mamulid");
         String page = request.getParameter("page");
         String excelsql = "";
@@ -84,8 +83,11 @@ public class SevkRaporServlet extends HttpServlet implements Serializable {
             } else {
                 firmaid = null;
             }
-            if (bas_tarih != null && bit_tarih != null && !bas_tarih.equals("") && !bit_tarih.equals("")) {
-                filter3 = andYes + " ( date(gonderimtarihi) BETWEEN '" + Util.date_tr_to_eng(bas_tarih) + "' AND '" + Util.date_tr_to_eng(bit_tarih) + "')";
+            if (tarih != null && !tarih.trim().isEmpty()) {
+                filter3 = andYes + " ( date(gonderimtarihi) = '" + Util.date_tr_to_eng(tarih) + "')";
+            }
+            else{
+                tarih = null;
             }
             if (mamulid != null && Util.isNumeric(mamulid)) {
                 filter4 = andYes + " exists (select 1 from " + BaseDao.IRSALIYEBILESEN + " ib where irsaliye.id = ib.irsaliyeid and ib.mamulid = " + Integer.valueOf(mamulid) + ")";
@@ -103,7 +105,7 @@ public class SevkRaporServlet extends HttpServlet implements Serializable {
 
             logger.info("noofpages: " + noofpages + ", totalrecord: " + totalrecord + ", " + tablename + " WHERE 1=1" + filter0);
 
-            irsaliyebilesenonaylandi = irsaliyeDao.irsaliyeBilesenListeTum(IrsaliyeTip.ONAYLANDI, 1, irsaliyeid, firmaid, bas_tarih, bit_tarih, page0, mamulid);
+            irsaliyebilesenonaylandi = irsaliyeDao.irsaliyeBilesenListeTum(IrsaliyeTip.ONAYLANDI, 1, irsaliyeid, firmaid, tarih, tarih, page0, mamulid);
 
             excelsql = filter0;
         }
@@ -115,8 +117,7 @@ public class SevkRaporServlet extends HttpServlet implements Serializable {
         request.setAttribute("irsaliyejson", irsaliyejson);
         request.setAttribute("irsaliyebilesenonaylandi", irsaliyebilesenonaylandi);
         request.setAttribute("firmaid", firmaid);
-        request.setAttribute("bas_tarih", bas_tarih);
-        request.setAttribute("bit_tarih", bit_tarih);
+        request.setAttribute("tarih", tarih);
         request.setAttribute("mamulid", mamulid);
         request.setAttribute("totalrecord", totalrecord);
         request.setAttribute("currentpage", page0);
