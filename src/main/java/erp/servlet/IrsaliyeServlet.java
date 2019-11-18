@@ -124,12 +124,10 @@ public class IrsaliyeServlet extends HttpServlet implements Serializable {
                     logger.info("irsaliyeid :" + irsaliyeid);
                     /* 0:Insert */
                     if (IrsaliyeEnum.IRSALIYE_EKLE.getValue() == irsaliyeid) {
-                        irsaliyeEkle();
+                        irsaliyeid = irsaliyeEkle();
                     }
-                    else{
-                        if(!excelRowsProcessed)
-                            message = irsaliyeBilesenEkle(r_mamulid, r_miktar, r_not, irsaliyeid);
-                    }
+                    if(!excelRowsProcessed)
+                        message = irsaliyeBilesenEkle(r_mamulid, r_miktar, r_not, irsaliyeid);
                 }
             }
         }
@@ -221,7 +219,6 @@ public class IrsaliyeServlet extends HttpServlet implements Serializable {
     private boolean processExcelFile(File storeFile, String irsaliyeId, List<Stok> stok) {
         boolean retVal = false;
         String message = "";
-        int count = 0;
         try {
             // Creating Input Stream
             FileInputStream myInput = new FileInputStream(storeFile);
@@ -236,31 +233,39 @@ public class IrsaliyeServlet extends HttpServlet implements Serializable {
 
             /** We now need something to iterate through the cells.**/
             Iterator<Row> rowIter = mySheet.rowIterator();
-            while (rowIter.hasNext()) {
+            int rCount = 0;
+            boolean emptyLine = false;
+            while (rowIter.hasNext() && !emptyLine) {
                 XSSFRow myRow = (XSSFRow) rowIter.next();
                 /*Ilk satiri almamak icin*/
-                if (count++ == 0)
+                if (rCount++ < 3) /* satir baslangici */
                     continue;
 
                 IrsaliyeUploadData uploadData = new IrsaliyeUploadData();
                 Iterator<Cell> cellIter = myRow.cellIterator();
-                while (cellIter.hasNext()) {
-
+                while (cellIter.hasNext() && !emptyLine) {
                     XSSFCell myCell = (XSSFCell) cellIter.next();
 
                     String cellValue = myCell.getCellType() == XSSFCell.CELL_TYPE_NUMERIC ? String.valueOf(myCell.getRawValue()) : myCell.getStringCellValue();
                     switch (myCell.getColumnIndex()) {
-                        case 0:
-                            uploadData.setMamulKodu(cellValue);
-                            uploadData.setMamulId(getMamuldIdFromMamulKod(cellValue, stok));
+                        case 1:
+                            if(cellValue.trim().isEmpty()) {
+                                emptyLine = true;
+                            }
+                            else {
+                                uploadData.setMamulKodu(cellValue);
+                                uploadData.setMamulId(getMamuldIdFromMamulKod(cellValue, stok));
+                            }
                             break;
                         case 2:
+                            uploadData.setNot(cellValue);
+                        case 3:
                             uploadData.setMiktar(cellValue);
                             break;
-                        case 3:
-                            uploadData.setNot(cellValue);
                     }
                 }
+                if (emptyLine)
+                    continue;
                 System.out.println(uploadData);
 
                 int newIrsaliyeId = 0;
