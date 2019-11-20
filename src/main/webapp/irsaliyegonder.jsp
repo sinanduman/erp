@@ -59,7 +59,6 @@
                 <tr>
                     <td><label class="text-success">İrsaliye No</label></td>
                     <td><label class="text-success">Oluşturma Tarihi</label></td>
-                    <td><label class="text-success">Gönderim Tarihi</label></td>
                     <td><label class="text-success">Müşteri</label></td>
                     <td class="text-center"><label class="text-success">Aksiyon</label></td>
                 </tr>
@@ -68,14 +67,9 @@
                 %>
                 <form name="action_form<%=i.getId()%>" id="action_form<%=i.getId()%>">
                     <tr id="tr<%=i.getId()%>">
-                        <td><%=i.getIrsaliyeno()%>
-                        </td>
-                        <td><%=Util.getTarihTR(i.getOlusturmatarihi())%>
-                        </td>
-                        <td><%=Util.getTarihTR(i.getGonderimtarihi())%>
-                        </td>
-                        <td><%= (i.getFirmaad() == null) ? "" : i.getFirmaad() %>
-                        </td>
+                        <td><%=i.getIrsaliyeno()%></td>
+                        <td><%=Util.getTarihTR(i.getOlusturmatarihi())%></td>
+                        <td><%= (i.getFirmaad() == null) ? "" : i.getFirmaad() %></td>
 
                         <td class="text-center">
                             <div id="divirsaliye<%= i.getId() %>">

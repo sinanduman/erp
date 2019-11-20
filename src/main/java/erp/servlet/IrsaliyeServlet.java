@@ -6,6 +6,7 @@ import erp.dao.StokDao;
 import erp.entity.*;
 import erp.model.IrsaliyeEnum;
 import erp.model.IrsaliyeTip;
+import erp.util.Util;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
@@ -61,6 +62,7 @@ public class IrsaliyeServlet extends HttpServlet implements Serializable {
     private String r_not;
     private String r_tarih;
     private String r_firmaid;
+    private StringBuffer pageFlash = new StringBuffer("");
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doPost(request, response);
@@ -133,9 +135,11 @@ public class IrsaliyeServlet extends HttpServlet implements Serializable {
         }
 
         if (!ajaxInAction) {
+            if(!excelRowsProcessed){
+                pageFlash = new StringBuffer("");
+            }
             if(stok == null)
                 stok = stokDao.stokMamulListeGetirTum(null, 1);
-            List<Birim> birim = daoFunctions.birimListeGetirTum();
             List<Firma> firma = firmaDao.firmaListeGetirTum(0);
             List<Irsaliye> irsaliye = irsaliyeDao.irsaliyeListeGetirTum(IrsaliyeTip.OPEN, 0, null, null, null);
 
@@ -144,10 +148,10 @@ public class IrsaliyeServlet extends HttpServlet implements Serializable {
             List<IrsaliyeBilesen> irsaliyebilesenopen = irsaliyeDao.irsaliyeBilesenListeGetirTum(IrsaliyeTip.OPEN, 0, null, null, null, 0);
             List<IrsaliyeBilesen> irsaliyebilesencompleted = irsaliyeDao.irsaliyeBilesenListeGetirTum(IrsaliyeTip.COMPLETED, 0, null, null, null, 0);
 
-            request.setAttribute("birim", birim);
             request.setAttribute("firma", firma);
             request.setAttribute("stok", stok);
             request.setAttribute("message", message);
+            request.setAttribute("pageflash", pageFlash);
             request.setAttribute("irsaliye", irsaliye);
             request.setAttribute("irsaliyekapali", irsaliyekapali);
             request.setAttribute("irsaliyebilesenopen", irsaliyebilesenopen);
@@ -219,6 +223,7 @@ public class IrsaliyeServlet extends HttpServlet implements Serializable {
     private boolean processExcelFile(File storeFile, String irsaliyeId, List<Stok> stok) {
         boolean retVal = false;
         String message = "";
+        pageFlash = new StringBuffer("");
         try {
             // Creating Input Stream
             FileInputStream myInput = new FileInputStream(storeFile);
@@ -235,6 +240,7 @@ public class IrsaliyeServlet extends HttpServlet implements Serializable {
             Iterator<Row> rowIter = mySheet.rowIterator();
             int rCount = 0;
             boolean emptyLine = false;
+            String pipe = "";
             while (rowIter.hasNext() && !emptyLine) {
                 XSSFRow myRow = (XSSFRow) rowIter.next();
                 /*Ilk satiri almamak icin*/
@@ -264,9 +270,8 @@ public class IrsaliyeServlet extends HttpServlet implements Serializable {
                             break;
                     }
                 }
-                if (emptyLine)
+                if (emptyLine || uploadData.getMamulKodu() == null)
                     continue;
-                System.out.println(uploadData);
 
                 int newIrsaliyeId = 0;
                 if (Integer.parseInt(r_irsaliyeid) == 0) {
@@ -276,13 +281,23 @@ public class IrsaliyeServlet extends HttpServlet implements Serializable {
                 else {
                     newIrsaliyeId = Integer.valueOf(r_irsaliyeid);
                 }
-                if(uploadData.getMamulId().equals("0"))
-                    message += uploadData.getMamulKodu() + " icin kayit bulunamadi!";
-                else
-                    message += irsaliyeBilesenEkle(uploadData.getMamulId(), uploadData.getMiktar(), uploadData.getNot(), newIrsaliyeId);
+                if(uploadData.getMamulId().equals("0")) {
+                    message = "<strong>" + uploadData.getMamulKodu() + "</strong>, " + uploadData.getNot() + " Stok'ta bulunamadı!";
+                    pageFlash.append(pipe + message);
+                    pipe = "<br/>";
+                }
+                else {
+                    message = irsaliyeBilesenEkle(uploadData.getMamulId(), uploadData.getMiktar(), uploadData.getNot(), newIrsaliyeId);
+                    if (!message.equals("0")){
+                        if(Util.isNumeric(message)){
+                            message = "<strong>" + uploadData.getMamulKodu() + "</strong>, " + uploadData.getNot() + " için <strong style='color:green;'>"+ message +"</strong> adet daha ekleyiniz!";
+                            pageFlash.append(pipe + message);
+                            pipe = "<br/>";
+                        }
+                    }
+                }
                 System.out.println(message);
                 retVal = true;
-
             }
         } catch (Exception e) {
             e.printStackTrace();

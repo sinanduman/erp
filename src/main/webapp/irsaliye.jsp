@@ -40,7 +40,7 @@
     List<IrsaliyeBilesen> irsaliyebilesencompleted = (List<IrsaliyeBilesen>) request.getAttribute("irsaliyebilesencompleted");
     List<Stok> stok = (List<Stok>) request.getAttribute("stok");
     List<Firma> firma = (List<Firma>) request.getAttribute("firma");
-    List<Birim> birim = (List<Birim>) request.getAttribute("birim");
+    StringBuffer pageflash = (StringBuffer) request.getAttribute("pageflash");
     String admin = (String) session.getAttribute("admin");
 %>
 
@@ -241,6 +241,14 @@
         </form>
     </div>
 
+    <% if (pageflash!= null && !pageflash.toString().isEmpty()) { %>
+        <div class="row alert alert-warning alert-dismissible" role="alert" style="background-color: darkkhaki;">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <strong style="color:green;">BULUNAMAYAN MAMÜL KODLARI</strong>
+            <hr/>
+            <span style="color: #333333;"><%= pageflash %></span>
+        </div>
+    <% } %>
 
     <div class="row" style="font-size:12px;">
         <table class="tableplan">
@@ -298,7 +306,7 @@
                 <%
                     not = (ib.getNot() == null) ? "" : ib.getNot().replaceAll("\"", "");
                 %>
-                <td><%=Util.getTarihTR(ib.getOlusturmatarihi())%>
+                <td nowrap="nowrap"><%=Util.getTarihTR(ib.getOlusturmatarihi())%>
                 </td>
                 <td><%=ib.getIrsaliyeno()%>
                 </td>
