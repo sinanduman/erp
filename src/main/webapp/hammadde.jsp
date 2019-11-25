@@ -7,6 +7,7 @@
 <%@ page import="erp.model.BirimTip" %>
 <%@ page import="erp.util.Util" %>
 <%@ page import="java.util.List" %>
+<%@ page import="erp.model.FiyatTip" %>
 <!doctype html>
 <html lang="en">
 <head>
@@ -143,6 +144,27 @@
                         </select>
                     </div>
                 </div>
+
+                <div class="form-group">
+                    <label for="hamfiyatid" class="col-xs-3 control-label text-baslik">Para Tipi: </label>
+                    <div>
+                        <select class="form-control big" name="hamfiyatid" id="hamfiyatid">
+                        <%
+                            for (FiyatTip ft : FiyatTip.values()) {
+                                out.println("<option value='" + ft.value() + "'>" + ft.ad() + " ("+ ft.kod() +")</option>");
+                            }
+                        %>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="hamfiyat" class="col-xs-3 control-label text-baslik">Birim Fiyat: </label>
+                    <div>
+                        <input type="number" class="form-control big" name="hamfiyat" id="hamfiyat" placeholder="Birim Fiyat" autocomplete="off">
+                    </div>
+                </div>
+
                 <%
                     if (admin != null && admin.equals("1")) {
                 %>
@@ -203,6 +225,8 @@
                     <td nowrap><label class="text-success">Malzeme Tipi</label></td>
                     <td><label class="text-success">Birim</label></td>
                     <td><label class="text-success">Tedarikçi</label></td>
+                    <td nowrap><label class="text-success">Para Tipi</label></td>
+                    <td nowrap><label class="text-success">Birim Fiyat</label></td>
                     <td><label class="text-success">Aktif</label></td>
                     <%
                         if (admin != null && admin.equals("1")) {
@@ -245,6 +269,20 @@
                                 %>
                             </select>
                         </td>
+                        <td>
+                            <select class="form-control xs" name="fiyatid" id="fiyatid">
+                                <%
+                                    for (FiyatTip ft : FiyatTip.values()) {
+                                        if (ft.value() == h.getFiyatId()) {
+                                            out.println("<option value='" + ft.value() + "' selected>" + ft.ad() + " ("+ ft.kod() +")</option>");
+                                        } else {
+                                            out.println("<option value='" + ft.value() + "'>" + ft.ad() + " ("+ ft.kod() +")</option>");
+                                        }
+                                    }
+                                %>
+                            </select>
+                        </td>
+                        <td><input type="number" class="form-control xs" value="<%= h.getFiyat() %>" id="fiyat" autocomplete="off"></td>
                         <td>
                             <select class="form-control xs" name="liste_bilesendurum" id="liste_bilesendurum">
                                 <%

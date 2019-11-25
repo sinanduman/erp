@@ -90,7 +90,9 @@ public class HammaddeServlet extends HttpServlet implements Serializable {
                                     new String(request.getParameter("firmaid").getBytes("UTF-8")),
                                     new String(request.getParameter("bilesenkod").getBytes("UTF-8")),
                                     new String(request.getParameter("bilesenad").getBytes("UTF-8")),
-                                    new String(request.getParameter("durum").getBytes("UTF-8"))
+                                    new String(request.getParameter("durum").getBytes("UTF-8")),
+                                    new String(request.getParameter("fiyatid").getBytes("UTF-8")),
+                                    new String(request.getParameter("fiyat").getBytes("UTF-8"))
                                     );
                     break;
                 case 3:
@@ -113,7 +115,9 @@ public class HammaddeServlet extends HttpServlet implements Serializable {
                         new String(request.getParameter("hamad").getBytes("UTF-8")),
                         new String(request.getParameter("hambirim").getBytes("UTF-8")),
                         new String(request.getParameter("hamfirma").getBytes("UTF-8")),
-                        new String(request.getParameter("hamtip").getBytes("UTF-8"))
+                        new String(request.getParameter("hamtip").getBytes("UTF-8")),
+                        new String(request.getParameter("hamfiyatid").getBytes("UTF-8")),
+                        new String(request.getParameter("hamfiyat").getBytes("UTF-8"))
                 );
             }
             else {

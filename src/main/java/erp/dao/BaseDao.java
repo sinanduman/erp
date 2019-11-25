@@ -18,6 +18,7 @@ public interface BaseDao {
     public static final String MAMUL = "irfan.mamul";
     public static final String MAMULBILESEN = "irfan.mamulbilesen";
     public static final String MAMULTIP = "irfan.mamultip";
+    public static final String PARA = "irfan.para";
     public static final String SIPARIS = "irfan.siparis";
     public static final String SIPARISPLAN = "irfan.siparisplan";
     public static final String STOK = "irfan.stok";

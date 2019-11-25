@@ -9,6 +9,15 @@ function hammaddeEkle(){
     if($("#hamtip").val()!=$("#hambirim").val()){
         message += "Malzeme Tipi ve Birimi uyuşmamaktadır!\n";
     }
+
+    if($("#hamfiyat").val()==""){
+        message += "Birim Fiyat giriniz!\n";
+    }
+    else{
+        if(!is_ondalik($.trim($("#hamfiyat").val()))){
+            message += "Birim Fiyat nümerik değil!\n";
+        }
+    }
     if(message!=""){
         alert(message);
         return false;
@@ -29,6 +38,8 @@ function updateHammaddeGo(url,id,action_form,islem){
     var f_ad		= $.trim($("#liste_ad"+id).val());
     var f_islemid	= islem;
     var f_durum		= action_form.liste_bilesendurum.value;
+    var f_fiyatid   = action_form.fiyatid.value;
+    var f_fiyat     = action_form.fiyat.value;
     var alert_mesaj	= f_kod + " Kodlu " + f_ad;
     //console.log(f_esid);
     if(f_kod=="" || f_ad=="" ){
@@ -46,7 +57,9 @@ function updateHammaddeGo(url,id,action_form,islem){
                 bilesenkod: f_kod,
                 bilesenad: f_ad,
                 islemid: f_islemid,
-                durum: f_durum
+                durum: f_durum,
+                fiyatid: f_fiyatid,
+                fiyat: f_fiyat
             },
             dataType: 'html',
             beforeSend: function ( xhr ) {

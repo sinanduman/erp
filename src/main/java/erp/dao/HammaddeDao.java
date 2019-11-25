@@ -17,9 +17,9 @@ public class HammaddeDao implements Serializable, BaseDao {
     ConnectionManager connectionManager;
     private static final Logger logger = LoggerFactory.getLogger(HammaddeDao.class);
 
-    public String hammaddeEkle(String kod, String ad, String birimid, String firmaid, String bilesentip) {
+    public String hammaddeEkle(String kod, String ad, String birimid, String firmaid, String bilesentip, String fiyatId, String fiyat) {
         String result = "0";
-        String insertQuery = "insert into " + BaseDao.BILESEN + " (kod, ad, birimid, bilesentipid, firmaid) values (?,?,?,?,?) ";
+        String insertQuery = "insert into " + BaseDao.BILESEN + " (kod, ad, birimid, bilesentipid, firmaid, fiyatid, fiyat) values (?,?,?,?,?,?,?) ";
         // connect to DB
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(insertQuery)) {
@@ -28,6 +28,8 @@ public class HammaddeDao implements Serializable, BaseDao {
             pstmt.setInt(3, Integer.valueOf(birimid));
             pstmt.setInt(4, Integer.valueOf(bilesentip));
             pstmt.setInt(5, Integer.valueOf(firmaid));
+            pstmt.setInt(6, Integer.valueOf(fiyatId));
+            pstmt.setDouble(7, Double.valueOf(fiyat));
             logger.info(pstmt.toString());
             pstmt.executeUpdate();
         } catch (SQLException e) {
