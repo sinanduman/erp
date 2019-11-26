@@ -5,9 +5,9 @@
 <%@ page import="erp.entity.Genel" %>
 <%@ page import="erp.model.BilesenTip" %>
 <%@ page import="erp.model.BirimTip" %>
+<%@ page import="erp.model.FiyatTip" %>
 <%@ page import="erp.util.Util" %>
 <%@ page import="java.util.List" %>
-<%@ page import="erp.model.FiyatTip" %>
 <!doctype html>
 <html lang="en">
 <head>

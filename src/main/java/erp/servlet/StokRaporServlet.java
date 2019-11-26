@@ -1,9 +1,17 @@
 package erp.servlet;
 
-import java.io.IOException;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import erp.dao.BaseDao;
+import erp.dao.BilesenDao;
+import erp.dao.MamulDao;
+import erp.dao.StokDao;
+import erp.entity.Bilesen;
+import erp.entity.Genel;
+import erp.entity.Mamul;
+import erp.entity.StokRapor;
+import erp.model.BilesenTip;
+import erp.util.Util;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import javax.servlet.ServletException;
@@ -11,21 +19,12 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import erp.dao.BaseDao;
-import erp.dao.BilesenDao;
-import erp.dao.MamulDao;
-import erp.dao.StokDao;
-import erp.model.BilesenTip;
-import erp.util.Util;
-import org.joda.time.DateTime;
-
-import erp.entity.Bilesen;
-import erp.entity.Genel;
-import erp.entity.Mamul;
-import erp.entity.StokRapor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.io.IOException;
+import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 @WebServlet("/stokrapor")
 public class StokRaporServlet extends HttpServlet implements Serializable {
@@ -71,13 +70,13 @@ public class StokRaporServlet extends HttpServlet implements Serializable {
             String filter1 = "";
             String filter2 = "";
             String filterIn = "";
-            DateTime datetime = new DateTime(Util.date_tr_to_eng(tarih)).plusDays(1);
+            LocalDate datetime = LocalDate.parse(tarih, DateTimeFormatter.ofPattern("dd-MM-yyyy")).plusDays(1);
             if (bilesentip != null) {
-                if (Integer.parseInt(bilesentip) == 1) {
+                if (Integer.parseInt(bilesentip) == BilesenTip.HAMMADDE.value()) {
                     tablename = BaseDao.BILESEN;
                     filter0 = " AND bilesentipid IN (1) ";
                     bilesentipenum = BilesenTip.HAMMADDE;
-                } else if (Integer.parseInt(bilesentip) == 2) {
+                } else if (Integer.parseInt(bilesentip) == BilesenTip.YARIMAMUL.value()) {
                     tablename = BaseDao.BILESEN;
                     filter0 = " AND bilesentipid IN (2) ";
                     bilesentipenum = BilesenTip.YARIMAMUL;
