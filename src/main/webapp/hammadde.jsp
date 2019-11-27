@@ -282,7 +282,7 @@
                                 %>
                             </select>
                         </td>
-                        <td><input type="number" class="form-control xs" value="<%= h.getFiyat() %>" id="fiyat" autocomplete="off"></td>
+                        <td><input type="number" class="form-control xss" value="<%= h.getFiyat() %>" id="fiyat" autocomplete="off"></td>
                         <td>
                             <select class="form-control xs" name="liste_bilesendurum" id="liste_bilesendurum">
                                 <%

@@ -123,20 +123,16 @@ select.time{
 	width: 60px; 
 	display: inline-block !important;
 }
-select.xs{
-	width: 80px; 
-	display: inline-block !important;
-}
-select.xm{
-	width: 120px; 
-	display: inline-block !important;
-}
-select.small{
-	width: 150px; 
-	display: inline-block !important;
-}
 input.xs, textarea.xs, select.xs{
 	width: 80px; 
+	display: inline-block !important;
+}
+input.xss, textarea.xss, select.xss{
+	width: 60px;
+	display: inline-block !important;
+}
+input.xsss, textarea.xsss, select.xsss{
+	width: 40px;
 	display: inline-block !important;
 }
 input.xm, textarea.xm, select.xm{

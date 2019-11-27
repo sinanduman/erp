@@ -111,7 +111,8 @@ public class MamulServlet extends HttpServlet implements Serializable {
                                     new String(request.getParameter("figur").getBytes("UTF-8")),
                                     new String(request.getParameter("cevrimsuresi").getBytes("UTF-8")),
                                     new String(request.getParameter("esmamulid").getBytes("UTF-8")),
-                                    new String(request.getParameter("durum").getBytes("UTF-8"))
+                                    new String(request.getParameter("durum").getBytes("UTF-8")),
+                                    new String(request.getParameter("kritikesik").getBytes("UTF-8"))
                                     );
                     break;
                 case 2:

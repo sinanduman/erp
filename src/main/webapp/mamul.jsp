@@ -286,13 +286,14 @@
                 <tr>
                     <td><label class="text-success">Mamül Kodu</label></td>
                     <td><label class="text-success">Mamül Adı</label></td>
-                    <td><label class="text-success">Çevrim Süresi</label></td>
-                    <td><label class="text-success">Figür Adedi</label></td>
-                    <td><label class="text-success">Eş Mamül Kod</label></td>
-                    <td><label class="text-success">Eş Mamül Ad</label></td>
-                    <td><label class="text-success">Aktif</label></td>
+                    <td nowrap><label class="text-success">Çevrim Sr.</label></td>
+                    <td nowrap><label class="text-success">Figür Ad.</label></td>
+                    <td nowrap><label class="text-success">Eş Mamül Kod</label></td>
+                    <td nowrap><label class="text-success">Eş Mamül Ad</label></td>
                     <td><label class="text-success">Firma</label></td>
-                    <td class="text-center"><label class="text-success">Aksiyon</label></td>
+                    <td><label class="text-success">Min.Stok</label></td>
+                    <td><label class="text-success">Aktif</label></td>
+                    <td nowrap class="text-center"><label class="text-success">Aksiyon</label></td>
                 </tr>
                 <% } %>
                 <form name=action_form<%=m.getId()%> id=action_form<%=m.getId()%>>
@@ -300,10 +301,12 @@
                             <%= (m.getDurum() == 0 ? " style='background-color:darkKhaki;'" : "") %> >
                         <td><input type="text" class="form-control small" value="<%= m.getKod() %>" name=liste_kod<%=m.getId()%> id="liste_kod<%=m.getId()%>"></td>
                         <td><input type="text" class="form-control" value="<%= m.getAd().replaceAll("\"", "") %>" name=liste_ad<%=m.getId()%> id="liste_ad<%=m.getId()%>"></td>
-                        <td><input type="text" class="form-control xs" value="<%= m.getCevrimsuresi() %>" name=liste_cevrimsuresi<%=m.getId()%> id="liste_cevrimsuresi<%=m.getId()%>"></td>
+                        <td><input type="number" class="form-control xss" value="<%= m.getCevrimsuresi() %>"
+                                   name=liste_cevrimsuresi<%=m.getId()%> id="liste_cevrimsuresi<%=m.getId()%>"></td>
                         <td>
                             <div>
-                                <select class="form-control xs" name=liste_figurid<%=m.getId()%> id="liste_figurid<%=m.getId()%>">
+                                <select class="form-control xss" name=liste_figurid<%=m.getId()%>
+                                        id="liste_figurid<%=m.getId()%>">
                                     <%
                                         for (int i = 1; i <= 32; i++) {
                                             if (i == m.getFigur()) {
@@ -325,6 +328,21 @@
                         m.getId()%>" value="0"/><input type="hidden" value="<%= m.getEsmamulid()>0 ? m.getEsmamulid()
                         : "0" %>" id="liste_esmamulid<%= m.getId() %>"></td>
                         <td>
+                            <select class="form-control small" name=liste_firmaid<%=m.getId()%> id="liste_firmaid<%=m.getId()%>">
+                                <%
+                                    for (Firma f : firma) {
+                                        if (f.getId() == m.getFirmaid()) {
+                                            out.println("<option value='" + f.getId() + "' selected>" + f.getAd() + "</option>");
+                                        } else {
+                                            out.println("<option value='" + f.getId() + "'>" + f.getAd() + "</option>");
+                                        }
+                                    }
+                                %>
+                            </select>
+                        </td>
+                        <td nowrap><input type="number" class="form-control xss" value="<%= m.getKritikEsik()
+                        %>" name=liste_kritikesik<%=m.getId()%> id="liste_kritikesik<%=m.getId()%>"></td>
+                        <td>
                             <div class="form-group">
                                 <div>
                                     <select class="form-control xs" name=liste_mamuldurum<%=m.getId()%> id="liste_mamuldurum<%=m.getId()%>">
@@ -341,20 +359,7 @@
                                 </div>
                             </div>
                         </td>
-                        <td>
-                            <select class="form-control" name=liste_firmaid<%=m.getId()%> id="liste_firmaid<%=m.getId()%>">
-                                <%
-                                    for (Firma f : firma) {
-                                        if (f.getId() == m.getFirmaid()) {
-                                            out.println("<option value='" + f.getId() + "' selected>" + f.getAd() + "</option>");
-                                        } else {
-                                            out.println("<option value='" + f.getId() + "'>" + f.getAd() + "</option>");
-                                        }
-                                    }
-                                %>
-                            </select>
-                        </td>
-                        <td class="text-center" nowrap="nowrap">
+                        <td nowrap class="text-center" nowrap="nowrap">
                             <a href="javascript:hideshow('#tr_mam_detay<%= m.getId() %>');" title="İçerik"><span
                                     class="fa fa-chevron-down fa-lg text-success"></span></a>
                             <%

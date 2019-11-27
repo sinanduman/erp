@@ -82,23 +82,24 @@ public class MamulDao implements Serializable, BaseDao {
         return result;
     }
 
-    public String mamulGuncelle(String mamulid, String firmaid, String kod, String ad, String figur, String cevrimsuresi, String esmamulid, String durum) {
+    public String mamulGuncelle(String mamulid, String firmaid, String kod, String ad, String figur, String cevrimsuresi, String esmamulid, String durum, String kritikEsik) {
         String result = "0";
-        String updateQuery = "update " + BaseDao.MAMUL + " set firmaid =?, kod =?, ad =?, figur =?, cevrimsuresi =?, esmamulid =?, durum =? where id =?";
+        String updateQuery = "update " + BaseDao.MAMUL + " set firmaid =?, kod =?, ad =?, figur =?, cevrimsuresi =?, esmamulid =?, durum =?, kritikesik =? where id =?";
         // connect to DB
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(updateQuery)) {
-            pstmt.setInt(1, Integer.valueOf(firmaid));
+            pstmt.setInt(1, Integer.parseInt(firmaid));
             pstmt.setString(2, kod);
             pstmt.setString(3, ad);
-            pstmt.setInt(4, Integer.valueOf(figur));
-            pstmt.setInt(5, Integer.valueOf(cevrimsuresi));
+            pstmt.setInt(4, Integer.parseInt(figur));
+            pstmt.setInt(5, Integer.parseInt(cevrimsuresi));
             if(esmamulid == null || esmamulid.isEmpty() || esmamulid.equals("0"))
                 pstmt.setNull(6, Types.INTEGER);
             else
-                pstmt.setInt(6, Integer.valueOf(esmamulid));
-            pstmt.setInt(7, Integer.valueOf(durum));
-            pstmt.setInt(8, Integer.valueOf(mamulid));
+                pstmt.setInt(6, Integer.parseInt(esmamulid));
+            pstmt.setInt(7, Integer.parseInt(durum));
+            pstmt.setInt(8, Integer.parseInt(kritikEsik));
+            pstmt.setInt(9, Integer.parseInt(mamulid));
             logger.info(pstmt.toString());
             pstmt.executeUpdate();
         } catch (SQLException e) {
@@ -114,9 +115,9 @@ public class MamulDao implements Serializable, BaseDao {
         // connect to DB
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(updateQuery)) {
-            pstmt.setFloat(1, Float.valueOf(miktar));
-            pstmt.setInt(2, Integer.valueOf(mamulid));
-            pstmt.setInt(3, Integer.valueOf(bilesenid));
+            pstmt.setFloat(1, Float.parseFloat(miktar));
+            pstmt.setInt(2, Integer.parseInt(mamulid));
+            pstmt.setInt(3, Integer.parseInt(bilesenid));
             logger.info(pstmt.toString());
             pstmt.executeUpdate();
         } catch (SQLException e) {

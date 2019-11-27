@@ -178,6 +178,7 @@ function updateMamulGo(url,id,action_form,islem){
     var f_figur		= $.trim($("#liste_figurid"+id).val());
     var f_cevrimsure= $.trim($("#liste_cevrimsuresi"+id).val());
     var f_durum     = $.trim($("#liste_mamuldurum"+id).val());
+    var f_kritikesik= $.trim($("#liste_kritikesik"+id).val());
     var f_islemid	= islem;
     var alert_mesaj	= f_kod + " Kodlu " + f_ad;
     if(f_kod=="" || f_ad==""  || f_cevrimsure=="" ){
@@ -201,7 +202,8 @@ function updateMamulGo(url,id,action_form,islem){
                 figur		: f_figur,
                 cevrimsuresi: f_cevrimsure,
                 esmamulid	: f_esmamulid,
-                durum       : f_durum
+                durum       : f_durum,
+                kritikesik  : f_kritikesik
             },
             dataType: 'html',
             beforeSend: function ( xhr ) {

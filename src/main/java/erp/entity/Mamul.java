@@ -34,6 +34,7 @@ public class Mamul {
     private String esmamulad;
     private String esmamulkod;
     private Integer durum;
+    private Integer kritikEsik;
 
     public Mamul(ResultSet rs) throws SQLException {
         this.id = rs.getInt("id");
@@ -57,5 +58,6 @@ public class Mamul {
         this.esmamulad = Util.nullToEmpty(rs.getString("esmamulad"));
         this.esmamulkod = Util.nullToEmpty(rs.getString("esmamulkod"));
         this.durum = rs.getInt("durum");
+        this.kritikEsik = rs.getInt("kritikesik");
     }
 }
