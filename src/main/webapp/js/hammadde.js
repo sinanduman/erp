@@ -40,6 +40,7 @@ function updateHammaddeGo(url,id,action_form,islem){
     var f_durum		= action_form.liste_bilesendurum.value;
     var f_fiyatid   = action_form.fiyatid.value;
     var f_fiyat     = action_form.fiyat.value;
+    var f_kritikesik= action_form.kritikesik.value;
     var alert_mesaj	= f_kod + " Kodlu " + f_ad;
     //console.log(f_esid);
     if(f_kod=="" || f_ad=="" ){
@@ -59,7 +60,8 @@ function updateHammaddeGo(url,id,action_form,islem){
                 islemid: f_islemid,
                 durum: f_durum,
                 fiyatid: f_fiyatid,
-                fiyat: f_fiyat
+                fiyat: f_fiyat,
+                kritikesik: f_kritikesik
             },
             dataType: 'html',
             beforeSend: function ( xhr ) {
@@ -82,8 +84,8 @@ function updateHammaddeGo(url,id,action_form,islem){
 }
 function deleteHammaddeGo(url,id,action_form,islem){
     var f_bilesenid	= id;
-    var f_kod		= $.trim(action_form.liste_kod.value);
-    var f_ad		= $.trim(action_form.liste_ad.value);
+    var f_kod		= $.trim($("#liste_kod"+id).val());
+    var f_ad		= $.trim($("#liste_ad"+id).val());
     var f_islemid	= islem;
     var alert_mesaj	= f_kod + " Kodlu " + f_ad;
     if(confirm(alert_mesaj +"\n\n" + "Malzeme bilgisini SİLMEK istediğinden" +"\n\n" + "Emin misin?")){

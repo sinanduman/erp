@@ -35,7 +35,7 @@ public class BilesenDao implements Serializable, BaseDao {
                 + " join " + BaseDao.FIRMA + " f on f.id = b.firmaid"
                 + " join " + BaseDao.PARA + " p on p.id = b.fiyatid"
                 + filter0
-                + " order by b.kod " + pageFilter;
+                + " order by b.id desc " + pageFilter;
 
         // connect to DB
         ResultSet rs = null;
@@ -73,10 +73,10 @@ public class BilesenDao implements Serializable, BaseDao {
         return result;
     }
 
-    public String bilesenGuncelle(String bilesenid, String birimid, String firmaid, String bilesenkod, String bilesenad, String durum, String fiyatId, String fiyat) {
+    public String bilesenGuncelle(String bilesenid, String birimid, String firmaid, String bilesenkod, String bilesenad, String durum, String fiyatId, String fiyat, String kritikEsik) {
         String result = "0";
         String updateQuery = "update " + BaseDao.BILESEN
-                + " set birimid =?, firmaid =?, kod =?, ad =?, durum =?, fiyatid =?, fiyat =?"
+                + " set birimid =?, firmaid =?, kod =?, ad =?, durum =?, fiyatid =?, fiyat =?, kritikesik =?"
                 + " where id =?";
 
         // connect to DB
@@ -92,7 +92,8 @@ public class BilesenDao implements Serializable, BaseDao {
             pstmt.setInt(5, Integer.parseInt(durum));
             pstmt.setInt(6, Integer.parseInt(fiyatId));
             pstmt.setDouble(7, Double.parseDouble(fiyat));
-            pstmt.setInt(8, Integer.parseInt(bilesenid));
+            pstmt.setInt(8, Integer.parseInt(kritikEsik));
+            pstmt.setInt(9, Integer.parseInt(bilesenid));
             logger.info(pstmt.toString());
 
             pstmt.executeUpdate();

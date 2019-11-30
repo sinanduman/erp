@@ -98,7 +98,7 @@
             <div class="form-group col-xs-8">
                 <label for="mamulcevrim" class="col-xs-3 control-label text-baslik">Çevrim Süresi(sn): </label>
                 <div>
-                    <input type="text" class="form-control big" name="mamulcevrim" id="mamulcevrim"
+                    <input type="number" class="form-control big" name="mamulcevrim" id="mamulcevrim"
                            ng-model="mamulcevrim" placeholder="Çevrim Süresi" autocomplete="off">
                 </div>
             </div>
@@ -187,7 +187,7 @@
             <div class="form-group col-xs-8">
                 <label for="miktar" class="col-xs-3 control-label text-baslik">Miktar: </label>
                 <div>
-                    <input type="text" class="form-control big" id="miktar" name="miktar" ng-model="yenibilesen.miktar"
+                    <input type="number" class="form-control big" id="miktar" name="miktar" ng-model="yenibilesen.miktar"
                            placeholder="Kullanılan Miktar" autocomplete="off">
                 </div>
             </div>
@@ -235,21 +235,21 @@
             if (admin != null && admin.equals("1")) {
         %>
         <div class="row" style="margin-bottom:5px;">
-            <div class="col-xs-5">
+            <div class="form-group col-xs-3">
                 <button type="button" class="btn btn-danger" ng-click="saveMamul()">Mamül Ekle</button>
                 <input type="hidden" id="bilesen_length" name="bilesen_length" ng-model="bilesen_length"
                        value="{{bilesenler.length}}">
                 <input type="hidden" name="token" id="token" value="<%= token %>">
             </div>
 
-
-            <div class="col-xs-4 text-right">
-                <input type="text" class="form-control big" name="mamulkodara" id="mamulkodara" placeholder="Mamül Kodu"
+            <div class="form-group col-xs-7 text-right">
+                <input type="text" class="form-control big margin-right-10px" name="mamulkodara" id="mamulkodara"
+                       placeholder="Mamül Kodu"
                        autocomplete="off">
                 <input type="hidden" name="mamulidara" id="mamulidara">
             </div>
 
-            <div class="col-xs-2">
+            <div class="form-group col-xs-2">
                 <button type="button" class="btn btn-danger" name="stokliste" id="stokliste" disabled="disabled">Mamül Getir</button>
                 <input type="hidden" name="stoklisteid" id="stoklisteid" value="0">
             </div>
@@ -345,7 +345,8 @@
                         <td>
                             <div class="form-group">
                                 <div>
-                                    <select class="form-control xs" name=liste_mamuldurum<%=m.getId()%> id="liste_mamuldurum<%=m.getId()%>">
+                                    <select class="form-control xss" name=liste_mamuldurum<%=m.getId()%>
+                                            id="liste_mamuldurum<%=m.getId()%>">
                                         <%
                                             if (m.getDurum() == 1) {
                                                 out.println("<option value='" + 1 + "' selected>Aktif</option>");
@@ -373,7 +374,7 @@
                         </td>
                     </tr>
                     <tr id="tr_mam_detay<%= m.getId() %>" style="display:none;">
-                        <td colspan="5">
+                        <td colspan="9">
                             <table style="width:100%;" class="tableplan">
                                 <% int sayacbilesen = 0; %>
                                 <% for (MamulBilesen j : mamulbilesen) {%>

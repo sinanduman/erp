@@ -165,22 +165,30 @@
                     </div>
                 </div>
 
+                <div class="form-group">
+                    <label for="hamkritikesik" class="col-xs-3 control-label text-baslik">Minimum Stok: </label>
+                    <div>
+                        <input type="number" class="form-control big" name="hamkritikesik" id="hamkritikesik" placeholder="Minimum Stok" autocomplete="off">
+                    </div>
+                </div>
+
                 <%
                     if (admin != null && admin.equals("1")) {
                 %>
-                <div class="row col-xs-10" sytle="margin-bottom:5px;border:1px solid #ccc;">
-                    <label class="col-xs-3 control-label">&nbsp;</label>
-                    <div class="col-xs-1">
+                <div class="row" sytle="margin-bottom:5px;">
+                    <div class="form-group col-xs-4 text-right">
                         <button type="button" class="btn btn-danger" onclick="hammaddeEkle()">Ekle</button>
                         <input type="hidden" name="token" id="token" value="<%= token %>">
                     </div>
 
-                    <div class="col-xs-6 text-right">
-                        <input type="text" class="form-control big" name="bilesenkodara" id="bilesenkodara" placeholder="Malzeme Kodu" autocomplete="off">
+                    <div class="form-group col-xs-7 text-right">
+                        <input type="text" class="form-control big margin-right-10px" name="bilesenkodara"
+                               id="bilesenkodara"
+                               placeholder="Malzeme Kodu" autocomplete="off">
                         <input type="hidden" name="bilesenidara" id="bilesenidara" value="<%=bilesenid%>">
                     </div>
 
-                    <div class="col-xs-2">
+                    <div class="form-group col-xs-1">
                         <button type="button" class="btn btn-danger" name="stokliste" id="stokliste" disabled="disabled">Malzeme Getir</button>
                         <input type="hidden" name="stoklisteid" id="stoklisteid" value="0">
                     </div>
@@ -199,13 +207,13 @@
     <%
         } else if (message.equals("0")) {
     %>
-    <div class="row col-sm-10 alert alert-success">
+    <div class="row alert alert-success">
         <strong>Başarılı</strong> olarak eklendi!
     </div>
     <%
         } else if (!message.equals("") && message.length() > 1) {
     %>
-    <div class="row col-sm-10 alert alert-danger">
+    <div class="row alert alert-danger">
         <strong>Hata! </strong><%= message %>
     </div>
     <%
@@ -214,7 +222,7 @@
     <!-- ALERT BOX -->
 
     <div class="row" style="font-size:12px;">
-        <div class="col-sm-10">
+        <div>
             <table class="tableplan">
                 <% int sayac = 0; %>
                 <% for (Bilesen h : hammadde) { %>
@@ -227,6 +235,7 @@
                     <td><label class="text-success">Tedarikçi</label></td>
                     <td nowrap><label class="text-success">Para Tipi</label></td>
                     <td nowrap><label class="text-success">Birim Fiyat</label></td>
+                    <td nowrap><label class="text-success">Min.Stok</label></td>
                     <td><label class="text-success">Aktif</label></td>
                     <%
                         if (admin != null && admin.equals("1")) {
@@ -283,8 +292,9 @@
                             </select>
                         </td>
                         <td><input type="number" class="form-control xss" value="<%= h.getFiyat() %>" id="fiyat" autocomplete="off"></td>
+                        <td><input type="number" class="form-control xss" value="<%= h.getKritikesik() %>" id="kritikesik" autocomplete="off"></td>
                         <td>
-                            <select class="form-control xs" name="liste_bilesendurum" id="liste_bilesendurum">
+                            <select class="form-control xss" name="liste_bilesendurum" id="liste_bilesendurum">
                                 <%
                                     if (h.getDurum() == 1) {
                                         out.println("<option value='" + 1 + "' selected>Aktif</option>");

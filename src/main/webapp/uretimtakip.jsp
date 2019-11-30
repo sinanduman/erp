@@ -188,13 +188,12 @@
                 </div>
             </div>
 
-            <div class="form-group">
+            <div class="form-group" id="div_mamulizno" >
                 <label for="mamulizleno" class="text-baslik">Mamül İzl.No</label>
                 <div>
                     <select class="form-control normal" name="mamulizleno" id="mamulizleno"></select>
                 </div>
             </div>
-
 
             <div class="clearfix"></div>
 
@@ -229,16 +228,23 @@
                     <select class="form-control big" name="yarimamul" id="yarimamul" readonly="readonly"></select>
                 </div>
             </div>
-
+            <%-- EŞ MAMÜL TANIMLARI --%>
             <div class="form-group" id="div_esmamul" style="display: none;">
                 <label for="cxb_esmamul" class="text-baslik" id="lbl_esmamul">Eş Mamül</label>
-                <div>
+                <div style="height: 32px;">
                     <input type="checkbox" name="cxb_esmamul" id="cxb_esmamul" aria-label="Eş Mamül de üretilsin mi?">
                     <span id="esmamulad"></span>
                     <input type="hidden" name="esmamulid" id="esmamulid" value="">
                     <input type="hidden" name="esmamulid_shadow" id="esmamulid_shadow" value="">
                 </div>
             </div>
+            <div class="form-group" id="div_esmamulizno" style="display: none;">
+                <label for="esmamulizleno" class="text-baslik">Eş Mamül İzl.No</label>
+                <div>
+                    <select class="form-control normal" name="esmamulizleno" id="esmamulizleno"></select>
+                </div>
+            </div>
+            <%-- EŞ MAMÜL TANIMLARI --%>
 
             <div class="clearfix"></div>
 

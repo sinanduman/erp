@@ -274,8 +274,8 @@ function updateMamulBilesenGo(url, mamulid, bilesenid, bilesen_miktar, islem){
 
 function deleteMamulGo(url,id,action_form,islem){
     var f_bilesenid	= id;
-    var f_kod		= $.trim(action_form.liste_kod.value);
-    var f_ad		= $.trim(action_form.liste_ad.value);
+    var f_kod		= $.trim($("#liste_kod"+id).val());
+    var f_ad		= $.trim($("#liste_ad"+id).val());
     var f_islemid	= islem;
     var alert_mesaj	= f_kod + " Kodlu " + f_ad;
     if(confirm(alert_mesaj +"\n\n" + "Mamül bilgisini SİLMEK istediğinden" +"\n\n" + "Emin misin?")){

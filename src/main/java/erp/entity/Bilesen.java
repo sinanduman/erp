@@ -24,6 +24,7 @@ public class Bilesen {
     private Date eklemetarihi;
     private Integer fiyatId;
     private Double fiyat;
+    private Integer kritikesik;
     private Integer durum;
 
     public Bilesen(ResultSet rs) throws SQLException {
@@ -38,6 +39,7 @@ public class Bilesen {
         this.firmaad = rs.getString("firmaad");
         this.fiyatId = rs.getInt("fiyatId");
         this.fiyat = rs.getDouble("fiyat");
+        this.kritikesik = rs.getInt("kritikesik");
         this.eklemetarihi = rs.getDate("eklemetarihi");
         this.durum = rs.getInt("durum");
     }

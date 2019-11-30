@@ -709,6 +709,7 @@ function clearEsMamul() {
     $("#esmamulid_shadow").val("");
     $("#div_esmamul").hide();
     $("#cxb_esmamul").prop("checked", false);
+    $("#esmamulizleno option").remove();
     es_mamul_checkbox_off();
 }
 
@@ -716,12 +717,15 @@ function es_mamul_checkbox_on() {
     $("#esmamulad").css("color", "indianred");
     $("#lbl_esmamul").text("Eş Mamül [Üretilsin]");
     $("#esmamulid").val($("#esmamulid_shadow").val());
+    $("#div_esmamulizno").show();
+    izlemeNoKontrol($("#esmamulid_shadow").val(), 6, 1, "#esmamulizleno", 0);
 }
 
 function es_mamul_checkbox_off() {
     $("#esmamulad").css("color", "#333333");
     $("#lbl_esmamul").text("Eş Mamül");
     $("#esmamulid").val("");
+    $("#div_esmamulizno").hide();
 }
 
 function changefun_uretim(elem, guncelle) {
@@ -733,20 +737,15 @@ function changefun_uretim(elem, guncelle) {
         for (i in mamul) {
             // var b = elem.value.split("[");
             if (elem.value === mamul[i].mamulkod && !found) {
+                clearEsMamul();
                 $("#div_esmamul").show();
                 globalMamul = mamul[i];
                 found = true;
+                var esmamulid = mamul[i].esmamulid;
                 if (guncelle == undefined) {
-                    var esmamulid = mamul[i].esmamulid;
                     if (esmamulid > 0) {
                         findmamulkod(esmamulid);
                     }
-                    else{
-                        clearEsMamul();
-                    }
-                }
-                else{
-                    clearEsMamul();
                 }
 
                 var ham_name_ar = mamul[i].hammadde.split(";");
@@ -817,6 +816,11 @@ function changefun_uretim(elem, guncelle) {
                 /* Mamul Izleme No Kutusu Doldurma */
                 /* MamulId, Uret/Kontrol(1,6), Kullanildi/Kullanilmadi(0:1), SelectBox */
                 izlemeNoKontrol($("#mamulid").val(), 6, 1, "#mamulizleno", 0);
+                /*
+                if (esmamulid > 0) {
+                    izlemeNoKontrol(esmamulid, 6, 1, "#esmamulizleno", 0);
+                }
+                */
             }
         }
     }
@@ -825,6 +829,7 @@ function changefun_uretim(elem, guncelle) {
         $("#hammadde option").remove();
         $("#yarimamul option").remove();
         $("#mamulizleno option").remove();
+        $("#esmamulizleno option").remove();
         globalMamul = null;
     }
 }

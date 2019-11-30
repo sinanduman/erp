@@ -134,7 +134,7 @@ public class MamulDao implements Serializable, BaseDao {
         String queryFilter0 = (mamulid == null) ? "" : " and id = " + mamulid;
         String queryFilter1 = (durum == null) ? "" : " and durum = " + durum;
         String queryFilter = baseFilter + queryFilter0 + queryFilter1;
-        String searchQuery = "select * from " + BaseDao.V_MAMUL_TUM + queryFilter + " ORDER BY kod " + pageFilter; /* view */
+        String searchQuery = "select * from " + BaseDao.V_MAMUL_TUM + queryFilter + " ORDER BY ad " + pageFilter; /* view */
 
         // connect to DB
         ResultSet rs = null;
@@ -159,7 +159,7 @@ public class MamulDao implements Serializable, BaseDao {
         String queryFilter0 = (mamulid == null) ? "" : " and id = " + mamulid;
         String queryFilter1 = (durum == null) ? "" : " and durum = " + durum;
         String queryFilter = baseFilter + queryFilter0 + queryFilter1;
-        String searchQuery = "select * from " + BaseDao.V_MAMUL_STOK + queryFilter + " ORDER BY kod " + pageFilter; /* view */
+        String searchQuery = "select * from " + BaseDao.V_MAMUL_STOK + queryFilter + " ORDER BY ad " + pageFilter; /* view */
 
         // connect to DB
         ResultSet rs = null;

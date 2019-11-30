@@ -110,8 +110,6 @@ public class UretimTakipServlet extends HttpServlet implements Serializable {
                         && !request.getParameter("esmamulid").equals("")
                         && !request.getParameter("esmamulid").equals("0")
                         && Integer.parseInt(request.getParameter("esmamulid"))>0){
-                    List<IzlemeNo> izlemeNoList = izlemeNoDao.izlemeNoKontrol(request.getParameter("esmamulid"), "1", 1);
-                    if(!izlemeNoList.isEmpty()){
                         int result2 = uretimDao.uretimTakipEkleGuncelle(
                                 request.getParameter("esmamulid"),
                                 request.getParameter("uretimadet"),
@@ -124,11 +122,10 @@ public class UretimTakipServlet extends HttpServlet implements Serializable {
                                 request.getParameter("hatasebepid"),
                                 request.getParameter("durussebepid"),
                                 request.getParameter("duruszaman"),
-                                izlemeNoList.get(0).getGkrno(),
+                                Integer.parseInt(request.getParameter("esmamulizleno")),
                                 Integer.parseInt(uretimplanid)
                         );
                         message = (result2==-1) ? "Hata oluştu" : "";
-                    }
                 }
                 message = (result==-1) ? "Hata oluştu" : "";
             }

@@ -266,3 +266,6 @@ input[type="submit"]:disabled {
 i.iki-bosluk {
 	padding-right: 8px;
 }
+input.margin-right-10px {
+	margin-right: 10px;
+}
