@@ -56,7 +56,7 @@ public class HammaddeServlet extends HttpServlet implements Serializable {
         List<Bilesen> hammaddetum   = new ArrayList<Bilesen>();
         List<Bilesen> hammadde      = new ArrayList<Bilesen>();
         hammaddetum = bilesenDao.bilesenListeGetirTum(null, 0, null, null);
-        hammadde = bilesenDao.bilesenListeGetirTum(null, page, (Util.isNotEmptyOrNull(bilesenid))? Integer.valueOf(bilesenid): null, null);
+        hammadde = bilesenDao.bilesenListeGetirTum(null, page, (Util.isNotEmptyOrNull(bilesenid))? Integer.parseInt(bilesenid): null, null);
 
         token  = Util.getToken();
         request.setAttribute("token", token);
@@ -82,7 +82,7 @@ public class HammaddeServlet extends HttpServlet implements Serializable {
         String message      = "-1";
         if(islemid != null && islemid != "" ) {
             Integer result = 0;
-            switch (Integer.valueOf(islemid)) {
+            switch (Integer.parseInt(islemid)) {
                 case 1:
                     message = bilesenDao.bilesenGuncelle(
                                     new String(request.getParameter("bilesenid").getBytes("UTF-8")),
@@ -106,7 +106,7 @@ public class HammaddeServlet extends HttpServlet implements Serializable {
         else {
             /* Prevent Resubmit */
             if(Util.isNotEmptyOrNull(request.getParameter("stoklisteid")) && 
-                            Integer.valueOf(request.getParameter("stoklisteid"))==1 ) {
+                            Integer.parseInt(request.getParameter("stoklisteid"))==1 ) {
                 bilesenid   = request.getParameter("bilesenidara");
                 stoklisteid = request.getParameter("stoklisteid");
             }
@@ -137,7 +137,7 @@ public class HammaddeServlet extends HttpServlet implements Serializable {
             List<Bilesen> hammaddetum   = new ArrayList<Bilesen>();
             List<Bilesen> hammadde      = new ArrayList<Bilesen>();
             hammaddetum = bilesenDao.bilesenListeGetirTum(null, 0, null, null);
-            hammadde = bilesenDao.bilesenListeGetirTum(null, page, (Util.isNotEmptyOrNull(bilesenid))? Integer.valueOf(bilesenid): null, null);
+            hammadde = bilesenDao.bilesenListeGetirTum(null, page, (Util.isNotEmptyOrNull(bilesenid))? Integer.parseInt(bilesenid): null, null);
 
             List<Firma> firma = new ArrayList<Firma>();
             firma = firmaDao.firmaListeGetirTum(0);

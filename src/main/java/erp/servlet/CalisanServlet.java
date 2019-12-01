@@ -42,7 +42,7 @@ public class CalisanServlet extends HttpServlet implements Serializable {
         String islemid = request.getParameter("islemid");
         if(islemid != null && islemid != "" ) {
             String result = "";
-            switch (Integer.valueOf(islemid)) {
+            switch (Integer.parseInt(islemid)) {
                 case 1:
                     ajaxIncluded = true;
                     result = calisanDao.calisanGuncelle(

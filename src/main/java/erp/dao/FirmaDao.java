@@ -72,7 +72,7 @@ public class FirmaDao implements Serializable, BaseDao {
             pstmt.setString(2, tel);
             pstmt.setString(3, adres);
             pstmt.setString(4, email);
-            pstmt.setInt(5, Integer.valueOf(id));
+            pstmt.setInt(5, Integer.parseInt(id));
             logger.info(pstmt.toString());
             pstmt.executeUpdate();
         } catch (SQLException e) {
@@ -89,7 +89,7 @@ public class FirmaDao implements Serializable, BaseDao {
         ResultSet rs = null;
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(updateQuery)) {
-            pstmt.setInt(1, Integer.valueOf(id));
+            pstmt.setInt(1, Integer.parseInt(id));
             logger.info(pstmt.toString());
             rs = pstmt.executeQuery();
             if (rs.next()) {

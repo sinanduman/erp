@@ -79,16 +79,16 @@ public class UretimRaporServlet extends HttpServlet implements Serializable {
             String andYes           = " AND ";
             
             if(bilesenid!=null && !bilesenid.equals("") ) {
-                filter1     = andYes + " mamulid = " + Integer.valueOf(bilesenid);
+                filter1     = andYes + " mamulid = " + Integer.parseInt(bilesenid);
             }
             if(makinaid!=null && !makinaid.equals("") ) {
-                filter2     = andYes + " makinaid = " + Integer.valueOf(makinaid);
+                filter2     = andYes + " makinaid = " + Integer.parseInt(makinaid);
             }
             if(calisanid!=null && !calisanid.equals("") ) {
-                filter3     = andYes + " calisanid = " + Integer.valueOf(calisanid);
+                filter3     = andYes + " calisanid = " + Integer.parseInt(calisanid);
             }
             if(firmaid!=null && !firmaid.equals("") ) {
-                filter4     = andYes + " firmaid = " + Integer.valueOf(firmaid);
+                filter4     = andYes + " firmaid = " + Integer.parseInt(firmaid);
             }
             if(bas_tarih!=null && bit_tarih!=null && !bas_tarih.equals("") && !bit_tarih.equals("") ) {
                 filter5     = andYes + " ( tarih BETWEEN '" + Util.date_tr_to_eng(bas_tarih) + "' AND '" + Util.date_tr_to_eng(bit_tarih) +"')";

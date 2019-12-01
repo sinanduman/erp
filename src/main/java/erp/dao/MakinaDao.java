@@ -55,7 +55,7 @@ public class MakinaDao implements Serializable, BaseDao {
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(insertQuery)) {
             pstmt.setString(1, ad);
-            pstmt.setInt(2, Integer.valueOf(makinatip));
+            pstmt.setInt(2, Integer.parseInt(makinatip));
             logger.info(pstmt.toString());
             pstmt.executeUpdate();
 
@@ -73,7 +73,7 @@ public class MakinaDao implements Serializable, BaseDao {
         ResultSet rs = null;
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(updateQuery)) {
-            pstmt.setInt(1, Integer.valueOf(id));
+            pstmt.setInt(1, Integer.parseInt(id));
             logger.info(pstmt.toString());
             rs = pstmt.executeQuery();
             if (rs.next()) {
@@ -94,8 +94,8 @@ public class MakinaDao implements Serializable, BaseDao {
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(updateQuery)) {
             pstmt.setString(1, ad);
-            pstmt.setInt(2, Integer.valueOf(tip));
-            pstmt.setInt(3, Integer.valueOf(id));
+            pstmt.setInt(2, Integer.parseInt(tip));
+            pstmt.setInt(3, Integer.parseInt(id));
             logger.info(pstmt.toString());
             pstmt.executeUpdate();
         } catch (SQLException e) {

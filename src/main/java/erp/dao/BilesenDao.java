@@ -59,7 +59,7 @@ public class BilesenDao implements Serializable, BaseDao {
         ResultSet rs = null;
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(updateQuery)) {
-            pstmt.setInt(1, Integer.valueOf(bilesenid));
+            pstmt.setInt(1, Integer.parseInt(bilesenid));
             logger.info(pstmt.toString());
 
             rs = pstmt.executeQuery();

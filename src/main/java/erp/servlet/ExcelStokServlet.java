@@ -64,7 +64,7 @@ public class ExcelStokServlet extends HttpServlet implements Serializable {
             stokrapor   = stokDao.stokBilesenRapor(tablename, excelsql, 0);
             
             if(Util.isNotEmptyOrNull(exceldetay) && Util.isNotEmptyOrNull(exceldetayid) && Util.isNumeric(exceldetayid)) {
-                stokrapor   = stokDao.stokBilesenDetayRapor(tablename, excelsql, 0, Integer.valueOf(exceldetayid));
+                stokrapor   = stokDao.stokBilesenDetayRapor(tablename, excelsql, 0, Integer.parseInt(exceldetayid));
                 prefixDetay = "_detay";
             }
             

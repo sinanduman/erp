@@ -35,8 +35,8 @@ public class StokDao implements Serializable, BaseDao {
         ResultSet rs = null;
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(selectQuery)) {
-            pstmt.setInt(1, Integer.valueOf(bilesenid));
-            pstmt.setInt(2, Integer.valueOf(gkrno));
+            pstmt.setInt(1, Integer.parseInt(bilesenid));
+            pstmt.setInt(2, Integer.parseInt(gkrno));
             rs = pstmt.executeQuery();
             logger.info(pstmt.toString());
             if (rs.next()) {
@@ -45,11 +45,11 @@ public class StokDao implements Serializable, BaseDao {
         } catch (SQLException e) {
             logger.error("Error: " + e);
         }
-        if (Boolean.valueOf(iade)) {
+        if (Boolean.parseBoolean(iade)) {
             if (sum == null) sum = 0;
             String resStr = "";
             Double hammaddeMiktar = 0.0;
-            if (Integer.valueOf(miktar) > sum) {
+            if (Integer.parseInt(miktar) > sum) {
                 resStr = sum.toString();
                 /* Donus degerinin KG olarak verilmesi icin */
                 if (bilesentipid.equals("1")) {
@@ -75,10 +75,10 @@ public class StokDao implements Serializable, BaseDao {
              PreparedStatement pstmt = conn.prepareStatement(insertQuery)) {
             logger.info(tarih);
             pstmt.setNull(1, Types.INTEGER); // planid
-            pstmt.setInt(2, Integer.valueOf(bilesenid));
-            pstmt.setBigDecimal(3, BigDecimal.valueOf(Double.valueOf(miktar)));
+            pstmt.setInt(2, Integer.parseInt(bilesenid));
+            pstmt.setBigDecimal(3, BigDecimal.valueOf(Double.parseDouble(miktar)));
             if (gkrno != null)
-                pstmt.setInt(4, Integer.valueOf(gkrno));
+                pstmt.setInt(4, Integer.parseInt(gkrno));
             else
                 pstmt.setNull(4, Types.INTEGER);
             if (irsaliyeno != null)
@@ -116,10 +116,10 @@ public class StokDao implements Serializable, BaseDao {
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(updateQuery)) {
             pstmt.setNull(1, Types.INTEGER); // Planid
-            pstmt.setInt(2, Integer.valueOf(bilesenid));
-            pstmt.setBigDecimal(3, BigDecimal.valueOf(Double.valueOf(miktar)));
+            pstmt.setInt(2, Integer.parseInt(bilesenid));
+            pstmt.setBigDecimal(3, BigDecimal.valueOf(Double.parseDouble(miktar)));
             if (gkrno != null)
-                pstmt.setInt(4, Integer.valueOf(gkrno));
+                pstmt.setInt(4, Integer.parseInt(gkrno));
             else
                 pstmt.setNull(4, Types.INTEGER);
             if (irsaliyeno != null)

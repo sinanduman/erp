@@ -43,7 +43,7 @@ public class MakinaServlet extends HttpServlet implements Serializable {
         String islemid = request.getParameter("islemid");
         if(islemid != null && !islemid.isEmpty() ) {
             String result = "";
-            switch (Integer.valueOf(islemid)) {
+            switch (Integer.parseInt(islemid)) {
                 case 1:
                     ajaxIncluded = true;
                     result = makinaDao.makinaGuncelle(

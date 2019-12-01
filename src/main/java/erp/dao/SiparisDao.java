@@ -28,8 +28,8 @@ public class SiparisDao implements Serializable, BaseDao {
         int newSiparisId = 0;
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(insertQuery, Statement.RETURN_GENERATED_KEYS)) {
-            pstmt.setInt(1, Integer.valueOf(bilesenid));
-            pstmt.setInt(2, Integer.valueOf(miktar));
+            pstmt.setInt(1, Integer.parseInt(bilesenid));
+            pstmt.setInt(2, Integer.parseInt(miktar));
             pstmt.setString(3, not);
             logger.info(pstmt.toString());
             pstmt.executeUpdate();

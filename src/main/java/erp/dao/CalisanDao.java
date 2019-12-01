@@ -74,8 +74,8 @@ public class CalisanDao implements Serializable, BaseDao {
             pstmt.setString(1, ad);
             pstmt.setString(2, soyad);
             pstmt.setString(3, gorev);
-            pstmt.setInt(4, Integer.valueOf(durum));
-            pstmt.setInt(5, Integer.valueOf(id));
+            pstmt.setInt(4, Integer.parseInt(durum));
+            pstmt.setInt(5, Integer.parseInt(id));
             logger.info(pstmt.toString());
             pstmt.executeUpdate();
         } catch (SQLException e) {
@@ -92,7 +92,7 @@ public class CalisanDao implements Serializable, BaseDao {
         ResultSet rs = null;
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(updateQuery)) {
-            pstmt.setInt(1, Integer.valueOf(id));
+            pstmt.setInt(1, Integer.parseInt(id));
             logger.info(pstmt.toString());
 
             rs = pstmt.executeQuery();

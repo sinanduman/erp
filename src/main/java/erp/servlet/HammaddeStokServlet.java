@@ -51,13 +51,13 @@ public class HammaddeStokServlet extends HttpServlet implements Serializable {
         
         if(stoklisteid != null && Integer.parseInt(stoklisteid) == 1) {
             // PAGING
-            totalrecord = daoFunctions.recordCount(BaseDao.V_STOKBILESEN," where bilesenid= " + Integer.valueOf(bilesenid) );
-            sumagg      = daoFunctions.recordAgg(BaseDao.V_STOKMIKTAR, "sum", "miktar", " where bilesenid= " + Integer.valueOf(bilesenid));
+            totalrecord = daoFunctions.recordCount(BaseDao.V_STOKBILESEN," where bilesenid= " + Integer.parseInt(bilesenid) );
+            sumagg      = daoFunctions.recordAgg(BaseDao.V_STOKMIKTAR, "sum", "miktar", " where bilesenid= " + Integer.parseInt(bilesenid));
             if(request.getParameter("page") != null)
                 page    = Integer.parseInt(request.getParameter("page"));        
             noofpages   = (int) Math.ceil(totalrecord * 1.0 / Genel.ROWPERPAGE);
             // PAGING
-            stok        = stokDao.stokListeGetirTum(BilesenTip.HAMMADDEYARIMAMUL, Integer.valueOf(bilesenid), page, null);
+            stok        = stokDao.stokListeGetirTum(BilesenTip.HAMMADDEYARIMAMUL, Integer.parseInt(bilesenid), page, null);
         }
         
         request.setAttribute("hammadde", hammadde);
@@ -80,7 +80,7 @@ public class HammaddeStokServlet extends HttpServlet implements Serializable {
         Boolean ajaxInAction= false;
         
         if(request.getParameter("islemid")!=null) {
-            Integer islemid     = Integer.valueOf(request.getParameter("islemid"));
+            Integer islemid     = Integer.parseInt(request.getParameter("islemid"));
             String tarih        = request.getParameter("tarih");
             String gkrno        = request.getParameter("gkrno");
             String miktar       = request.getParameter("miktar");
@@ -133,13 +133,13 @@ public class HammaddeStokServlet extends HttpServlet implements Serializable {
             }
             
             // PAGING
-            totalrecord = daoFunctions.recordCount(BaseDao.V_STOKBILESEN," where bilesenid= " +  Integer.valueOf(bilesenid));
-            sumagg      = daoFunctions.recordAgg(BaseDao.V_STOKMIKTAR, "sum", "miktar", " where bilesenid= " +  Integer.valueOf(bilesenid));
+            totalrecord = daoFunctions.recordCount(BaseDao.V_STOKBILESEN," where bilesenid= " +  Integer.parseInt(bilesenid));
+            sumagg      = daoFunctions.recordAgg(BaseDao.V_STOKMIKTAR, "sum", "miktar", " where bilesenid= " +  Integer.parseInt(bilesenid));
             if(request.getParameter("page") != null)
-                page = Integer.parseInt(request.getParameter("page"));        
+                page = Integer.parseInt(request.getParameter("page"));
             noofpages = (int) Math.ceil(totalrecord * 1.0 / Genel.ROWPERPAGE);
             // PAGING
-            stok = stokDao.stokListeGetirTum(BilesenTip.HAMMADDEYARIMAMUL, Integer.valueOf(bilesenid), page, null);
+            stok = stokDao.stokListeGetirTum(BilesenTip.HAMMADDEYARIMAMUL, Integer.parseInt(bilesenid), page, null);
             
             List<Bilesen> hammadde = bilesenDao.bilesenListeGetirTum(null, 0, null, null);
             List<Firma> firma = firmaDao.firmaListeGetirTum(0);

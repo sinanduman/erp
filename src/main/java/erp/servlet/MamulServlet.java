@@ -43,53 +43,6 @@ public class MamulServlet extends HttpServlet implements Serializable {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         doPost(request, response);
-        /*
-        String message  = "";
-        Integer mamulid = null;
-        
-        List<Firma> firma = new ArrayList<Firma>();
-        firma = firmaDao.firmaListeGetirTum(0);
-        
-        List<Bilesen> hammadde = new ArrayList<Bilesen>();
-        hammadde = bilesenDao.bilesenListeGetirTum(BilesenTip.HAMMADDE, 0, null);
-        
-        List<Bilesen> yarimamul = new ArrayList<Bilesen>();
-        yarimamul = bilesenDao.bilesenListeGetirTum(BilesenTip.YARIMAMUL, 0, null);
-        
-        // PAGING
-        int totalrecord = daoFunctions.recordAgg(BaseDao.V_MAMUL_TUM, "COUNT", "*", ((mamulid==null)?"":" where id=" + mamulid));
-        int page = 1;
-        if(request.getParameter("page") != null)
-            page = Integer.parseInt(request.getParameter("page"));        
-        int noofpages = (int) Math.ceil(totalrecord * 1.0 / Genel.ROWPERPAGE);
-        // PAGING
-        
-        if(request.getParameter("mamulidara") != null)
-            mamulid = Integer.parseInt(request.getParameter("mamulidara")); 
-        
-        List<Mamul> mamul   = new ArrayList<Mamul>();
-        List<Mamul> mamultum= new ArrayList<Mamul>();
-        mamul   = mamulDao.mamulListeGetir(mamulid, page);
-        mamultum= mamulDao.mamulListeGetir(null, 0);
-        
-        List<MamulBilesen> mamulbilesen = new ArrayList<MamulBilesen>();
-        mamulbilesen = mamulDao.mamulBilesenListeGetirTum(mamulid);
-        
-        token  = Util.getToken();
-        request.setAttribute("token", token);
-        request.setAttribute("firma", firma);
-        request.setAttribute("hammadde", hammadde);
-        request.setAttribute("yarimamul", yarimamul);
-        request.setAttribute("mamul", mamul);
-        request.setAttribute("mamultum", mamultum);
-        request.setAttribute("message", message);
-        request.setAttribute("totalrecord", totalrecord);
-        request.setAttribute("currentpage", page);
-        request.setAttribute("noofpages", noofpages);
-        request.setAttribute("mamulbilesen", mamulbilesen);
-        
-        request.getRequestDispatcher("mamul.jsp").forward(request, response);
-         */
     }
     
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -101,7 +54,7 @@ public class MamulServlet extends HttpServlet implements Serializable {
         Integer mamulid = null;
         
         if(Util.isNotEmptyOrNull(islemid)) {
-            switch (Integer.valueOf(islemid)) {
+            switch (Integer.parseInt(islemid)) {
                 case 1:
                     message = mamulDao.mamulGuncelle(
                                     new String(request.getParameter("bilesenid").getBytes("UTF-8")),
@@ -131,8 +84,8 @@ public class MamulServlet extends HttpServlet implements Serializable {
         }
         else {
             if(Util.isNotEmptyOrNull(request.getParameter("stoklisteid")) && 
-                            Integer.valueOf(request.getParameter("stoklisteid"))==1 ) {
-                mamulid = Integer.valueOf(request.getParameter("mamulidara"));
+                            Integer.parseInt(request.getParameter("stoklisteid"))==1 ) {
+                mamulid = Integer.parseInt(request.getParameter("mamulidara"));
             }
             /* Prevent ReSubmit */
             else if(request.getParameter("token") != null && Long.valueOf(request.getParameter("token"))==token) {
@@ -150,17 +103,17 @@ public class MamulServlet extends HttpServlet implements Serializable {
                 }
                 else {
                     message = "0"; //Basarili
-                    int bilesenSayisi = Integer.valueOf(request.getParameter("bilesen_length"));
+                    int bilesenSayisi = Integer.parseInt(request.getParameter("bilesen_length"));
                     for(int i=0; i< bilesenSayisi; i++) {
                         String bilesenid= request.getParameter("bilesenid_" + i);
                         String birimid  = request.getParameter("birimid_" + i);
                         String miktar   = request.getParameter("miktar_" + i);
                         logger.info("newMamulId: "+ newMamulId + ", bilesenid: "+ bilesenid);
                         mamulDao.mamulBilesenEkle(
-                                Integer.valueOf(newMamulId),
-                                Integer.valueOf(bilesenid),
-                                Integer.valueOf(birimid),
-                                Float.valueOf(miktar)
+                                Integer.parseInt(newMamulId),
+                                Integer.parseInt(bilesenid),
+                                Integer.parseInt(birimid),
+                                Float.parseFloat(miktar)
                         );
                     }
                 }

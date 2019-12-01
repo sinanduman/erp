@@ -85,7 +85,7 @@ public class IrsaliyeServlet extends HttpServlet implements Serializable {
         }
 
         if (r_islemid != null) {
-            Integer islemid = Integer.valueOf(r_islemid);
+            Integer islemid = Integer.parseInt(r_islemid);
             /* with ajax */
             if (islemid == IrsaliyeEnum.IRSALIYE_SIL.getValue()) {
                 ajaxInAction = true;
@@ -111,18 +111,18 @@ public class IrsaliyeServlet extends HttpServlet implements Serializable {
                 /* no ajax */
                 logger.info("islemid :" + islemid);
                 if (islemid == IrsaliyeEnum.IRSALIYE_BILESEN_GUNCELLE.getValue()) {
-                    int irsaliyeid = Integer.valueOf(r_irsaliyeid);
-                    int irsaliyebilesenid = Integer.valueOf(r_irsaliyebilesenid);
-                    int mamulid = Integer.valueOf(r_mamulid);
-                    int gkrno = Integer.valueOf(r_gkrno);
-                    int miktar = Integer.valueOf(r_miktar);
+                    int irsaliyeid = Integer.parseInt(r_irsaliyeid);
+                    int irsaliyebilesenid = Integer.parseInt(r_irsaliyebilesenid);
+                    int mamulid = Integer.parseInt(r_mamulid);
+                    int gkrno = Integer.parseInt(r_gkrno);
+                    int miktar = Integer.parseInt(r_miktar);
                     String not = r_not;
 
                     irsaliyeDao.irsaliyeBilesenGuncelle(irsaliyeid, irsaliyebilesenid, mamulid, gkrno, miktar, not);
                 } else if (islemid == IrsaliyeEnum.IRSALIYE_KAPAT.getValue()) {
                     irsaliyeDao.irsaliyeKapat(r_irsaliyeid);
                 } else {
-                    int irsaliyeid = Integer.valueOf(r_irsaliyeid);
+                    int irsaliyeid = Integer.parseInt(r_irsaliyeid);
                     logger.info("irsaliyeid :" + irsaliyeid);
                     /* 0:Insert */
                     if (IrsaliyeEnum.IRSALIYE_EKLE.getValue() == irsaliyeid) {
@@ -279,7 +279,7 @@ public class IrsaliyeServlet extends HttpServlet implements Serializable {
                     r_irsaliyeid = String.valueOf(newIrsaliyeId);
                 }
                 else {
-                    newIrsaliyeId = Integer.valueOf(r_irsaliyeid);
+                    newIrsaliyeId = Integer.parseInt(r_irsaliyeid);
                 }
                 if(uploadData.getMamulId().equals("0")) {
                     message = "<strong>" + uploadData.getMamulKodu() + "</strong>, " + uploadData.getNot() + " Stok'ta bulunamadı!";
@@ -321,8 +321,8 @@ public class IrsaliyeServlet extends HttpServlet implements Serializable {
     private String irsaliyeBilesenEkle(String mamulId, String miktar, String not, int newIrsaliyeId) {
         return irsaliyeDao.irsaliyeBilesenEkle(
                             newIrsaliyeId,
-                            Integer.valueOf(mamulId),
-                            Integer.valueOf(miktar),
+                            Integer.parseInt(mamulId),
+                            Integer.parseInt(miktar),
                 not);
     }
 

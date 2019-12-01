@@ -58,13 +58,13 @@ public class MamulStokServlet extends HttpServlet implements Serializable {
             // PAGING
             // totalrecord = DAOFunctions.recordCount("stok"," where id= " +
             // stoklisteid);
-            totalrecord = daoFunctions.recordAgg(BaseDao.STOK, "count", "*", " where bilesenid= " + Integer.valueOf(mamulid));
-            sumagg = daoFunctions.recordAgg(BaseDao.V_STOKMIKTAR, "sum", "miktar"," where bilesenid= " + Integer.valueOf(mamulid));
+            totalrecord = daoFunctions.recordAgg(BaseDao.STOK, "count", "*", " where bilesenid= " + Integer.parseInt(mamulid));
+            sumagg = daoFunctions.recordAgg(BaseDao.V_STOKMIKTAR, "sum", "miktar"," where bilesenid= " + Integer.parseInt(mamulid));
             if (request.getParameter("page") != null)
                 page = Integer.parseInt(request.getParameter("page"));
             noofpages = (int) Math.ceil(totalrecord * 1.0 / Genel.ROWPERPAGE);
             // PAGING
-            stok = stokDao.stokListeGetirTum(BilesenTip.MAMUL, Integer.valueOf(mamulid), page, null);
+            stok = stokDao.stokListeGetirTum(BilesenTip.MAMUL, Integer.parseInt(mamulid), page, null);
             
             logger.info(String.valueOf(totalrecord));
             logger.info(String.valueOf(noofpages));
@@ -87,16 +87,13 @@ public class MamulStokServlet extends HttpServlet implements Serializable {
         
         response.setContentType("text/html; charset=UTF-8");
 
-        // Integer stoklisteid =
-        // Integer.valueOf(request.getParameter("stoklisteid"));
         String mamulid      = request.getParameter("mamulid");
         String mamulekleid  = request.getParameter("mamulekleid");
         String message      = null;
         Boolean ajaxInAction= false;
         
-        
         if(request.getParameter("islemid")!=null) {
-            Integer islemid     = Integer.valueOf(request.getParameter("islemid"));
+            Integer islemid     = Integer.parseInt(request.getParameter("islemid"));
             String tarih        = request.getParameter("tarih");
             String gkrno        = request.getParameter("gkrno");
             String miktar       = request.getParameter("miktar");
@@ -151,12 +148,12 @@ public class MamulStokServlet extends HttpServlet implements Serializable {
 
             // if(stoklisteid!=null && stoklisteid==1) {
             
-            totalrecord = daoFunctions.recordAgg(BaseDao.STOK, "count", "*", " where bilesenid= " + Integer.valueOf(mamulid));
-            sumagg      = daoFunctions.recordAgg(BaseDao.V_STOKMIKTAR, "sum", "miktar", " where bilesenid= " + Integer.valueOf(mamulid));
+            totalrecord = daoFunctions.recordAgg(BaseDao.STOK, "count", "*", " where bilesenid= " + Integer.parseInt(mamulid));
+            sumagg      = daoFunctions.recordAgg(BaseDao.V_STOKMIKTAR, "sum", "miktar", " where bilesenid= " + Integer.parseInt(mamulid));
             if (request.getParameter("page") != null)
                 page = Integer.parseInt(request.getParameter("page"));
             noofpages   = (int) Math.ceil(totalrecord * 1.0 / Genel.ROWPERPAGE);
-            stok        = stokDao.stokListeGetirTum(BilesenTip.MAMUL, Integer.valueOf(mamulid), page, null);
+            stok        = stokDao.stokListeGetirTum(BilesenTip.MAMUL, Integer.parseInt(mamulid), page, null);
             // }
             
             List<Mamul> mamul = new ArrayList<Mamul>();

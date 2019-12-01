@@ -50,7 +50,7 @@ public class Util {
         String returnValue = dateinfo;
         Integer tmp = 1;
         if (returnValue.matches("[0-9]{2}-[0-9]{2}-[0-9]{4}")) {
-            tmp = Integer.valueOf(dateinfo.substring(3, 5));
+            tmp = Integer.parseInt(dateinfo.substring(3, 5));
             logger.info("tmp :" + tmp);
             for (Aylar a : Aylar.values()) {
                 if (a.value() == tmp) {
@@ -156,7 +156,7 @@ public class Util {
     }
 
     public static String getPageFilter(int offset, Map<String, String> param) {
-        int rowperpage = (param == null || param.get("rowperpage") == null) ? Genel.ROWPERPAGE : Integer.valueOf(param.get("rowperpage"));
+        int rowperpage = (param == null || param.get("rowperpage") == null) ? Genel.ROWPERPAGE : Integer.parseInt(param.get("rowperpage"));
         return (offset == 0) ? "" : " offset " + (offset - 1) * rowperpage + " limit " + rowperpage;
     }
 

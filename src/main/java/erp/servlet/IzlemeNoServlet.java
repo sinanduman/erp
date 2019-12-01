@@ -80,7 +80,7 @@ public class IzlemeNoServlet extends HttpServlet implements Serializable {
         
         if(request.getParameter("islemid")!=null) {
             List<IzlemeNo> result = new ArrayList<IzlemeNo>(); 
-            Integer islemid     = Integer.valueOf(request.getParameter("islemid"));
+            Integer islemid     = Integer.parseInt(request.getParameter("islemid"));
             String mamulid      = request.getParameter("mamulid");
             String kullanildi   = request.getParameter("kullanildi");
             String gkrno        = request.getParameter("gkrno");

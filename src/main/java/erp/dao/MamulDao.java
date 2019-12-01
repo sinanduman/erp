@@ -29,10 +29,10 @@ public class MamulDao implements Serializable, BaseDao {
              PreparedStatement pstmt = conn.prepareStatement(insertQuery, Statement.RETURN_GENERATED_KEYS)) {
             pstmt.setString(1, ad);
             pstmt.setString(2, kod);
-            pstmt.setInt(3, Integer.valueOf(cevrimSuresi));
+            pstmt.setInt(3, Integer.parseInt(cevrimSuresi));
             pstmt.setInt(4, BilesenTip.MAMUL.value());
-            pstmt.setInt(5, Integer.valueOf(firmaid));
-            pstmt.setInt(6, Integer.valueOf(figur));
+            pstmt.setInt(5, Integer.parseInt(firmaid));
+            pstmt.setInt(6, Integer.parseInt(figur));
             logger.info(pstmt.toString());
             pstmt.executeUpdate();
             rs = pstmt.getGeneratedKeys();
@@ -69,7 +69,7 @@ public class MamulDao implements Serializable, BaseDao {
         ResultSet rs = null;
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(updateQuery)) {
-            pstmt.setInt(1, Integer.valueOf(mamulid));
+            pstmt.setInt(1, Integer.parseInt(mamulid));
             logger.info(pstmt.toString());
             rs = pstmt.executeQuery();
             if (rs.next()) {

@@ -67,7 +67,7 @@ public class IzlemeNoDao implements Serializable, BaseDao {
         // connect to DB
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(updateQuery)) {
-            pstmt.setInt(1, Integer.valueOf(mamulid));
+            pstmt.setInt(1, Integer.parseInt(mamulid));
             logger.info(pstmt.toString());
             pstmt.executeUpdate();
             temp = izlemeNoKontrol(mamulid, kullanildi, null);
@@ -84,8 +84,8 @@ public class IzlemeNoDao implements Serializable, BaseDao {
         // connect to DB
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(updateQuery)) {
-            pstmt.setInt(1, Integer.valueOf(mamulid));
-            pstmt.setInt(2, Integer.valueOf(gkrno));
+            pstmt.setInt(1, Integer.parseInt(mamulid));
+            pstmt.setInt(2, Integer.parseInt(gkrno));
             pstmt.executeUpdate();
             logger.info(pstmt.toString());
             temp = izlemeNoKontrol(mamulid, kullanildi, null);
@@ -107,8 +107,8 @@ public class IzlemeNoDao implements Serializable, BaseDao {
         ResultSet rs = null;
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(updateQuery)) {
-            pstmt.setInt(1, Integer.valueOf(mamulid));
-            pstmt.setInt(2, Integer.valueOf(kullanildi));
+            pstmt.setInt(1, Integer.parseInt(mamulid));
+            pstmt.setInt(2, Integer.parseInt(kullanildi));
             pstmt.setInt(3, rownumber);
             logger.info(pstmt.toString());
             rs = pstmt.executeQuery();
@@ -119,7 +119,7 @@ public class IzlemeNoDao implements Serializable, BaseDao {
                         rs.getDate("kullanildi_tarih"),
                         rs.getString("mamulkod"),
                         rs.getString("mamulad"),
-                        Integer.valueOf(0), /* Ilk Uretim */
+                        0, /* Ilk Uretim */
                         rs.getInt("kullanildi"))
                 );
             }

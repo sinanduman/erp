@@ -74,12 +74,12 @@ public class SevkRaporServlet extends HttpServlet implements Serializable {
             String filter4 = "";
             String andYes = " AND ";
             if (irsaliyeid != null && Util.isNumeric(irsaliyeid)) {
-                filter1 = andYes + " id = " + Integer.valueOf(irsaliyeid);
+                filter1 = andYes + " id = " + Integer.parseInt(irsaliyeid);
             } else {
                 irsaliyeid = null;
             }
             if (firmaid != null && Util.isNumeric(firmaid)) {
-                filter2 = andYes + " firmaid = " + Integer.valueOf(firmaid);
+                filter2 = andYes + " firmaid = " + Integer.parseInt(firmaid);
             } else {
                 firmaid = null;
             }
@@ -90,7 +90,7 @@ public class SevkRaporServlet extends HttpServlet implements Serializable {
                 tarih = null;
             }
             if (mamulid != null && Util.isNumeric(mamulid)) {
-                filter4 = andYes + " exists (select 1 from " + BaseDao.IRSALIYEBILESEN + " ib where irsaliye.id = ib.irsaliyeid and ib.mamulid = " + Integer.valueOf(mamulid) + ")";
+                filter4 = andYes + " exists (select 1 from " + BaseDao.IRSALIYEBILESEN + " ib where irsaliye.id = ib.irsaliyeid and ib.mamulid = " + Integer.parseInt(mamulid) + ")";
             } else {
                 mamulid = null;
             }

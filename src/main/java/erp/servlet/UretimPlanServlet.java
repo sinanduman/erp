@@ -69,11 +69,11 @@ public class UretimPlanServlet extends HttpServlet implements Serializable {
                 String hataid       = request.getParameter("hatasebepid")==""?null:request.getParameter("hatasebepid");
                 String uretimplanid = request.getParameter("uretimplanid")==""?null:request.getParameter("uretimplanid");
                 String result = uretimDao.uretimPlanGuncelle(
-                                Integer.valueOf(gercekuretim),
-                                Integer.valueOf(hedefuretim),
-                                (fark==null)?null:Integer.valueOf(fark),
-                                (hataid==null)?null:Integer.valueOf(hataid),
-                                Integer.valueOf(uretimplanid)
+                                Integer.parseInt(gercekuretim),
+                                Integer.parseInt(hedefuretim),
+                                (fark==null)?null:Integer.parseInt(fark),
+                                (hataid==null)?null:Integer.parseInt(hataid),
+                                Integer.parseInt(uretimplanid)
                                 );
                 message = result;
             }
