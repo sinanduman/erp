@@ -1,7 +1,8 @@
-var numpattern	= /^[0-9][0-9]*$/;
-var numpattern2	= /^[1-9][0-9]*$/; /* Sayilabilir miktar icin */
-var numpattern3	= /^[\-]?[1-9][0-9]*$/; /* Stok iade için miktar icin */
-var numpattern4	= /^(([1-9]*[0-9]*([.][0-9]+))|([1-9][0-9]*))$/; /* Hammadde gramaj icin */
+const numpattern	= /^[0-9][0-9]*$/;
+const numpattern2	= /^[1-9][0-9]*$/; /* Sayilabilir miktar icin */
+const numpattern3	= /^[\-]?[1-9][0-9]*$/; /* Stok iade için miktar icin */
+const numpattern4	= /^(([1-9]*[0-9]*([.][0-9]+))|([1-9][0-9]*))$/; /* Hammadde gramaj icin */
+const numpattern5   = /^[0-9]{2}-[0-9]{2}-[0-9]{4}$/; /* Tarih girisi icin */
 function is_number(formval){
     if($.trim(formval)==""){
         return false;
@@ -26,19 +27,21 @@ function is_iade(formval){
     }
     return numpattern3.test(formval);
 }
-
 function is_empty(formval) {
-    if ($.trim(formval) == ""){
+    if($.trim(formval) == "")
         return true;
-    }
-    else{
+    else
+        return false;
+}
+function is_trdate(formval){
+    if($.trim(formval)==""){
         return false;
     }
-
+    return numpattern5.test(formval);
 }
 function disableFormElements(action_form){
-    var elements = action_form.elements;
-    for(var i=0; i< action_form.length; i++ ){
+    let elements = action_form.elements;
+    for(let i=0; i< action_form.length; i++ ){
         elements[i].disabled = true;
     }
 }
@@ -46,7 +49,7 @@ function hideshow(trid){
     $(trid).toggle("fast");
 }
 $("#go").click(function(){
-    var message="";
+    let message="";
     if(document.kategori.customerid.value==""){
         message += "Müşteri seçiniz!\n";
     }
@@ -75,7 +78,7 @@ function cleartrbackground(){
 var OK = (function() {
     "use strict";
 
-    var elem,
+    let elem,
         hideHandler,
         that = {};
 
@@ -91,10 +94,10 @@ var OK = (function() {
     };
     return that;
 }());
-var Error = (function() {
+let Error = (function() {
     "use strict";
 
-    var elem,
+    let elem,
         hideHandler,
         that = {};
 
@@ -161,10 +164,10 @@ function izlemeNoTest(mamulid, islemid, kullanildi, inputbox, gkrno){
     }
 }
 function izlemeNoKontrol(mamulid, islemid, kullanildi, inputbox, gkrno){
-    var f_mamulid	= mamulid;
-    var f_islem		= islemid; /* 1:Yeni Kayit, 3:Kayit Sil, 6:Kontrol */
-    var f_kullanildi= kullanildi; /* 0:Kullanilmadi, 1:Kullanildi */
-    var f_gkrno		= gkrno; /* Sadece Silme Isleminde Anlamli, Digerlerinde degeri: 0*/
+    let f_mamulid	= mamulid;
+    let f_islem		= islemid; /* 1:Yeni Kayit, 3:Kayit Sil, 6:Kontrol */
+    let f_kullanildi= kullanildi; /* 0:Kullanilmadi, 1:Kullanildi */
+    let f_gkrno		= gkrno; /* Sadece Silme Isleminde Anlamli, Digerlerinde degeri: 0*/
 
     if(!is_empty(mamulid)){
         $.ajax({
@@ -185,16 +188,16 @@ function izlemeNoKontrol(mamulid, islemid, kullanildi, inputbox, gkrno){
             }
         }).done(function( msg ) {
 
-            var obj = $.parseJSON( msg );
+            let obj = $.parseJSON( msg );
 
             if(f_islem == "3"){
-                var trbox = eval("'#tr" + f_mamulid +"_" + f_gkrno + "'");
+                let trbox = eval("'#tr" + f_mamulid +"_" + f_gkrno + "'");
                 $(trbox).hide();
             }
 
             if(f_islem == "1"){
 
-                var strTR = "\"<tr id='tr" + obj[0].mamulid + "_" +obj[0].gkrno + "'>" +
+                let strTR = "\"<tr id='tr" + obj[0].mamulid + "_" +obj[0].gkrno + "'>" +
                     "<td>" + obj[0].kullanildi_tarih + "</td>" +
                     "<td>" + obj[0].gkrno + "</td>" +
                     "<td>" + obj[0].mamulkod + "</td>" +
@@ -208,17 +211,17 @@ function izlemeNoKontrol(mamulid, islemid, kullanildi, inputbox, gkrno){
                 $("#izlemenotable tr:first").after(strTR);
             }
 
-            var inputbox_option = eval("'" + inputbox + " option'");
+            let inputbox_option = eval("'" + inputbox + " option'");
             //console.log(inputbox_option);
             $(inputbox_option).remove();
 
             //var gkrno  = mamul[i].gkrno.split(";");
             //var miktar = mamul[i].miktar.split(";");
             //var used = jQuery.parseJSON('{"0":"Kullanılmadı", "1":"Kullanıldı"}');
-            var option = "";
-            for(var i = 0; i < obj.length; i++) {
+            let option = "";
+            for(let i = 0; i < obj.length; i++) {
                 // console.log(obj[i]);
-                var kullanildi ="";
+                let kullanildi ="";
                 if(obj[i].kullanildi=="1"){
                     kullanildi = " (*)";
                 }

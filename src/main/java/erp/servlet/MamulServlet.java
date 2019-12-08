@@ -3,6 +3,7 @@ package erp.servlet;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Serializable;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,26 +58,28 @@ public class MamulServlet extends HttpServlet implements Serializable {
             switch (Integer.parseInt(islemid)) {
                 case 1:
                     message = mamulDao.mamulGuncelle(
-                                    new String(request.getParameter("bilesenid").getBytes("UTF-8")),
-                                    new String(request.getParameter("firmaid").getBytes("UTF-8")),
-                                    new String(request.getParameter("bilesenkod").getBytes("UTF-8")),
-                                    new String(request.getParameter("bilesenad").getBytes("UTF-8")),
-                                    new String(request.getParameter("figur").getBytes("UTF-8")),
-                                    new String(request.getParameter("cevrimsuresi").getBytes("UTF-8")),
-                                    new String(request.getParameter("esmamulid").getBytes("UTF-8")),
-                                    new String(request.getParameter("durum").getBytes("UTF-8")),
-                                    new String(request.getParameter("kritikesik").getBytes("UTF-8"))
-                                    );
+                                    new String(request.getParameter("bilesenid").getBytes(StandardCharsets.UTF_8)),
+                                    new String(request.getParameter("firmaid").getBytes(StandardCharsets.UTF_8)),
+                                    new String(request.getParameter("bilesenkod").getBytes(StandardCharsets.UTF_8)),
+                                    new String(request.getParameter("bilesenad").getBytes(StandardCharsets.UTF_8)),
+                                    new String(request.getParameter("figur").getBytes(StandardCharsets.UTF_8)),
+                                    new String(request.getParameter("cevrimsuresi").getBytes(StandardCharsets.UTF_8)),
+                                    new String(request.getParameter("esmamulid").getBytes(StandardCharsets.UTF_8)),
+                                    new String(request.getParameter("durum").getBytes(StandardCharsets.UTF_8)),
+                                    new String(request.getParameter("kritikesik").getBytes(StandardCharsets.UTF_8)),
+                                    new String(request.getParameter("bakimtarihi").getBytes(StandardCharsets.UTF_8)),
+                                    String.valueOf(request.getSession().getAttribute("userid"))
+                    );
                     break;
                 case 2:
                     message = mamulDao.mamulBilesenGuncelle(
-                                    new String(request.getParameter("mamulid").getBytes("UTF-8")),
-                                    new String(request.getParameter("bilesenid").getBytes("UTF-8")),
-                                    new String(request.getParameter("miktar").getBytes("UTF-8"))
+                                    new String(request.getParameter("mamulid").getBytes(StandardCharsets.UTF_8)),
+                                    new String(request.getParameter("bilesenid").getBytes(StandardCharsets.UTF_8)),
+                                    new String(request.getParameter("miktar").getBytes(StandardCharsets.UTF_8))
                                     );
                     break;
                 case 3:
-                    message = mamulDao.mamulSil(new String(request.getParameter("bilesenid").getBytes("UTF-8")));
+                    message = mamulDao.mamulSil(new String(request.getParameter("bilesenid").getBytes(StandardCharsets.UTF_8)));
                     break;
             }
             PrintWriter out = response.getWriter();
@@ -94,7 +97,8 @@ public class MamulServlet extends HttpServlet implements Serializable {
                         new String(request.getParameter("mamulkod").getBytes("UTF-8")),
                         new String(request.getParameter("mamulcevrim").getBytes("UTF-8")),
                         new String(request.getParameter("mamulfirma").getBytes("UTF-8")),
-                        new String(request.getParameter("mamulfigur").getBytes("UTF-8"))
+                        new String(request.getParameter("mamulfigur").getBytes("UTF-8")),
+                        new String(request.getParameter("mamulbakimsuresi").getBytes("UTF-8"))
                         );
         
                 /* if Error occured */

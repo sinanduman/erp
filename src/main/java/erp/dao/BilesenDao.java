@@ -56,7 +56,7 @@ public class BilesenDao implements Serializable, BaseDao {
         String result = "0";
         String updateQuery = "select " + BaseDao.F_BILESEN_SIL + "(?)";
         // connect to DB
-        ResultSet rs = null;
+        ResultSet rs;
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(updateQuery)) {
             pstmt.setInt(1, Integer.parseInt(bilesenid));

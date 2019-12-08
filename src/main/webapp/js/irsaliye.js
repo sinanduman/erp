@@ -36,7 +36,7 @@ function checkFileUploadEnabled(){
 }
 
 $("#irsaliyeekle").click(function() {
-    var message = "";
+    let message = "";
     if (!checkFileUploadEnabled() || $("#irsaliye_yukle").val()=="" ) {
         if ($("#firmaid").val() == 0) {
             message += "Müşteri adı giriniz!\n";
@@ -102,14 +102,14 @@ $("#gkrno").change(function(){
     // console.log("tmp: "+ tmp);
     // $("#miktarbox").val(tmp.split(",")[1].split(":")[1]);
 
-    var found = false;
+    let found = false;
     for (i in mamul) {
         if($("#mamulkod").val() == mamul[i].mamulkod && (!found)){
             found = true;
-            var gkrno  = mamul[i].gkrno.split(";");
-            var miktar = mamul[i].miktar.split(";");
-            var stokid = mamul[i].stokid.split(";");
-            for(var j = 0; j < gkrno.length; j++) {
+            let gkrno  = mamul[i].gkrno.split(";");
+            let miktar = mamul[i].miktar.split(";");
+            let stokid = mamul[i].stokid.split(";");
+            for(let j = 0; j < gkrno.length; j++) {
                 if(gkrno[j]==$(this).val()){
                     $("#miktarbox").val(miktar[j]);
                     $("#stokid").val(stokid[j]);
@@ -143,19 +143,19 @@ function irsaliyepaketguncelle(sender,bilesenid){
     //console.log("gkrno: " + paket[bilesenid].gkrno);
     //console.log(paket[bilesenid].mamulkod);
 
-    var found = false;
+    let found = false;
     $("#gkrno option").remove();
     for (i in mamul) {
         if(paket[bilesenid].mamulkod == mamul[i].mamulkod){
             found = true;
             //console.log(mamul[i].mamulkod);
-            var gkrno  = mamul[i].gkrno.split(";");
-            var miktar = mamul[i].miktar.split(";");
+            let gkrno  = mamul[i].gkrno.split(";");
+            let miktar = mamul[i].miktar.split(";");
 
-            var option = "";
-            var gkrno_found = false;
-            var bilesen_miktar = 0;
-            for(var j = 0; j < gkrno.length; j++) {
+            let option = "";
+            let gkrno_found = false;
+            let bilesen_miktar = 0;
+            for(let j = 0; j < gkrno.length; j++) {
                 if(gkrno[j] == paket[bilesenid].gkrno){
                     gkrno_found = true;
                     //console.log(gkrno_found);

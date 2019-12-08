@@ -44,8 +44,10 @@ public class LoginServlet extends HttpServlet implements Serializable {
             if ((User) request.getSession().getAttribute("user") == null) {
                 request.getSession().setAttribute("loggedin", (user != null));
                 request.getSession().setAttribute("user", user);
-                request.getSession().setAttribute("admin", user.getAdmin().toString());
-                request.getSession().setAttribute("role", user.getRole());
+                request.getSession().setAttribute("userid", (user != null) ? user.getId() : "0");
+                request.getSession().setAttribute("username", (user != null) ? user.getUsername() : "");
+                request.getSession().setAttribute("admin", (user != null) ? user.getAdmin().toString() : "");
+                request.getSession().setAttribute("role", (user != null) ? user.getRole() : "");
                 request.getSession().setAttribute("message", "");
                 try {
                     request.getRequestDispatcher(successPage).forward(request, response);

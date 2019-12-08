@@ -1,6 +1,7 @@
 package erp.dao;
 
 public interface BaseDao {
+    public static final String BAKIM = "irfan.bakim";
     public static final String BILESEN = "irfan.bilesen";
     public static final String BILESENTIP = "irfan.bilesentip";
     public static final String BIRIM = "irfan.birim";

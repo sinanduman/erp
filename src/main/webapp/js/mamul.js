@@ -1,11 +1,11 @@
-var mamulislemtip = {
+let mamulislemtip = {
     add:"Bileşen Ekle",
     update:"Bileşen Güncelle"
 };
-var mamulApp = angular.module('mamulApp', []);
+let mamulApp = angular.module('mamulApp', []);
 mamulApp.controller('MamulCtrl',['$scope', function($scope){
-    var show = true;
-    var uid = 0;
+    let show = true;
+    let uid = 0;
 
     $scope.bilesenler = [];
     $scope.tip = [
@@ -89,17 +89,22 @@ mamulApp.controller('MamulCtrl',['$scope', function($scope){
         if($scope.bilesenler.length==0) {
             alert("En az BİR bileşen eklenmelidir!");
         } else {
-            var mamulad = document.mamulform.mamulad.value;
-            var mamulkod = document.mamulform.mamulkod.value;
-            var mamulcevrim = document.mamulform.mamulcevrim.value;
+            let mamulad = document.mamulform.mamulad.value;
+            let mamulkod = document.mamulform.mamulkod.value;
+            let mamulcevrim = document.mamulform.mamulcevrim.value;
+            let mamulsonbakim = document.mamulform.mamulsonbakim.value;
 
-            if($.trim(mamulad)=="" || $.trim(mamulkod)=="" || $.trim(mamulcevrim)=="" ){
-                alert("Mamül ADI, KODU veya ÇEVRİMSÜRESİ boş olamaz!");
+            if($.trim(mamulad)=="" || $.trim(mamulkod)=="" || $.trim(mamulcevrim)=="" || $.trim(mamulsonbakim)=="" ){
+                alert("Mamül ADI, KODU, ÇEVRİMSÜRESİ veya SONBAKIM tarihi boş olamaz!");
                 return false;
             }
             else{
                 if(!is_positive(mamulcevrim)){
                     alert("Çevrimsüresi NÜMERİK bir değer olmalı!");
+                    return false;
+                }
+                else if (!is_trdate(mamulsonbakim)){
+                    alert("SONBAKIM tarihi geçerli bir tarih değil!");
                     return false;
                 }
                 else{
@@ -170,17 +175,18 @@ function YariMamulEkleCtrl($scope) {
 }
 
 function updateMamulGo(url,id,action_form,islem){
-    var f_bilesenid	= id;
-    var f_esmamulid	= $.trim($("#liste_esmamulid"+id).val());
-    var f_firmaid	= $.trim($("#liste_firmaid"+id).val());
-    var f_kod		= $.trim($("#liste_kod"+id).val());
-    var f_ad		= $.trim($("#liste_ad"+id).val());
-    var f_figur		= $.trim($("#liste_figurid"+id).val());
-    var f_cevrimsure= $.trim($("#liste_cevrimsuresi"+id).val());
-    var f_durum     = $.trim($("#liste_mamuldurum"+id).val());
-    var f_kritikesik= $.trim($("#liste_kritikesik"+id).val());
-    var f_islemid	= islem;
-    var alert_mesaj	= f_kod + " Kodlu " + f_ad;
+    let f_bilesenid	= id;
+    let f_esmamulid	= $.trim($("#liste_esmamulid"+id).val());
+    let f_firmaid	= $.trim($("#liste_firmaid"+id).val());
+    let f_kod		= $.trim($("#liste_kod"+id).val());
+    let f_ad		= $.trim($("#liste_ad"+id).val());
+    let f_figur		= $.trim($("#liste_figurid"+id).val());
+    let f_cevrimsure= $.trim($("#liste_cevrimsuresi"+id).val());
+    let f_durum     = $.trim($("#liste_mamuldurum"+id).val());
+    let f_kritikesik= $.trim($("#liste_kritikesik"+id).val());
+    let f_bakimtarihi=$.trim($("#liste_bakimtarihi"+id).val());
+    let f_islemid	= islem;
+    let alert_mesaj	= f_kod + " Kodlu " + f_ad;
     if(f_kod=="" || f_ad==""  || f_cevrimsure=="" ){
         alert("Mamül ADI, KODU veya ÇEVRİMSÜRESİ boş olamaz!");
         return false;
@@ -203,7 +209,8 @@ function updateMamulGo(url,id,action_form,islem){
                 cevrimsuresi: f_cevrimsure,
                 esmamulid	: f_esmamulid,
                 durum       : f_durum,
-                kritikesik  : f_kritikesik
+                kritikesik  : f_kritikesik,
+                bakimtarihi : f_bakimtarihi
             },
             dataType: 'html',
             beforeSend: function ( xhr ) {
@@ -226,11 +233,11 @@ function updateMamulGo(url,id,action_form,islem){
 }
 
 function updateMamulBilesenGo(url, mamulid, bilesenid, bilesen_miktar, islem){
-    var f_mamulid	= mamulid;
-    var f_bilesenid	= bilesenid;
-    var f_miktar	= $.trim(bilesen_miktar.value);
-    var f_islemid	= islem;
-    var alert_mesaj	= "";
+    let f_mamulid	= mamulid;
+    let f_bilesenid	= bilesenid;
+    let f_miktar	= $.trim(bilesen_miktar.value);
+    let f_islemid	= islem;
+    let alert_mesaj	= "";
 
     if(f_miktar==""){
         alert("Miktar BOŞ olamaz!");
@@ -273,11 +280,11 @@ function updateMamulBilesenGo(url, mamulid, bilesenid, bilesen_miktar, islem){
 }
 
 function deleteMamulGo(url,id,action_form,islem){
-    var f_bilesenid	= id;
-    var f_kod		= $.trim($("#liste_kod"+id).val());
-    var f_ad		= $.trim($("#liste_ad"+id).val());
-    var f_islemid	= islem;
-    var alert_mesaj	= f_kod + " Kodlu " + f_ad;
+    let f_bilesenid	= id;
+    let f_kod		= $.trim($("#liste_kod"+id).val());
+    let f_ad		= $.trim($("#liste_ad"+id).val());
+    let f_islemid	= islem;
+    let alert_mesaj	= f_kod + " Kodlu " + f_ad;
     if(confirm(alert_mesaj +"\n\n" + "Mamül bilgisini SİLMEK istediğinden" +"\n\n" + "Emin misin?")){
         $.ajax({
             url: url,

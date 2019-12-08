@@ -4,6 +4,7 @@
 <%@ page import="erp.model.BirimTip" %>
 <%@ page import="erp.util.Util" %>
 <%@ page import="java.util.List" %>
+<%@ page import="java.time.LocalDate" %>
 <!doctype html>
 <html lang="en" ng-app="mamulApp">
 <head>
@@ -72,7 +73,7 @@
             out.println(delimeter + " { label:'" + m.getKod() + " ["+m.getAd().replaceAll("'", "") +"]',id:" + m.getId() + "}");
             delimeter = ",";
         }%>];
-
+    let bakimTarihi = [];
 </script>
 
 <div class="container" ng-controller="MamulCtrl">
@@ -84,22 +85,19 @@
             <div class="form-group col-xs-8">
                 <label for="mamulkod" class="col-xs-3 control-label text-baslik">Mamül Kodu: </label>
                 <div>
-                    <input type="text" class="form-control big" name="mamulkod" id="mamulkod" ng-model="mamulkod"
-                           placeholder="Mamül Kodu" autocomplete="off">
+                    <input type="text" class="form-control big" name="mamulkod" id="mamulkod" ng-model="mamulkod" placeholder="Mamül Kodu" autocomplete="off">
                 </div>
             </div>
             <div class="form-group col-xs-8">
                 <label for="mamulad" class="col-xs-3 control-label text-baslik">Mamül Adı: </label>
                 <div>
-                    <input type="text" class="form-control big" name="mamulad" id="mamulad" ng-model="mamulad"
-                           placeholder="Mamül Adı" autocomplete="off">
+                    <input type="text" class="form-control big" name="mamulad" id="mamulad" ng-model="mamulad" placeholder="Mamül Adı" autocomplete="off">
                 </div>
             </div>
             <div class="form-group col-xs-8">
                 <label for="mamulcevrim" class="col-xs-3 control-label text-baslik">Çevrim Süresi(sn): </label>
                 <div>
-                    <input type="number" class="form-control big" name="mamulcevrim" id="mamulcevrim"
-                           ng-model="mamulcevrim" placeholder="Çevrim Süresi" autocomplete="off">
+                    <input type="number" class="form-control big" name="mamulcevrim" id="mamulcevrim" placeholder="Çevrim Süresi" autocomplete="off">
                 </div>
             </div>
             <div class="form-group col-xs-8">
@@ -124,6 +122,27 @@
                             }
                         %>
                     </select>
+                </div>
+            </div>
+            <div class="form-group col-xs-8">
+                <label for="mamulbakimsuresi" class="col-xs-3 control-label text-baslik">Bakım Süresi: </label>
+                <div>
+                    <select class="form-control big" name="mamulbakimsuresi" id="mamulbakimsuresi">
+                        <%
+                            for (int i = 12; i <= 36; i=i+12) {
+                                if(i==24)
+                                    out.println("<option value='" + i + "' selected>" + i + " Ay</option>");
+                                else
+                                    out.println("<option value='" + i + "'>" + i + " Ay</option>");
+                            }
+                        %>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group col-xs-8">
+                <label for="mamulsonbakim" class="col-xs-3 control-label text-baslik">Son Bakım Tarihi: </label>
+                <div>
+                    <input type="text" required class="form-control big" name="mamulsonbakim" id="mamulsonbakim" autocomplete="off" value="<%= LocalDate.now() %>">
                 </div>
             </div>
 
@@ -280,9 +299,9 @@
     <div class="row" style="font-size:12px; margin-top:5px;">
         <div>
             <table class="tableplan">
-                <% int sayac = 0; %>
-                <% for (Mamul m : mamul) { %>
-                <% if (sayac++ == 0) { %>
+                <%  int sayac = 0;
+                    for (Mamul m : mamul) {
+                    if (sayac++ == 0) { %>
                 <tr>
                     <td><label class="text-success">Mamül Kodu</label></td>
                     <td><label class="text-success">Mamül Adı</label></td>
@@ -291,7 +310,8 @@
                     <td nowrap><label class="text-success">Eş Mamül Kod</label></td>
                     <td nowrap><label class="text-success">Eş Mamül Ad</label></td>
                     <td><label class="text-success">Firma</label></td>
-                    <td><label class="text-success">Min.Stok</label></td>
+                    <td nowrap><label class="text-success">Min.Stok</label></td>
+                    <td nowrap><label class="text-success">Bakım Tarihi</label></td>
                     <td><label class="text-success">Aktif</label></td>
                     <td nowrap class="text-center"><label class="text-success">Aksiyon</label></td>
                 </tr>
@@ -334,14 +354,17 @@
                                         if (f.getId() == m.getFirmaid()) {
                                             out.println("<option value='" + f.getId() + "' selected>" + f.getAd() + "</option>");
                                         } else {
-                                            out.println("<option value='" + f.getId() + "'>" + f.getAd() + "</option>");
+                                            out.println("<option value='" + f.getId() + "'>" + f.getAd() + " :: " + Util.getTarihTR(m.getBakimTarihi()) + "</option>");
                                         }
                                     }
                                 %>
                             </select>
                         </td>
-                        <td nowrap><input type="number" class="form-control xss" value="<%= m.getKritikEsik()
-                        %>" name=liste_kritikesik<%=m.getId()%> id="liste_kritikesik<%=m.getId()%>"></td>
+                        <td><input type="number" class="form-control xss" value="<%= m.getKritikEsik() %>" name=liste_kritikesik<%=m.getId()%> id="liste_kritikesik<%=m.getId()%>"></td>
+                        <td><input type="text" class="form-control xm" value="<%= Util.getTarihTR(m.getBakimTarihi()) %>" name=liste_bakimtarihi<%=m.getId()%> id="liste_bakimtarihi<%=m.getId()%>"></td>
+                        <script type="text/javascript">
+                            bakimTarihi.push(<%=m.getId()%>);
+                        </script>
                         <td>
                             <div class="form-group">
                                 <div>
@@ -374,12 +397,13 @@
                         </td>
                     </tr>
                     <tr id="tr_mam_detay<%= m.getId() %>" style="display:none;">
-                        <td colspan="9">
+                        <td colspan="10">
                             <table style="width:100%;" class="tableplan">
-                                <% int sayacbilesen = 0; %>
-                                <% for (MamulBilesen j : mamulbilesen) {%>
-                                <% if (j.getMamulid().equals(m.getId())) { %>
-                                <% if ((sayacbilesen++ == 0)) { %>
+                                <%
+                                    int sayacbilesen = 0;
+                                    for (MamulBilesen j : mamulbilesen) {
+                                        if (j.getMamulid().equals(m.getId())) {
+                                            if ((sayacbilesen++ == 0)) { %>
                                 <tr>
                                     <td><label class="text-danger">Sıra No</label></td>
                                     <td><label class="text-danger">Bileşen Adı</label></td>
@@ -410,18 +434,15 @@
                                                     Float vale = j.getMiktar();
                                                     val = vale.toString();
                                                 }
-                                        %>
-                                        <% if (admin != null && admin.equals("1")) { %>
-                                            <input type="text" class="form-control xs" value="<%= val %>"
-                                               name="mamulbilesen_miktar<%= j.getBilesenid() %>"
-                                               id="mamulbilesen_miktar<%= j.getBilesenid() %>">
+                                                if (admin != null && admin.equals("1")) { %>
+                                                    <input type="text" class="form-control xs" value="<%= val %>"
+                                                    name="mamulbilesen_miktar<%= j.getBilesenid() %>"
+                                                    id="mamulbilesen_miktar<%= j.getBilesenid() %>">
                                         <% } else { %>
                                         <%= j.getMiktar() %>
-                                        <% } %>
-                                        <%
+                                        <% }
                                         } else {
-                                        %>
-                                        <% if (admin != null && admin.equals("1")) { %>
+                                                if (admin != null && admin.equals("1")) { %>
                                         <select class='form-control xs'
                                                 name='mamulbilesen_miktar<%= j.getBilesenid() %>'
                                                 id='mamulbilesen_miktar<%= j.getBilesenid() %>'>
@@ -437,10 +458,7 @@
                                         </select>
                                         <% } else { %>
                                         <%= j.getMiktar().intValue() %>
-                                        <% } %>
-                                        <%
-                                        }
-                                        %>
+                                        <% }} %>
                                     </td>
                                     <% if (admin != null && admin.equals("1")) { %>
                                     <td class="text-center"><a
@@ -448,10 +466,8 @@
                                             title="Güncelle"><span class="fa fa-refresh fa-lg text-warning"></span></a>
                                     </td>
                                     <% } %>
-
                                 </tr>
-                                <% } %><%-- if  j== m--%>
-                                <% } %> <%-- mamulbilesen --%>
+                                <% }} %> <%-- mamulbilesen --%>
                             </table>
                         </td>
                     </tr>
@@ -467,7 +483,6 @@
     </div>
 
 </div>
-
 <script src="js/angular.min.js"></script>
 <script src="js/angular-route.min.js"></script>
 <script src="js/jquery.min.js"></script>
@@ -476,14 +491,23 @@
 <script src="js/irfan.js?<%=Util.nanoTime%>" type="text/javascript"></script>
 <script src="js/mamul.js?<%=Util.nanoTime%>" type="text/javascript"></script>
 <script src="js/mamul-helper.js?<%=Util.nanoTime%>" type="text/javascript"></script>
-
 <script type="text/javascript">
     $(function () {
-        $('#tarih').datepicker({
+        $('#mamulsonbakim').datepicker({
             inline: true,
             format: 'dd-mm-yy',
             firstDay: 1,
         }).datepicker("option", "dateFormat", "dd-mm-yy").datepicker("setDate", "today");
+
+        for(let i = 0; i < bakimTarihi.length; i++){
+            let element = $("#liste_bakimtarihi"+ bakimTarihi[i]);
+            let elementVal = element.val();
+            element.datepicker({
+                inline: true,
+                format: 'dd-mm-yy',
+                firstDay: 1,
+            }).datepicker("option", "dateFormat", "dd-mm-yy").datepicker("setDate", elementVal);
+        }
     });
     $("#mamulkodara").autocomplete({
         source: mamul2,
@@ -497,18 +521,16 @@
     });
 
     $("#stokliste").click(function () {
-        console.log("selam: ");
         $("#stoklisteid").val("1");
         $("#mamulform").submit();
     });
 
     function changefun(elem) {
-        console.log("fun: " + elem);
         console.log("fun val: " + elem.value);
-        var found = false;
+        let found = false;
         if (elem != null) {
             for (i in mamul) {
-                var b = elem.value.split("[");
+                let b = elem.value.split("[");
                 if (b[0].trim() == mamul[i].mamulkod) {
                     found = true;
                     $("#mamulidara").val(mamul[i].mamulid);

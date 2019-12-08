@@ -49,11 +49,7 @@
             <table class="tableplan">
                 <%
                     int sayac = 0;
-                %>
-                <%
                     for (Irsaliye i : irsaliye) {
-                %>
-                <%
                     if (sayac++ == 0) {
                 %>
                 <tr>
@@ -62,9 +58,7 @@
                     <td><label class="text-success">Müşteri</label></td>
                     <td class="text-center"><label class="text-success">Aksiyon</label></td>
                 </tr>
-                <%
-                    }
-                %>
+                <% } %>
                 <form name="action_form<%=i.getId()%>" id="action_form<%=i.getId()%>">
                     <tr id="tr<%=i.getId()%>">
                         <td><%=i.getIrsaliyeno()%></td>
@@ -81,10 +75,10 @@
                     <tr id="tr_irs_detay<%= i.getId() %>" style="display:none;">
                         <td colspan="5">
                             <table style="width:100%;" class="tableplan">
-                                <% int sayacbilesen = 0; %>
-                                <% for (IrsaliyeBilesen j : irsaliyebilesenonaylandi) {%>
-                                <% if (j.getIrsaliyeid().intValue() == i.getId().intValue()) { %>
-                                <% if ((sayacbilesen++ == 0)) { %>
+                                <% int sayacbilesen = 0;
+                                for (IrsaliyeBilesen j : irsaliyebilesenonaylandi) {
+                                if (j.getIrsaliyeid().intValue() == i.getId().intValue()) {
+                                if ((sayacbilesen++ == 0)) { %>
                                 <tr>
                                     <td><label class="text-danger">Sıra No</label></td>
                                     <td><label class="text-danger">İrsaliye İd</label></td>
@@ -96,23 +90,15 @@
                                 </tr>
                                 <% } %><%-- if tablo baslik --%>
                                 <tr>
-                                    <td><%= sayacbilesen %>
-                                    </td>
-                                    <td><%= j.getIrsaliyeid() %>
-                                    </td>
-                                    <td><%= j.getMamulad() %>
-                                    </td>
-                                    <td><%= j.getMamulkod() %>
-                                    </td>
-                                    <td><%= j.getFirmaad() %>
-                                    </td>
-                                    <td><%= j.getGkrno() %>
-                                    </td>
-                                    <td><%= j.getMiktar() %>
-                                    </td>
+                                    <td><%= sayacbilesen %></td>
+                                    <td><%= j.getIrsaliyeid() %></td>
+                                    <td><%= j.getMamulad() %></td>
+                                    <td><%= j.getMamulkod() %></td>
+                                    <td><%= j.getFirmaad() %></td>
+                                    <td><%= j.getGkrno() %></td>
+                                    <td><%= j.getMiktar() %></td>
                                 </tr>
-                                <% } %><%-- if  i== j --%>
-                                <% } %><%-- irsaliyebilesen --%>
+                                <% }} %><%-- irsaliyebilesen --%>
                             </table>
                         </td>
                     </tr>

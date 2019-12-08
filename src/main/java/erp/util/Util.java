@@ -12,6 +12,9 @@ import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.TemporalField;
 import java.util.Date;
 import java.util.Map;
 
@@ -183,10 +186,21 @@ public class Util {
         return digest;
     }
 
-    public static String nullToEmpty(String val){
+    public static Object nullToEmpty(Object val){
         if (val == null)
             return "";
         else
             return val;
+    }
+
+    public static Object nullToNow(Object val){
+        if (val == null)
+            return new Date();
+        else
+            return val;
+    }
+
+    public static java.sql.Date convertToSqlDate(LocalDate dateToConvert) {
+        return java.sql.Date.valueOf(dateToConvert);
     }
 }

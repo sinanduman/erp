@@ -11,6 +11,7 @@ import java.sql.SQLException;
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
+    private Integer id;
     private String name;
     private String surname;
     private String username;
@@ -23,10 +24,11 @@ public class User {
     }
 
     public User(ResultSet rs) throws SQLException {
+        this.id = rs.getInt("id");
         this.name = rs.getString("name");
         this.surname = rs.getString("surname");
         this.username = rs.getString("username");
-        this.username = rs.getString("password");
+        this.password = rs.getString("password");
         this.admin = rs.getInt("admin");
         this.role = rs.getString("role");
     }

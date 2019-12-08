@@ -35,6 +35,8 @@ public class Mamul {
     private String esmamulkod;
     private Integer durum;
     private Integer kritikEsik;
+    private Integer bakimSuresi;
+    private Date bakimTarihi;
 
     public Mamul(ResultSet rs) throws SQLException {
         this.id = rs.getInt("id");
@@ -55,9 +57,11 @@ public class Mamul {
         this.yarimamulmiktar = Util.mamulInfoDecompose(rs.getString("yarimamul"), 3); /* -- 1: yarimamul agirlik icin */
         this.yarimamulmamulbasi = Util.mamulInfoDecompose(rs.getString("yarimamul"), 5); /* -- 1: yarimamul mamul basi icin */
         this.esmamulid = rs.getInt("esmamulid");
-        this.esmamulad = Util.nullToEmpty(rs.getString("esmamulad"));
-        this.esmamulkod = Util.nullToEmpty(rs.getString("esmamulkod"));
+        this.esmamulad = (String) Util.nullToEmpty(rs.getString("esmamulad"));
+        this.esmamulkod = (String) Util.nullToEmpty(rs.getString("esmamulkod"));
         this.durum = rs.getInt("durum");
         this.kritikEsik = rs.getInt("kritikesik");
+        this.bakimSuresi = rs.getInt("bakimsuresi");
+        this.bakimTarihi = (Date) Util.nullToNow(rs.getDate ("bakimtarihi"));
     }
 }

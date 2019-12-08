@@ -72,6 +72,11 @@
 	border-bottom: 1px solid darkkhaki;
 }
 
+.tableplan tr:nth-of-type(even) {
+	background-color: #E1E1BF;
+	border-bottom: 1px solid darkkhaki;
+}
+
 /* Pagination */
 #pagination {
 	border: 1px solid darkkhaki;
@@ -269,3 +274,5 @@ i.iki-bosluk {
 input.margin-right-10px {
 	margin-right: 10px;
 }
+
+input.tr_input_tarih{}
