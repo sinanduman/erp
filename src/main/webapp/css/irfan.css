@@ -140,6 +140,10 @@ input.xsss, textarea.xsss, select.xsss{
 	width: 40px;
 	display: inline-block !important;
 }
+input.xt, textarea.xt, select.xt{
+	width: 100px;
+	display: inline-block !important;
+}
 input.xm, textarea.xm, select.xm{
 	width: 120px; 
 	display: inline-block !important;

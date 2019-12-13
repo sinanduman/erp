@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Date;
+import java.sql.Date;
 
 @Data
 @NoArgsConstructor
@@ -37,6 +37,7 @@ public class Mamul {
     private Integer kritikEsik;
     private Integer bakimSuresi;
     private Date bakimTarihi;
+    private Integer calisanId;
 
     public Mamul(ResultSet rs) throws SQLException {
         this.id = rs.getInt("id");
@@ -62,6 +63,7 @@ public class Mamul {
         this.durum = rs.getInt("durum");
         this.kritikEsik = rs.getInt("kritikesik");
         this.bakimSuresi = rs.getInt("bakimsuresi");
-        this.bakimTarihi = (Date) Util.nullToNow(rs.getDate ("bakimtarihi"));
+        this.bakimTarihi = rs.getDate ("bakimtarihi");
+        this.calisanId = rs.getInt ("calisanid");
     }
 }

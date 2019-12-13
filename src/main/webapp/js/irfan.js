@@ -157,6 +157,12 @@ $("#exceleaktar_izlemeno").click(function(){
         $("#excelform").submit();
     }
 });
+$("#exceleaktar_bakimrapor").click(function(){
+    if(confirm("Mamül Kalıp Bakım Raporu Excel'e aktarılsın mı?\n")){
+        $("#excelegonder").val(1);
+        $("#excelform").submit();
+    }
+});
 function izlemeNoTest(mamulid, islemid, kullanildi, inputbox, gkrno){
     if(confirm(gkrno + " ID'li İzleme No'yu SİLMEK istediğinden emin misin?")){
         /* Uretim No Sil */

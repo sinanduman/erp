@@ -1,5 +1,7 @@
 package erp.util;
 
+import erp.entity.Calisan;
+import erp.entity.Mamul;
 import erp.model.Aylar;
 import erp.entity.Genel;
 import org.slf4j.Logger;
@@ -15,8 +17,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.TemporalField;
-import java.util.Date;
-import java.util.Map;
+import java.util.*;
 
 public class Util {
 
@@ -202,5 +203,25 @@ public class Util {
 
     public static java.sql.Date convertToSqlDate(LocalDate dateToConvert) {
         return java.sql.Date.valueOf(dateToConvert);
+    }
+
+    public static String convertLocalDateTarihTR(LocalDate dateToConvert) {
+        return date_eng_to_tr(dateToConvert.toString());
+    }
+
+    public static Map<Integer, Calisan> calisanListToMap(List<Calisan> calisanList){
+        Map<Integer, Calisan> tempMap = new HashMap<>();
+        for(Calisan v : calisanList){
+            tempMap.putIfAbsent(v.getId(), v);
+        }
+        return tempMap;
+    }
+
+    public static Map<Integer, Mamul> mamulListToMap(List<Mamul> mamulList){
+        Map<Integer, Mamul> tempMap = new HashMap<>();
+        for(Mamul v : mamulList){
+            tempMap.putIfAbsent(v.getId(), v);
+        }
+        return tempMap;
     }
 }

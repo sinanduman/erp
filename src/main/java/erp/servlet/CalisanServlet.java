@@ -36,7 +36,7 @@ public class CalisanServlet extends HttpServlet implements Serializable {
 
         response.setContentType("text/html; charset=UTF-8");
 
-        Boolean ajaxIncluded= false;
+        boolean ajaxIncluded= false;
         String message      = "";
         
         String islemid = request.getParameter("islemid");

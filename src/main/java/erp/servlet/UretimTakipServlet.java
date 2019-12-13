@@ -146,7 +146,7 @@ public class UretimTakipServlet extends HttpServlet implements Serializable {
 
             int noofpages = (int) Math.ceil(totalrecord * 1.0 / Genel.ROWPERPAGE);
 
-            List<UretimPlan> uretimplan = uretimDao.uretimPlanListeGetir(UretimDurum.BEKLEYEN, page, "","takip");
+            List<UretimPlan> uretimplan = uretimDao.uretimPlanListeGetir(UretimDurum.BEKLEYEN, page, "", BaseDao.V_URETIMPLAN_TUM_TAKIP);
 
             request.setAttribute("hatasebep", hatasebep);
             request.setAttribute("durussebep", durussebep);

@@ -28,7 +28,8 @@ public interface BaseDao {
     public static final String URETIM = "irfan.uretim";
     public static final String URETIMPLAN = "irfan.uretimplan";
 
-    public static final String V_IZLEMENO_TUM = "irfan.izlemeno_tum";
+
+    public static final String V_BAKIM_MAMUL = "irfan.bakim_mamul";
     public static final String V_MAMUL_STOK = "irfan.mamulstok";
     public static final String V_MAMUL_TUM = "irfan.mamultum";
     public static final String V_MAMULBILESEN_TUM = "irfan.mamulbilesentum";
@@ -38,6 +39,7 @@ public interface BaseDao {
     public static final String V_STOKBILESEN = "irfan.stokbilesen";
     public static final String V_STOKMAMUL_TUM = "irfan.stokmamultum";
     public static final String V_STOKMIKTAR = "irfan.stokmiktar";
+    public static final String V_IZLEMENO_TUM = "irfan.izlemeno_tum";
 
     public static final String F_BILESEN_SIL = "irfan.bilesen_sil";
     public static final String F_CALISAN_SIL = "irfan.calisan_sil";

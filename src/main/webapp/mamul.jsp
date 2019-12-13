@@ -35,11 +35,19 @@
 <%@ include file="logincheck.jsp" %>
 
 <%
+    @SuppressWarnings("unchecked")
+    List<Calisan> calisan = (List<Calisan>) request.getAttribute("calisan");
+    @SuppressWarnings("unchecked")
     List<Firma> firma = (List<Firma>) request.getAttribute("firma");
+    @SuppressWarnings("unchecked")
     List<Bilesen> hammadde = (List<Bilesen>) request.getAttribute("hammadde");
+    @SuppressWarnings("unchecked")
     List<Bilesen> yarimamul = (List<Bilesen>) request.getAttribute("yarimamul");
+    @SuppressWarnings("unchecked")
     List<Mamul> mamul = (List<Mamul>) request.getAttribute("mamul");
+    @SuppressWarnings("unchecked")
     List<Mamul> mamultum = (List<Mamul>) request.getAttribute("mamultum");
+    @SuppressWarnings("unchecked")
     List<MamulBilesen> mamulbilesen = (List<MamulBilesen>) request.getAttribute("mamulbilesen");
     String message = (String) request.getAttribute("message");
     Long token = (Long) request.getAttribute("token");
@@ -143,6 +151,20 @@
                 <label for="mamulsonbakim" class="col-xs-3 control-label text-baslik">Son Bakım Tarihi: </label>
                 <div>
                     <input type="text" required class="form-control big" name="mamulsonbakim" id="mamulsonbakim" autocomplete="off" value="<%= LocalDate.now() %>">
+                </div>
+            </div>
+
+            <div class="form-group col-xs-8">
+                <label for="mamulsonbakimyapan" class="col-xs-3 control-label text-baslik">Son Bakım Yapan: </label>
+                <div>
+                    <select class="form-control big" name="mamulsonbakimyapan" id="mamulsonbakimyapan">
+                    <%
+                        for (Calisan c : calisan) {
+                            if (c.getDurum() == 1)
+                                out.println("<option value='" + c.getId() + "'>" + c.getFullName() + "</option>");
+                        }
+                    %>
+                    </select>
                 </div>
             </div>
 
@@ -303,8 +325,8 @@
                     for (Mamul m : mamul) {
                     if (sayac++ == 0) { %>
                 <tr>
-                    <td><label class="text-success">Mamül Kodu</label></td>
-                    <td><label class="text-success">Mamül Adı</label></td>
+                    <td nowrap><label class="text-success">Mamül Kodu</label></td>
+                    <td nowrap><label class="text-success">Mamül Adı</label></td>
                     <td nowrap><label class="text-success">Çevrim Sr.</label></td>
                     <td nowrap><label class="text-success">Figür Ad.</label></td>
                     <td nowrap><label class="text-success">Eş Mamül Kod</label></td>
@@ -312,6 +334,7 @@
                     <td><label class="text-success">Firma</label></td>
                     <td nowrap><label class="text-success">Min.Stok</label></td>
                     <td nowrap><label class="text-success">Bakım Tarihi</label></td>
+                    <td nowrap><label class="text-success">Bakım Yapan</label></td>
                     <td><label class="text-success">Aktif</label></td>
                     <td nowrap class="text-center"><label class="text-success">Aksiyon</label></td>
                 </tr>
@@ -319,7 +342,7 @@
                 <form name=action_form<%=m.getId()%> id=action_form<%=m.getId()%>>
                     <tr id="tr<%=m.getId()%>"
                             <%= (m.getDurum() == 0 ? " style='background-color:darkKhaki;'" : "") %> >
-                        <td><input type="text" class="form-control small" value="<%= m.getKod() %>" name=liste_kod<%=m.getId()%> id="liste_kod<%=m.getId()%>"></td>
+                        <td><input type="text" class="form-control xm" value="<%= m.getKod() %>" name=liste_kod<%=m.getId()%> id="liste_kod<%=m.getId()%>"></td>
                         <td><input type="text" class="form-control" value="<%= m.getAd().replaceAll("\"", "") %>" name=liste_ad<%=m.getId()%> id="liste_ad<%=m.getId()%>"></td>
                         <td><input type="number" class="form-control xss" value="<%= m.getCevrimsuresi() %>"
                                    name=liste_cevrimsuresi<%=m.getId()%> id="liste_cevrimsuresi<%=m.getId()%>"></td>
@@ -339,7 +362,7 @@
                                 </select>
                             </div>
                         </td>
-                        <td><input type="text" class="form-control small" value="<%= m.getEsmamulid()>0 ?
+                        <td><input type="text" class="form-control xm" value="<%= m.getEsmamulid()>0 ?
                         m.getEsmamulkod() : "" %>" id="liste_esmamulkod<%= m.getId() %>" autocomplete="off"
                                    onfocus="javascript:changeFocusId(<%=m.getId()%>);"
                                    onblur="javascript:clearId(<%=m.getId()%>);"></td>
@@ -348,7 +371,7 @@
                         m.getId()%>" value="0"/><input type="hidden" value="<%= m.getEsmamulid()>0 ? m.getEsmamulid()
                         : "0" %>" id="liste_esmamulid<%= m.getId() %>"></td>
                         <td>
-                            <select class="form-control small" name=liste_firmaid<%=m.getId()%> id="liste_firmaid<%=m.getId()%>">
+                            <select class="form-control xm" name=liste_firmaid<%=m.getId()%> id="liste_firmaid<%=m.getId()%>">
                                 <%
                                     for (Firma f : firma) {
                                         if (f.getId() == m.getFirmaid()) {
@@ -361,10 +384,25 @@
                             </select>
                         </td>
                         <td><input type="number" class="form-control xss" value="<%= m.getKritikEsik() %>" name=liste_kritikesik<%=m.getId()%> id="liste_kritikesik<%=m.getId()%>"></td>
-                        <td><input type="text" class="form-control xm" value="<%= Util.getTarihTR(m.getBakimTarihi()) %>" name=liste_bakimtarihi<%=m.getId()%> id="liste_bakimtarihi<%=m.getId()%>"></td>
+                        <td><input type="text" class="form-control xt" value="<%= Util.getTarihTR(m.getBakimTarihi()) %>" name=liste_bakimtarihi<%=m.getId()%> id="liste_bakimtarihi<%=m.getId()%>"></td>
                         <script type="text/javascript">
                             bakimTarihi.push(<%=m.getId()%>);
                         </script>
+
+                        <td>
+                            <select class="form-control xm" id="liste_calisanid<%=m.getId()%>" name="liste_calisanid<%=m.getId()%>">
+                                <%
+                                    for (Calisan c : calisan) {
+                                        if (m.getCalisanId().intValue() == c.getId()) {
+                                            out.println("<option value='" + c.getId() + "' selected>" + c.getFullName() + "</option>");
+                                        } else {
+                                            out.println("<option value='" + c.getId() + "'>" + c.getFullName() + "</option>");
+                                        }
+                                    }
+                                %>
+                            </select>
+                        </td>
+
                         <td>
                             <div class="form-group">
                                 <div>
@@ -397,7 +435,7 @@
                         </td>
                     </tr>
                     <tr id="tr_mam_detay<%= m.getId() %>" style="display:none;">
-                        <td colspan="10">
+                        <td colspan="11">
                             <table style="width:100%;" class="tableplan">
                                 <%
                                     int sayacbilesen = 0;

@@ -15,6 +15,7 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Singleton
@@ -23,7 +24,7 @@ public class MamulDao implements Serializable, BaseDao {
     ConnectionManager connectionManager;
     private static final Logger logger = LoggerFactory.getLogger(MamulDao.class);
 
-    public String mamulEkle(String ad, String kod, String cevrimSuresi, String firmaid, String figur, String mamulBakimSuresi) {
+    public String mamulEkle(String ad, String kod, String cevrimSuresi, String firmaid, String figur, String mamulBakimSuresi, String calisanId) {
         String insertQuery = "insert into " + BaseDao.MAMUL + "(ad, kod, cevrimsuresi, bilesentipid, firmaid, figur, bakimsuresi) values (?,?,?,?,?,?,?)";
         String newMamulId = "-1";
         ResultSet rs;
@@ -41,6 +42,9 @@ public class MamulDao implements Serializable, BaseDao {
             rs = pstmt.getGeneratedKeys();
             if (rs.next()) {
                 newMamulId = String.valueOf(rs.getInt(1));
+                if(rs.getInt(1) > 0){
+                    int retVal = mamulBakimTarihEkle(Integer.parseInt(newMamulId), Integer.parseInt(calisanId), Util.getTarihTR(new Date()));
+                }
             }
         } catch (SQLException e) {
             logger.error("Error: " + e);
@@ -51,7 +55,6 @@ public class MamulDao implements Serializable, BaseDao {
 
     public void mamulBilesenEkle(int mamulid, int bilesen, int birim, float miktar) {
         String insertQuery = "insert into " + BaseDao.MAMULBILESEN + " (mamulid, bilesenid, birimid, miktar) values (?,?,?,?)";
-        ResultSet rs;
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(insertQuery)) {
             pstmt.setInt(1, mamulid);
@@ -85,9 +88,9 @@ public class MamulDao implements Serializable, BaseDao {
         return result;
     }
 
-    public String mamulGuncelle(String mamulid, String firmaid, String kod, String ad, String figur, String cevrimsuresi, String esmamulid, String durum, String kritikEsik, String bakimTarihi, String userId) {
+    public String mamulGuncelle(String mamulid, String firmaid, String kod, String ad, String figur, String cevrimsuresi, String esmamulid, String durum, String kritikEsik, String bakimTarihi, String calisanId) {
         String result = "0";
-        String updateQuery = "update " + BaseDao.MAMUL + " set firmaid =?, kod =?, ad =?, figur =?, cevrimsuresi =?, esmamulid =?, durum =?, kritikesik =? where id =?";
+        String updateQuery = "update " + BaseDao.MAMUL + " set firmaid=?,kod=?,ad=?,figur=?,cevrimsuresi=?,esmamulid =?,durum =?,kritikesik=? where id=?";
         // connect to DB
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(updateQuery)) {
@@ -106,7 +109,7 @@ public class MamulDao implements Serializable, BaseDao {
             logger.info(pstmt.toString());
             int retVal = pstmt.executeUpdate();
             if(retVal > 0){
-                retVal = mamulBakimTarihEkle(Integer.parseInt(mamulid), Integer.parseInt(userId), bakimTarihi);
+                retVal = mamulBakimTarihEkle(Integer.parseInt(mamulid), Integer.parseInt(calisanId), bakimTarihi);
             }
         } catch (SQLException e) {
             logger.error("Error: " + e);
@@ -141,7 +144,7 @@ public class MamulDao implements Serializable, BaseDao {
         String queryFilter1 = (durum == null) ? "" : " and m.durum = " + durum;
         String queryFilter = baseFilter + queryFilter0 + queryFilter1;
         String searchQuery= "select * from ("
-                + " select m.*, b.bakimtarihi, rank() over(partition by b.mamulid order by b.id desc) ranko"
+                + " select m.*, b.bakimtarihi, b.calisanid, rank() over(partition by b.mamulid order by b.id desc) ranko"
                 + " from " + BaseDao.V_MAMUL_TUM + " m"
                 + " left join " + BaseDao.BAKIM + " b on b.mamulid = m.id"
                 + queryFilter
@@ -211,14 +214,14 @@ public class MamulDao implements Serializable, BaseDao {
         return temp;
     }
 
-    public int mamulBakimTarihEkle(int mamulId, int userId, String bakimTarihi) {
+    public int mamulBakimTarihEkle(int mamulId, int calisanId, String bakimTarihi) {
         int retVal = -1;
-        String insertQuery = "insert into " + BaseDao.BAKIM + " (mamulid, userid, bakimtarihi, islemtarihi) values (?,?,?,?)";
+        String insertQuery = "insert into " + BaseDao.BAKIM + " (mamulid, calisanid, bakimtarihi, islemtarihi) values (?,?,?,?)";
         ResultSet rs;
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(insertQuery)) {
             pstmt.setInt(1, mamulId);
-            pstmt.setInt(2, userId);
+            pstmt.setInt(2, calisanId);
             pstmt.setDate (3, Util.convertToSqlDate(LocalDate.parse(bakimTarihi, DateTimeFormatter.ofPattern("dd-MM-yyyy"))));
             pstmt.setDate(4, Util.convertToSqlDate(LocalDate.now()));
             logger.info(pstmt.toString());

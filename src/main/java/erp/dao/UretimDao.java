@@ -149,22 +149,16 @@ public class UretimDao implements Serializable, BaseDao {
         return result;
     }
 
-    public List<UretimPlan> uretimPlanListeGetir(UretimDurum uretimdurum, int offset, String filter, String view) {
+    public List<UretimPlan> uretimPlanListeGetir(UretimDurum uretimdurum, int offset, String filter, final String view) {
         List<UretimPlan> temp = new ArrayList<UretimPlan>();
 
         String pageFilter = Util.getPageFilter (offset);
-        String filter0 = "";
-        if (uretimdurum == UretimDurum.BEKLEYEN) {
-            filter0 = " where tamamlandi=0 " + filter;
-        } else if (uretimdurum == UretimDurum.TAMAMLANMIS) {
-            filter0 = " where tamamlandi=1 " + filter;
-        }
-
-        String searchQuery = "select * from irfan.uretimplantum_" + view /* view */
+        String filter0 = " where tamamlandi=" + uretimdurum.value() + " " + filter;
+        String searchQuery = "select * from " + view + " v " /* view */
                 + filter0
-                + " order by id "
+                + " order by v.id "
                 + pageFilter;
-        ResultSet rs = null;
+        ResultSet rs;
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(searchQuery)) {
             long start = System.currentTimeMillis();
@@ -212,16 +206,15 @@ public class UretimDao implements Serializable, BaseDao {
         return temp;
     }
 
-    public List<UretimPlan> uretimPlanListeGetirExcel(UretimDurum uretimdurum, String tarih, String excelsql) {
+    public List<UretimPlan> uretimPlanListeGetirExcel(UretimDurum uretimdurum, String tarih, final String excelsql) {
         List<UretimPlan> temp = new ArrayList<UretimPlan>();
 
         logger.info("excel: " + excelsql);
         // String searchQuery ="SELECT * FROM irfan.uretimplantum WHERE
         // tamamlandi=? AND tarih=? "; /* view */
-        String searchQuery = excelsql; /* view */
         ResultSet rs = null;
         try (Connection conn = connectionManager.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(searchQuery)) {
+             PreparedStatement pstmt = conn.prepareStatement(excelsql)) {
             long start = System.currentTimeMillis();
             rs = pstmt.executeQuery();
             logger.info(pstmt.toString() + (System.currentTimeMillis()-start) +"ms.");
@@ -271,13 +264,11 @@ public class UretimDao implements Serializable, BaseDao {
     public List<UretimPlan> uretimBilesenRapor(String tablename, int offset, String filterPage) {
         List<UretimPlan> temp = new ArrayList<UretimPlan>();
         String pageFilter = Util.getPageFilter (offset);
-        String filter0 = filterPage;
         String searchQuery = "SELECT * FROM " + tablename
-                + " WHERE 1=1 " + filter0
+                + " WHERE 1=1 " + filterPage
                 + " ORDER BY tarih, id " + pageFilter;
 
-        // connect to DB
-        ResultSet rs = null;
+        ResultSet rs;
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(searchQuery)) {
             long start = System.currentTimeMillis();

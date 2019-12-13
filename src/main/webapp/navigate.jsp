@@ -103,6 +103,11 @@
                     <a href="izlemeno">
                         <span class="fa fa-dot-circle-o text-danger"></span> Mamül İzleme No</a>
                 </li>
+
+                <li>
+                    <a href="bakimrapor">
+                        <span class="fa fa-dot-circle-o text-danger"></span> Kalıp Bakım</a>
+                </li>
             </ul>
         </div>
         <!-- /btn-group -->

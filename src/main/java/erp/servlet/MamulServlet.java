@@ -14,16 +14,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import erp.dao.BaseDao;
-import erp.dao.BilesenDao;
-import erp.dao.FirmaDao;
-import erp.dao.MamulDao;
+import erp.dao.*;
+import erp.entity.*;
 import erp.model.BilesenTip;
-import erp.entity.Bilesen;
-import erp.entity.Firma;
-import erp.entity.Genel;
-import erp.entity.Mamul;
-import erp.entity.MamulBilesen;
 import erp.util.Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +25,8 @@ import org.slf4j.LoggerFactory;
 public class MamulServlet extends HttpServlet implements Serializable {
     private static long token = 1L;
     private static final Logger logger = LoggerFactory.getLogger(MamulServlet.class);
+    @Inject
+    CalisanDao calisanDao;
     @Inject
     FirmaDao firmaDao;
     @Inject
@@ -68,7 +63,7 @@ public class MamulServlet extends HttpServlet implements Serializable {
                                     new String(request.getParameter("durum").getBytes(StandardCharsets.UTF_8)),
                                     new String(request.getParameter("kritikesik").getBytes(StandardCharsets.UTF_8)),
                                     new String(request.getParameter("bakimtarihi").getBytes(StandardCharsets.UTF_8)),
-                                    String.valueOf(request.getSession().getAttribute("userid"))
+                                    new String(request.getParameter("calisanid").getBytes(StandardCharsets.UTF_8))
                     );
                     break;
                 case 2:
@@ -91,16 +86,16 @@ public class MamulServlet extends HttpServlet implements Serializable {
                 mamulid = Integer.parseInt(request.getParameter("mamulidara"));
             }
             /* Prevent ReSubmit */
-            else if(request.getParameter("token") != null && Long.valueOf(request.getParameter("token"))==token) {
+            else if(request.getParameter("token") != null && Long.parseLong(request.getParameter("token"))==token) {
                 String newMamulId = mamulDao.mamulEkle(
-                        new String(request.getParameter("mamulad").getBytes("UTF-8")),
-                        new String(request.getParameter("mamulkod").getBytes("UTF-8")),
-                        new String(request.getParameter("mamulcevrim").getBytes("UTF-8")),
-                        new String(request.getParameter("mamulfirma").getBytes("UTF-8")),
-                        new String(request.getParameter("mamulfigur").getBytes("UTF-8")),
-                        new String(request.getParameter("mamulbakimsuresi").getBytes("UTF-8"))
+                        new String(request.getParameter("mamulad").getBytes(StandardCharsets.UTF_8)),
+                        new String(request.getParameter("mamulkod").getBytes(StandardCharsets.UTF_8)),
+                        new String(request.getParameter("mamulcevrim").getBytes(StandardCharsets.UTF_8)),
+                        new String(request.getParameter("mamulfirma").getBytes(StandardCharsets.UTF_8)),
+                        new String(request.getParameter("mamulfigur").getBytes(StandardCharsets.UTF_8)),
+                        new String(request.getParameter("mamulbakimsuresi").getBytes(StandardCharsets.UTF_8)),
+                        new String(request.getParameter("mamulsonbakimyapan").getBytes(StandardCharsets.UTF_8))
                         );
-        
                 /* if Error occured */
                 if(!Util.isNumeric(newMamulId)) {
                     message = newMamulId;
@@ -125,6 +120,8 @@ public class MamulServlet extends HttpServlet implements Serializable {
             else {
                 message="-1";
             }
+
+            List<Calisan> calisan = calisanDao.calisanListeGetirTum(0, null);
                     
             List<Firma> firma = new ArrayList<Firma>();
             firma = firmaDao.firmaListeGetirTum(0);
@@ -153,6 +150,7 @@ public class MamulServlet extends HttpServlet implements Serializable {
             
             token  = Util.getToken();
             request.setAttribute("token", token);
+            request.setAttribute("calisan", calisan);
             request.setAttribute("firma", firma);
             request.setAttribute("hammadde", hammadde);
             request.setAttribute("yarimamul", yarimamul);
