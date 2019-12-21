@@ -63,7 +63,8 @@ public class BakimRaporServlet extends HttpServlet implements Serializable {
         String filter2  = "";
         String filter3  = "";
         String andYes   = " AND ";
-        String tableName = (mamulid == null || mamulid.isEmpty()) ? BaseDao.V_BAKIM_MAMUL : BaseDao.BAKIM;
+        //String tableName = (mamulid == null || mamulid.isEmpty()) ? BaseDao.V_BAKIM_MAMUL : BaseDao.BAKIM;
+        String tableName = BaseDao.V_BAKIM_MAMUL;
 
         if(mamulid!=null && !mamulid.equals("") ) {
             filter1     = andYes + " mamulid = " + Integer.parseInt(mamulid);

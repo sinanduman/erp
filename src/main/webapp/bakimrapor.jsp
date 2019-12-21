@@ -3,17 +3,13 @@
 <%@ page import="erp.entity.Genel" %>
 <%@ page import="erp.entity.Mamul" %>
 <%@ page import="erp.util.Util" %>
-<%@ page import="java.time.Instant" %>
 <%@ page import="java.time.LocalDate" %>
-<%@ page import="java.time.Period" %>
-<%@ page import="java.time.ZoneId" %>
 <%@ page import="java.util.HashMap" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Map" %>
-<%@ page import="java.sql.Date" %>
-<%@ page import="static java.time.temporal.ChronoUnit.DAYS" %>
-<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
+<%@ page contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt" %>
 <!doctype html>
 <html lang="en">
 <head>
@@ -54,8 +50,8 @@
     Map<Integer, Mamul> mamulmap = (HashMap<Integer, Mamul>) request.getAttribute("mamulmap");
     @SuppressWarnings("unchecked")
     List<Bakim> bakimrapor = (List<Bakim>) request.getAttribute("bakimrapor");
-    String mamulid = (String) request.getAttribute("mamulid");
-    String calisanid = (String) request.getAttribute("calisanid");
+    String mamulid = request.getAttribute("mamulid")==null?"": (String) request.getAttribute("mamulid");
+    String calisanid = request.getAttribute("calisanid")==null?"": (String)request.getAttribute("calisanid");
     String bas_tarih = (String) request.getAttribute("bas_tarih");
     String bit_tarih = (String) request.getAttribute("bit_tarih");
     String excelsql = (String) request.getAttribute("excelsql");
@@ -157,6 +153,21 @@
     </div>
     <%
         int sayac = 0;
+        /*
+        Integer MONTH_LENGTH = 30;
+        String kalanSure = "";
+        java.sql.Date bakimTarihi = mamulmap.get(r.getMamulid()).getBakimTarihi();
+        if (bakimTarihi != null) {
+            LocalDate localDate = bakimTarihi.toLocalDate();
+            localDate = localDate.plusDays(mamulmap.get(r.getMamulid()).getBakimSuresi() * MONTH_LENGTH);
+            Period period = Period.between(LocalDate.now(), localDate);
+            //long daysBetween = DAYS.between(LocalDate.now(), localDate);
+            String yil = period.getYears() > 0 ? period.getYears() + " yıl, " : "";
+            String ay = period.getMonths() > 0 ? period.getMonths() + " ay, " : "";
+            String gun = period.getDays() > 0 ? period.getDays() + " gün" : "";
+            kalanSure = yil + ay + gun;
+        }
+         */
     %>
     <div class="row" style="font-size:12px;">
         <table class="tableplan">
@@ -182,38 +193,25 @@
                 if (sayac++ == 0) {
             %>
             <tr>
-                <th>Kalan Süre</th>
+                <th>Bakıma Kalan Baskı</th>
+                <th>Baskı Sayısı</th>
+                <th>Üretim Miktarı</th>
                 <th>Mamul Kod</th>
                 <th>Mamul Ad</th>
                 <th>Son Bakım Yapan</th>
                 <th>Son Bakım Tarihi</th>
-                <th>İşlem Tarihi</th>
             </tr>
             <%
                 }
             %>
             <tr id="tr<%=r.getId()%>">
-                <%
-                    Integer MONTH_LENGTH = 30;
-                    String kalanSure = "";
-                    java.sql.Date bakimTarihi = mamulmap.get(r.getMamulid()).getBakimTarihi();
-                    if (bakimTarihi != null) {
-                        LocalDate localDate = bakimTarihi.toLocalDate();
-                        localDate = localDate.plusDays(mamulmap.get(r.getMamulid()).getBakimSuresi() * MONTH_LENGTH);
-                        Period period = Period.between(LocalDate.now(), localDate);
-                        //long daysBetween = DAYS.between(LocalDate.now(), localDate);
-                        String yil = period.getYears() > 0 ? period.getYears() + " yıl, " : "";
-                        String ay = period.getMonths() > 0 ? period.getMonths() + " ay, " : "";
-                        String gun = period.getDays() > 0 ? period.getDays() + " gün" : "";
-                        kalanSure = yil + ay + gun;
-                    }
-                %>
-                <td nowrap><%= kalanSure %></td>
+                <td nowrap align="right"><%= String.format ("%,d", r.getKalanBaski()) %></td>
+                <td nowrap align="right"><%= String.format ("%,d", r.getBaskiSayisi()) %></td>
+                <td nowrap align="right"><%= String.format ("%,d", r.getUretimMiktar()) %></td>
                 <td nowrap><%= mamulmap.get(r.getMamulid()) == null ? "" : mamulmap.get(r.getMamulid()).getKod() %></td>
                 <td nowrap><%= mamulmap.get(r.getMamulid()) == null ? "" : "<form method='post' action='mamul'><input type='hidden' name='stoklisteid' value='1'><input type='hidden' value='"+r.getMamulid()+"' name='mamulidara'><input type='button' value='"+ mamulmap.get(r.getMamulid()).getAd()+"' class='mamullink' onclick='javascript:this.form.submit();'></form>" %></td>
                 <td nowrap><%= calisanmap.get(r.getCalisanid()) == null ? "" : calisanmap.get(r.getCalisanid()).getFullName() %></td>
                 <td nowrap><%= Util.getTarihTR(r.getBakimtarihi()) %></td>
-                <td nowrap><%= Util.getTarihTR(r.getIslemtarihi()) %></td>
             </tr>
             <% } %>
         </table>

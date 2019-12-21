@@ -1,8 +1,12 @@
 package erp.servlet;
 
-import erp.dao.*;
-import erp.entity.*;
-import erp.model.BilesenTip;
+import erp.dao.BakimDao;
+import erp.dao.BaseDao;
+import erp.dao.CalisanDao;
+import erp.dao.MamulDao;
+import erp.entity.Bakim;
+import erp.entity.Calisan;
+import erp.entity.Mamul;
 import erp.util.Util;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.*;
@@ -65,7 +69,7 @@ public class ExcelBakimServlet extends HttpServlet implements Serializable {
             String filter2 = "";
             String filter3 = "";
             String andYes = " AND ";
-            String tableName = (mamulid == null || mamulid.isEmpty()) ? BaseDao.V_BAKIM_MAMUL : BaseDao.BAKIM;
+            String tableName = BaseDao.V_BAKIM_MAMUL;
 
             if (mamulid != null && !mamulid.isEmpty()) {
                 filter1 = andYes + " mamulid = " + Integer.parseInt(mamulid);
@@ -91,7 +95,9 @@ public class ExcelBakimServlet extends HttpServlet implements Serializable {
                             "Mamül Kod",
                             "Mamül Ad",
                             "Son Bakım Zamanı",
-                            "İşlem Zamanı"
+                            "Üretim Miktarı",
+                            "Baskı Sayısı",
+                            "Bakıma Kalan Baskı"
                     }
             );
             for (Bakim r : bakimrapor) {
@@ -100,7 +106,9 @@ public class ExcelBakimServlet extends HttpServlet implements Serializable {
                         mamulmap.get(r.getMamulid()) == null ? "" : mamulmap.get(r.getMamulid()).getAd(),
                         calisanmap.get(r.getCalisanid()) == null ? "" : calisanmap.get(r.getCalisanid()).getFullName(),
                         Util.getTarihTR(r.getBakimtarihi()),
-                        Util.getTarihTR(r.getIslemtarihi())
+                        r.getUretimMiktar(),
+                        r.getBaskiSayisi(),
+                        r.getKalanBaski()
                 });
             }
 
@@ -148,7 +156,7 @@ public class ExcelBakimServlet extends HttpServlet implements Serializable {
             response.setContentType("application/vnd.ms-excel");
             response.setHeader("Expires:", "0"); // eliminates browser caching
             response.setContentLength(outArray.length);
-            response.setHeader("Content-Disposition", "attachment; filename="+ "excelbakim_" + (mamulid!=null?mamulid + "_":"") + bit_tarih + ".xls");
+            response.setHeader("Content-Disposition", "attachment; filename="+ "excelbakim_" + ((mamulid==null || mamulid.isEmpty())? "" : mamulid + "_") + bit_tarih + ".xls");
             OutputStream outStream = response.getOutputStream();
             outStream.write(outArray);
             outStream.flush();

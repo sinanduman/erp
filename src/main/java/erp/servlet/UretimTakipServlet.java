@@ -61,7 +61,8 @@ public class UretimTakipServlet extends HttpServlet implements Serializable {
             String uretimplanid = request.getParameter("uretimplanid");
             String mamulid      = request.getParameter("mamulid");
             String uret_miktar  = request.getParameter("uretilenmiktar");
-            String hata_miktar  = (request.getParameter("hatalimiktar")==null || request.getParameter("hatalimiktar").isEmpty()) ? "0" : request.getParameter("hatalimiktar");
+            String hata_miktar  = request.getParameter("hatalimiktar");
+            String plan_miktar  = request.getParameter("tahminiuretim");
 
             if(islemid==3) {  /* Stok Yeterli mi ? */
                 ajaxInAction    = true;
@@ -101,7 +102,8 @@ public class UretimTakipServlet extends HttpServlet implements Serializable {
                                 request.getParameter("durussebepid"),
                                 request.getParameter("duruszaman"),
                                 Integer.parseInt(request.getParameter("mamulizleno")),
-                                Integer.parseInt(uretimplanid)
+                                Integer.parseInt(uretimplanid),
+                                Integer.parseInt(plan_miktar)
                                 );
                 /* Ilk mamul uretim takip basarili
                 Es mamul uretim takip yapiliyor */
@@ -123,7 +125,8 @@ public class UretimTakipServlet extends HttpServlet implements Serializable {
                                 request.getParameter("durussebepid"),
                                 request.getParameter("duruszaman"),
                                 Integer.parseInt(request.getParameter("esmamulizleno")),
-                                Integer.parseInt(uretimplanid)
+                                Integer.parseInt(uretimplanid),
+                                Integer.parseInt(plan_miktar)
                         );
                         message = (result2==-1) ? "Hata oluştu" : "";
                 }

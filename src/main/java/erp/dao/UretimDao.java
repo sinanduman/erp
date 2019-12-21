@@ -58,19 +58,19 @@ public class UretimDao implements Serializable, BaseDao {
         return retVal;
     }
 
-    public int uretimTakipEkleGuncelle(String mamulid, String uretilenmiktar, String hatalimiktar, String makinaid, String calisanid, String tarih, String baszaman, String bitzaman, String hataid, String durusid, String duruszaman, Integer mamulizleno, Integer uretimplanid) {
+    public int uretimTakipEkleGuncelle(String mamulid, String uretilenmiktar, String hatalimiktar, String makinaid, String calisanid, String tarih, String baszaman, String bitzaman, String hataid, String durusid, String duruszaman, Integer mamulizleno, Integer uretimplanid, Integer planlananmiktar) {
         int result = -1;
-        String insertQuery = null;
+        String insertQuery;
 
         if (uretimplanid == 0) {
             insertQuery = "insert into " + BaseDao.URETIMPLAN + " (mamulid, uretilenmiktar, hatalimiktar,"
                     + " makinaid, calisanid, tarih, baszaman, bitzaman, hataid, durusid,"
-                    + " duruszaman, mamulizleno)"
-                    + " values (?,?,?,?,?,?,?,?,?,?,?,?)";
+                    + " duruszaman, mamulizleno, planlananmiktar)"
+                    + " values (?,?,?,?,?,?,?,?,?,?,?,?,?)";
         } else {
             insertQuery = "update " + BaseDao.URETIMPLAN + " set mamulid =?, uretilenmiktar =?,"
                     + " hatalimiktar =?, makinaid =?, calisanid =?, tarih =?, baszaman =?,"
-                    + " bitzaman =?, hataid =?, durusid =?, duruszaman =?, mamulizleno =?"
+                    + " bitzaman =?, hataid =?, durusid =?, duruszaman =?, mamulizleno =?, planlananmiktar=?"
                     + " where id =?";
         }
         // connect to DB
@@ -106,11 +106,11 @@ public class UretimDao implements Serializable, BaseDao {
             else
                 pstmt.setInt(11, Integer.parseInt(duruszaman));
 
+            pstmt.setInt(12, mamulizleno);
+            pstmt.setInt(13, planlananmiktar);
+
             if (uretimplanid != 0) { /* Guncelleme */
-                pstmt.setInt(12, mamulizleno);
-                pstmt.setInt(13, uretimplanid);
-            } else { /* Ekleme */
-                pstmt.setInt(12, mamulizleno);
+                pstmt.setInt(14, uretimplanid);
             }
 
             logger.info(pstmt.toString());

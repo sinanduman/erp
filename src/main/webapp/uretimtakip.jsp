@@ -259,16 +259,14 @@
             <div class="form-group">
                 <label for="uretimadet" class="text-baslik">Üretim Ad.</label>
                 <div>
-                    <input type="text" class="form-control xs text-right" name="uretimadet" id="uretimadet"
-                           autocomplete="off">
+                    <input type="number" class="form-control xs text-right" name="uretimadet" id="uretimadet" autocomplete="off">
                 </div>
             </div>
 
             <div class="form-group">
                 <label for="hataliadet" class="text-baslik">Hatalı Ad.</label>
                 <div>
-                    <input type="text" class="form-control xs text-right" name="hataliadet" id="hataliadet"
-                           autocomplete="off">
+                    <input type="number" class="form-control xs text-right" name="hataliadet" id="hataliadet" autocomplete="off">
                 </div>
             </div>
 
@@ -289,8 +287,7 @@
             <div class="form-group">
                 <label for="duruszaman" class="text-baslik">Duruş Zamanı</label>
                 <div>
-                    <input type="text" class="form-control xs text-right" name="duruszaman" id="duruszaman"><span
-                        class="birim">Dk.</span>
+                    <input type="text" class="form-control xs text-right" type="number" name="duruszaman" id="duruszaman"><span class="birim">Dk.</span>
                 </div>
             </div>
 
@@ -356,8 +353,8 @@
     <div class="row size12px" style="font-size:12px;">
         <table class="tableplan">
             <script type="text/javascript" charset="utf-8">
-                var plan = {};
-                var plantemp = {};
+                let plan = {};
+                let plantemp = {};
             </script>
             <%
                 for (UretimPlan u : uretimplan) {
@@ -489,7 +486,7 @@
 
     //$("#tr"+planid).attr("disabled","disabled").css( "background-color", "darkkhaki");
 
-    var globalMamul = new Object();
+    let globalMamul = new Object();
     $(function () {
         $('#tarih').datepicker({
             inline: true,
@@ -521,32 +518,31 @@
         if ($("#mamulid").val() != "") {
             dateDiff();
         }
-        ;
     });
 
     function dateDiff() {
-        var basFullDate = document.uretimtakipform.tarih.value + " " + document.uretimtakipform.bassaat.value + ":" + document.uretimtakipform.basdakika.value;
-        var bitFullDate = document.uretimtakipform.tarih.value + " " + document.uretimtakipform.bitsaat.value + ":" + document.uretimtakipform.bitdakika.value;
+        let basFullDate = document.uretimtakipform.tarih.value + " " + document.uretimtakipform.bassaat.value + ":" + document.uretimtakipform.basdakika.value;
+        let bitFullDate = document.uretimtakipform.tarih.value + " " + document.uretimtakipform.bitsaat.value + ":" + document.uretimtakipform.bitdakika.value;
 
-        var basTime = document.uretimtakipform.bassaat.value + document.uretimtakipform.basdakika.value;
-        var bitTime = document.uretimtakipform.bitsaat.value + document.uretimtakipform.bitdakika.value;
+        let basTime = document.uretimtakipform.bassaat.value + document.uretimtakipform.basdakika.value;
+        let bitTime = document.uretimtakipform.bitsaat.value + document.uretimtakipform.bitdakika.value;
 
-        var basDay = moment(basFullDate, "DD-MM-YYYY HH:mm");
-        var bitDay = moment(bitFullDate, "DD-MM-YYYY HH:mm");
+        let basDay = moment(basFullDate, "DD-MM-YYYY HH:mm");
+        let bitDay = moment(bitFullDate, "DD-MM-YYYY HH:mm");
 
         if (bitTime <= basTime) {
             bitDay = bitDay.add(1, 'days');
         }
 
-        var diffMinutes = bitDay.diff(basDay, 'minutes');
+        let diffMinutes = bitDay.diff(basDay, 'minutes');
 
-        var diff = diffMinutes; /* Difference in Minutes */
+        let diff = diffMinutes; /* Difference in Minutes */
 
-        diffHour = Math.floor(diff / 60);
-        diffMin = diff - diffHour * 60;
+        let diffHour = Math.floor(diff / 60);
+        let diffMin = diff - diffHour * 60;
 
-        diffHourStr = (diffHour == 0) ? "" : diffHour + " saat ";
-        diffMinStr = (diffMin == 0) ? "" : diffMin + " dakika";
+        let diffHourStr = (diffHour == 0) ? "" : diffHour + " saat ";
+        let diffMinStr = (diffMin == 0) ? "" : diffMin + " dakika";
 
         document.uretimtakipform.cevrimsure.value = globalMamul.cevrimsure + "/" + globalMamul.figur;
         document.uretimtakipform.toplamsure.value = diffHourStr + diffMinStr;

@@ -21,6 +21,8 @@ import java.util.*;
 
 public class Util {
 
+    public static long BASKI_SAYISI = 20000;
+
     public static long nanoTime = System.nanoTime();
 
     private static final Logger logger = LoggerFactory.getLogger(Util.class);

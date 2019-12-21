@@ -7,8 +7,8 @@ function SiparisCntrl($scope) {
         return 0;
     };
     $scope.savePlan = function(){
-        var baszaman  = document.uretimtakipform.bassaat.value + document.uretimtakipform.basdakika.value;
-        var bitzaman  = document.uretimtakipform.bitsaat.value + document.uretimtakipform.bitdakika.value;
+        let baszaman  = document.uretimtakipform.bassaat.value + document.uretimtakipform.basdakika.value;
+        let bitzaman  = document.uretimtakipform.bitsaat.value + document.uretimtakipform.bitdakika.value;
         if(!is_positive(document.uretimtakipform.miktar.value)){
             alert("Planlanan Miktar NÜMERİK bir değer olmalıdır!");
             return false;
@@ -46,22 +46,22 @@ function SiparisEkleCtrl($scope) {
 }
 
 function updateGo(url,id,action_form,islem){
-    var f_siparisplanid	= id;
-    var f_bilesen		= action_form.bilesen.value;
-    var f_miktar		= $.trim(action_form.miktar.value);
-    var f_makinaid		= action_form.makina.value;
-    var f_calisanid		= action_form.calisan.value;
-    var f_tarih			= action_form.tarih.value;
-    var f_bassaat		= action_form.bassaat.value;
-    var f_basdakika		= action_form.basdakika.value;
-    var f_bitsaat		= action_form.bitsaat.value;
-    var f_bitdakika		= action_form.bitdakika.value;
-    var f_hataid		= action_form.hataid.value;
-    var f_hatamiktar	= $.trim(action_form.hatamiktar.value);
-    var f_durusid		= action_form.durusid.value;
-    var f_not			= action_form.not.value;
-    var f_islemid		= islem;
-    var alert_mesaj		= f_siparisplanid + " Numaralı " + f_bilesen;
+    let f_siparisplanid	= id;
+    let f_bilesen		= action_form.bilesen.value;
+    let f_miktar		= $.trim(action_form.miktar.value);
+    let f_makinaid		= action_form.makina.value;
+    let f_calisanid		= action_form.calisan.value;
+    let f_tarih			= action_form.tarih.value;
+    let f_bassaat		= action_form.bassaat.value;
+    let f_basdakika		= action_form.basdakika.value;
+    let f_bitsaat		= action_form.bitsaat.value;
+    let f_bitdakika		= action_form.bitdakika.value;
+    let f_hataid		= action_form.hataid.value;
+    let f_hatamiktar	= $.trim(action_form.hatamiktar.value);
+    let f_durusid		= action_form.durusid.value;
+    let f_not			= action_form.not.value;
+    let f_islemid		= islem;
+    let alert_mesaj		= f_siparisplanid + " Numaralı " + f_bilesen;
 
     if(!is_empty(f_hataid) && !is_positive(f_hatamiktar)){
         alert("Hata miktarı, eğer varsa, NÜMERİK olmalıdır!");
@@ -116,11 +116,11 @@ function updateGo(url,id,action_form,islem){
     }
 }
 function okGo(url,id,action_form,islem){
-    var f_siparisplanid	= id;
-    var f_bilesen		= action_form.bilesen.value;
-    var f_miktar		= action_form.miktar.value;
-    var f_islemid		= islem;
-    var alert_mesaj		= f_siparisplanid + " Numaralı " + f_bilesen;
+    let f_siparisplanid	= id;
+    let f_bilesen		= action_form.bilesen.value;
+    let f_miktar		= action_form.miktar.value;
+    let f_islemid		= islem;
+    let alert_mesaj		= f_siparisplanid + " Numaralı " + f_bilesen;
     if (is_positive(f_miktar)){
         if(confirm(alert_mesaj +"\n\n" + "Plan bilgisinin TAMAMLANDIĞINDAN" +"\n\n" + "Emin misin?")){
             $.ajax({
@@ -160,11 +160,11 @@ function okGo(url,id,action_form,islem){
     }
 }
 function deleteGo(url,id,action_form,islem){
-    var f_siparisplanid	= id;
-    var f_bilesen		= action_form.bilesen.value;
-    var f_miktar		= action_form.miktar.value;
-    var f_islemid		= islem;
-    var alert_mesaj		= f_siparisplanid + " Numaralı " + f_bilesen;
+    let f_siparisplanid	= id;
+    let f_bilesen		= action_form.bilesen.value;
+    let f_miktar		= action_form.miktar.value;
+    let f_islemid		= islem;
+    let alert_mesaj		= f_siparisplanid + " Numaralı " + f_bilesen;
     if (is_positive(f_miktar)){
         if(confirm(alert_mesaj +"\n\n" + "Plan bilgisini SİLMEK istediğinden" +"\n\n" + "Emin misin?")){
             $.ajax({
@@ -204,7 +204,7 @@ function deleteGo(url,id,action_form,islem){
 }
 
 $("#uretimekle").click(function(){
-    var message="";
+    let message="";
     if(document.uretimtakipform.mamulid.value==""){
         message += "Mamül seçiniz!\n";
     }
@@ -229,6 +229,15 @@ $("#uretimekle").click(function(){
     if(is_empty(document.uretimtakipform.duruszaman.value) && is_positive(document.uretimtakipform.durussebepid.value)){
         message += "Duruş kodu seçili, duruş zamanı seçilmeli!\n";
     }
+    if(is_empty(document.uretimtakipform.duruszaman.value) && is_positive(document.uretimtakipform.durussebepid.value)){
+        message += "Duruş kodu seçili, duruş zamanı seçilmeli!\n";
+    }
+    let uretimadet = document.uretimtakipform.uretimadet.value;
+    let hataliadet = is_empty(document.uretimtakipform.hataliadet.value) ? 0 : document.uretimtakipform.hataliadet.value;
+    let tahminiuretim = document.uretimtakipform.tahminiuretim.value;
+    if ((parseInt(uretimadet) + parseInt(hataliadet)) > parseInt(tahminiuretim)) {
+        message += "Üretilen ve Hatalı Üretilen toplamı, Tahmini Üretim'den fazla olamaz!\n";
+    }
     if(message!=""){
         alert(message);
     }
@@ -239,11 +248,12 @@ $("#uretimekle").click(function(){
             url: "uretimtakip",
             type: "POST",
             data: {
+                islemid:        3,
                 uretimplanid:	$("#uretimplanid").val(),
                 mamulid:		$("#mamulid").val(),
-                uretilenmiktar:	$("#uretimadet").val(),
-                hatalimiktar:	$("#hataliadet").val(),
-                islemid: 3
+                uretilenmiktar:	uretimadet,
+                hatalimiktar:	hataliadet,
+                tahminiuretim:  tahminiuretim
             },
             beforeSend: function ( xhr ) {
             },
@@ -474,11 +484,11 @@ $("#uretimiptal").click(function(){
 
     //$("#calisanid").val("");
 
-    var calisanval	= 0;
-    var makinaval	= 0;
+    let calisanval	= 0;
+    let makinaval	= 0;
 
-    var hatasebepval= 0;
-    var durussebepval=0;
+    let hatasebepval= 0;
+    let durussebepval=0;
 
     $("#calisanid option").each(function(index) {
         if(index == 0){
@@ -590,7 +600,7 @@ $("#uretimplanguncelle").click(function(){
         }
         //console.log("gercekuretim: " + parseInt($("#gercekuretim").val()));
         //console.log("gercekuretim_hidden: " + parseInt($("#gercekuretim_hidden").val()));
-        var uretimfark = (parseInt($("#gercekuretim").val()) - parseInt($("#gercekuretim_hidden").val()));
+        let uretimfark = (parseInt($("#gercekuretim").val()) - parseInt($("#gercekuretim_hidden").val()));
         console.log(uretimfark);
         /* Malzeme yeterli mi*/
         $.ajax({
@@ -641,14 +651,14 @@ function hedefuretim_change(){
         alert("Hedeflenen üretim miktarı 0'dan büyük olmalı!\n");
     }
     else{
-        var tempfark = parseInt($("#hedefuretim").val()) - parseInt($("#gercekuretim").val());
+        let tempfark = parseInt($("#hedefuretim").val()) - parseInt($("#gercekuretim").val());
         if(tempfark>0){
             $("#fark").val(tempfark);
             $("#sapma").val( Math.round(( ( tempfark )*100 / $("#hedefuretim").val())*100)/100.0 );
             $("#hedefuretimhidden").val($("hedefuretim").val());
         }
         else if(tempfark==0){
-            var hatasebepval = 0;
+            let hatasebepval = 0;
             $("#fark").val("");
             $("#sapma").val("");
             $("#hedefuretimhidden").val($("hedefuretim").val());
@@ -729,8 +739,8 @@ function es_mamul_checkbox_off() {
 }
 
 function changefun_uretim(elem, guncelle) {
-    var found = false;
-    var option = "";
+    let found = false;
+    let option = "";
     if (elem != null) {
         $("#hammadde option").remove();
         $("#yarimamul option").remove();
@@ -741,25 +751,25 @@ function changefun_uretim(elem, guncelle) {
                 $("#div_esmamul").show();
                 globalMamul = mamul[i];
                 found = true;
-                var esmamulid = mamul[i].esmamulid;
+                let esmamulid = mamul[i].esmamulid;
                 if (guncelle == undefined) {
                     if (esmamulid > 0) {
                         findmamulkod(esmamulid);
                     }
                 }
 
-                var ham_name_ar = mamul[i].hammadde.split(";");
-                var ham_gkrno_ar = mamul[i].hammaddegkrno.split(";");
-                var ham_agir_ar = mamul[i].hammaddeagir.split(";");
-                var ham_mamulbasi_ar = mamul[i].hammaddemamulbasi.split(";");
+                let ham_name_ar = mamul[i].hammadde.split(";");
+                let ham_gkrno_ar = mamul[i].hammaddegkrno.split(";");
+                let ham_agir_ar = mamul[i].hammaddeagir.split(";");
+                let ham_mamulbasi_ar = mamul[i].hammaddemamulbasi.split(";");
 
-                var yari_name_ar = mamul[i].yarimamul.split(";");
-                var yari_gkrno_ar = mamul[i].yarimamulgkrno.split(";");
-                var yari_agir_ar = mamul[i].yarimamulagir.split(";");
-                var yari_mamulbasi_ar = mamul[i].yarimamulmamulbasi.split(";");
+                let yari_name_ar = mamul[i].yarimamul.split(";");
+                let yari_gkrno_ar = mamul[i].yarimamulgkrno.split(";");
+                let yari_agir_ar = mamul[i].yarimamulagir.split(";");
+                let yari_mamulbasi_ar = mamul[i].yarimamulmamulbasi.split(";");
 
-                var gkrno = mamul[i].gkrno;
-                var cevrimsure = mamul[i].cevrimsure;
+                let gkrno = mamul[i].gkrno;
+                let cevrimsure = mamul[i].cevrimsure;
 
                 document.uretimtakipform.mamulad.value = mamul[i].mamulad;
                 document.uretimtakipform.mamulid.value = mamul[i].mamulid;
@@ -769,10 +779,10 @@ function changefun_uretim(elem, guncelle) {
                 dateDiff(); /* Difference in Minutes */
 
                 option = "";
-                var ham_name = "";
-                var ham_gkrno = "";
-                var ham_miktar = 0;
-                var ham_mamulbasi = 0;
+                let ham_name = "";
+                let ham_gkrno = "";
+                let ham_miktar = 0;
+                let ham_mamulbasi = 0;
                 for (i in ham_name_ar) {
 
                     ham_name = ham_name_ar[i];
@@ -791,10 +801,10 @@ function changefun_uretim(elem, guncelle) {
                 }
 
                 option = "";
-                var yari_name = "";
-                var yari_gkrno = "";
-                var yari_miktar = 0;
-                var yari_mamulbasi = 0;
+                let yari_name = "";
+                let yari_gkrno = "";
+                let yari_miktar = 0;
+                let yari_mamulbasi = 0;
                 for (i in yari_name_ar) {
                     //console.log(i +" : " +yari_name_ar[i]);
 

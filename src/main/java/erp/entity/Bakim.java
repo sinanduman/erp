@@ -15,6 +15,9 @@ public class Bakim {
     private Integer id;
     private Integer mamulid;
     private Integer calisanid;
+    private Integer uretimMiktar;
+    private Integer baskiSayisi;
+    private Integer kalanBaski;
     private Date bakimtarihi;
     private Date islemtarihi;
 
@@ -24,5 +27,8 @@ public class Bakim {
         this.calisanid = rs.getInt("calisanid");
         this.bakimtarihi = rs.getDate ("bakimtarihi");
         this.islemtarihi = rs.getDate("islemtarihi");
+        this.uretimMiktar = rs.getInt("uretim_miktari");
+        this.baskiSayisi = rs.getInt("baski_sayisi");
+        this.kalanBaski = rs.getInt("kalan_baski");
     }
 }

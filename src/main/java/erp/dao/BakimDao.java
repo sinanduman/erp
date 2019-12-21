@@ -26,7 +26,7 @@ public class BakimDao implements Serializable, BaseDao {
         String pageFilter = Util.getPageFilter (offset);
         String searchQuery = "SELECT * FROM " + tablename
                 + " WHERE 1=1 " + filterPage
-                + " ORDER BY mamulid, id desc " + pageFilter;
+                + " " + pageFilter;
 
         ResultSet rs;
         try (Connection conn = connectionManager.getConnection();
