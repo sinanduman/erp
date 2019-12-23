@@ -185,6 +185,7 @@ function updateMamulGo(url,id,action_form,islem){
     let f_durum     = $.trim($("#liste_mamuldurum"+id).val());
     let f_kritikesik= $.trim($("#liste_kritikesik"+id).val());
     let f_bakimtarihi=$.trim($("#liste_bakimtarihi"+id).val());
+    let f_baskisayisi=$.trim($("#liste_baskisayisi"+id).val());
     let f_calisanid  =$.trim($("#liste_calisanid"+id).val());
     let f_islemid	= islem;
     let alert_mesaj	= f_kod + " Kodlu " + f_ad;
@@ -212,6 +213,7 @@ function updateMamulGo(url,id,action_form,islem){
                 durum       : f_durum,
                 kritikesik  : f_kritikesik,
                 bakimtarihi : f_bakimtarihi,
+                baskisayisi : f_baskisayisi,
                 calisanid   : f_calisanid
             },
             dataType: 'html',

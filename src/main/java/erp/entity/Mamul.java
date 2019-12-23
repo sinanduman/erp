@@ -35,7 +35,7 @@ public class Mamul {
     private String esmamulkod;
     private Integer durum;
     private Integer kritikEsik;
-    private Integer bakimSuresi;
+    private Integer baskiSayisi;
     private Date bakimTarihi;
     private Integer calisanId;
 
@@ -62,7 +62,7 @@ public class Mamul {
         this.esmamulkod = (String) Util.nullToEmpty(rs.getString("esmamulkod"));
         this.durum = rs.getInt("durum");
         this.kritikEsik = rs.getInt("kritikesik");
-        this.bakimSuresi = rs.getInt("bakimsuresi");
+        this.baskiSayisi = rs.getInt("baskisayisi");
         this.bakimTarihi = rs.getDate ("bakimtarihi");
         this.calisanId = rs.getInt ("calisanid");
     }

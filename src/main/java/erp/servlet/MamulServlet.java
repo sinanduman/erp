@@ -63,6 +63,7 @@ public class MamulServlet extends HttpServlet implements Serializable {
                                     new String(request.getParameter("durum").getBytes(StandardCharsets.UTF_8)),
                                     new String(request.getParameter("kritikesik").getBytes(StandardCharsets.UTF_8)),
                                     new String(request.getParameter("bakimtarihi").getBytes(StandardCharsets.UTF_8)),
+                                    new String(request.getParameter("baskisayisi").getBytes(StandardCharsets.UTF_8)),
                                     new String(request.getParameter("calisanid").getBytes(StandardCharsets.UTF_8))
                     );
                     break;
@@ -93,7 +94,8 @@ public class MamulServlet extends HttpServlet implements Serializable {
                         new String(request.getParameter("mamulcevrim").getBytes(StandardCharsets.UTF_8)),
                         new String(request.getParameter("mamulfirma").getBytes(StandardCharsets.UTF_8)),
                         new String(request.getParameter("mamulfigur").getBytes(StandardCharsets.UTF_8)),
-                        new String(request.getParameter("mamulbakimsuresi").getBytes(StandardCharsets.UTF_8)),
+                        new String(request.getParameter("mamulbaskisayisi").getBytes(StandardCharsets.UTF_8)),
+                        new String(request.getParameter("mamulsonbakim").getBytes(StandardCharsets.UTF_8)),
                         new String(request.getParameter("mamulsonbakimyapan").getBytes(StandardCharsets.UTF_8))
                         );
                 /* if Error occured */

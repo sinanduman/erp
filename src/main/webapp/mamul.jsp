@@ -105,7 +105,13 @@
             <div class="form-group col-xs-8">
                 <label for="mamulcevrim" class="col-xs-3 control-label text-baslik">Çevrim Süresi(sn): </label>
                 <div>
-                    <input type="number" class="form-control big" name="mamulcevrim" id="mamulcevrim" placeholder="Çevrim Süresi" autocomplete="off">
+                    <select class="form-control big" name="mamulcevrim" id="mamulcevrim">
+                        <%
+                            for (int i = 1; i <= 300; i++) {
+                                out.println("<option value='" + i + "'>" + i + "</option>");
+                            }
+                        %>
+                    </select>
                 </div>
             </div>
             <div class="form-group col-xs-8">
@@ -133,15 +139,15 @@
                 </div>
             </div>
             <div class="form-group col-xs-8">
-                <label for="mamulbakimsuresi" class="col-xs-3 control-label text-baslik">Bakım Süresi: </label>
+                <label for="mamulbaskisayisi" class="col-xs-3 control-label text-baslik">Baskı Sayısı: </label>
                 <div>
-                    <select class="form-control big" name="mamulbakimsuresi" id="mamulbakimsuresi">
+                    <select class="form-control big" name="mamulbaskisayisi" id="mamulbaskisayisi">
                         <%
-                            for (int i = 12; i <= 36; i=i+12) {
-                                if(i==24)
-                                    out.println("<option value='" + i + "' selected>" + i + " Ay</option>");
+                            for (int i = 5000; i <= 100000; i=i+1000) {
+                                if(i==20000)
+                                    out.println("<option value='" + i + "' selected>" + i + "</option>");
                                 else
-                                    out.println("<option value='" + i + "'>" + i + " Ay</option>");
+                                    out.println("<option value='" + i + "'>" + i + "</option>");
                             }
                         %>
                     </select>
@@ -327,12 +333,13 @@
                 <tr>
                     <td nowrap><label class="text-success">Mamül Kodu</label></td>
                     <td nowrap><label class="text-success">Mamül Adı</label></td>
-                    <td nowrap><label class="text-success">Çevrim Sr.</label></td>
-                    <td nowrap><label class="text-success">Figür Ad.</label></td>
+                    <td nowrap><label class="text-success">Çevrim</label></td>
+                    <td nowrap><label class="text-success">Figür</label></td>
                     <td nowrap><label class="text-success">Eş Mamül Kod</label></td>
                     <td nowrap><label class="text-success">Eş Mamül Ad</label></td>
                     <td><label class="text-success">Firma</label></td>
                     <td nowrap><label class="text-success">Min.Stok</label></td>
+                    <td nowrap><label class="text-success">Baskı</label></td>
                     <td nowrap><label class="text-success">Bakım Tarihi</label></td>
                     <td nowrap><label class="text-success">Bakım Yapan</label></td>
                     <td><label class="text-success">Aktif</label></td>
@@ -344,23 +351,32 @@
                             <%= (m.getDurum() == 0 ? " style='background-color:darkKhaki;'" : "") %> >
                         <td><input type="text" class="form-control xm" value="<%= m.getKod() %>" name=liste_kod<%=m.getId()%> id="liste_kod<%=m.getId()%>"></td>
                         <td><input type="text" class="form-control" value="<%= m.getAd().replaceAll("\"", "") %>" name=liste_ad<%=m.getId()%> id="liste_ad<%=m.getId()%>"></td>
-                        <td><input type="number" class="form-control xss" value="<%= m.getCevrimsuresi() %>"
-                                   name=liste_cevrimsuresi<%=m.getId()%> id="liste_cevrimsuresi<%=m.getId()%>"></td>
                         <td>
-                            <div>
-                                <select class="form-control xss" name=liste_figurid<%=m.getId()%>
-                                        id="liste_figurid<%=m.getId()%>">
-                                    <%
-                                        for (int i = 1; i <= 32; i++) {
-                                            if (i == m.getFigur()) {
-                                                out.println("<option value='" + i + "' selected>" + i + "</option>");
-                                            } else {
-                                                out.println("<option value='" + i + "'>" + i + "</option>");
-                                            }
+                            <select class="form-control xss" name=liste_cevrimsuresi<%=m.getId()%>
+                                    id="liste_cevrimsuresi<%=m.getId()%>">
+                            <%
+                                for (int i = 1; i <= 300; i++) {
+                                    if (m.getCevrimsuresi().intValue() == i) {
+                                        out.print("<option value='" + i + "' selected>" + i + "</option>");
+                                    } else {
+                                        out.print("<option value='" + i + "'>" + i + "</option>");
+                                    }
+                                }
+                            %>
+                            </select>
+                        <td>
+                            <select class="form-control xsss" name=liste_figurid<%=m.getId()%>
+                                    id="liste_figurid<%=m.getId()%>">
+                                <%
+                                    for (int i = 1; i <= 32; i++) {
+                                        if (i == m.getFigur()) {
+                                            out.println("<option value='" + i + "' selected>" + i + "</option>");
+                                        } else {
+                                            out.println("<option value='" + i + "'>" + i + "</option>");
                                         }
-                                    %>
-                                </select>
-                            </div>
+                                    }
+                                %>
+                            </select>
                         </td>
                         <td><input type="text" class="form-control xm" value="<%= m.getEsmamulid()>0 ?
                         m.getEsmamulkod() : "" %>" id="liste_esmamulkod<%= m.getId() %>" autocomplete="off"
@@ -377,20 +393,32 @@
                                         if (f.getId() == m.getFirmaid()) {
                                             out.println("<option value='" + f.getId() + "' selected>" + f.getAd() + "</option>");
                                         } else {
-                                            out.println("<option value='" + f.getId() + "'>" + f.getAd() + " :: " + Util.getTarihTR(m.getBakimTarihi()) + "</option>");
+                                            out.println("<option value='" + f.getId() + "'>" + f.getAd() + "</option>");
                                         }
                                     }
                                 %>
                             </select>
                         </td>
                         <td><input type="number" class="form-control xss" value="<%= m.getKritikEsik() %>" name=liste_kritikesik<%=m.getId()%> id="liste_kritikesik<%=m.getId()%>"></td>
+                        <td>
+                            <select class="form-control xsu" name="liste_baskisayisi<%=m.getId()%>" id="liste_baskisayisi<%=m.getId()%>">
+                                <%
+                                    for (int i = 5000; i <= 100000; i=i+1000) {
+                                        if(i == m.getBaskiSayisi().intValue())
+                                            out.println("<option value='" + i + "' selected>" + i + "</option>");
+                                        else
+                                            out.println("<option value='" + i + "'>" + i + "</option>");
+                                    }
+                                %>
+                            </select>
+                        </td>
                         <td><input type="text" class="form-control xt" value="<%= Util.getTarihTR(m.getBakimTarihi()) %>" name=liste_bakimtarihi<%=m.getId()%> id="liste_bakimtarihi<%=m.getId()%>"></td>
                         <script type="text/javascript">
                             bakimTarihi.push(<%=m.getId()%>);
                         </script>
 
                         <td>
-                            <select class="form-control xm" id="liste_calisanid<%=m.getId()%>" name="liste_calisanid<%=m.getId()%>">
+                            <select class="form-control xt" id="liste_calisanid<%=m.getId()%>" name="liste_calisanid<%=m.getId()%>">
                                 <%
                                     for (Calisan c : calisan) {
                                         if (m.getCalisanId().intValue() == c.getId()) {
@@ -435,7 +463,7 @@
                         </td>
                     </tr>
                     <tr id="tr_mam_detay<%= m.getId() %>" style="display:none;">
-                        <td colspan="11">
+                        <td colspan="12">
                             <table style="width:100%;" class="tableplan">
                                 <%
                                     int sayacbilesen = 0;
@@ -500,7 +528,7 @@
                                     </td>
                                     <% if (admin != null && admin.equals("1")) { %>
                                     <td class="text-center"><a
-                                            href="javascript:updateMamulBilesenGo('mamul',<%=m.getId()%>,<%=j.getBilesenid()%>,document.action_form<%=m.getId()%>.mamulbilesen_miktar<%= j.getBilesenid() %>,2);"
+                                            href="javascript:updateMamulBilesenGo('mamul','<%=m.getId()%>','<%=j.getBilesenid()%>',document.action_form<%=m.getId()%>.mamulbilesen_miktar<%= j.getBilesenid() %>,2);"
                                             title="Güncelle"><span class="fa fa-refresh fa-lg text-warning"></span></a>
                                     </td>
                                     <% } %>

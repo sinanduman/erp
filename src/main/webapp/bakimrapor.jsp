@@ -205,7 +205,7 @@
                 }
             %>
             <tr id="tr<%=r.getId()%>">
-                <td nowrap align="right"><%= String.format ("%,d", r.getKalanBaski()) %></td>
+                <td nowrap align="right"><%= String.format ("%,d", r.getKalanBaski()) + " {" + String.format ("%,d", mamulmap.get(r.getMamulid()).getBaskiSayisi()) + "}" %></td>
                 <td nowrap align="right"><%= String.format ("%,d", r.getBaskiSayisi()) %></td>
                 <td nowrap align="right"><%= String.format ("%,d", r.getUretimMiktar()) %></td>
                 <td nowrap><%= mamulmap.get(r.getMamulid()) == null ? "" : mamulmap.get(r.getMamulid()).getKod() %></td>

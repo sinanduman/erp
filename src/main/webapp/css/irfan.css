@@ -136,6 +136,14 @@ input.xss, textarea.xss, select.xss{
 	width: 60px;
 	display: inline-block !important;
 }
+input.xsu, textarea.xst, select.xsu{
+	width: 50px;
+	display: inline-block !important;
+}
+input.xsu, textarea.xsu, select.xsu{
+	width: 70px;
+	display: inline-block !important;
+}
 input.xsss, textarea.xsss, select.xsss{
 	width: 40px;
 	display: inline-block !important;

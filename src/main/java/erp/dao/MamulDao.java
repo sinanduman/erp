@@ -24,8 +24,8 @@ public class MamulDao implements Serializable, BaseDao {
     ConnectionManager connectionManager;
     private static final Logger logger = LoggerFactory.getLogger(MamulDao.class);
 
-    public String mamulEkle(String ad, String kod, String cevrimSuresi, String firmaid, String figur, String mamulBakimSuresi, String calisanId) {
-        String insertQuery = "insert into " + BaseDao.MAMUL + "(ad, kod, cevrimsuresi, bilesentipid, firmaid, figur, bakimsuresi) values (?,?,?,?,?,?,?)";
+    public String mamulEkle(String ad, String kod, String cevrimSuresi, String firmaid, String figur, String mamulBaskiSayisi, String bakimTarihi, String calisanId) {
+        String insertQuery = "insert into " + BaseDao.MAMUL + "(ad, kod, cevrimsuresi, bilesentipid, firmaid, figur, baskisayisi) values (?,?,?,?,?,?,?)";
         String newMamulId = "-1";
         ResultSet rs;
         try (Connection conn = connectionManager.getConnection();
@@ -36,14 +36,14 @@ public class MamulDao implements Serializable, BaseDao {
             pstmt.setInt(4, BilesenTip.MAMUL.value());
             pstmt.setInt(5, Integer.parseInt(firmaid));
             pstmt.setInt(6, Integer.parseInt(figur));
-            pstmt.setInt(7, Integer.parseInt(mamulBakimSuresi));
+            pstmt.setInt(7, Integer.parseInt(mamulBaskiSayisi));
             logger.info(pstmt.toString());
             pstmt.executeUpdate();
             rs = pstmt.getGeneratedKeys();
             if (rs.next()) {
                 newMamulId = String.valueOf(rs.getInt(1));
                 if(rs.getInt(1) > 0){
-                    int retVal = mamulBakimTarihEkle(Integer.parseInt(newMamulId), Integer.parseInt(calisanId), Util.getTarihTR(new Date()));
+                    int retVal = mamulBakimTarihEkle(Integer.parseInt(newMamulId), Integer.parseInt(calisanId), bakimTarihi);
                 }
             }
         } catch (SQLException e) {
@@ -88,9 +88,9 @@ public class MamulDao implements Serializable, BaseDao {
         return result;
     }
 
-    public String mamulGuncelle(String mamulid, String firmaid, String kod, String ad, String figur, String cevrimsuresi, String esmamulid, String durum, String kritikEsik, String bakimTarihi, String calisanId) {
+    public String mamulGuncelle(String mamulid, String firmaid, String kod, String ad, String figur, String cevrimsuresi, String esmamulid, String durum, String kritikEsik, String bakimTarihi, String baskiSayisi, String calisanId) {
         String result = "0";
-        String updateQuery = "update " + BaseDao.MAMUL + " set firmaid=?,kod=?,ad=?,figur=?,cevrimsuresi=?,esmamulid =?,durum =?,kritikesik=? where id=?";
+        String updateQuery = "update " + BaseDao.MAMUL + " set firmaid=?,kod=?,ad=?,figur=?,cevrimsuresi=?,esmamulid =?,durum =?,kritikesik=?,baskisayisi=? where id=?";
         // connect to DB
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(updateQuery)) {
@@ -105,7 +105,8 @@ public class MamulDao implements Serializable, BaseDao {
                 pstmt.setInt(6, Integer.parseInt(esmamulid));
             pstmt.setInt(7, Integer.parseInt(durum));
             pstmt.setInt(8, Integer.parseInt(kritikEsik));
-            pstmt.setInt(9, Integer.parseInt(mamulid));
+            pstmt.setInt(9, Integer.parseInt(baskiSayisi));
+            pstmt.setInt(10, Integer.parseInt(mamulid));
             logger.info(pstmt.toString());
             int retVal = pstmt.executeUpdate();
             if(retVal > 0){
