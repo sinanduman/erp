@@ -22,7 +22,7 @@
     <!-- Custom styles for this template -->
     <link rel="stylesheet" href="css/irfan.css?<%=Util.nanoTime%>">
     <link rel="stylesheet" href="css/fonts.css">
-    <link rel="stylesheet" href="css/font-awesome.css">
+    <link rel="stylesheet" href="css/all.css">
     <link rel="stylesheet" href="css/jquery-ui-1.10.0.custom.css">
     <link rel="stylesheet/less" type="text/css" href="less/datepicker.less">
 

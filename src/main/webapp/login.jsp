@@ -19,8 +19,8 @@
     <!-- Custom styles for this template -->
     <link rel="stylesheet" href="css/irfan.css?<%=Util.nanoTime%>">
     <link rel="stylesheet" href="css/fonts.css">
-    <link rel="stylesheet" href="css/signin.css">
-    <link rel="stylesheet" href="css/font-awesome.css">
+    <link rel="stylesheet" href="css/signin.css?<%=Util.nanoTime%>">
+    <link rel="stylesheet" href="css/all.css">
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -48,25 +48,13 @@
         </h2>
 
 
-        <div class="input-group input-group" style="margin-bottom: -1px;">
-				<span class="input-group-addon"><i class="fa fa-user"
-                                                   style="margin-right: 3px;"></i></span><input type="text"
-                                                                                                name="username"
-                                                                                                class="form-control"
-                                                                                                placeholder="Kullanıcı Adı"/>
-        </div>
+        <div class="input-group" style="margin-bottom:-1px;width:100%;"><span class="input-group-addon" style="width:50px;"><i class="fa fa-user"></i></span><input type="text" name="username" class="form-control normal" placeholder="Kullanıcı Adı"/></div>
 
-        <div class="input-group input-group" style="margin-bottom: 15px;">
-            <span class="input-group-addon"><i class="fa fa-key"></i></span><input
-                type="password" name="password" class="form-control"
-                placeholder="Şifre">
-        </div>
+        <div class="input-group" style="margin-bottom:15px;width:100%;"><span class="input-group-addon" style="width:50px;"><i class="fa fa-key"></i></span><input type="password" name="password" class="form-control normal" placeholder="Şifre"></div>
 
 
         <div>
-            <button class="btn btn-success" type="submit" name="submit"
-                    style="background-color: #5fb336"><i class="fa fa-sign-in iki-bosluk"></i>Giriş Yap
-            </button>
+            <button class="btn btn-success" type="submit" name="submit" style="background-color: #5fb336"><i class="fa fa-sign-in-alt iki-bosluk"></i>Giriş Yap</button>
         </div>
 
     </form>

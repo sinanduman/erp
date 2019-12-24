@@ -21,7 +21,7 @@
     <!-- Custom styles for this template -->
     <link rel="stylesheet" href="css/irfan.css?<%=Util.nanoTime%>">
     <link rel="stylesheet" href="css/fonts.css">
-    <link rel="stylesheet" href="css/font-awesome.css">
+    <link rel="stylesheet" href="css/all.css">
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>

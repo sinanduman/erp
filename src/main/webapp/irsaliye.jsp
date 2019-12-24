@@ -20,7 +20,7 @@
     <!-- Custom styles for this template -->
     <link rel="stylesheet" href="css/irfan.css?<%=Util.nanoTime%>">
     <link rel="stylesheet" href="css/fonts.css">
-    <link rel="stylesheet" href="css/font-awesome.css">
+    <link rel="stylesheet" href="css/all.css">
     <link rel="stylesheet" href="css/jquery-ui-1.10.0.custom.css">
     <link rel="stylesheet/less" type="text/css" href="less/datepicker.less">
 
@@ -328,7 +328,7 @@
                 <td class="text-center">
                     <div id="div<%=ib.getId()%>">
                         <a href="javascript:irsaliyepaketguncelle('#tr<%=ib.getId()%>',<%=ib.getId()%>);"
-                           title="Güncelle"><span class="fa fa-refresh fa-lg text-warning"></span></a>
+                           title="Güncelle"><span class="fa fa-sync fa-lg text-warning"></span></a>
                         <a href="javascript:irsaliyebilesensil('#tr<%=ib.getId()%>',<%=ib.getGkrno()%>,<%=ib.getMiktar()%>,<%=ib.getId()%>);"
                            title="Sil"><span class="fa fa-minus-circle fa-lg text-danger"></span></a>
                     </div>

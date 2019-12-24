@@ -17,7 +17,7 @@
     <!-- Custom styles for this template -->
     <link rel="stylesheet" href="css/irfan.css?<%=Util.nanoTime%>">
     <link rel="stylesheet" href="css/fonts.css">
-    <link rel="stylesheet" href="css/font-awesome.css">
+    <link rel="stylesheet" href="css/all.css">
     <link rel="stylesheet" href="css/jquery-ui-1.10.0.custom.css">
     <link rel="stylesheet/less" type="text/css" href="less/datepicker.less">
 
@@ -434,7 +434,7 @@
                 <td><%= u.getDuruskodu() %></td>
                 <td>
                     <div id="div<%= u.getId() %>">
-                        <a href="javascript:uretimtakipguncelle('#tr<%= u.getId() %>','<%= u.getId() %>');" title="Güncelle"><span class="fa fa-refresh fa-lg text-warning"></span></a>
+                        <a href="javascript:uretimtakipguncelle('#tr<%= u.getId() %>','<%= u.getId() %>');" title="Güncelle"><span class="fa fa-sync fa-lg text-warning"></span></a>
                         <a href="javascript:uretimtakipok(<%= u.getId() %>);" title="Onayla"><span class="fa fa-check-circle fa-lg text-success"></span></a>
                         <a href="javascript:uretimtakipsil(<%= u.getId() %>);" title="Sil"><span class="fa fa-minus-circle fa-lg text-danger"></span></a>
                     </div>

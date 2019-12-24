@@ -25,7 +25,7 @@
     <!-- Custom styles for this template -->
     <link rel="stylesheet" href="css/irfan.css?<%=Util.nanoTime%>">
     <link rel="stylesheet" href="css/fonts.css">
-    <link rel="stylesheet" href="css/font-awesome.css">
+    <link rel="stylesheet" href="css/all.css">
     <link rel="stylesheet" href="css/jquery-ui-1.10.0.custom.css">
     <link rel="stylesheet/less" type="text/css" href="less/datepicker.less">
 
@@ -311,7 +311,7 @@
                         %>
                         <td>
                             <div id="div<%= h.getId() %>" class="text-center">
-                                <a href='javascript:updateHammaddeGo("hammadde", "<%=h.getId()%>", document.action_form<%=h.getId()%>,1);' title="Güncelle"><span class="fa fa-refresh fa-lg text-warning"></span></a>
+                                <a href='javascript:updateHammaddeGo("hammadde", "<%=h.getId()%>", document.action_form<%=h.getId()%>,1);' title="Güncelle"><span class="fa fa-sync fa-lg text-warning"></span></a>
                                 <a href='javascript:deleteHammaddeGo("hammadde", "<%=h.getId()%>", document.action_form<%=h.getId()%>,3);' title="Sil"><span class="fa fa-minus-circle fa-lg text-danger"></span></a>
                             </div>
                         </td>

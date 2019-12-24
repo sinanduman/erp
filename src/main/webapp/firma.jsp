@@ -20,7 +20,7 @@
     <!-- Custom styles for this template -->
     <link rel="stylesheet" href="css/irfan.css?<%=Util.nanoTime%>">
     <link rel="stylesheet" href="css/fonts.css">
-    <link rel="stylesheet" href="css/font-awesome.css">
+    <link rel="stylesheet" href="css/all.css">
     <link rel="stylesheet" href="css/jquery-ui-1.10.0.custom.css">
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -143,7 +143,7 @@
                         <td>
                             <div id="div<%= f.getId() %>" class="text-center">
                                 <a href="javascript:updateFirmaGo('firma','<%=f.getId()%>',document.action_form<%=f.getId()%>,1);"
-                                   title="Güncelle"><span class="fa fa-refresh fa-lg text-warning"></span></a>
+                                   title="Güncelle"><span class="fa fa-sync fa-lg text-warning"></span></a>
                                 <a href="javascript:deleteFirmaGo('firma','<%=f.getId()%>',document.action_form<%=f.getId()%>,3);"
                                    title="Sil"><span class="fa fa-minus-circle fa-lg text-danger"></span></a>
                             </div>

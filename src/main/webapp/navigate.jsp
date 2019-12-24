@@ -129,7 +129,7 @@
             </ul>
         </div>
 
-        <div class="btn-group" style="width:10px;">&nbsp;</div>
+        <div class="btn-group" style="width:10px;"> </div>
 
         <div class="btn-group">
             <button type="button" class="btn btn-info dropdown-toggle"
@@ -143,6 +143,12 @@
                         <span class="fa fa-sign-out" style="color:darkkhaki;"></span> Çıkış</a>
                 </li>
             </ul>
+        </div>
+
+        <div class="btn-group">
+            <a href="#"><span class="text-danger" style="font-size:24px;margin-left:10px;" title="Kalıp Bakımı Gelen Mamüller Var!"><i class="fas fa-compass fa-spin"></i></span></a>
+            <a href="#"><span class="text-success" style="font-size:24px;margin-left:10px;" title="Stoğu Azalan Hammaddeler Var!"><i class="fas fa-compass fa-spin"></i></span></a>
+            <a href="#"><span class="text-sevk" style="font-size:24px;margin-left:10px;" title="Stoğu Azalan Hammaddeler Var!"><i class="fas fa-compass fa-spin"></i></span></a>
         </div>
     </div>
 </div>

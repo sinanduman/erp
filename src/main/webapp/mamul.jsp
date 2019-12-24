@@ -22,7 +22,7 @@
     <!-- Custom styles for this template -->
     <link rel="stylesheet" href="css/irfan.css?<%=Util.nanoTime%>">
     <link rel="stylesheet" href="css/fonts.css">
-    <link rel="stylesheet" href="css/font-awesome.css">
+    <link rel="stylesheet" href="css/all.css">
     <link rel="stylesheet" href="css/jquery-ui-1.10.0.custom.css">
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -266,7 +266,7 @@
                     <td>{{ bilesen.uretimtip }}</td>
                     <td class="text-center">
                         <a href="#" ng-click="edit(bilesen.id)" title="Güncelle"><span
-                                class="fa fa-refresh fa-lg text-warning"></span></a>
+                                class="fa fa-sync fa-lg text-warning"></span></a>
                         <a href="#" ng-click="del(bilesen.id)" title="Sil"><span
                                 class="fa fa-minus-circle fa-lg text-danger"></span></a>
 
@@ -456,7 +456,7 @@
                                 if (admin != null && admin.equals("1")) {
                             %>
                             <a href="javascript:updateMamulGo('mamul','<%=m.getId()%>','document.action_form<%=m.getId()%>',1);"
-                               title="Güncelle"><span class="fa fa-refresh fa-lg text-warning"></span></a>
+                               title="Güncelle"><span class="fa fa-sync fa-lg text-warning"></span></a>
                             <a href="javascript:deleteMamulGo('mamul','<%=m.getId()%>','document.action_form<%=m.getId()%>',3);"
                                title="Sil"><span class="fa fa-minus-circle fa-lg text-danger"></span></a>
                             <%  } %>
@@ -529,7 +529,7 @@
                                     <% if (admin != null && admin.equals("1")) { %>
                                     <td class="text-center"><a
                                             href="javascript:updateMamulBilesenGo('mamul','<%=m.getId()%>','<%=j.getBilesenid()%>',document.action_form<%=m.getId()%>.mamulbilesen_miktar<%= j.getBilesenid() %>,2);"
-                                            title="Güncelle"><span class="fa fa-refresh fa-lg text-warning"></span></a>
+                                            title="Güncelle"><span class="fa fa-sync fa-lg text-warning"></span></a>
                                     </td>
                                     <% } %>
                                 </tr>
