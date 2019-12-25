@@ -432,7 +432,7 @@
                 <td><%= u.getHatakodu() %></td>
                 <td><%= (u.getDuruszaman() == 0) ? "" : u.getDuruszaman() + " Dk."%></td>
                 <td><%= u.getDuruskodu() %></td>
-                <td>
+                <td nowrap>
                     <div id="div<%= u.getId() %>">
                         <a href="javascript:uretimtakipguncelle('#tr<%= u.getId() %>','<%= u.getId() %>');" title="Güncelle"><span class="fa fa-sync fa-lg text-warning"></span></a>
                         <a href="javascript:uretimtakipok(<%= u.getId() %>);" title="Onayla"><span class="fa fa-check-circle fa-lg text-success"></span></a>

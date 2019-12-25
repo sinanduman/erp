@@ -224,7 +224,7 @@
             <div class="form-group" style="margin:20px 0;">
                 <div>
                     <button type="button" class="btn btn-danger" name="irsaliyeekle" id="irsaliyeekle"><i
-                            class="fa fa-upload iki-bosluk"></i>İrsaliyeye Ekle
+                            class="fas fa-upload iki-bosluk"></i>İrsaliyeye Ekle
                     </button>
                     <button type="button" class="btn btn-danger" name="irsaliyeiptal" id="irsaliyeiptal"
                             style="display:none;">İptal

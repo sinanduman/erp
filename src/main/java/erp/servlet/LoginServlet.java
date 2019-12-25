@@ -1,8 +1,13 @@
 package erp.servlet;
 
+import erp.dao.BakimDao;
+import erp.dao.BaseDao;
 import erp.dao.LoginDao;
 import erp.entity.Greeting;
+import erp.entity.Irsaliye;
+import erp.entity.IrsaliyeBilesen;
 import erp.entity.User;
+import erp.model.IrsaliyeTip;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,9 +19,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.List;
 
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet implements Serializable {
+    @Inject
+    private BakimDao bakimDao;
     @Inject
     private LoginDao loginDao;
     @Inject
@@ -42,6 +50,9 @@ public class LoginServlet extends HttpServlet implements Serializable {
 
         if (loginDao.loginResult(user)) {
             if ((User) request.getSession().getAttribute("user") == null) {
+
+                int bakimZamani = bakimDao.bakimZamaniGelmis(BaseDao.V_BAKIM_MAMUL, " and mamul_durum=1 and kalan_baski < 2000 ");
+
                 request.getSession().setAttribute("loggedin", (user != null));
                 request.getSession().setAttribute("user", user);
                 request.getSession().setAttribute("userid", (user != null) ? user.getId() : "0");
@@ -49,6 +60,7 @@ public class LoginServlet extends HttpServlet implements Serializable {
                 request.getSession().setAttribute("admin", (user != null) ? user.getAdmin().toString() : "");
                 request.getSession().setAttribute("role", (user != null) ? user.getRole() : "");
                 request.getSession().setAttribute("message", "");
+                request.getSession().setAttribute("bakimzamani", bakimZamani);
                 try {
                     request.getRequestDispatcher(successPage).forward(request, response);
                 } catch (ServletException | IOException e) {

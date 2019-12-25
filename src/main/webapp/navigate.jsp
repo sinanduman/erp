@@ -3,6 +3,7 @@
 <%@ page import="erp.entity.User" %>
 <%
     User user = (User) request.getSession().getAttribute("user");
+    int bakimZamani = (int) request.getSession().getAttribute("bakimzamani");
 %>
 <div class="container" style="margin-top:20px;">
 
@@ -17,11 +18,11 @@
             <ul class="dropdown-menu">
                 <li>
                     <a href="uretimtakip">
-                        <span class="fa fa-dot-circle-o text-primary"></span> Üretim Takibi</a>
+                        <span class="fas fa-bullseye text-primary"></span> Üretim Takibi</a>
                 </li>
                 <li>
                     <a href="uretimplan">
-                        <span class="fa fa-dot-circle-o text-primary"></span> Üretim Planlama</a>
+                        <span class="fas fa-bullseye text-primary"></span> Üretim Planlama</a>
                 </li>
             </ul>
         </div>
@@ -34,13 +35,13 @@
             </button>
             <ul class="dropdown-menu">
                 <li>
-                    <a href="hammaddestok"><span class="fa fa-dot-circle-o text-success"></span> Hammadde ve Yarı Mamül</a>
+                    <a href="hammaddestok"><span class="fas fa-bullseye text-success"></span> Hammadde ve Yarı Mamül</a>
                 </li>
                 <!-- li>
-                    <a href="yarimamulstok"><span class="fa fa-dot-circle-o text-success"></span> Yarı Mamül</a>
+                    <a href="yarimamulstok"><span class="fas fa-bullseye text-success"></span> Yarı Mamül</a>
                 </li-->
                 <li>
-                    <a href="mamulstok"><span class="fa fa-dot-circle-o text-success"></span> Mamül</a>
+                    <a href="mamulstok"><span class="fas fa-bullseye text-success"></span> Mamül</a>
                 </li>
             </ul>
         </div>
@@ -54,24 +55,24 @@
             <ul class="dropdown-menu">
                 <li>
                     <a href="hammadde">
-                        <span class="fa fa-dot-circle-o text-orange"></span> Hammadde ve Yarı Mamül</a>
+                        <span class="fas fa-bullseye text-orange"></span> Hammadde ve Yarı Mamül</a>
                 </li>
                 <li>
                     <a href="mamul">
-                        <span class="fa fa-dot-circle-o text-orange"></span> Mamül</a>
+                        <span class="fas fa-bullseye text-orange"></span> Mamül</a>
                 </li>
                 <li class="divider"></li>
                 <li>
                     <a href="calisan">
-                        <span class="fa fa-dot-circle-o text-orange"></span> Çalışan</a>
+                        <span class="fas fa-bullseye text-orange"></span> Çalışan</a>
                 </li>
                 <li>
                     <a href="makina">
-                        <span class="fa fa-dot-circle-o text-orange"></span> Makina/Bant</a>
+                        <span class="fas fa-bullseye text-orange"></span> Makina/Bant</a>
                 </li>
                 <li>
                     <a href="firma">
-                        <span class="fa fa-dot-circle-o text-orange"></span> Firma</a>
+                        <span class="fas fa-bullseye text-orange"></span> Firma</a>
                 </li>
             </ul>
         </div>
@@ -85,28 +86,28 @@
             <ul class="dropdown-menu">
                 <li>
                     <a href="stokrapor">
-                        <span class="fa fa-dot-circle-o text-danger"></span> Stok</a>
+                        <span class="fas fa-bullseye text-danger"></span> Stok</a>
                 </li>
                 <li>
                     <a href="uretimrapor">
-                        <span class="fa fa-dot-circle-o text-danger"></span> Üretim</a>
+                        <span class="fas fa-bullseye text-danger"></span> Üretim</a>
                 </li>
                 <li>
                     <a href="sevkrapor">
-                        <span class="fa fa-dot-circle-o text-danger"></span> Sevk</a>
+                        <span class="fas fa-bullseye text-danger"></span> Sevk</a>
                 </li>
                 <li>
                     <a href="gkrliste">
-                        <span class="fa fa-dot-circle-o text-danger"></span> GKR Listesi</a>
+                        <span class="fas fa-bullseye text-danger"></span> GKR Listesi</a>
                 </li>
                 <li>
                     <a href="izlemeno">
-                        <span class="fa fa-dot-circle-o text-danger"></span> Mamül İzleme No</a>
+                        <span class="fas fa-bullseye text-danger"></span> Mamül İzleme No</a>
                 </li>
 
                 <li>
                     <a href="bakimrapor">
-                        <span class="fa fa-dot-circle-o text-danger"></span> Kalıp Bakım</a>
+                        <span class="fas fa-bullseye text-danger"></span> Kalıp Bakım</a>
                 </li>
             </ul>
         </div>
@@ -120,11 +121,11 @@
             <ul class="dropdown-menu">
                 <li>
                     <a href="irsaliye">
-                        <span class="fa fa-dot-circle-o text-sevk"></span> İrsaliye Hazırla</a>
+                        <span class="fas fa-bullseye text-sevk"></span> İrsaliye Hazırla</a>
                 </li>
                 <li>
                     <a href="irsaliyegonder">
-                        <span class="fa fa-dot-circle-o text-sevk"></span> Gönderilen İrsaliyeler</a>
+                        <span class="fas fa-bullseye text-sevk"></span> Gönderilen İrsaliyeler</a>
                 </li>
             </ul>
         </div>
@@ -140,15 +141,24 @@
             <ul class="dropdown-menu">
                 <li>
                     <a href="logout">
-                        <span class="fa fa-sign-out" style="color:darkkhaki;"></span> Çıkış</a>
+                        <span class="fa fa-sign-out-alt" style="color:darkkhaki;"></span> Çıkış</a>
                 </li>
             </ul>
         </div>
 
+        <div class="btn-group" style="width:10px;"> </div>
+
         <div class="btn-group">
+            <ul class="nav nav-pills" role="tablist">
+                <% if (bakimZamani > 0) { %>
+                <li role="presentation" class="active"><a href="bakimrapor">Bakım<span class="badge"><%= bakimZamani %></span></a></li>
+                <% } %>
+            </ul>
+            <!--
             <a href="#"><span class="text-danger" style="font-size:24px;margin-left:10px;" title="Kalıp Bakımı Gelen Mamüller Var!"><i class="fas fa-compass fa-spin"></i></span></a>
             <a href="#"><span class="text-success" style="font-size:24px;margin-left:10px;" title="Stoğu Azalan Hammaddeler Var!"><i class="fas fa-compass fa-spin"></i></span></a>
             <a href="#"><span class="text-sevk" style="font-size:24px;margin-left:10px;" title="Stoğu Azalan Hammaddeler Var!"><i class="fas fa-compass fa-spin"></i></span></a>
+            -->
         </div>
     </div>
 </div>

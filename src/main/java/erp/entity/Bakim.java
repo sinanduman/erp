@@ -14,6 +14,7 @@ import java.util.Date;
 public class Bakim {
     private Integer id;
     private Integer mamulid;
+    private Integer mamulDurum;
     private Integer calisanid;
     private Integer uretimMiktar;
     private Integer baskiSayisi;
@@ -24,6 +25,7 @@ public class Bakim {
     public Bakim(ResultSet rs) throws SQLException {
         this.id = rs.getInt("id");
         this.mamulid = rs.getInt("mamulid");
+        this.mamulDurum = rs.getInt("mamul_durum");
         this.calisanid = rs.getInt("calisanid");
         this.bakimtarihi = rs.getDate ("bakimtarihi");
         this.islemtarihi = rs.getDate("islemtarihi");

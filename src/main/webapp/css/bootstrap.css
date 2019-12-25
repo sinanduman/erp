@@ -3561,7 +3561,7 @@ input[type="button"].btn-block {
 	margin: 2px 0 0;
 	font-size: 14px;
 	list-style: none;
-	background-color: #ffffff;
+	background-color: #fafafa;
 	border: 1px solid #cccccc;
 	border: 1px solid rgba(0, 0, 0, 0.15);
 	border-radius: 4px;
@@ -4139,7 +4139,7 @@ textarea.input-group-sm > .input-group-btn > .btn {
 .nav > li > a {
 	position: relative;
 	display: block;
-	padding: 10px 15px;
+	padding: 6px 12px;
 }
 
 .nav > li > a:hover,
@@ -4196,7 +4196,7 @@ textarea.input-group-sm > .input-group-btn > .btn {
 
 .nav-tabs > li > a:hover {
 	border-color: #eeeeee #eeeeee #dddddd;
-}
+}nav-pills
 
 .nav-tabs > li.active > a,
 .nav-tabs > li.active > a:hover,
@@ -4253,7 +4253,7 @@ textarea.input-group-sm > .input-group-btn > .btn {
 .nav-pills > li.active > a:hover,
 .nav-pills > li.active > a:focus {
 	color: #ffffff;
-	background-color: #428bca;
+	background-color: #d9534f;
 }
 
 .nav-stacked > li {
@@ -5286,7 +5286,7 @@ a.badge:focus {
 
 a.list-group-item.active > .badge,
 .nav-pills > .active > a > .badge {
-	color: #428bca;
+	color: #d9534f;
 	background-color: #ffffff;
 }
 

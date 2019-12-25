@@ -42,4 +42,20 @@ public class BakimDao implements Serializable, BaseDao {
         }
         return temp;
     }
+
+    public int bakimZamaniGelmis(String tablename, String filterPage) {
+        int retVal = 0;
+        String searchQuery = "SELECT count(*) mamul_sayi FROM " + tablename + " WHERE 1=1 " + filterPage;
+
+        try (Connection conn = connectionManager.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(searchQuery)) {
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                retVal = rs.getInt("mamul_sayi");
+            }
+        } catch (SQLException e) {
+            logger.error(e.getMessage());
+        }
+        return retVal;
+    }
 }
