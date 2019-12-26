@@ -43,8 +43,7 @@ public class HammaddeServlet extends HttpServlet implements Serializable {
         String message      = "";
         String bilesenid    = request.getParameter("bilesenidara");
         String stoklisteid  = request.getParameter("stoklisteid");
-        List<Firma> firma   = new ArrayList<Firma>();
-        firma = firmaDao.firmaListeGetirTum(0);
+        List<Firma> firma   = firmaDao.firmaListeGetirTum(0);
 
         int totalrecord = daoFunctions.recordCount(BaseDao.BILESEN," ");
         int page = 1;
@@ -53,10 +52,8 @@ public class HammaddeServlet extends HttpServlet implements Serializable {
 
         int noofpages = (int) Math.ceil(totalrecord * 1.0 / Genel.ROWPERPAGE);
 
-        List<Bilesen> hammaddetum   = new ArrayList<Bilesen>();
-        List<Bilesen> hammadde      = new ArrayList<Bilesen>();
-        hammaddetum = bilesenDao.bilesenListeGetirTum(null, 0, null, null);
-        hammadde = bilesenDao.bilesenListeGetirTum(null, page, (Util.isNotEmptyOrNull(bilesenid))? Integer.parseInt(bilesenid): null, null);
+        List<Bilesen> hammaddetum = bilesenDao.bilesenListeGetirTum(null, 0, null, null);;
+        List<Bilesen> hammadde    = bilesenDao.bilesenListeGetirTum(null, page, (Util.isNotEmptyOrNull(bilesenid))? Integer.parseInt(bilesenid): null, null);;
 
         token  = Util.getToken();
         request.setAttribute("token", token);

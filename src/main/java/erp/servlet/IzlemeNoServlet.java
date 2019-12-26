@@ -42,10 +42,10 @@ public class IzlemeNoServlet extends HttpServlet implements Serializable {
         for(IzlemeNo i : temp ) {
             tmpStr = tmpStr + delimeter + "{ "
                             + "\"gkrno\":\"" + i.getGkrno().toString() + "\"" 
-                            + ",\"mamulid\":\"" + i.getMamulid().toString()  + "\""
-                            + ",\"mamulad\":\"" + i.getMamulad().toString()  + "\""
-                            + ",\"mamulkod\":\"" + i.getMamulkod().toString()  + "\""
-                            + ",\"kullanildi\":\"" + i.getKullanildi().toString()  + "\""
+                            + ",\"mamulid\":\"" + i.getMamulid().toString() + "\""
+                            + ",\"mamulad\":\"" + i.getMamulad() + "\""
+                            + ",\"mamulkod\":\"" + i.getMamulkod() + "\""
+                            + ",\"kullanildi\":\"" + i.getKullanildi().toString() + "\""
                             + ",\"kullanildi_tarih\":\"" + Util.getTarihTR(i.getKullanildi_tarih()) + "\"" + "}";
             delimeter = ",";
         }

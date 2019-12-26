@@ -124,15 +124,9 @@ public class MamulServlet extends HttpServlet implements Serializable {
             }
 
             List<Calisan> calisan = calisanDao.calisanListeGetirTum(0, null);
-                    
-            List<Firma> firma = new ArrayList<Firma>();
-            firma = firmaDao.firmaListeGetirTum(0);
-            
-            List<Bilesen> hammadde = new ArrayList<Bilesen>();
-            hammadde = bilesenDao.bilesenListeGetirTum(BilesenTip.HAMMADDE, 0, null, 1); /// Aktif
-            
-            List<Bilesen> yarimamul = new ArrayList<Bilesen>();
-            yarimamul = bilesenDao.bilesenListeGetirTum(BilesenTip.YARIMAMUL, 0, null, 1); /// Aktif
+            List<Firma> firma = firmaDao.firmaListeGetirTum(0);
+            List<Bilesen> hammadde = bilesenDao.bilesenListeGetirTum(BilesenTip.HAMMADDE, 0, null, 1); /// Aktif
+            List<Bilesen> yarimamul = bilesenDao.bilesenListeGetirTum(BilesenTip.YARIMAMUL, 0, null, 1); /// Aktif
             
             // PAGING
             int totalrecord = daoFunctions.recordAgg(BaseDao.V_MAMUL_TUM, "COUNT", "*", ((mamulid==null)?"":" where id=" + mamulid));
@@ -142,13 +136,9 @@ public class MamulServlet extends HttpServlet implements Serializable {
             int noofpages = (int) Math.ceil(totalrecord * 1.0 / Genel.ROWPERPAGE);
             // PAGING
             
-            List<Mamul> mamul   = new ArrayList<Mamul>();
-            List<Mamul> mamultum= new ArrayList<Mamul>();
-            mamul   = mamulDao.mamulListeGetir(mamulid, page, null);
-            mamultum= mamulDao.mamulListeGetir(null, 0, null);
-            
-            List<MamulBilesen> mamulbilesen = new ArrayList<MamulBilesen>();
-            mamulbilesen = mamulDao.mamulBilesenListeGetirTum(mamulid);
+            List<Mamul> mamul   = mamulDao.mamulListeGetir(mamulid, page, null);
+            List<Mamul> mamultum= mamulDao.mamulListeGetir(null, 0, null);
+            List<MamulBilesen> mamulbilesen = mamulDao.mamulBilesenListeGetirTum(mamulid);
             
             token  = Util.getToken();
             request.setAttribute("token", token);

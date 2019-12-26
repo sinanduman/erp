@@ -454,9 +454,9 @@
     <div class="row" style="font-size:12px;margin-top:10px;">
         <label class="text-danger">Not:</label>
         <br>
-        <span class="text-danger">&rarr;</span> <span class="text-success">Aksiyon bölümünde "Onayla" simgesine tıklayınca, listeye yansıyan "Ür.Adet" miktarı, ürün stoğuna eklenir.</span>
+        <span class="text-danger"><i class="fas fa-paperclip"></i></span> <span class="text-success">Aksiyon bölümünde "Onayla" simgesine tıklayınca, listeye yansıyan "Ür.Adet" miktarı, ürün stoğuna eklenir.</span>
         <br>
-        <span class="text-danger">&rarr;</span> <span class="text-success">Aksiyon bölümünde "Onayla" simgesine tıklayınca, listeye yansıyan "Ür.Adet" miktarına göre, hammadde ve yarımamül stoğundan düşülür.</span>
+        <span class="text-danger"><i class="fas fa-paperclip"></i></span> <span class="text-success">Aksiyon bölümünde "Onayla" simgesine tıklayınca, listeye yansıyan "Ür.Adet" miktarına göre, hammadde ve yarımamül stoğundan düşülür.</span>
         <br>
     </div>
     <div id="okdiv" class="bb-alert alert alert-success" style="display:none;">

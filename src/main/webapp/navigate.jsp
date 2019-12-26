@@ -3,7 +3,7 @@
 <%@ page import="erp.entity.User" %>
 <%
     User user = (User) request.getSession().getAttribute("user");
-    int bakimZamani = (int) request.getSession().getAttribute("bakimzamani");
+    int bakimBadge = (int) request.getSession().getAttribute("bakimbadge");
 %>
 <div class="container" style="margin-top:20px;">
 
@@ -150,8 +150,8 @@
 
         <div class="btn-group">
             <ul class="nav nav-pills" role="tablist">
-                <% if (bakimZamani > 0) { %>
-                <li role="presentation" class="active"><a href="bakimrapor">Bakım<span class="badge"><%= bakimZamani %></span></a></li>
+                <% if (bakimBadge > 0) { %>
+                <li role="presentation" class="active"><a href="bakimrapor">Bakım<span class="badge"><%= bakimBadge %></span></a></li>
                 <% } %>
             </ul>
             <!--

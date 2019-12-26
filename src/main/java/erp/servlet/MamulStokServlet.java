@@ -156,11 +156,9 @@ public class MamulStokServlet extends HttpServlet implements Serializable {
             stok        = stokDao.stokListeGetirTum(BilesenTip.MAMUL, Integer.parseInt(mamulid), page, null);
             // }
             
-            List<Mamul> mamul = new ArrayList<Mamul>();
-            mamul = mamulDao.mamulListeStokGetir(null, 0, 1);
+            List<Mamul> mamul = mamulDao.mamulListeStokGetir(null, 0, 1);
             
-            List<Firma> firma = new ArrayList<Firma>();
-            firma = firmaDao.firmaListeGetirTum(0);
+            List<Firma> firma = firmaDao.firmaListeGetirTum(0);
             
             request.setAttribute("mamul", mamul);
             request.setAttribute("firma", firma);

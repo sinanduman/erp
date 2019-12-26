@@ -51,7 +51,9 @@ public class LoginServlet extends HttpServlet implements Serializable {
         if (loginDao.loginResult(user)) {
             if ((User) request.getSession().getAttribute("user") == null) {
 
-                int bakimZamani = bakimDao.bakimZamaniGelmis(BaseDao.V_BAKIM_MAMUL, " and mamul_durum=1 and kalan_baski < 2000 ");
+                int bakimBadge = bakimDao.bakimZamaniGelmis(BaseDao.V_BAKIM_MAMUL, " and mamul_durum=1 and kalan_baski < 2000 ");
+                int hammaddeBadge = bakimDao.bakimZamaniGelmis(BaseDao.V_BAKIM_MAMUL, " and mamul_durum=1 and kalan_baski < 2000 ");
+                int yarimamulBadge = bakimDao.bakimZamaniGelmis(BaseDao.V_BAKIM_MAMUL, " and mamul_durum=1 and kalan_baski < 2000 ");
 
                 request.getSession().setAttribute("loggedin", (user != null));
                 request.getSession().setAttribute("user", user);
@@ -60,7 +62,9 @@ public class LoginServlet extends HttpServlet implements Serializable {
                 request.getSession().setAttribute("admin", (user != null) ? user.getAdmin().toString() : "");
                 request.getSession().setAttribute("role", (user != null) ? user.getRole() : "");
                 request.getSession().setAttribute("message", "");
-                request.getSession().setAttribute("bakimzamani", bakimZamani);
+                request.getSession().setAttribute("bakimbadge", bakimBadge);
+                request.getSession().setAttribute("hammaddebadge", hammaddeBadge);
+                request.getSession().setAttribute("yarimamulbadge", yarimamulBadge);
                 try {
                     request.getRequestDispatcher(successPage).forward(request, response);
                 } catch (ServletException | IOException e) {

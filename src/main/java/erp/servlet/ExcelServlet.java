@@ -45,8 +45,7 @@ public class ExcelServlet extends HttpServlet implements Serializable {
         
         if(excelegonder!=null && excelegonder.equals("1")) {
             
-            List<UretimPlan> uretimplan = new ArrayList<UretimPlan>();
-            uretimplan  = uretimDao.uretimPlanListeGetirExcel(UretimDurum.TAMAMLANMIS,exceltarih, excelsql);
+            List<UretimPlan> uretimplan = uretimDao.uretimPlanListeGetirExcel(UretimDurum.TAMAMLANMIS,exceltarih, excelsql);
             
             Workbook workbook = new XSSFWorkbook();
             Sheet sheet = workbook.createSheet();

@@ -171,25 +171,6 @@ public class StokDao implements Serializable, BaseDao {
         return retVal;
     }
 
-    public String hammaddeStokSil(Integer stokid) {
-        String retVal = "0";
-        String deleteQuery = "select " + BaseDao.F_HAMMADDE_STOK_SIL + "(?)";
-        // connect to DB
-        try (Connection conn = connectionManager.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(deleteQuery)) {
-            pstmt.setInt(1, stokid);
-            logger.info(pstmt.toString());
-            ResultSet rs = pstmt.executeQuery();
-            if (rs.next()) {
-                retVal = rs.getString(1);
-                logger.info("Sonuc: " + retVal);
-            }
-        } catch (SQLException e) {
-            logger.error("Error: " + e);
-        }
-        return retVal;
-    }
-
     public List<Stok> stokMamulListeGetirTum(Integer mamulid, Integer durum) {
         List<Stok> temp = new ArrayList<Stok>();
         String filter0 = " where 1=1";

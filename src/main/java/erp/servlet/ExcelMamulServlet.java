@@ -58,8 +58,7 @@ public class ExcelMamulServlet extends HttpServlet implements Serializable {
         if(excelegonder!=null && excelegonder.equals("1")) {
 
             int sumagg      = daoFunctions.recordAgg(BaseDao.V_STOKMIKTAR, "sum", "miktar", " where bilesenid= " +  Integer.parseInt(excelsql));
-            List<Stok> stok = new ArrayList<Stok>();            
-            stok   = stokDao.stokListeGetirTum(BilesenTip.MAMUL, Integer.parseInt(excelsql), 0, null);
+            List<Stok> stok = stokDao.stokListeGetirTum(BilesenTip.MAMUL, Integer.parseInt(excelsql), 0, null);
             
             Workbook workbook = new XSSFWorkbook();
             Sheet sheet = workbook.createSheet();

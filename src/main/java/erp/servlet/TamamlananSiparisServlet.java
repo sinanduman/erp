@@ -33,11 +33,8 @@ public class TamamlananSiparisServlet extends HttpServlet implements Serializabl
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         
-        List<Bilesen> bilesen = new ArrayList<Bilesen>();
-        bilesen = bilesenDao.bilesenListeGetirTum(BilesenTip.MAMUL, 0, null, null);
-        
-        List<Siparis> siparis = new ArrayList<Siparis>();
-        siparis = siparisDao.siparisListeGetir(SiparisTip.TAMAMLANMIS);
+        List<Bilesen> bilesen = bilesenDao.bilesenListeGetirTum(BilesenTip.MAMUL, 0, null, null);
+        List<Siparis> siparis = siparisDao.siparisListeGetir(SiparisTip.TAMAMLANMIS);
         
         request.setAttribute("bilesen", bilesen);
         request.setAttribute("siparis", siparis);

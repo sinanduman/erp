@@ -432,9 +432,9 @@
     <div class="row" style="font-size:12px;margin-top:10px;">
         <label class="text-danger">Not:</label>
         <br>
-        <span class="text-danger">&rarr;</span> <span class="text-success">Buradaki veriler herhangi bir sayfaya etki etmez, değiştirmez. (Stok girmek, düşmek, vs.)</span>
+        <span class="text-danger"><i class="fas fa-paperclip"></i></span> <span class="text-success">Buradaki veriler herhangi bir sayfaya etki etmez, değiştirmez. (Stok girmek, düşmek, vs.)</span>
         <br>
-        <span class="text-danger">&rarr;</span> <span class="text-success">Sadece Hedef Üretim ve Fark varsa Açıklama girilebilir.</span>
+        <span class="text-danger"><i class="fas fa-paperclip"></i></span> <span class="text-success">Sadece Hedef Üretim ve Fark varsa Açıklama girilebilir.</span>
         <br>
     </div>
     <div id="okdiv" class="bb-alert alert alert-success" style="display:none;">

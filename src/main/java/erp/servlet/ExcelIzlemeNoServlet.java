@@ -56,8 +56,7 @@ public class ExcelIzlemeNoServlet extends HttpServlet implements Serializable {
         
         if(excelegonder!=null && excelegonder.equals("1")) {
             
-            List<IzlemeNo> stokrapor = new ArrayList<IzlemeNo>();
-            stokrapor   = izlemeNoDao.izlemeNoTum(tablename, excelsql, 0);
+            List<IzlemeNo> stokrapor = izlemeNoDao.izlemeNoTum(tablename, excelsql, 0);
             
             Workbook workbook = new XSSFWorkbook();
             Sheet sheet = workbook.createSheet();
