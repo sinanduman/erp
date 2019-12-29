@@ -3,11 +3,9 @@ package erp.servlet;
 import erp.dao.BakimDao;
 import erp.dao.BaseDao;
 import erp.dao.LoginDao;
+import erp.dao.StokDao;
 import erp.entity.Greeting;
-import erp.entity.Irsaliye;
-import erp.entity.IrsaliyeBilesen;
 import erp.entity.User;
-import erp.model.IrsaliyeTip;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,10 +17,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.List;
 
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet implements Serializable {
+    @Inject
+    private StokDao stokDao;
     @Inject
     private BakimDao bakimDao;
     @Inject
@@ -51,9 +50,10 @@ public class LoginServlet extends HttpServlet implements Serializable {
         if (loginDao.loginResult(user)) {
             if ((User) request.getSession().getAttribute("user") == null) {
 
-                int bakimBadge = bakimDao.bakimZamaniGelmis(BaseDao.V_BAKIM_MAMUL, " and mamul_durum=1 and kalan_baski < 2000 ");
-                int hammaddeBadge = bakimDao.bakimZamaniGelmis(BaseDao.V_BAKIM_MAMUL, " and mamul_durum=1 and kalan_baski < 2000 ");
-                int yarimamulBadge = bakimDao.bakimZamaniGelmis(BaseDao.V_BAKIM_MAMUL, " and mamul_durum=1 and kalan_baski < 2000 ");
+                int bakimBadge = bakimDao.bakimZamaniGelmis(BaseDao.V_BAKIM_MAMUL, " and kalan_baski < 2000 ");
+                int hammaddeBadge = stokDao.stokEsikHammadde();
+                int yarimamulBadge = stokDao.stokEsikYarimamul();
+                int mamulBadge = stokDao.stokEsikMamul();
 
                 request.getSession().setAttribute("loggedin", (user != null));
                 request.getSession().setAttribute("user", user);
@@ -65,6 +65,7 @@ public class LoginServlet extends HttpServlet implements Serializable {
                 request.getSession().setAttribute("bakimbadge", bakimBadge);
                 request.getSession().setAttribute("hammaddebadge", hammaddeBadge);
                 request.getSession().setAttribute("yarimamulbadge", yarimamulBadge);
+                request.getSession().setAttribute("mamulbadge", mamulBadge);
                 try {
                     request.getRequestDispatcher(successPage).forward(request, response);
                 } catch (ServletException | IOException e) {

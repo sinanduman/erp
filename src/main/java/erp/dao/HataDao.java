@@ -27,7 +27,7 @@ public class HataDao implements Serializable, BaseDao {
         String searchQuery = "select * from " + BaseDao.DURUSSEBEP + " order by ad";
 
         // connect to DB
-        ResultSet rs = null;
+        ResultSet rs;
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(searchQuery)) {
             logger.info(pstmt.toString());
@@ -46,7 +46,7 @@ public class HataDao implements Serializable, BaseDao {
         String searchQuery = "select * from " + BaseDao.HATASEBEP + " order by ad";
 
         // connect to DB
-        ResultSet rs = null;
+        ResultSet rs;
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(searchQuery)) {
             logger.info(pstmt.toString());

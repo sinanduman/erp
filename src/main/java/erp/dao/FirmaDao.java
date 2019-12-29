@@ -27,7 +27,7 @@ public class FirmaDao implements Serializable, BaseDao {
         String pageFilter = Util.getPageFilter (offset);
         String searchQuery = "select * from " + BaseDao.FIRMA + " order by ad " + pageFilter;
         // connect to DB
-        ResultSet rs = null;
+        ResultSet rs;
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(searchQuery)) {
             logger.info(pstmt.toString());
@@ -86,7 +86,7 @@ public class FirmaDao implements Serializable, BaseDao {
         String result = "0";
         String updateQuery = "select " + BaseDao.F_FIRMA_SIL + "(?)";
         // connect to DB
-        ResultSet rs = null;
+        ResultSet rs;
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(updateQuery)) {
             pstmt.setInt(1, Integer.parseInt(id));

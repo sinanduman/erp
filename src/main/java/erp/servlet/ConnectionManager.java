@@ -10,12 +10,12 @@ import java.sql.SQLException;
 
 public class ConnectionManager implements Serializable {
 
-    private Connection conn = null;
+    private Connection conn;
     private DataSource ds;
 
     @PostConstruct
     private void connectionReady() {
-        Context ctx = null;
+        Context ctx;
         try {
             /*
             String hostName = "localhost";

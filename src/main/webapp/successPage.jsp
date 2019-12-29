@@ -8,7 +8,7 @@
 </head>
 <body>
 <%
-    String message = null;
+    String message;
     if (request.getSession().isNew()) {
         message = "new Sessions";
     } else {

@@ -37,6 +37,13 @@ public interface BaseDao {
     public static final String V_URETIMPLAN_TUM_PLAN = "irfan.uretimplantum_plan";
     public static final String V_URETIMPLAN_TUM_TAKIP = "irfan.uretimplantum_takip";
     public static final String V_STOKBILESEN = "irfan.stokbilesen";
+    public static final String V_STOKESIK_HAMMADDE = "irfan.stokesik_hammadde";
+    public static final String V_STOKESIK_YARIMAMUL = "irfan.stokesik_yarimamul";
+    public static final String V_STOKESIK_MAMUL = "irfan.stokesik_mamul";
+    public static final String V_STOKDETAY_BILESEN = "irfan.stokdetay_bilesen";
+    public static final String V_STOKDETAY_BILESEN_ID = "irfan.stokdetay_bilesen_id";
+    public static final String V_STOKDETAY_MAMUL = "irfan.stokdetay_mamul";
+    public static final String V_STOKDETAY_MAMUL_ID = "irfan.stokdetay_mamul_id";
     public static final String V_STOKMAMUL_TUM = "irfan.stokmamultum";
     public static final String V_STOKMIKTAR = "irfan.stokmiktar";
     public static final String V_IZLEMENO_TUM = "irfan.izlemeno_tum";

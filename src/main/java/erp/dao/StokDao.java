@@ -32,7 +32,7 @@ public class StokDao implements Serializable, BaseDao {
                 + " group by gkrno";
 
         // connect to DB
-        ResultSet rs = null;
+        ResultSet rs;
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(selectQuery)) {
             pstmt.setInt(1, Integer.parseInt(bilesenid));
@@ -73,7 +73,6 @@ public class StokDao implements Serializable, BaseDao {
 
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(insertQuery)) {
-            logger.info(tarih);
             pstmt.setNull(1, Types.INTEGER); // planid
             pstmt.setInt(2, Integer.parseInt(bilesenid));
             pstmt.setBigDecimal(3, BigDecimal.valueOf(Double.parseDouble(miktar)));
@@ -179,7 +178,7 @@ public class StokDao implements Serializable, BaseDao {
         String searchQuery = "select * from " + BaseDao.V_STOKMAMUL_TUM + filter0 + filter1 + filter2;
         logger.info(searchQuery);
         // connect to DB
-        ResultSet rs = null;
+        ResultSet rs;
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(searchQuery)) {
             long start = System.currentTimeMillis();
@@ -231,7 +230,7 @@ public class StokDao implements Serializable, BaseDao {
 
         logger.info(searchQuery);
         // connect to DB
-        ResultSet rs = null;
+        ResultSet rs;
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(searchQuery)) {
             logger.info(pstmt.toString());
@@ -290,7 +289,7 @@ public class StokDao implements Serializable, BaseDao {
         String searchQuery = "select m2.kod mamulkod, s.*, b.ad bilesenad, b.kod bilesenkod, "
                 + " bt.id bilesentipid, bt.ad bilesentipad, br.id birimid, br.ad birimad, "
                 + " f.id firmaid, f.ad firmaad, '' as mamuldetay, (sum(CASE WHEN s.islemyonu = 0 THEN s.miktar ELSE -1*miktar END) "
-                + " OVER (ORDER BY CASE WHEN s.islemyonu=0 THEN date(s.giristarihi) ELSE date(s.cikistarihi) END, s.id)) kalan "
+                + " OVER (PARTITION BY s.bilesenid ORDER BY s.id)) kalan "
                 + " from      " + BaseDao.STOK       + " s"
                 + " left join " + BaseDao.URETIMPLAN + " p on p.id = s.planid"
                 + " left join " + BaseDao.MAMUL      + " m2 on m2.id = p.mamulid " + join0
@@ -298,11 +297,11 @@ public class StokDao implements Serializable, BaseDao {
                 + " left join " + BaseDao.BIRIM      + " br on br.id = b.birimid"
                 + " join      " + BaseDao.FIRMA      + " f on f.id = b.firmaid "
                 + " where 1=1 " + filter0 + filter1 + filter2
-                + " order by case when s.islemyonu=0 then date(s.giristarihi) else date(s.cikistarihi) end desc, id desc "
+                + " order by s.id desc "
                 + pageFilter;
 
         // connect to DB
-        ResultSet rs = null;
+        ResultSet rs;
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement  pstmt = conn.prepareStatement(searchQuery)) {
             logger.info(pstmt.toString());
@@ -318,31 +317,23 @@ public class StokDao implements Serializable, BaseDao {
 
     public List<StokRapor> stokBilesenRapor(String tablename, String filter, int offset) {
         List<StokRapor> temp = new ArrayList<StokRapor>();
-        if(!tablename.toLowerCase().startsWith("irfan")) tablename = "irfan." + tablename;
 
         String pageFilter = Util.getPageFilter (offset);
-        String searchQuery = "select t.*, f.ad firmaad, b.ad bilesentipad, -1::integer as islemyonu from ("
-                + " select s.bilesenid, m.ad, m.kod, m.firmaid, m.bilesentipid,"
-                + " sum(case when islemyonu = 0 then miktar else -1*miktar end) miktar,"
-                + " max(case when islemyonu = 0 then giristarihi else cikistarihi end) tarih"
-                + " from " + BaseDao.STOK + " s"
-                + " join " + tablename + " m on s.bilesenid = m.id"
-                + " where 1=1 " + filter
-                + " group by s.bilesenid, m.ad, m.kod, m.firmaid, m.bilesentipid) t"
-                + " join " + BaseDao.FIRMA + " f on f.id = t.firmaid"
-                + " join " + BaseDao.BILESENTIP + " b on b.id = t.bilesentipid"
-                + " order by t.ad " + pageFilter;
+        String searchQuery = "select * from " + tablename
+                + filter
+                + pageFilter;
 
         // connect to DB
-        ResultSet rs = null;
+        ResultSet rs;
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(searchQuery)) {
             logger.info(pstmt.toString());
             rs = pstmt.executeQuery();
+            int index = 0;
             while (rs.next()) {
                 temp.add(new StokRapor(
-                        null, //rs.getInt("id"),
-                        null, //rs.getInt("stokid"),
+                        ++index,
+                        rs.getInt("bilesenid"),
                         rs.getInt("islemyonu"),
                         rs.getString("ad"),
                         rs.getString("kod"),
@@ -360,24 +351,16 @@ public class StokDao implements Serializable, BaseDao {
         return temp;
     }
 
-    public List<StokRapor> stokBilesenDetayRapor(String tablename, String filter, int offset, int bilesenid) {
+    public List<StokRapor> stokBilesenDetayRapor(String tablename, String filter, int offset) {
         List<StokRapor> temp = new ArrayList<StokRapor>();
-        if(!tablename.toLowerCase().startsWith("irfan")) tablename = "irfan." + tablename;
 
         String pageFilter = Util.getPageFilter (offset);
-        String searchQuery = "SELECT m.*, s.id stokid, s.islemyonu, s.miktar, f.ad firmaad, bt.ad bilesentipad,"
-                + " s.islemyonu, case when s.islemyonu=0 THEN s.giristarihi ELSE s.cikistarihi END as tarih,"
-                + " sum(CASE s.islemyonu WHEN 1 THEN (-1) * s.miktar ELSE 1 * s.miktar END) OVER (PARTITION BY s.bilesenid ORDER BY s.id) kalan"
-                + " FROM " + tablename + " m"
-                + " LEFT JOIN " + BaseDao.STOK + " s on s.bilesenid=m.id"
-                + " JOIN " + BaseDao.FIRMA + " f ON f.id=m.firmaid"
-                + " JOIN " + BaseDao.BILESENTIP + " bt ON bt.id=m.bilesentipid"
-                + " WHERE 1=1 " + filter
-                + " ORDER BY (case when s.islemyonu=0 THEN s.giristarihi ELSE s.cikistarihi END) desc, stokid DESC"
+        String searchQuery = "select * from " + tablename
+                + filter
                 + pageFilter;
 
         // connect to DB
-        ResultSet rs = null;
+        ResultSet rs;
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(searchQuery)) {
             logger.info(pstmt.toString());
@@ -389,5 +372,53 @@ public class StokDao implements Serializable, BaseDao {
             logger.error(e.getMessage());
         }
         return temp;
+    }
+
+    public int stokEsikHammadde() {
+        int retVal = 0;
+        String searchQuery = "SELECT count(*) as hammadde_sayi from " + BaseDao.V_STOKESIK_HAMMADDE;
+
+        try (Connection conn = connectionManager.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(searchQuery)) {
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                retVal = rs.getInt("hammadde_sayi");
+            }
+        } catch (SQLException e) {
+            logger.error(e.getMessage());
+        }
+        return retVal;
+    }
+
+    public int stokEsikYarimamul() {
+        int retVal = 0;
+        String searchQuery = "SELECT count(*) as yarimamul_sayi from " + BaseDao.V_STOKESIK_YARIMAMUL;
+
+        try (Connection conn = connectionManager.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(searchQuery)) {
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                retVal = rs.getInt("yarimamul_sayi");
+            }
+        } catch (SQLException e) {
+            logger.error(e.getMessage());
+        }
+        return retVal;
+    }
+
+    public int stokEsikMamul() {
+        int retVal = 0;
+        String searchQuery = "SELECT count(*) as mamul_sayi from " + BaseDao.V_STOKESIK_MAMUL;
+
+        try (Connection conn = connectionManager.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(searchQuery)) {
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                retVal = rs.getInt("mamul_sayi");
+            }
+        } catch (SQLException e) {
+            logger.error(e.getMessage());
+        }
+        return retVal;
     }
 }

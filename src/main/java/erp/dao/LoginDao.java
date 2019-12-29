@@ -17,7 +17,7 @@ public class LoginDao implements Serializable, BaseDao {
     ConnectionManager connectionManager;
 
     public User login(String username, String password) {
-        ResultSet rs = null;
+        ResultSet rs;
         User user = null;
         String searchQuery = "select * from " + BaseDao.LOGIN + " where username=? and password=?";
 

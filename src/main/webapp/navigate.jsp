@@ -4,6 +4,9 @@
 <%
     User user = (User) request.getSession().getAttribute("user");
     int bakimBadge = (int) request.getSession().getAttribute("bakimbadge");
+    int hammaddeBadge = (int) request.getSession().getAttribute("hammaddebadge");
+    int yarimamulBadge = (int) request.getSession().getAttribute("yarimamulbadge");
+    int mamulBadge = (int) request.getSession().getAttribute("mamulbadge");
 %>
 <div class="container" style="margin-top:20px;">
 
@@ -151,14 +154,22 @@
         <div class="btn-group">
             <ul class="nav nav-pills" role="tablist">
                 <% if (bakimBadge > 0) { %>
-                <li role="presentation" class="active"><a href="bakimrapor">Bakım<span class="badge"><%= bakimBadge %></span></a></li>
+                <li role="presentation" class="active" style="margin-right:2px;"><a href="bakimrapor">Bakım<span class="badge"><%= bakimBadge %></span></a></li>
                 <% } %>
+
+                <% if (hammaddeBadge > 0) { %>
+                <li role="presentation" class="active" style="margin-right:2px;"><a href="bakimrapor">Hammadde<span class="badge"><%= hammaddeBadge %></span></a></li>
+                <% } %>
+
+                <% if (yarimamulBadge > 0) { %>
+                <li role="presentation" class="active" style="margin-right:2px;"><a href="bakimrapor">Yarımamül<span class="badge"><%= yarimamulBadge %></span></a></li>
+                <% } %>
+
+                <% if (mamulBadge > 0) { %>
+                <li role="presentation" class="active" style="margin-right:2px;"><a href="bakimrapor">Mamül<span class="badge"><%= mamulBadge %></span></a></li>
+                <% } %>
+
             </ul>
-            <!--
-            <a href="#"><span class="text-danger" style="font-size:24px;margin-left:10px;" title="Kalıp Bakımı Gelen Mamüller Var!"><i class="fas fa-compass fa-spin"></i></span></a>
-            <a href="#"><span class="text-success" style="font-size:24px;margin-left:10px;" title="Stoğu Azalan Hammaddeler Var!"><i class="fas fa-compass fa-spin"></i></span></a>
-            <a href="#"><span class="text-sevk" style="font-size:24px;margin-left:10px;" title="Stoğu Azalan Hammaddeler Var!"><i class="fas fa-compass fa-spin"></i></span></a>
-            -->
         </div>
     </div>
 </div>

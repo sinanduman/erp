@@ -212,7 +212,7 @@ public class UretimDao implements Serializable, BaseDao {
         logger.info("excel: " + excelsql);
         // String searchQuery ="SELECT * FROM irfan.uretimplantum WHERE
         // tamamlandi=? AND tarih=? "; /* view */
-        ResultSet rs = null;
+        ResultSet rs;
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(excelsql)) {
             long start = System.currentTimeMillis();

@@ -24,7 +24,7 @@ public class SiparisDao implements Serializable, BaseDao {
         String insertQuery = "insert into " + BaseDao.SIPARIS + " (bilesenid, miktar, \"not\") values (?,?,?)";
 
         // connect to DB
-        ResultSet rs = null;
+        ResultSet rs;
         int newSiparisId = 0;
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(insertQuery, Statement.RETURN_GENERATED_KEYS)) {
@@ -62,7 +62,7 @@ public class SiparisDao implements Serializable, BaseDao {
                 + filter
                 + " order by s.id";
 
-        ResultSet rs = null;
+        ResultSet rs;
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(searchQuery)) {
             logger.info(pstmt.toString());

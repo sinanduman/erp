@@ -38,7 +38,7 @@ public class BilesenDao implements Serializable, BaseDao {
                 + " order by b.id desc " + pageFilter;
 
         // connect to DB
-        ResultSet rs = null;
+        ResultSet rs;
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(searchQuery)) {
             logger.info(pstmt.toString());

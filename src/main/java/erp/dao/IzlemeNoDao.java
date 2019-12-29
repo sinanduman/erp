@@ -37,7 +37,7 @@ public class IzlemeNoDao implements Serializable, BaseDao {
                 + " ORDER BY e.kullanildi_tarih DESC, e.gkrno DESC " + pageFilter;
 
         // connect to DB
-        ResultSet rs = null;
+        ResultSet rs;
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(searchQuery)) {
             long start = System.currentTimeMillis();
@@ -104,7 +104,7 @@ public class IzlemeNoDao implements Serializable, BaseDao {
                 + " where mamulid = ? and kullanildi <= ? order by gkrno desc limit ?";
 
         // connect to DB
-        ResultSet rs = null;
+        ResultSet rs;
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(updateQuery)) {
             pstmt.setInt(1, Integer.parseInt(mamulid));

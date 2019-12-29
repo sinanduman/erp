@@ -23,7 +23,7 @@ public class DAOFunctions implements Serializable {
         List<Birim> temp = new ArrayList<Birim>();
         String searchQuery = "select * from " + BaseDao.BIRIM + " order by ad ";
         // connect to DB
-        ResultSet rs = null;
+        ResultSet rs;
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(searchQuery)) {
             rs = pstmt.executeQuery();
@@ -42,7 +42,7 @@ public class DAOFunctions implements Serializable {
         logger.info(selectQuery);
 
         // connect to DB
-        ResultSet rs = null;
+        ResultSet rs;
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(selectQuery)) {
             logger.info(pstmt.toString());
@@ -63,7 +63,7 @@ public class DAOFunctions implements Serializable {
         logger.info(selectQuery);
 
         // connect to DB
-        ResultSet rs = null;
+        ResultSet rs;
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(selectQuery)) {
             rs = pstmt.executeQuery();
@@ -86,7 +86,7 @@ public class DAOFunctions implements Serializable {
         String selectQuery = "select " + aggfunc + "(" + aggfield + ")" + " from " + tablename +(prefix!=null?prefix:"")+ filter;
         logger.info(selectQuery);
         // connect to DB
-        ResultSet rs = null;
+        ResultSet rs;
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(selectQuery)) {
             rs = pstmt.executeQuery();

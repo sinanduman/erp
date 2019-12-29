@@ -50,7 +50,7 @@ public class AjaxUtils extends HttpServlet implements Serializable {
         String insertQuery = "insert into " + BaseDao.CALISAN + " (adsoy, gorev) values (?,?) ";
         String searchQuery = "select * from " + BaseDao.CALISAN + " order by id ";
         // connect to DB
-        ResultSet rs = null;
+        ResultSet rs;
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(insertQuery)) {
             pstmt.setString(1, adsoy);

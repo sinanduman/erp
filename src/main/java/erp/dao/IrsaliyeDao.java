@@ -26,7 +26,7 @@ public class IrsaliyeDao implements Serializable, BaseDao {
         String updateQuery = "select " + BaseDao.F_IRSALIYE_SIL + "(?)";
 
         // connect to DB
-        ResultSet rs = null;
+        ResultSet rs;
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement  pstmt = conn.prepareStatement(updateQuery)) {
             pstmt.setInt(1, Integer.parseInt(irsaliyeid));
@@ -64,7 +64,7 @@ public class IrsaliyeDao implements Serializable, BaseDao {
         String updateQuery = "select count(*) from " + BaseDao.IRSALIYE + " where trim(irsaliyeno) = ?";
 
         // connect to DB
-        ResultSet rs = null;
+        ResultSet rs;
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(updateQuery)) {
             pstmt.setString(1, irsaliyeno);
@@ -84,7 +84,7 @@ public class IrsaliyeDao implements Serializable, BaseDao {
         String updateQuery = "SELECT " + BaseDao.F_IRSALIYE_ONAYLA + "(?)";
 
         // connect to DB
-        ResultSet rs = null;
+        ResultSet rs;
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(updateQuery)) {
             pstmt.setInt(1, Integer.parseInt(irsaliyeid));
@@ -104,7 +104,7 @@ public class IrsaliyeDao implements Serializable, BaseDao {
         int retVal = 0;
         String updateQuery = "update " + BaseDao.IRSALIYE + " set kapatildi=1 where id = ?";
         // connect to DB
-        ResultSet rs = null;
+        ResultSet rs;
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(updateQuery)) {
             pstmt.setInt(1, Integer.parseInt(irsaliyeid));
@@ -121,7 +121,7 @@ public class IrsaliyeDao implements Serializable, BaseDao {
         String updateQuery = "SELECT " + BaseDao.F_IRSALIYEBILESEN_GUNCELLE + "(?,?,?,?,?,?,?)";
 
         // connect to DB
-        ResultSet rs = null;
+        ResultSet rs;
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(updateQuery)) {
             pstmt.setInt(1, irsaliyeid);
@@ -146,7 +146,7 @@ public class IrsaliyeDao implements Serializable, BaseDao {
     public int irsaliyeEkle(String irsaliyeno, String tarih, String firmaid) {
         String insertQuery = "insert into " + BaseDao.IRSALIYE + "(irsaliyeno, olusturmatarihi, firmaid) values (?,?,?)";
 
-        ResultSet rs = null;
+        ResultSet rs;
         int newIrsaliyeId = -1;
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(insertQuery, Statement.RETURN_GENERATED_KEYS)) {
@@ -169,7 +169,7 @@ public class IrsaliyeDao implements Serializable, BaseDao {
         String retVal = "-1";
         String insertQuery = "SELECT " + BaseDao.F_IRSALIYEBILESEN_EKLE + "(?,?,?,?)";
 
-        ResultSet rs = null;
+        ResultSet rs;
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(insertQuery)) {
             pstmt.setInt(1, irsaliyeid);
@@ -203,7 +203,7 @@ public class IrsaliyeDao implements Serializable, BaseDao {
                 + firmaFilter + irsaliyeFilter + tarihFilter
                 + " order by i.id DESC "
                 + pageFilter;
-        ResultSet rs = null;
+        ResultSet rs;
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(searchQuery)) {
             long start = System.currentTimeMillis();
@@ -228,7 +228,7 @@ public class IrsaliyeDao implements Serializable, BaseDao {
                 + " order by i.id DESC "
                 + pageFilter;
 
-        ResultSet rs = null;
+        ResultSet rs;
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(searchQuery)) {
             long start = System.currentTimeMillis();
@@ -266,7 +266,7 @@ public class IrsaliyeDao implements Serializable, BaseDao {
                 + " join " + BaseDao.FIRMA + " fb on fb.id = m.firmaid "
                 + " order by i.id desc, ib.id ";
         // connect to DB
-        ResultSet rs = null;
+        ResultSet rs;
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(searchQuery)) {
             long start = System.currentTimeMillis();
@@ -303,7 +303,7 @@ public class IrsaliyeDao implements Serializable, BaseDao {
                 + mamulFilter
                 + " order by i.id desc, ib.id";
         // connect to DB
-        ResultSet rs = null;
+        ResultSet rs;
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(searchQuery)) {
             long start = System.currentTimeMillis();

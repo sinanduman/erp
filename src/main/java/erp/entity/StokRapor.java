@@ -13,8 +13,8 @@ import java.text.SimpleDateFormat;
 @NoArgsConstructor
 @AllArgsConstructor
 public class StokRapor {
-    private Integer id;
     private Integer stokid;
+    private Integer bilesenid;
     private Integer islemyonu;
     private String bilesenad;
     private String bilesenkod;
@@ -27,8 +27,8 @@ public class StokRapor {
     private Timestamp tarih;
 
     public StokRapor(ResultSet rs) throws SQLException {
-        this.id = rs.getInt("id");
-        this.stokid = rs.getInt("stokid");
+        this.stokid = rs.getInt("id");
+        this.bilesenid = rs.getInt("bilesenid");
         this.islemyonu = rs.getInt("islemyonu");
         this.bilesenad = rs.getString("ad");
         this.bilesenkod = rs.getString("kod");

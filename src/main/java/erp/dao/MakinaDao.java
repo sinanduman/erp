@@ -32,7 +32,7 @@ public class MakinaDao implements Serializable, BaseDao {
                 + pageFilter;
 
         // connect to DB
-        ResultSet rs = null;
+        ResultSet rs;
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(searchQuery)) {
             rs = pstmt.executeQuery();
@@ -51,7 +51,7 @@ public class MakinaDao implements Serializable, BaseDao {
         String insertQuery = "insert into " + BaseDao.MAKINA + " (ad, makinatipid) values (?,?)";
 
         // connect to DB
-        ResultSet rs = null;
+        ResultSet rs;
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(insertQuery)) {
             pstmt.setString(1, ad);
@@ -70,7 +70,7 @@ public class MakinaDao implements Serializable, BaseDao {
         String result = "0";
         String updateQuery = "select " + BaseDao.F_MAKINA_SIL + "(?)";
         // connect to DB
-        ResultSet rs = null;
+        ResultSet rs;
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(updateQuery)) {
             pstmt.setInt(1, Integer.parseInt(id));

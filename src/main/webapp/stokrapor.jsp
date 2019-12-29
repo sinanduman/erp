@@ -2,7 +2,7 @@
 <%@ page import="erp.model.BilesenTip,erp.util.Util" %>
 <%@ page import="java.util.Date" %>
 <%@ page import="java.util.List" %>
-<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
+<%@ page contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!doctype html>
 <html lang="en">
@@ -34,7 +34,6 @@
 <body>
 <%@ include file="logincheck.jsp" %>
 <%
-    List<Firma> firma = (List<Firma>) request.getAttribute("firma");
     List<Mamul> mamul = (List<Mamul>) request.getAttribute("mamul");
     List<Bilesen> bilesen = (List<Bilesen>) request.getAttribute("bilesen");
     List<StokRapor> stokrapor = (List<StokRapor>) request.getAttribute("stokrapor");
@@ -47,7 +46,7 @@
 %>
 
 <script>
-    var mamul = [
+    let mamul = [
         <%String delimeter = "";
         for (Mamul m : mamul) {
             out.println(delimeter
@@ -59,9 +58,9 @@
         + ",label:'" + m.getKod() + " ["+ m.getAd().replaceAll("'", "") + "]'" + "}");
             delimeter = ",";
         }%>];
-    var mamuldef = mamul;
+    let mamuldef = mamul;
 
-    var hammadde = [
+    let hammadde = [
         <%delimeter = "";
         for (Bilesen b : bilesen) {
              if(b.getBilesentipid() == BilesenTip.YARIMAMUL.value() ){
@@ -77,7 +76,7 @@
             delimeter = ",";
         }%>];
 
-    var yarimamul = [
+    let yarimamul = [
         <%delimeter = "";
         for (Bilesen b : bilesen) {
             if(b.getBilesentipid() == BilesenTip.HAMMADDE.value() ){
@@ -177,10 +176,6 @@
     %>
     <div class="row" style="font-size:12px;">
         <table class="tableplan" width="50%">
-            <script type="text/javascript" charset="utf-8">
-                var plan = {};
-                var plantemp = {};
-            </script>
             <%
                 if (stokdetay != null && stokdetay.size() > 0) {
                     stokrapor = stokdetay;
@@ -208,7 +203,7 @@
             <%
                 }
             %>
-            <tr id="tr<%=sr.getId()%>">
+            <tr id="tr<%=sr.getStokid() %>">
                 <%
                     String miktar = sr.getMiktar().toString();
                     if (sr.getBilesentipid() == BilesenTip.HAMMADDE.value()) {
@@ -250,15 +245,10 @@
                             kalan = k.toString();
                         }
                 %>
-                <td class="text-right-stok"><%=kalan%>
-                </td>
-                <%
-                    }
-                %>
+                <td class="text-right-stok"><%=kalan%></td>
+                <% } %>
             </tr>
-            <%
-                }
-            %>
+            <% } %>
         </table>
 
         <%--For displaying Previous link except for the 1st page --%>

@@ -97,16 +97,16 @@ public class HammaddeStokServlet extends HttpServlet implements Serializable {
         }
         
         if (!ajaxInAction) {
-            List<Stok> stok     = new ArrayList<Stok>();
-            
-            int totalrecord = 0;
-            int page        = 1;
-            int noofpages   = 0;
-            int sumagg      = 0;
+            List<Stok> stok;
+
+            int totalrecord;
+            int page = 1;
+            int noofpages;
+            int sumagg;
             
             if(bilesenekleid.equals("1")) {
-                String result   = ""; 
-                String iade     = request.getParameter("iade");
+                String result;
+                String iade= request.getParameter("iade");
                 if(iade==null) {
                     result = stokDao.stokEkle(
                                     request.getParameter("bilesenid"),

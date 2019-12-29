@@ -52,7 +52,7 @@ public class StokRaporServlet extends HttpServlet implements Serializable {
         String tarih = request.getParameter("tarih");
         String page = request.getParameter("page");
         String excelsql = "";
-        String tablename = BaseDao.MAMUL;
+        String tablename = BaseDao.V_STOKDETAY_MAMUL;
 
         int totalrecord = 0;
         int noofpages = 0;
@@ -63,63 +63,54 @@ public class StokRaporServlet extends HttpServlet implements Serializable {
 
         List<StokRapor> stokrapor = new ArrayList<StokRapor>();
         List<StokRapor> stokdetay = new ArrayList<StokRapor>();
-        BilesenTip bilesentipenum = BilesenTip.MAMUL;
         if (raporgetirid != null || page != null) {
-            String filter = "";
+            String filter;
             String filter0 = " AND bilesentipid IN (3) ";
             String filter1 = "";
-            String filter2 = "";
-            String filterIn = "";
             LocalDate datetime = LocalDate.parse(tarih, DateTimeFormatter.ofPattern("dd-MM-yyyy")).plusDays(1);
             if (bilesentip != null) {
                 if (Integer.parseInt(bilesentip) == BilesenTip.HAMMADDE.value()) {
-                    tablename = BaseDao.BILESEN;
+                    tablename = BaseDao.V_STOKDETAY_BILESEN;
                     filter0 = " AND bilesentipid IN (1) ";
-                    bilesentipenum = BilesenTip.HAMMADDE;
                 } else if (Integer.parseInt(bilesentip) == BilesenTip.YARIMAMUL.value()) {
-                    tablename = BaseDao.BILESEN;
+                    tablename = BaseDao.V_STOKDETAY_BILESEN;
                     filter0 = " AND bilesentipid IN (2) ";
-                    bilesentipenum = BilesenTip.YARIMAMUL;
                 } else {
-                    tablename = BaseDao.MAMUL;
+                    tablename = BaseDao.V_STOKDETAY_MAMUL;
                     filter0 = " AND bilesentipid IN (3) ";
-                    bilesentipenum = BilesenTip.MAMUL;
                 }
-                filter2 += " AND (case when islemyonu=0 then giristarihi else cikistarihi end)<'" + datetime.toString() + "' ";
+                filter1 += " AND tarih <= '" + datetime.toString() + "' ";
             }
-            if (Util.isNotEmptyOrNull(bilesenid)) {
-                filter1 = " AND m.id = " + Integer.parseInt(bilesenid);
-            }
-            filter = filter0 + filter1 + filter2;
-            filterIn = " AND id in (select bilesenid from " + BaseDao.STOK + " where (case when islemyonu=0 then giristarihi else cikistarihi end) <'" + datetime.toString() + "') ";
+            filter = " WHERE 1=1 " + filter0 + filter1;
+
             // PAGING
-            System.out.println("islem: " +tablename + " count" + " * " + filter0 + filter1 + filterIn);
-            totalrecord = daoFunctions.recordAgg2(tablename, "COUNT", "*", " WHERE 1=1 " + filter0 + filter1 + filterIn, " m ");
             if (request.getParameter("page") != null)
                 page0 = Integer.parseInt(request.getParameter("page"));
-            noofpages = (int) Math.ceil(totalrecord * 1.0 / Genel.ROWPERPAGE);
             // PAGING
-            stokrapor = stokDao.stokBilesenRapor(tablename, filter, page0);
 
             /* Eger bir urunde detay isteniyorsa*/
             if (Util.isNotEmptyOrNull(bilesenid)) {
-                stokdetay = stokDao.stokBilesenDetayRapor(tablename, filter, page0, Integer.parseInt(bilesenid));
-                totalrecord = daoFunctions.recordAgg(BaseDao.STOK, "COUNT", "*", " WHERE 1=1 " + "AND bilesenid = " + bilesenid);
+                if(Integer.parseInt(bilesentip) == BilesenTip.MAMUL.value())
+                    tablename = BaseDao.V_STOKDETAY_MAMUL_ID;
+                else
+                    tablename = BaseDao.V_STOKDETAY_BILESEN_ID;
+                totalrecord = daoFunctions.recordAgg(tablename, "COUNT", "*", " WHERE bilesenid = " + bilesenid);
                 noofpages = (int) Math.ceil(totalrecord * 1.0 / Genel.ROWPERPAGE);
+                stokdetay = stokDao.stokBilesenDetayRapor(tablename, filter + "AND bilesenid = " + bilesenid, page0);
+                excelsql = filter + " AND bilesenid = " + bilesenid;
             }
-
-            excelsql = filter;
-
-            logger.info("noofpages: " + noofpages + ", totalrecord: " + totalrecord + ", " + tablename + " WHERE 1=1 " + filter);
-            logger.info("bilesentip: " + bilesentipenum.id());
-            logger.info("excelsql: " + excelsql);
-
+            else{
+                totalrecord = daoFunctions.recordAgg(tablename, "COUNT", "*", filter);
+                noofpages = (int) Math.ceil(totalrecord * 1.0 / Genel.ROWPERPAGE);
+                stokrapor = stokDao.stokBilesenRapor(tablename, filter, page0);
+                excelsql = filter;
+            }
         }
         request.setAttribute("mamul", mamul);
         request.setAttribute("bilesen", bilesen);
         request.setAttribute("stokrapor", stokrapor);
         request.setAttribute("stokdetay", stokdetay);
-        request.setAttribute("bilesentip", bilesentipenum.id());
+        request.setAttribute("bilesentip", bilesentip);
         request.setAttribute("bilesenid", bilesenid);
         request.setAttribute("tarih", tarih);
         request.setAttribute("totalrecord", totalrecord);

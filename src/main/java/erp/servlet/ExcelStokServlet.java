@@ -59,12 +59,15 @@ public class ExcelStokServlet extends HttpServlet implements Serializable {
         if(excelegonder!=null && excelegonder.equals("1")) {
             String prefix       = "";
             String prefixDetay  = "";
-            
-            List<StokRapor> stokrapor = stokDao.stokBilesenRapor(tablename, excelsql, 0);
+
+            List<StokRapor> stokrapor;
             
             if(Util.isNotEmptyOrNull(exceldetay) && Util.isNotEmptyOrNull(exceldetayid) && Util.isNumeric(exceldetayid)) {
-                stokrapor   = stokDao.stokBilesenDetayRapor(tablename, excelsql, 0, Integer.parseInt(exceldetayid));
+                stokrapor   = stokDao.stokBilesenDetayRapor(tablename, excelsql, 0);
                 prefixDetay = "_detay";
+            }
+            else{
+                stokrapor = stokDao.stokBilesenRapor(tablename, excelsql, 0);
             }
             
             Workbook workbook = new XSSFWorkbook();
