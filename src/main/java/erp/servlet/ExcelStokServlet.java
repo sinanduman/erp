@@ -18,9 +18,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import erp.dao.BilesenDao;
 import erp.dao.StokDao;
+import erp.entity.Bilesen;
 import erp.model.BilesenTip;
 import erp.entity.StokRapor;
+import erp.model.FiyatTip;
 import erp.util.Util;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.Cell;
@@ -36,6 +39,9 @@ import org.slf4j.LoggerFactory;
 @WebServlet("/excelstok")
 public class ExcelStokServlet extends HttpServlet implements Serializable {
 	private static final Logger logger = LoggerFactory.getLogger(ExcelStokServlet.class);
+
+    @Inject
+    BilesenDao bilesenDao;
 
 	@Inject
 	StokDao stokDao;
@@ -53,6 +59,8 @@ public class ExcelStokServlet extends HttpServlet implements Serializable {
         String excelstoktip = request.getParameter("excelstoktip");
         String excelsql     = request.getParameter("excelsql");
         String tablename    = request.getParameter("tablename");
+        String excelazalan  = request.getParameter("excelazalan");
+        boolean fiyatDetayGoster = excelstoktip != null && excelstoktip.equals("1") && excelazalan.equals("0");
         
         logger.info("excelsql: " + excelsql);
         
@@ -69,6 +77,8 @@ public class ExcelStokServlet extends HttpServlet implements Serializable {
             else{
                 stokrapor = stokDao.stokBilesenRapor(tablename, excelsql, 0);
             }
+            List<Bilesen> bilesen = bilesenDao.bilesenListeGetirTum(BilesenTip.HAMMADDEYARIMAMUL, 0, null, null);
+            Map<Integer, Bilesen> bilesenmap = Util.bilesenListToMap(bilesen);
             
             Workbook workbook = new XSSFWorkbook();
             Sheet sheet = workbook.createSheet();
@@ -94,14 +104,28 @@ public class ExcelStokServlet extends HttpServlet implements Serializable {
                 );
             }
             else {
-                data.put(++cnt, new Object[] {
-                                "Bileşen Kodu",
-                                "Bileşen Adı",
-                                "Firma",
-                                "Son İşlem Tarihi",
-                                "Kalan Miktar" + birim
-                                }
-                );
+                if (fiyatDetayGoster){
+                    data.put(++cnt, new Object[] {
+                                    "Bileşen Kodu",
+                                    "Bileşen Adı",
+                                    "Firma",
+                                    "Birim Fiyat",
+                                    "Para Birimi",
+                                    "Son İşlem Tarihi",
+                                    "Kalan Miktar" + birim
+                            }
+                    );
+                }
+                else{
+                    data.put(++cnt, new Object[] {
+                                    "Bileşen Kodu",
+                                    "Bileşen Adı",
+                                    "Firma",
+                                    "Son İşlem Tarihi",
+                                    "Kalan Miktar" + birim
+                            }
+                    );
+                }
             }
             for(StokRapor sr: stokrapor) {
                 if( Util.isNotEmptyOrNull(exceldetayid) && Util.isNumeric(exceldetayid)) {
@@ -117,13 +141,26 @@ public class ExcelStokServlet extends HttpServlet implements Serializable {
                                     });
                 }
                 else {
-                    data.put(++cnt, new Object[] {
-                                    sr.getBilesenkod(),
-                                    sr.getBilesenad(),
-                                    sr.getFirmaad(),
-                                    sr.getTarih(),
-                                    ((sr.getBilesentipid()==BilesenTip.HAMMADDE.value()) ? Util.Round(sr.getMiktar(),1000) : sr.getMiktar() ),
-                                    });
+                    if(fiyatDetayGoster){
+                        data.put(++cnt, new Object[]{
+                                sr.getBilesenkod(),
+                                sr.getBilesenad(),
+                                sr.getFirmaad(),
+                                bilesenmap.get(sr.getBilesenid()).getFiyat(),
+                                FiyatTip.getAdKod(bilesenmap.get(sr.getBilesenid()).getFiyatId()),
+                                sr.getTarih(),
+                                ((sr.getBilesentipid() == BilesenTip.HAMMADDE.value()) ? Util.Round(sr.getMiktar(), 1000) : sr.getMiktar()),
+                        });
+                    }
+                    else {
+                        data.put(++cnt, new Object[]{
+                                sr.getBilesenkod(),
+                                sr.getBilesenad(),
+                                sr.getFirmaad(),
+                                sr.getTarih(),
+                                ((sr.getBilesentipid() == BilesenTip.HAMMADDE.value()) ? Util.Round(sr.getMiktar(), 1000) : sr.getMiktar()),
+                        });
+                    }
                 }
                 
                 if(cnt==2) {

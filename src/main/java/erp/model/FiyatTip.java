@@ -23,4 +23,14 @@ public enum FiyatTip {
     public String kod() {
         return kod;
     }
+
+    public static String getAdKod(int value) {
+        if (value == 1)
+            return TL.ad + "(" + TL.kod + ")";
+        else if (value == 2)
+            return USD.ad + "(" + USD.kod + ")";
+        else
+            return EURO.ad + "(" + EURO.kod + ")";
+    }
+
 }

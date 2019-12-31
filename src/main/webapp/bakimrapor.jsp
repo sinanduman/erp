@@ -171,19 +171,6 @@
     %>
     <div class="row" style="font-size:12px;">
         <table class="tableplan">
-            <style>
-            .mamullink {
-                margin: 0;
-                border: 0;
-                background: none;
-                overflow: visible;
-                cursor: pointer;
-            }
-            .mamullink:hover {
-                color: white;
-                background-color: darkkhaki;
-            }
-            </style>
             <script type="text/javascript" charset="utf-8">
                 let plan = {};
                 let plantemp = {};
@@ -205,7 +192,13 @@
                 }
             %>
             <tr id="tr<%=r.getId()%>">
-                <td nowrap align="right"><%= String.format ("%,d", r.getKalanBaski()) + " {" + String.format ("%,d", mamulmap.get(r.getMamulid()).getBaskiSayisi()) + "}" %></td>
+                <%
+                    String formatted = String.format ("%,d", r.getKalanBaski());
+                    if(r.getKalanBaski() < Util.KALAN_BASKI_SAYISI) {
+                        formatted = "<span style='font-weight:bold;color:#d43f3a;'>" + formatted + "</span>";
+                    }
+                %>
+                <td nowrap align="right"><%= formatted + " {" + String.format ("%,d", mamulmap.get(r.getMamulid()).getBaskiSayisi()) + "}" %></td>
                 <td nowrap align="right"><%= String.format ("%,d", r.getBaskiSayisi()) %></td>
                 <td nowrap align="right"><%= String.format ("%,d", r.getUretimMiktar()) %></td>
                 <td nowrap><%= mamulmap.get(r.getMamulid()) == null ? "" : mamulmap.get(r.getMamulid()).getKod() %></td>

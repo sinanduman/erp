@@ -288,3 +288,24 @@ input.margin-right-10px {
 }
 
 input.tr_input_tarih{}
+
+.badge-warning {
+	color: #eea236 !important;
+	background-color: white;
+}
+
+.badge-danger {
+	color: #d43f3a !important;
+	background-color: white;
+}
+.mamullink {
+	 margin: 0;
+	 border: 0;
+	 background: none;
+	 overflow: visible;
+	 cursor: pointer;
+}
+.mamullink:hover {
+	color: white;
+	background-color: darkkhaki;
+}

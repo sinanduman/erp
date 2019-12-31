@@ -2,6 +2,9 @@
 <%@ page import="erp.model.BilesenTip,erp.util.Util" %>
 <%@ page import="java.util.Date" %>
 <%@ page import="java.util.List" %>
+<%@ page import="java.util.Map" %>
+<%@ page import="java.util.HashMap" %>
+<%@ page import="erp.model.FiyatTip" %>
 <%@ page contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!doctype html>
@@ -43,6 +46,12 @@
     String excelsql = (String) request.getAttribute("excelsql");
     String tablename = (String) request.getAttribute("tablename");
     String tarih = (String) request.getAttribute("tarih");
+    String azalan = (request.getAttribute("azalan") == null) ? "0" : (String) request.getAttribute("azalan");
+    Map<Integer, Bilesen> bilesenmap = (HashMap<Integer, Bilesen>) request.getAttribute("bilesenmap");
+    boolean fiyatDetayGoster = bilesentip != null && bilesentip.equals("1") && azalan.equals("0");
+    String formaction = (bilesentip != null && bilesentip.equals("3")) ? "mamul" : "hammadde";
+    String bilesenidara = (bilesentip != null && bilesentip.equals("3")) ? "mamulidara" : "bilesenidara";
+
 %>
 
 <script>
@@ -94,7 +103,6 @@
 
 </script>
 
-
 <div class="container">
     <div class="row text-warning text-center">
         <label class="text-danger rounded">Stok Raporu</label>
@@ -137,8 +145,15 @@
             <div class="form-group">
                 <label for="tarih" class="text-baslik">Tarih</label>
                 <div>
-                    <input type="text" style="width:120px;" class="form-control" name="tarih" id="tarih"
-                           placeholder="Tarih">
+                    <input type="text" style="width:120px;" class="form-control" name="tarih" id="tarih" placeholder="Tarih">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="cbx_azalan" class="text-baslik">Stoğu Azalan</label>
+                <div>
+                    <input type="checkbox" class="form-control" name="cbx_azalan" id="cbx_azalan" <%= ((azalan!=null && azalan.equals("1"))?"checked":"") %> aria-label="Azalan stok raporu al">
+                    <input type="hidden" name="azalan" id="azalan" value="<%=azalan%>">
                 </div>
             </div>
 
@@ -186,19 +201,18 @@
                         String birim = (sr.getBilesentipid() == BilesenTip.HAMMADDE.value()) ? "(Kg)" : "(Adet)";
             %>
             <tr>
-                <th width="20%">Bileşen Kod</th>
-                <th width="20%">Bileşen Ad</th>
-                <th width="20%">Firma</th>
-                <th width="20%">Son İşlem Tarihi</th>
-                <%
-                    if (stokdetay.size() > 0) {
-                %>
-                <th width="<%= colsize-10 %>%">Değişim</th>
-                <%
-                    }
-                %>
-                <th width="<%= colsize %>%" nowrap>Kalan Miktar <%=birim%>
-                </th>
+                <th>Bileşen Kod</th>
+                <th>Bileşen Ad</th>
+                <th>Firma</th>
+                <% if (fiyatDetayGoster) { %>
+                    <th>Birim Fiyat</th>
+                    <th>Para Birimi</th>
+                <% } %>
+                <th>Son İşlem Tarihi</th>
+                <% if (stokdetay.size() > 0) { %>
+                    <th>Değişim</th>
+                <% } %>
+                <th nowrap>Kalan Miktar <%=birim%></th>
             </tr>
             <%
                 }
@@ -211,16 +225,17 @@
                         miktar = m.toString();
                     }
                 %>
-                <td><%=sr.getBilesenkod()%>
-                </td>
-                <td nowrap><%=sr.getBilesenad()%>
-                </td>
-                <td><%=sr.getFirmaad()%>
-                </td>
-                <td><%=sr.getTarih()%>
-                </td>
+                <td><%=sr.getBilesenkod()%></td>
+                <td nowrap><form class='form-inline' method='post' action='<%=formaction%>'><input type='hidden' name='stoklisteid' value='1'><input type='hidden' value='<%= sr.getBilesenid() %>' name='<%=bilesenidara%>'><button type='button' class='mamullink' onclick='javascript:this.form.submit();'><%= sr.getBilesenad() %></button></form></td>
+                <td><%=sr.getFirmaad()%></td>
+                <%
+                    if (fiyatDetayGoster) {
+                        out.print("<td>" + bilesenmap.get(sr.getBilesenid()).getFiyat() + "</td>");
+                        out.print("<td>" + FiyatTip.getAdKod(bilesenmap.get(sr.getBilesenid()).getFiyatId()) + "</td>");
+                    }
+                %>
+                <td><%=sr.getTarih()%></td>
                 <td class="text-right-stok">
-
                     <%
                         if (sr.getIslemyonu() == -1) {
                             if (miktar.equals("0")) {
@@ -284,6 +299,7 @@
                        value="<%= (stokdetay!=null && stokdetay.size()>0)?1:0 %>">
                 <input type="hidden" name="exceldetayid" id="exceldetayid" value="<%=bilesenid%>">
                 <input type="hidden" name="excelstoktip" id="excelstoktip" value="<%=bilesentip%>">
+                <input type="hidden" name="excelazalan" id="excelazalan" value="<%=azalan%>">
                 <input type="hidden" name="tablename" id="tablename" value="<%=tablename%>">
             </form>
         </div>

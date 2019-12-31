@@ -1,5 +1,6 @@
 package erp.util;
 
+import erp.entity.Bilesen;
 import erp.entity.Calisan;
 import erp.entity.Mamul;
 import erp.model.Aylar;
@@ -22,6 +23,8 @@ import java.util.*;
 public class Util {
 
     public static long BASKI_SAYISI = 20000;
+
+    public static long KALAN_BASKI_SAYISI = 2000;
 
     public static long nanoTime = System.nanoTime();
 
@@ -222,6 +225,14 @@ public class Util {
     public static Map<Integer, Mamul> mamulListToMap(List<Mamul> mamulList){
         Map<Integer, Mamul> tempMap = new HashMap<>();
         for(Mamul v : mamulList){
+            tempMap.putIfAbsent(v.getId(), v);
+        }
+        return tempMap;
+    }
+
+    public static Map<Integer, Bilesen> bilesenListToMap(List<Bilesen> mamulList){
+        Map<Integer, Bilesen> tempMap = new HashMap<>();
+        for(Bilesen v : mamulList){
             tempMap.putIfAbsent(v.getId(), v);
         }
         return tempMap;

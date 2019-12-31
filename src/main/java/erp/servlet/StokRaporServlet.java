@@ -25,6 +25,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @WebServlet("/stokrapor")
 public class StokRaporServlet extends HttpServlet implements Serializable {
@@ -49,8 +50,10 @@ public class StokRaporServlet extends HttpServlet implements Serializable {
         String raporgetirid = request.getParameter("raporgetirid");
         String bilesenid = request.getParameter("bilesenid");
         String bilesentip = request.getParameter("bilesentipid");
-        String tarih = request.getParameter("tarih");
+        String tarih = (request.getParameter("tarih") == null) ? LocalDate.now().plusDays(1).format(DateTimeFormatter.ofPattern("dd-MM-yyyy")) : request.getParameter("tarih");
         String page = request.getParameter("page");
+        String azalan = request.getParameter("azalan");
+
         String excelsql = "";
         String tablename = BaseDao.V_STOKDETAY_MAMUL;
 
@@ -60,6 +63,7 @@ public class StokRaporServlet extends HttpServlet implements Serializable {
 
         List<Mamul> mamul = mamulDao.mamulListeGetir(null, 0, null);
         List<Bilesen> bilesen = bilesenDao.bilesenListeGetirTum(BilesenTip.HAMMADDEYARIMAMUL, 0, null, null);
+        Map<Integer, Bilesen> bilesenmap = Util.bilesenListToMap(bilesen);
 
         List<StokRapor> stokrapor = new ArrayList<StokRapor>();
         List<StokRapor> stokdetay = new ArrayList<StokRapor>();
@@ -67,18 +71,11 @@ public class StokRaporServlet extends HttpServlet implements Serializable {
             String filter;
             String filter0 = " AND bilesentipid IN (3) ";
             String filter1 = "";
-            LocalDate datetime = LocalDate.parse(tarih, DateTimeFormatter.ofPattern("dd-MM-yyyy")).plusDays(1);
+            LocalDate datetime = (tarih==null) ? LocalDate.now().plusDays(1) : LocalDate.parse(tarih, DateTimeFormatter.ofPattern("dd-MM-yyyy")).plusDays(1);
+
             if (bilesentip != null) {
-                if (Integer.parseInt(bilesentip) == BilesenTip.HAMMADDE.value()) {
-                    tablename = BaseDao.V_STOKDETAY_BILESEN;
-                    filter0 = " AND bilesentipid IN (1) ";
-                } else if (Integer.parseInt(bilesentip) == BilesenTip.YARIMAMUL.value()) {
-                    tablename = BaseDao.V_STOKDETAY_BILESEN;
-                    filter0 = " AND bilesentipid IN (2) ";
-                } else {
-                    tablename = BaseDao.V_STOKDETAY_MAMUL;
-                    filter0 = " AND bilesentipid IN (3) ";
-                }
+                tablename = getTableName(bilesentip, azalan, bilesenid);
+                filter0 = getFilter0(bilesentip);
                 filter1 += " AND tarih <= '" + datetime.toString() + "' ";
             }
             filter = " WHERE 1=1 " + filter0 + filter1;
@@ -90,10 +87,6 @@ public class StokRaporServlet extends HttpServlet implements Serializable {
 
             /* Eger bir urunde detay isteniyorsa*/
             if (Util.isNotEmptyOrNull(bilesenid)) {
-                if(Integer.parseInt(bilesentip) == BilesenTip.MAMUL.value())
-                    tablename = BaseDao.V_STOKDETAY_MAMUL_ID;
-                else
-                    tablename = BaseDao.V_STOKDETAY_BILESEN_ID;
                 totalrecord = daoFunctions.recordAgg(tablename, "COUNT", "*", " WHERE bilesenid = " + bilesenid);
                 noofpages = (int) Math.ceil(totalrecord * 1.0 / Genel.ROWPERPAGE);
                 stokdetay = stokDao.stokBilesenDetayRapor(tablename, filter + "AND bilesenid = " + bilesenid, page0);
@@ -118,6 +111,41 @@ public class StokRaporServlet extends HttpServlet implements Serializable {
         request.setAttribute("noofpages", noofpages);
         request.setAttribute("excelsql", excelsql);
         request.setAttribute("tablename", tablename);
+        request.setAttribute("azalan", azalan);
+        request.setAttribute("bilesenmap", bilesenmap);
         request.getRequestDispatcher("stokrapor.jsp").forward(request, response);
+    }
+
+    public String getTableName(String bilesenTip, String azalan, String bilesenid){
+        String tablename;
+        if (Integer.parseInt(bilesenTip) == BilesenTip.HAMMADDE.value()) {
+            tablename = (azalan!= null && azalan.equals("1")) ? BaseDao.V_STOKESIK_HAMMADDE : BaseDao.V_STOKDETAY_BILESEN;
+            if (Util.isNotEmptyOrNull(bilesenid)) {
+                tablename = BaseDao.V_STOKDETAY_BILESEN_ID;
+            }
+        } else if (Integer.parseInt(bilesenTip) == BilesenTip.YARIMAMUL.value()) {
+            tablename = (azalan!= null && azalan.equals("1")) ? BaseDao.V_STOKESIK_YARIMAMUL : BaseDao.V_STOKDETAY_BILESEN;
+            if (Util.isNotEmptyOrNull(bilesenid)) {
+                tablename = BaseDao.V_STOKDETAY_BILESEN_ID;
+            }
+        } else {
+            tablename = (azalan!= null && azalan.equals("1")) ? BaseDao.V_STOKESIK_MAMUL : BaseDao.V_STOKDETAY_MAMUL;
+            if (Util.isNotEmptyOrNull(bilesenid)) {
+                tablename = BaseDao.V_STOKDETAY_MAMUL_ID;
+            }
+        }
+        return tablename;
+    }
+
+    public String getFilter0(String bilesentip){
+        String filter0;
+        if (Integer.parseInt(bilesentip) == BilesenTip.HAMMADDE.value()) {
+            filter0 = " AND bilesentipid IN (1) ";
+        } else if (Integer.parseInt(bilesentip) == BilesenTip.YARIMAMUL.value()) {
+            filter0 = " AND bilesentipid IN (2) ";
+        } else {
+            filter0 = " AND bilesentipid IN (3) ";
+        }
+        return filter0;
     }
 }
