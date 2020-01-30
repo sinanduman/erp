@@ -73,8 +73,8 @@
         <%delimeter = "";
         for (Bilesen b : bilesen) {
              if(b.getBilesentipid() == BilesenTip.YARIMAMUL.value() ){
-             continue;
-         }
+                 continue;
+             }
             out.println(delimeter
         + " { id:" + b.getId()
         + ",bilesenid:" + b.getId()
@@ -256,8 +256,8 @@
                     if (stokdetay.size() > 0) {
                         String kalan = sr.getKalan().toString();
                         if (sr.getBilesentipid() == BilesenTip.HAMMADDE.value()) {
-                            Double k = Util.Round((Double.valueOf(sr.getKalan()) / 1000.0), 3.0);
-                            kalan = k.toString();
+                            double k = Util.Round((Double.valueOf(sr.getKalan()) / 1000.0), 3.0);
+                            kalan = String.valueOf(k);
                         }
                 %>
                 <td class="text-right-stok"><%=kalan%></td>
@@ -272,7 +272,8 @@
         <%
             String param1 = "&amp;bilesentipid=" + bilesentip;
             String param2 = (bilesenid == null || bilesenid.equals("")) ? "" : "&amp;bilesenid=" + bilesenid;
-            String param3 = "&amp;tarih=" + tarih;
+            String param3 = (azalan == null || azalan.equals("")) ? "" : "&amp;azalan=" + azalan;
+            String param4 = "&amp;tarih=" + tarih;
         %>
         <jsp:include page="paging.jsp">
             <jsp:param value="noofpages" name="noofpages"/>
@@ -281,6 +282,7 @@
             <jsp:param value="<%=param1%>" name="param1"/>
             <jsp:param value="<%=param2%>" name="param2"/>
             <jsp:param value="<%=param3%>" name="param3"/>
+            <jsp:param value="<%=param4%>" name="param4"/>
         </jsp:include>
     </div>
     <%
@@ -357,7 +359,7 @@
     }
 
     function changefun(elem) {
-        var found = false;
+        let found = false;
         if (elem != null) {
             for (i in mamul) {
                 //var b = elem.value.split("[");
