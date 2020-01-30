@@ -1,14 +1,15 @@
 package erp.servlet;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.Serializable;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
+import erp.dao.IrsaliyeDao;
+import erp.entity.IrsaliyeBilesen;
+import erp.model.IrsaliyeTip;
+import erp.util.Util;
+import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFFont;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import javax.servlet.ServletException;
@@ -16,22 +17,11 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import erp.dao.IrsaliyeDao;
-import erp.util.Util;
-import org.apache.poi.hssf.util.HSSFColor;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFFont;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-
-import erp.entity.IrsaliyeBilesen;
-import erp.model.IrsaliyeTip;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.Serializable;
+import java.util.*;
 
 @WebServlet("/excelsevk")
 public class ExcelSevkServlet extends HttpServlet implements Serializable {
@@ -78,7 +68,7 @@ public class ExcelSevkServlet extends HttpServlet implements Serializable {
                             "Mamül Adı",
                             "Mamül Kodu",
                             "Firma",
-                            "GKR.No",
+                            "İzleme No",
                             "Miktarı"
                             }
             );
@@ -100,7 +90,7 @@ public class ExcelSevkServlet extends HttpServlet implements Serializable {
                                 sr.getFirmaad(),
                                 sr.getGkrno(),
                                 sr.getMiktar()
-                                });                
+                                });
             }
 
             Set<Integer> keysetib = dataib.keySet();

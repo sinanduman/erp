@@ -1,6 +1,7 @@
 <%@ page import="erp.entity.*" %>
 <%@ page import="erp.util.Util" %>
 <%@ page import="java.util.List" %>
+<%@ page import="erp.util.Constants" %>
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!doctype html>
@@ -30,13 +31,14 @@
     <script src="assets/js/respond.min.js"></script>
     <![endif]-->
     <script type="text/javascript" charset="utf-8">
-        var plan = {};
-        var plantemp = {};
+        let plan = {};
+        let plantemp = {};
     </script>
     <style type="text/css">
         .tableplan tr:nth-of-type(even) {
             background-color: #E1E1B8;
             border-bottom: 1px solid darkkhaki;
+        }
     </style>
 </head>
 <body>
@@ -76,7 +78,7 @@
 
 <script type="text/javascript">
 
-    var mamul = [
+    let mamul = [
         <%
         delimeter = "";
         for (Mamul m : mamul) {
@@ -89,7 +91,7 @@
             delimeter = ",";
         }%>];
 
-    var mamul2 = [
+    let mamul2 = [
         <%delimeter = "";
         for (Mamul m : mamul) {
             out.println(delimeter + " { value:'"+ m.getKod() + "', label:'" + m.getKod() + " ["+m.getAd().replaceAll("'", "") +"]',id:" + m.getId() + "}");
@@ -186,7 +188,7 @@
                 <td><label class="text-success">Mamül Adı</label></td>
                 <td><label class="text-success">Mamül Kodu</label></td>
                 <td><label class="text-success">Firma</label></td>
-                <td><label class="text-success">GKR.No</label></td>
+                <td><label class="text-success">İzleme No</label></td>
                 <td><label class="text-success">Miktarı (Ad.)</label></td>
             </tr>
             <% } %><%-- if tablo baslik --%>
@@ -203,22 +205,14 @@
                 }
             %>
             <tr <%=style %>>
-                <td><%= Util.getTarih(j.getGonderimtarihi()) %>
-                </td>
-                <td><%= j.getIrsaliyeno() %>
-                </td>
-                <td><%= ++sayacbilesen %>
-                </td>
-                <td><%= j.getMamulad() %>
-                </td>
-                <td><%= j.getMamulkod() %>
-                </td>
-                <td><%= j.getFirmaad() %>
-                </td>
-                <td><%= j.getGkrno() %>
-                </td>
-                <td><%= j.getMiktar() %>
-                </td>
+                <td><%= Util.getTarih(j.getGonderimtarihi()) %></td>
+                <td><%= j.getIrsaliyeno() %></td>
+                <td><%= ++sayacbilesen %></td>
+                <td><%= j.getMamulad() %></td>
+                <td><%= j.getMamulkod() %></td>
+                <td><%= j.getFirmaad() %></td>
+                <td><%= j.getGkrno() %></td>
+                <td style="text-align: right;"><%= Constants.decimalFormat.format(j.getMiktar()) %></td>
             </tr>
             <%
                 yeniIrsaliyeId = irsaliyeId;

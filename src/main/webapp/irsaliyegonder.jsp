@@ -2,6 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page import="erp.entity.*,erp.util.Util" %>
 <%@ page import="java.util.List" %>
+<%@ page import="erp.util.Constants" %>
 <!doctype html>
 <html lang="en">
 <head>
@@ -85,7 +86,7 @@
                                     <td><label class="text-danger">Mamül Adı</label></td>
                                     <td><label class="text-danger">Mamül Kodu</label></td>
                                     <td><label class="text-danger">Firma</label></td>
-                                    <td><label class="text-danger">GKR.No</label></td>
+                                    <td><label class="text-danger">İzleme No</label></td>
                                     <td><label class="text-danger">Miktarı</label></td>
                                 </tr>
                                 <% } %><%-- if tablo baslik --%>
@@ -96,7 +97,7 @@
                                     <td><%= j.getMamulkod() %></td>
                                     <td><%= j.getFirmaad() %></td>
                                     <td><%= j.getGkrno() %></td>
-                                    <td><%= j.getMiktar() %></td>
+                                    <td style="text-align: right;"><%= Constants.decimalFormat.format(j.getMiktar()) %></td>
                                 </tr>
                                 <% }} %><%-- irsaliyebilesen --%>
                             </table>
