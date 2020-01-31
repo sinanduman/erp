@@ -69,7 +69,7 @@ public class UretimTakipServlet extends HttpServlet implements Serializable {
                 String result   = stokDao.stokYeterli(
                                 Integer.parseInt(uretimplanid),
                                 Integer.parseInt(mamulid),
-                                Integer.parseInt(uret_miktar) + Integer.parseInt(hata_miktar)
+                                Integer.parseInt(uret_miktar)
                                 );
                 PrintWriter out = response.getWriter();
                 out.print(result);

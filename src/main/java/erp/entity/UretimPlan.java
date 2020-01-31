@@ -125,10 +125,10 @@ public class UretimPlan {
     }
 
     public double getSapma() {
-        if (planlananmiktar == null || planlananmiktar == 0) {
+        if (hatalimiktar == null || hatalimiktar == 0) {
             return 0;
         }
-        return Util.Round((planlananmiktar - uretilenmiktar) * 100, planlananmiktar);
+        return Util.Round((uretilenmiktar - (uretilenmiktar-hatalimiktar)) * 100, uretilenmiktar);
     }
 
 }

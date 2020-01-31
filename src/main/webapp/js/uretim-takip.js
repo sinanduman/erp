@@ -45,163 +45,6 @@ function SiparisEkleCtrl($scope) {
     };
 }
 
-function updateGo(url,id,action_form,islem){
-    let f_siparisplanid	= id;
-    let f_bilesen		= action_form.bilesen.value;
-    let f_miktar		= $.trim(action_form.miktar.value);
-    let f_makinaid		= action_form.makina.value;
-    let f_calisanid		= action_form.calisan.value;
-    let f_tarih			= action_form.tarih.value;
-    let f_bassaat		= action_form.bassaat.value;
-    let f_basdakika		= action_form.basdakika.value;
-    let f_bitsaat		= action_form.bitsaat.value;
-    let f_bitdakika		= action_form.bitdakika.value;
-    let f_hataid		= action_form.hataid.value;
-    let f_hatamiktar	= $.trim(action_form.hatamiktar.value);
-    let f_durusid		= action_form.durusid.value;
-    let f_not			= action_form.not.value;
-    let f_islemid		= islem;
-    let alert_mesaj		= f_siparisplanid + " Numaralı " + f_bilesen;
-
-    if(!is_empty(f_hataid) && !is_positive(f_hatamiktar)){
-        alert("Hata miktarı, eğer varsa, NÜMERİK olmalıdır!");
-        return false;
-    }
-    if(is_empty(f_hataid) && is_positive(f_hatamiktar)){
-        alert("Hata SEBEBİ seçmelisin!");
-        return false;
-    }
-    if (is_positive(f_miktar)){
-        if(confirm(alert_mesaj +"\n\n" + "Üretim Plan bilgisini GÜNCELLEMEK istediğinden"+"\n\n"+"Emin misin?")){
-            $.ajax({
-                url: url,
-                type: "POST",
-                data: {
-                    siparisplanid: f_siparisplanid,
-                    miktar: f_miktar,
-                    makinaid: f_makinaid,
-                    calisanid: f_calisanid,
-                    tarih: f_tarih,
-                    bassaat: f_bassaat,
-                    basdakika: f_basdakika,
-                    bitsaat: f_bitsaat,
-                    bitdakika: f_bitdakika,
-                    hataid: f_hataid,
-                    hatamiktar: f_hatamiktar,
-                    durusid: f_durusid,
-                    not: f_not,
-                    islemid: f_islemid
-                },
-                dataType: 'html',
-                beforeSend: function ( xhr ) {
-                },
-                success: function(data, textStatus, xhr) {
-                },
-                error: function(xhr, textStatus, errorThrown) {
-                    alert("Hata Oluştu: " + textStatus + " , " + errorThrown);
-                }
-            }).done(function( msg ) {
-                if(is_number( msg )){
-                    $("#tr"+id).css('background-color','darkkhaki');
-                    alert( f_bilesen + " ürünün Plan bilgisi başarıyla GÜNCELLENDİ" );
-                }
-                else{
-                    alert("Hata:"+ msg + ":" );
-                }
-            });
-        }
-    }
-    else{
-        alert("HATA! Miktar Bilgisine 0'dan farklı SAYISAL bir değer girin!");
-    }
-}
-function okGo(url,id,action_form,islem){
-    let f_siparisplanid	= id;
-    let f_bilesen		= action_form.bilesen.value;
-    let f_miktar		= action_form.miktar.value;
-    let f_islemid		= islem;
-    let alert_mesaj		= f_siparisplanid + " Numaralı " + f_bilesen;
-    if (is_positive(f_miktar)){
-        if(confirm(alert_mesaj +"\n\n" + "Plan bilgisinin TAMAMLANDIĞINDAN" +"\n\n" + "Emin misin?")){
-            $.ajax({
-                url: url,
-                type: "POST",
-                data: {
-                    siparisplanid: f_siparisplanid,
-                    islemid: f_islemid
-                },
-                dataType: "html",
-                beforeSend: function ( xhr ) {
-                },
-                success: function(data, textStatus, xhr) {
-                },
-                error: function(xhr, textStatus, errorThrown) {
-                    alert("Hata Oluştu: " + textStatus + " , " + errorThrown);
-                }
-            }).done(function( msg ) {
-                if(is_number( msg )){
-                    $("#tr"+id).css("background-color","E6E6E6");
-                    disableFormElements(action_form);
-                    //$("#tr"+id).css("display","none");
-                    //$("#tr"+id).css("display","none");
-                    //$("#tr"+id).css("display","none");
-                    //$("#tr"+id).css("display","none");
-                    alert( f_bilesen + " ürünün Üretim Planı TAMAMLANDI" );
-                }
-                else{
-                    //$("#tr_"+msg).css('visibility','hidden');
-                    alert("Hata: "+ msg );
-                }
-            });
-        }
-    }
-    else{
-        alert("HATA! Miktar Bilgisine 0'dan farklı SAYISAL bir değer girin!");
-    }
-}
-function deleteGo(url,id,action_form,islem){
-    let f_siparisplanid	= id;
-    let f_bilesen		= action_form.bilesen.value;
-    let f_miktar		= action_form.miktar.value;
-    let f_islemid		= islem;
-    let alert_mesaj		= f_siparisplanid + " Numaralı " + f_bilesen;
-    if (is_positive(f_miktar)){
-        if(confirm(alert_mesaj +"\n\n" + "Plan bilgisini SİLMEK istediğinden" +"\n\n" + "Emin misin?")){
-            $.ajax({
-                url: url,
-                type: "POST",
-                data: {
-                    siparisplanid: f_siparisplanid,
-                    islemid: f_islemid
-                },
-                dataType: "html",
-                beforeSend: function ( xhr ) {
-                },
-                success: function(data, textStatus, xhr) {
-                },
-                error: function(xhr, textStatus, errorThrown) {
-                    alert("Hata Oluştu: " + textStatus + " , " + errorThrown);
-                }
-            }).done(function( msg ) {
-                if(is_number( msg )){
-                    //disableFormElements(action_form);
-                    //$("#tr"+id).css("display","none");
-                    //$("#tr"+id).css("display","none");
-                    //$("#tr"+id).css("display","none");
-                    $("#tr"+id).css("display","none");
-                    $("#tr_urtpl_detay"+id).css("display","none");
-                    alert( f_bilesen + " ürünün Üretim Planı SİLİNDİ" );
-                }
-                else{
-                    alert("Hata: "+ msg );
-                }
-            });
-        }
-    }
-    else{
-        alert("HATA! Miktar Bilgisine 0'dan farklı SAYISAL bir değer girin!");
-    }
-}
 
 $("#uretimekle").click(function(){
     let message="";
@@ -251,9 +94,7 @@ $("#uretimekle").click(function(){
                 islemid:        3,
                 uretimplanid:	$("#uretimplanid").val(),
                 mamulid:		$("#mamulid").val(),
-                uretilenmiktar:	uretimadet,
-                hatalimiktar:	hataliadet,
-                tahminiuretim:  tahminiuretim
+                uretilenmiktar:	uretimadet
             },
             beforeSend: function ( xhr ) {
             },
@@ -388,7 +229,6 @@ function uretimtakipguncelle(sender,planid){
     document.uretimtakipform.durussebepid.value	= plan[planid].durusid;
     document.uretimtakipform.duruszaman.value	= plan[planid].duruszaman;
     document.uretimtakipform.mamulizleno.value	= plan[planid].izlemeno;
-    //findbilesenkod(plan[planid].esid);
 
     if(plan[planid].hataid=="0"){
         $("#hatasebepid option").each(function(index) {
@@ -416,60 +256,6 @@ function uretimtakipguncelle(sender,planid){
 
     //"01:23".substr(0,2)
     //"01:23".substr(3,5)
-}
-
-function uretimplanguncelle(sender,planid){
-
-    cleartrbackground();
-    $(sender).css("background-color","darkkhaki");
-
-    $("#hedefuretim").removeAttr("readonly");
-    $("#gercekuretim").removeAttr("readonly");
-
-    $("#uretimplanguncelle").removeAttr("disabled");
-    $("#uretimplanguncelle").removeClass("btn btn-danger").addClass("btn btn-success");
-
-    $("#uretimplaniptal").css("display","");
-
-    //changefun_uretim(plan[planid].mamulkod);
-    $("#tarih").val(plan[planid].tarihtr);
-    $("#calisanid").val(plan[planid].calisanid);
-    $("#makinaid").val(plan[planid].makinaid);
-
-    $("#mamulkod").val(plan[planid].mamulkod);
-    $("#hedefuretim").val(plan[planid].hedefuretim);
-    $("#hedefuretimhidden").val(plan[planid].hedefuretim);
-
-    $("#gercekuretim").val(plan[planid].uretimadet);
-    $("#gercekuretim_hidden").val(plan[planid].uretimadet);
-    $("#fark").val(plan[planid].fark);
-    $("#sapma").val(plan[planid].sapma);
-
-
-    if(!is_number(plan[planid].hedefuretim)){
-        if(is_number(plan[planid].fark)){
-            $("#hedefuretim").val(parseInt(plan[planid].uretimadet) + parseInt(plan[planid].fark) );
-            $("#hedefuretimhidden").val(parseInt(plan[planid].uretimadet) + parseInt(plan[planid].fark) );
-        }
-        else{
-            $("#hedefuretim").val(parseInt(plan[planid].uretimadet));
-            $("#hedefuretimhidden").val(parseInt(plan[planid].uretimadet) );
-        }
-        hedefuretim_change();
-    }
-
-    if(plan[planid].hataid=="0"){
-        $("#hatasebepid option").each(function(index) {
-            if(index == 0){
-                $("#hatasebepid").val($(this).val());
-            }
-        });
-    }
-    $("#hatasebepid").val(plan[planid].hataid);
-
-    /* 1:update, 2:insert */
-    $("#uretimplanid").val(planid);
-    changefun($("#mamulkod"));
 }
 
 $("#uretimiptal").click(function(){
@@ -550,99 +336,7 @@ $("#uretimiptal").click(function(){
     $("#tahminiuretim").val("");
 });
 
-
-$("#uretimplaniptal").click(function(){
-
-    cleartrbackground();
-
-    $("#hedefuretim").attr("readonly","readonly");
-    $("#gercekuretim").attr("readonly","readonly");
-
-    $("#uretimplanguncelle").removeClass("btn btn-success").addClass("btn btn-danger");
-    $("#uretimplanguncelle").attr("disabled","disabled");
-
-    $("#uretimplaniptal").css("display","none");
-    $("#uretimplanid").val("0");
-
-    $("#hedefuretim").val("");
-    $("#hedefuretimhidden").val("");
-    $("#gercekuretim").val("");
-    $("#fark").val("");
-    $("#sapma").val("");
-    $("#hatasebepid").val("0");
-
-    $("#mamulkod").val("");
-    $("#mamulizleno").val("");
-    changefun_uretim (document.uretimplanform.mamulkod);
-    //hedefuretim_change();
-});
-
-
-$("#uretimplanguncelle").click(function(){
-    //console.log("gercekuretim: " + $("#gercekuretim").val()  + " hedefuretim: " + $("#hedefuretim").val()  +	"fark: " + $("#fark").val() );
-    if(!is_number($("#hedefuretim").val())){
-        alert("Hedeflenen üretim girilmeli!\n");
-    }
-    else if(!is_number($("#gercekuretim").val())){
-        alert("Gerçekleşen üretim girilmeli!\n");
-    }
-    else if($("#fark").val()!="" && !is_positive($("#hatasebepid").val())){
-        alert("Hedeflenen üretim, Gerçekleşen üretimden yüksek.\nAçıklama seçilmeli!\n");
-    }
-    else if($("#fark").val()=="" && is_positive($("#hatasebepid").val())){
-        alert("Açıklama seçili!\n\Hedeflenen üretim, Gerçekleşen üretimden yüksek olmalı!\n");
-    }
-    else{
-        if(parseInt($("#gercekuretim").val())!=parseInt($("#gercekuretim_hidden").val()) ){
-            if(!confirm("Gerçekleşen Üretim DEĞİŞTİ, Onaylıyor musun?")){
-                return false;
-            }
-        }
-        //console.log("gercekuretim: " + parseInt($("#gercekuretim").val()));
-        //console.log("gercekuretim_hidden: " + parseInt($("#gercekuretim_hidden").val()));
-        let uretimfark = (parseInt($("#gercekuretim").val()) - parseInt($("#gercekuretim_hidden").val()));
-        console.log(uretimfark);
-        /* Malzeme yeterli mi*/
-        $.ajax({
-            url: "uretimtakip",
-            type: "POST",
-            data: {
-                uretimplanid:	0,
-                mamulid:		$("#mamulid").val(),
-                uretilenmiktar:	uretimfark,
-                hatalimiktar:	0,
-                islemid: 3
-            },
-            error: function(xhr, textStatus, errorThrown) {
-                alert("Hata Oluştu: " + textStatus + " , " + errorThrown);
-            }
-        }).done(function( msg ) {
-            if(msg == "0"){
-                //console.log(1);
-                if($("#uretimplanid").val()=="0"){
-                    //console.log(2);
-                    if(confirm("Güncellemek istediğine emin misin?")){
-                        document.uretimplanform.submit();
-                    }
-                }
-                else{
-                    //console.log(3);
-                    document.uretimplanform.submit();
-                }
-            }
-            else{
-                //console.log(4);
-                alert( msg );
-            }
-        });
-        /* Malzeme yeterli mi*/
-    }
-});
-
-$("#gercekuretim").change(function(){
-    hedefuretim_change();
-});
-$("#hedefuretim").change(function(){
+$("#gercekuretim, #hedefuretim, #hata").change(function(){
     hedefuretim_change();
 });
 
@@ -651,17 +345,15 @@ function hedefuretim_change(){
         alert("Hedeflenen üretim miktarı 0'dan büyük olmalı!\n");
     }
     else{
-        let tempfark = parseInt($("#hedefuretim").val()) - parseInt($("#gercekuretim").val());
-        if(tempfark>0){
-            $("#fark").val(tempfark);
-            $("#sapma").val( Math.round(( ( tempfark )*100 / $("#hedefuretim").val())*100)/100.0 );
-            $("#hedefuretimhidden").val($("hedefuretim").val());
+        let temphata = parseInt($("#hata").val());
+        let tempuretim = parseInt($("#gercekuretim").val());
+        if(temphata > 0){
+            $("#sapma").val(Math.round(((temphata * 100) / tempuretim)*100)/100.0);
         }
-        else if(tempfark==0){
+        else if(temphata == 0){
             let hatasebepval = 0;
-            $("#fark").val("");
+            $("#hata").val("");
             $("#sapma").val("");
-            $("#hedefuretimhidden").val($("hedefuretim").val());
 
             $("#hatasebepid option").each(function(index) {
                 if(index == 0){
@@ -672,18 +364,6 @@ function hedefuretim_change(){
         }
         else{
             alert("Hedeflenen üretim, Gerçekleşen üretimden düşük olamaz!\n\n");
-        }
-    }
-}
-
-function findbilesenkod(elemval) {
-    if (elemval != null && elemval != "") {
-        for (j in bilesen) {
-            if (elemval == bilesen[j].esid) {
-                $("#esmamulid_shadow").val(bilesen[j].esid);
-                $("#esmamulad").text(bilesen[j].esad);
-                return;
-            }
         }
     }
 }

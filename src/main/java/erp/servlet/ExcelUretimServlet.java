@@ -68,7 +68,7 @@ public class ExcelUretimServlet extends HttpServlet implements Serializable {
                             "İzl.No",
                             "Planlanan",
                             "Üretilen",
-                            "Fark",
+                            "Hata",
                             "Sapma",
                             "Açıklama"
                             }
@@ -89,7 +89,7 @@ public class ExcelUretimServlet extends HttpServlet implements Serializable {
                                 sr.getMamulizlno(),
                                 sr.getPlanlananmiktar(),
                                 sr.getUretilenmiktar(),
-                                ((sr.getFark()==0) ? "" : sr.getFark()),
+                                ((sr.getHatalimiktar() ==0) ? "" : sr.getHatalimiktar()),
                                 ((sr.getSapma()==0) ? "" : "% " + sr.getSapma()),
                                 sr.getHataad()
                                 });

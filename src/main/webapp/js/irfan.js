@@ -75,7 +75,7 @@ $("#go").click(function(){
 function cleartrbackground(){
     $(".tableplan tr").css("background-color","");
 }
-var OK = (function() {
+let OK = (function() {
     "use strict";
 
     let elem,

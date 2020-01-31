@@ -34,7 +34,6 @@
 <%@ include file="logincheck.jsp" %>
 <%
     List<HataSebep> hatasebep = (List<HataSebep>) request.getAttribute("hatasebep");
-    List<DurusSebep> durussebep = (List<DurusSebep>) request.getAttribute("durussebep");
     List<Calisan> calisan = (List<Calisan>) request.getAttribute("calisan");
     List<Makina> makina = (List<Makina>) request.getAttribute("makina");
     List<Mamul> mamul = (List<Mamul>) request.getAttribute("mamul");
@@ -64,14 +63,14 @@
         + ",agirlik:" + m.getAgirlik() + "}");
             delimeter = ",";
         }%>];
-    var mamul2 = [
+    let mamul2 = [
         <%delimeter = "";
         for (Mamul m : mamul) {
             out.println(delimeter + " { label:'" + m.getKod() + "'" + ",id:" + m.getId() + "}");
             delimeter = ",";
         }%>];
 
-    var hatasebep = {
+    let hatasebep = {
         <%delimeter = "";
         for (HataSebep h : hatasebep) {
             out.println(delimeter + "'" + h.getKod() + "'" +": { id:" + h.getId()
@@ -118,12 +117,9 @@
             </div>
 
             <div class="form-group">
-                <label for="mamulkod" class="text-success bgsaydam">&nbsp;&nbsp;</label>
+                <label for="uretimplanliste" class="text-success bgsaydam">&nbsp;&nbsp;</label>
                 <div>
-                    <button type="button" class="btn btn-danger" name="mamulliste" id="mamulliste">Plan Listesini
-                        Getir
-                    </button>
-                    <input type="hidden" name="mamullisteid" id="mamullisteid" value="0">
+                    <button type="button" class="btn btn-danger" name="uretimplanliste" id="uretimplanliste">Plan Listesini Getir</button>
                 </div>
             </div>
 
@@ -212,22 +208,21 @@
                 <div>
                     <input type="text" class="form-control xs text-right" name="gercekuretim"
                            id="gercekuretim" <%=readonly%>><span class="birim">Ad.</span>
-                    <input type="hidden" name="gercekuretim_hidden" id="gercekuretim_hidden">
+                    <input type="hidden" mamullistename="gercekuretim_hidden" id="gercekuretim_hidden">
                 </div>
             </div>
 
             <div class="form-group">
-                <label for="fark" class="text-baslik">Fark</label>
+                <label for="hata" class="text-baslik">Hata</label>
                 <div>
-                    <input type="text" class="form-control xs text-right" name="fark" id="fark"
-                           readonly="readonly"><span class="birim">Ad.</span>
+                    <input type="text" class="form-control xss text-right" name="hata" id="hata" <%=readonly%>><span class="birim">Ad.</span>
                 </div>
             </div>
 
             <div class="form-group">
                 <label for="sapma" class="text-baslik">Sapma</label>
                 <div>
-                    <input type="text" class="form-control xs text-right" name="sapma" id="sapma"
+                    <input type="text" class="form-control xss text-right" name="sapma" id="sapma"
                            readonly="readonly"><span class="birim">%</span>
                 </div>
             </div>
@@ -286,8 +281,8 @@
     <div class="row" style="font-size:12px;">
         <table class="tableplan">
             <script type="text/javascript" charset="utf-8">
-                var plan = {};
-                var plantemp = {};
+                let plan = {};
+                let plantemp = {};
             </script>
             <%
                 for (UretimPlan u : uretimplan) {
@@ -342,7 +337,7 @@
                 <th>İzl.No</th>
                 <th>Planlanan</th>
                 <th>Üretilen</th>
-                <th>Fark</th>
+                <th>Hata</th>
                 <th>Sapma</th>
                 <th>Açıklama</th>
                 <th>Aksiyon</th>
@@ -351,41 +346,25 @@
                 }
             %>
             <tr id="tr<%=u.getId()%>">
-                <td nowrap><%=u.getTarihTRShort()%>
-                </td>
-                <td><%=u.getBasZaman()%>
-                </td>
-                <td><%=u.getBitZaman()%>
-                </td>
-                <td nowrap><%=u.getMakinaad()%>
-                </td>
-                <td><%=u.getCalisanShortName()%>
-                </td>
-                <td><%=u.getFirmaad()%>
-                </td>
-                <td><%=Util.splitLine(u.getHammaddead(), ";", "<br>")%>
-                </td>
-                <td><%=Util.splitLine(u.getHammaddeizlno(), ";", "<br>")%>
-                </td>
-                <td><%= u.getMamulkod() %>
-                </td>
-                <td><%= u.getMamulad() %>
-                </td>
-                <td><%= (u.getMamulizlno() == 0) ? "" : u.getMamulizlno() %>
-                </td>
-                <td class="text-right nowrap"><%= (u.getPlanlananmiktar() == 0) ? "" : u.getPlanlananmiktar() + " Ad." %>
-                </td>
-                <td class="text-right nowrap"><%= u.getUretilenmiktar() + " Ad." %>
-                </td>
-                <td class="text-right" nowrap><%= (u.getFark() == 0) ? "" : u.getFark() + " Ad." %>
-                </td>
-                <td class="text-right"><%= (u.getSapma() == 0) ? "" : "% " + u.getSapma() %>
-                </td>
-                <td><%= u.getHataad() %>
-                </td>
+                <td nowrap><%=u.getTarihTRShort()%></td>
+                <td><%=u.getBasZaman()%></td>
+                <td><%=u.getBitZaman()%></td>
+                <td nowrap><%=u.getMakinaad()%></td>
+                <td><%=u.getCalisanShortName()%></td>
+                <td><%=u.getFirmaad()%></td>
+                <td><%=Util.splitLine(u.getHammaddead(), ";", "<br>")%></td>
+                <td><%=Util.splitLine(u.getHammaddeizlno(), ";", "<br>")%></td>
+                <td><%= u.getMamulkod() %></td>
+                <td><%= u.getMamulad() %></td>
+                <td><%= (u.getMamulizlno() == 0) ? "" : u.getMamulizlno() %></td>
+                <td class="text-right" nowrap><%= (u.getPlanlananmiktar() == 0) ? "" : u.getPlanlananmiktar() + " Ad." %></td>
+                <td class="text-right" nowrap><%= u.getUretilenmiktar() + " Ad." %></td>
+                <td class="text-right" nowrap><%= (u.getHatalimiktar() == 0) ? "" : u.getHatalimiktar() + " Ad." %></td>
+                <td class="text-right" nowrap><%= (u.getSapma() == 0) ? "" : "% " + u.getSapma() %></td>
+                <td><%= u.getHataad() %></td>
                 <td>
                     <div class="text-center" id="div<%= u.getId() %>">
-                        <a href="javascript:uretimplanguncelle('#tr<%= u.getId() %>',<%= u.getId() %>);"
+                        <a href="javascript:tr_uretimplanguncelle('#tr<%= u.getId() %>',<%= u.getId() %>);"
                            title="Güncelle"><span class="fa fa-sync fa-lg text-warning"></span></a>
                     </div>
                 </td>
@@ -400,8 +379,6 @@
         <%
             String param1 = (tarih == null || tarih.equals("")) ? "" : "&amp;tarih=" + tarih;
             String param2 = (makinaid == null || makinaid.equals("")) ? "" : "&amp;makinaid=" + makinaid;
-            String param3 = "&amp;mamullisteid=1";
-
         %>
         <jsp:include page="paging.jsp">
             <jsp:param value="noofpages" name="noofpages"/>
@@ -409,7 +386,6 @@
             <jsp:param value="uretimplan" name="pagename"/>
             <jsp:param value="<%=param1 %>" name="param1"/>
             <jsp:param value="<%=param2 %>" name="param2"/>
-            <jsp:param value="<%=param3 %>" name="param3"/>
         </jsp:include>
     </div>
 
@@ -451,9 +427,9 @@
 <script src="js/bootstrap.min.js" type="text/javascript"></script>
 <script src="js/bootbox.js" type="text/javascript"></script>
 <script src="js/irfan.js?<%=Util.nanoTime%>" type="text/javascript"></script>
-<script src="js/siparis.js?<%=Util.nanoTime%>" type="text/javascript"></script>
+<script src="js/uretim-plan.js?<%=Util.nanoTime%>" type="text/javascript"></script>
 <script>
-    var today = '<%= tarih.equals("")?"today":tarih %>';
+    let today = '<%= tarih.equals("")?"today":tarih %>';
     $(function () {
         $('#tarih').datepicker({
             inline: true,
@@ -473,9 +449,9 @@
     });
 
     function changefun(elem) {
-        var found = false;
+        let found = false;
         if (elem != null) {
-            for (var j=0; j < mamul.length && !found; j++) {
+            for (let j=0; j < mamul.length && !found; j++) {
                 if ($(elem).val() == mamul[j].mamulkod) {
                     found = true;
                     $("#mamulad").val(mamul[j].mamulad);

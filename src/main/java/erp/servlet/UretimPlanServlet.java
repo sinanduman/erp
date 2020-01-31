@@ -46,7 +46,7 @@ public class UretimPlanServlet extends HttpServlet implements Serializable {
         
         response.setContentType("text/html; charset=UTF-8");
 
-        String mamullisteid = request.getParameter("mamullisteid")==null?"":request.getParameter("mamullisteid");
+        String uretimplanid = request.getParameter("uretimplanid") == null ? "0" : request.getParameter("uretimplanid");
         String excelsql     = "";
         String message      = "";
         String tarih        = (request.getParameter("tarih")==null || request.getParameter("tarih").equals("")) ? Util.getTarih(new Date()) : Util.date_tr_to_eng(request.getParameter("tarih"));
@@ -61,29 +61,25 @@ public class UretimPlanServlet extends HttpServlet implements Serializable {
         }                
         filter0     = filter1 + filter2;
         
-        if(mamullisteid!=null && mamullisteid.matches("[0-9]+")) {
-            if(!mamullisteid.equals("1")) {                
-                String hedefuretim  = request.getParameter("hedefuretim");
-                String gercekuretim = request.getParameter("gercekuretim");
-                String fark         = request.getParameter("fark")==""?null:request.getParameter("fark");
-                String hataid       = request.getParameter("hatasebepid")==""?null:request.getParameter("hatasebepid");
-                String uretimplanid = request.getParameter("uretimplanid")==""?null:request.getParameter("uretimplanid");
-                String result = uretimDao.uretimPlanGuncelle(
-                                Integer.parseInt(gercekuretim),
-                                Integer.parseInt(hedefuretim),
-                                (fark==null)?null:Integer.parseInt(fark),
-                                (hataid==null)?null:Integer.parseInt(hataid),
-                                Integer.parseInt(uretimplanid)
-                                );
-                message = result;
-            }
+
+        if(Integer.parseInt(uretimplanid)>0) {
+            String hedefuretim  = request.getParameter("hedefuretim");
+            String gercekuretim = request.getParameter("gercekuretim");
+            String hata         = request.getParameter("hata");
+            String hataid       = request.getParameter("hatasebepid");
+            message = uretimDao.uretimPlanGuncelle(
+                            Integer.parseInt(gercekuretim),
+                            Integer.parseInt(hedefuretim),
+                            (hata == null || hata.isEmpty()) ? 0 : Integer.parseInt(hata),
+                            Integer.parseInt(hataid),
+                            Integer.parseInt(uretimplanid)
+                            );
         }
 
         excelsql = "SELECT * FROM " + BaseDao.V_URETIMPLAN_TUM_PLAN + " WHERE tamamlandi=1 " + filter0;
         logger.info("planservlet: " + excelsql);
 
         List<HataSebep> hatasebep = hataDao.hataSebepListeGetir();
-        List<DurusSebep> durussebep = hataDao.durusSebepListeGetir();
         List<Makina> makina = makinaDao.makinaListeGetirTum(0);
         List<Calisan> calisan = calisanDao.calisanListeGetirTum(0, null);
         List<Firma> firma =  firmaDao.firmaListeGetirTum(0);
@@ -99,7 +95,6 @@ public class UretimPlanServlet extends HttpServlet implements Serializable {
         List<UretimPlan> uretimplan = uretimDao.uretimPlanListeGetir(UretimDurum.TAMAMLANMIS, page, filter0, BaseDao.V_URETIMPLAN_TUM_PLAN);
         
         request.setAttribute("hatasebep", hatasebep);
-        request.setAttribute("durussebep", durussebep);
         request.setAttribute("makina", makina);
         request.setAttribute("calisan", calisan);
         request.setAttribute("firma", firma);

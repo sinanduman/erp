@@ -149,7 +149,7 @@ public class StokDao implements Serializable, BaseDao {
         return retVal;
     }
 
-    public String stokYeterli(Integer uretimplanid, Integer mamulid, Integer miktar) {
+    public String stokYeterli(Integer uretimplanid, Integer mamulid, Integer uretilenmiktar) {
         String retVal = "0";
         String insertQuery = "SELECT " + BaseDao.F_STOK_YETERLI + "(?,?,?)";
 
@@ -157,7 +157,7 @@ public class StokDao implements Serializable, BaseDao {
              PreparedStatement pstmt = conn.prepareStatement(insertQuery)) {
             pstmt.setInt(1, uretimplanid);
             pstmt.setInt(2, mamulid);
-            pstmt.setInt(3, miktar);
+            pstmt.setInt(3, uretilenmiktar);
 
             logger.info(pstmt.toString());
             ResultSet rs = pstmt.executeQuery();

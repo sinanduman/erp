@@ -473,7 +473,7 @@
 <script src="js/bootbox.js" type="text/javascript"></script>
 <script src="js/moment.min.js" type="text/javascript"></script>
 <script src="js/irfan.js?<%=Util.nanoTime%>" type="text/javascript"></script>
-<script src="js/siparis.js?<%=Util.nanoTime%>" type="text/javascript"></script>
+<script src="js/uretim-takip.js?<%=Util.nanoTime%>" type="text/javascript"></script>
 <script type="text/javascript">
     $("#cxb_esmamul").on("change", function () {
         if ($(this).prop("checked")) {

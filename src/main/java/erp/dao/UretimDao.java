@@ -131,13 +131,8 @@ public class UretimDao implements Serializable, BaseDao {
              PreparedStatement pstmt = conn.prepareStatement(updateQuery)) {
             pstmt.setInt(1, gerceklesenmiktar);
             pstmt.setInt(2, planlananmiktar);
-
-            if (hatalimiktar == null) pstmt.setNull(3, Types.INTEGER);
-            else pstmt.setInt(3, hatalimiktar);
-
-            if (hataid == null) pstmt.setNull(4, Types.INTEGER);
-            else pstmt.setInt(4, hataid);
-
+            pstmt.setInt(3, hatalimiktar);
+            pstmt.setInt(4, hataid);
             pstmt.setInt(5, uretimplanid);
             logger.info(pstmt.toString());
 
