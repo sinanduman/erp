@@ -2,9 +2,9 @@ package erp.util;
 
 import erp.entity.Bilesen;
 import erp.entity.Calisan;
+import erp.entity.Genel;
 import erp.entity.Mamul;
 import erp.model.Aylar;
-import erp.entity.Genel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,9 +16,10 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.temporal.TemporalField;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Util {
 
@@ -36,7 +37,7 @@ public class Util {
         else {
             String[] returnValue = bileseninfo.split("\\|");
             // 1: mamul ad, 2: mamul kod, 3: mamul agirlik 4: GKR No
-            return returnValue[type - 1].toString();
+            return returnValue[type - 1];
         }
     }
 
@@ -60,7 +61,6 @@ public class Util {
         Integer tmp = 1;
         if (returnValue.matches("[0-9]{2}-[0-9]{2}-[0-9]{4}")) {
             tmp = Integer.parseInt(dateinfo.substring(3, 5));
-            logger.info("tmp :" + tmp);
             for (Aylar a : Aylar.values()) {
                 if (a.value() == tmp) {
                     returnValue = a.tr();
