@@ -1,8 +1,6 @@
 package erp.dao;
 
 import erp.entity.Bakim;
-import erp.entity.UretimPlan;
-import erp.model.UretimDurum;
 import erp.servlet.ConnectionManager;
 import erp.util.Util;
 import org.slf4j.Logger;
@@ -11,7 +9,10 @@ import org.slf4j.LoggerFactory;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.io.Serializable;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
