@@ -53,7 +53,7 @@
 %>
 
 <script>
-    var mamul = [
+    let mamul = [
         <%String delimeter = "";
         for (Mamul m : mamul) {
             out.println(delimeter
@@ -64,9 +64,9 @@
         + ",label:'" + m.getKod() + "'" + "}");
             delimeter = ",";
         }%>];
-    var mamuldef = mamul;
+    let mamuldef = mamul;
 
-    var mamul2 = [
+    let mamul2 = [
         <%delimeter = "";
         for (Mamul m : mamul) {
             out.println(delimeter + " { value:'"+ m.getKod() + "', label:'" + m.getKod() + " ["+m.getAd().replaceAll("'", "") +"]',id:" + m.getId() + "}");
@@ -198,8 +198,8 @@
     <div class="row" style="font-size:12px;">
         <table class="tableplan">
             <script type="text/javascript" charset="utf-8">
-                var plan = {};
-                var plantemp = {};
+                let plan = {};
+                let plantemp = {};
             </script>
             <%
                 for (UretimPlan u : stokrapor) {
@@ -327,7 +327,7 @@
         });
 
         if ($("#bilesenid").val() != "") {
-            var found_bilesenid = mamul.filter(function (obj) {
+            let found_bilesenid = mamul.filter(function (obj) {
                 return obj.id == $("#bilesenid").val();
             });
             /*
@@ -346,7 +346,7 @@
     });
 
     function changefun(elem) {
-        var found = false;
+        let found = false;
         if (elem != null) {
             for (i in mamul) {
                 if (elem.value == mamul[i].bilesenkod) {

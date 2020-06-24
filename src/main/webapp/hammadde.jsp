@@ -54,7 +54,7 @@
 %>
 
 <script type="text/javascript">
-    var bilesen = [
+    let bilesen = [
         <%String delimeter = "";
         for (Bilesen b : hammaddetum) {
             out.println(delimeter
@@ -68,7 +68,7 @@
         + ",firmaad:'" + b.getFirmaad().replaceAll("'", "") + "'" + "}");
             delimeter = ",";
         }%>];
-    var bilesen2 = [
+    let bilesen2 = [
         <%delimeter = "";
         for (Bilesen b : hammaddetum) {
             out.println(delimeter + " { label:'" + b.getKod() + " ["+b.getAd().replaceAll("'", "") +"]',id:" + b.getId() + "}");

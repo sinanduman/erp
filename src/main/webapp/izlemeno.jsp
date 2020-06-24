@@ -53,7 +53,7 @@
 
 <script type="text/javascript">
 
-    var mamul = [
+    let mamul = [
         <%String delimeter = "";
         for (Mamul m : mamul) {
             out.println(delimeter
@@ -65,7 +65,7 @@
             delimeter = ",";
         }%>];
 
-    var mamul2 = [
+    let mamul2 = [
         <%delimeter = "";
         for (Mamul m : mamul) {
             out.println(delimeter + " { value:'"+ m.getKod() + "', label:'" + m.getKod() + " ["+m.getAd().replaceAll("'", "") +"]',id:" + m.getId() + "}");
@@ -278,7 +278,7 @@
         });
 
         if ($("#bilesenid").val() != "0") {
-            var found_bilesenid = mamul.filter(function (obj) {
+            let found_bilesenid = mamul.filter(function (obj) {
                 return obj.id == $("#bilesenid").val();
             });
             /*
@@ -299,7 +299,7 @@
     });
 
     function changefun(elem) {
-        var found = false;
+        let found = false;
         if (elem != null) {
             for (i in mamul) {
                 /* autocomplete alanina birden fazla alan ekler */

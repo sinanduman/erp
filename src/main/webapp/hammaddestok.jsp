@@ -51,7 +51,7 @@
 %>
 
 <script type="text/javascript">
-    var bilesen = [
+    let bilesen = [
         <%String delimeter = "";
         for (Bilesen b : hammadde) {
             out.println(delimeter
@@ -65,7 +65,7 @@
         + ",firmaad:'" + b.getFirmaad().replaceAll("'", "") + "'" + "}");
             delimeter = ",";
         }%>];
-    var bilesen2 = [
+    let bilesen2 = [
         <%delimeter = "";
         for (Bilesen b : hammadde) {
             out.println(delimeter + " { value:'"+ b.getKod() + "',label:'" + b.getKod() + " ["+b.getAd().replaceAll("'", "") +"]',id:" + b.getId() + "}");
@@ -369,7 +369,7 @@
     });
 
     function changefun(elem) {
-        var found = false;
+        let found = false;
         if (elem != null) {
             for (i in bilesen) {
                 /* autocomplete alanina birden fazla alan ekler */

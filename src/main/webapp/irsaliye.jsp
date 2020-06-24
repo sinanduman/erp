@@ -65,7 +65,7 @@
 %>
 
 <script>
-    var mamul = [
+    let mamul = [
         <%String delimeter = "";
         for (Stok s : stok) {
             out.println(delimeter
@@ -81,7 +81,7 @@
             delimeter = ",";
         }%>];
 
-    var mamul2 = [
+    let mamul2 = [
         <%delimeter = "";
         for (Stok s : stok) {
             out.println(delimeter + " { value:'"+ s.getBilesenkod() + "', label:'" + s.getBilesenkod() + " ["+ s.getBilesenad() +"]',id:" + s.getBilesenid() + "}");
@@ -253,8 +253,8 @@
     <div class="row" style="font-size:12px;">
         <table class="tableplan">
             <script type="text/javascript" charset="utf-8">
-                var paket = {};
-                var pakettemp = {};
+                let paket = {};
+                let pakettemp = {};
             </script>
             <%
                 int syc = 0;
@@ -462,7 +462,7 @@
 <script src="js/irfan.js?<%=Util.nanoTime%>" type="text/javascript"></script>
 <script src="js/irsaliye.js?<%=Util.nanoTime%>" type="text/javascript"></script>
 <script>
-    var today = '<%= acikirsaliyeotarihi.equals("")?"today":acikirsaliyeotarihi %>';
+    let today = '<%= acikirsaliyeotarihi.equals("")?"today":acikirsaliyeotarihi %>';
     $(function () {
 
         $('#tarih').datepicker({
@@ -490,7 +490,7 @@
     });
 
     function changefun(elem) {
-        var found = false;
+        let found = false;
         if (elem != null) {
             $("#gkrno option").remove();
             for (i in mamul) {
@@ -505,12 +505,12 @@
                     }
                     ;
                     //console.log(mamul[i].gkrno);
-                    var gkrno = mamul[i].gkrno.split(";");
-                    var miktar = mamul[i].miktar.split(";");
-                    var stokid = mamul[i].stokid.split(";");
-                    var option = "";
-                    var total_miktar = 0;
-                    for (var j = 0; j < gkrno.length; j++) {
+                    let gkrno = mamul[i].gkrno.split(";");
+                    let miktar = mamul[i].miktar.split(";");
+                    let stokid = mamul[i].stokid.split(";");
+                    let option = "";
+                    let total_miktar = 0;
+                    for (let j = 0; j < gkrno.length; j++) {
                         option += '<option value="' + gkrno[j] + '">' + gkrno[j] + ", Adet:" + miktar[j] + '</option>';
                         total_miktar += parseInt(miktar[j]);
                     }

@@ -55,7 +55,7 @@
 %>
 
 <script>
-    var mamul = [
+    let mamul = [
         <%String delimeter = "";
         for (Mamul m : mamultum) {
             out.println(delimeter
@@ -75,7 +75,7 @@
         + ",cevrimsure:" + m.getCevrimsuresi() + "}");
             delimeter = ",";
         }%>];
-    var mamul2 = [
+    let mamul2 = [
         <%delimeter = "";
         for (Mamul m : mamultum) {
             out.println(delimeter + " { label:'" + m.getKod() + " ["+m.getAd().replaceAll("'", "") +"]',id:" + m.getId() + "}");

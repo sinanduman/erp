@@ -49,7 +49,7 @@
 %>
 
 <script>
-    var mamul = [
+    let mamul = [
         <%String delimeter = "";
         for (Mamul m : mamul) {
             out.println(delimeter
@@ -66,7 +66,7 @@
         + ",cevrimsure:" + m.getCevrimsuresi() + "}");
             delimeter = ",";
         }%>];
-    var mamul2 = [
+    let mamul2 = [
         <%delimeter = "";
         for (Mamul m : mamul) {
             out.println(delimeter + " { value:'"+ m.getKod() + "', label:'" + m.getKod() + " ["+m.getAd().replaceAll("'", "") +"]',id:" + m.getId() + "}");
@@ -319,7 +319,7 @@
     function changefun_mamulstok(elem) {
         //console.log("fun: " + elem);
         //console.log("fun val: " + elem.value);
-        var found = false;
+        let found = false;
         if (elem != null) {
             for (i in mamul) {
                 if (elem.value == mamul[i].mamulkod) {

@@ -46,7 +46,7 @@
 %>
 
 <script>
-    var mamul = [
+    let mamul = [
         <%String delimeter = "";
         for (Mamul m : mamul) {
             out.println(delimeter

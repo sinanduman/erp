@@ -63,7 +63,7 @@
 %>
 
 <script>
-    var irsaliyejson = [
+    let irsaliyejson = [
         <%String delimeter = "";
         for (Irsaliye ij : irsaliyejson) {
             out.println(delimeter
@@ -304,7 +304,7 @@
         });
 
         if ($("#mamulid").val() != "") {
-            var found_bilesenid = mamul.filter(function (obj) {
+            let found_bilesenid = mamul.filter(function (obj) {
                 return obj.id == $("#mamulid").val();
             });
 
@@ -319,7 +319,7 @@
     });
 
     function changefun(elem) {
-        var found = false;
+        let found = false;
         if (elem != null) {
             for (i in irsaliyejson) {
                 if (elem.value == irsaliyejson[i].irsaliyeno) {
@@ -336,7 +336,7 @@
     function changefunMamul(elem) {
 
         console.log(elem);
-        var found = false;
+        let found = false;
         if (elem != null) {
             for (i in mamul) {
                 /* autocomplete alanina birden fazla alan ekler */

@@ -57,13 +57,13 @@
     String excelsql = (String) request.getAttribute("excelsql");
 
     if(bas_tarih == null || bas_tarih.isEmpty())
-        bas_tarih = Util.convertLocalDateTarihTR(LocalDate.now().minusDays(730)).toString();
+        bas_tarih = Util.convertLocalDateTarihTR(LocalDate.now().minusYears(4)).toString();
     if(bit_tarih == null || bit_tarih.isEmpty())
         bit_tarih = Util.convertLocalDateTarihTR(LocalDate.now()).toString();
 %>
 
 <script>
-    var mamul = [
+    let mamul = [
         <%String delimeter = "";
         for (Mamul m : mamul) {
             out.println(delimeter
@@ -74,9 +74,9 @@
         + ",label:'" + m.getKod() + "'" + "}");
             delimeter = ",";
         }%>];
-    var mamuldef = mamul;
+    let mamuldef = mamul;
 
-    var mamul2 = [
+    let mamul2 = [
         <%delimeter = "";
         for (Mamul m : mamul) {
             out.println(delimeter + " { value:'"+ m.getKod() + "', label:'" + m.getKod() + " ["+m.getAd().replaceAll("'", "") +"]',id:" + m.getId() + "}");

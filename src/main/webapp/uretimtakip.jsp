@@ -44,7 +44,7 @@
 %>
 
 <script type="text/javascript">
-    var bilesen = [
+    let bilesen = [
         <%String delimeter = "";
         for (Bilesen b : bilesen) {
             out.println(delimeter
@@ -56,7 +56,7 @@
         + ",bilesentipad:'" + b.getBilesentipad() + "'" + "}");
             delimeter = ",";
         }%>];
-    var mamul = [
+    let mamul = [
         <%delimeter = "";
         for (Mamul m : mamul) {
             out.println(delimeter
@@ -80,7 +80,7 @@
         + ",cevrimsure:" + m.getCevrimsuresi() + "}");
             delimeter = ",";
         }%>];
-    var mamul2 = [
+    let mamul2 = [
         <%delimeter = "";
         for (Mamul m : mamul) {
             // out.println(delimeter + " { label:'" + m.getKod() + "'" + ",id:" + m.getId() + "}");
