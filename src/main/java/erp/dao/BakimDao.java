@@ -3,6 +3,7 @@ package erp.dao;
 import erp.entity.Bakim;
 import erp.servlet.ConnectionManager;
 import erp.util.Util;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,8 +39,8 @@ public class BakimDao implements Serializable, BaseDao {
             while (rs.next()) {
                 temp.add(new Bakim(rs));
             }
-        } catch (SQLException e) {
-            logger.error(e.getMessage());
+        } catch (Exception e) {
+            logger.error(ExceptionUtils.getStackTrace(e));
         }
         return temp;
     }
@@ -50,12 +51,13 @@ public class BakimDao implements Serializable, BaseDao {
 
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(searchQuery)) {
+            logger.info(pstmt.toString());
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
                 retVal = rs.getInt("mamul_sayi");
             }
-        } catch (SQLException e) {
-            logger.error(e.getMessage());
+        } catch (Exception e) {
+            logger.error(ExceptionUtils.getStackTrace(e));
         }
         return retVal;
     }

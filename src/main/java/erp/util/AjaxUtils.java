@@ -3,6 +3,7 @@ package erp.util;
 import erp.dao.BaseDao;
 import erp.servlet.ConnectionManager;
 import erp.entity.Calisan;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -64,8 +65,8 @@ public class AjaxUtils extends HttpServlet implements Serializable {
                 temp.add(new Calisan(rs)
                 );
             }
-        } catch (SQLException e) {
-            logger.error("Error: " + e);
+        } catch (Exception e) {
+            logger.error(ExceptionUtils.getStackTrace(e));
         }
         return temp;
     }

@@ -1,6 +1,7 @@
 <%@ page import="erp.entity.*" %>
 <%@ page import="erp.util.Util,java.text.SimpleDateFormat,java.util.Date" %>
 <%@ page import="java.util.List" %>
+<%@ page import="org.apache.commons.text.StringEscapeUtils" %>
 <%@ page contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!doctype html>
@@ -52,13 +53,13 @@
             out.println(delimeter
         + " { id:" + m.getId()
         + ",mamulid:" + m.getId()
-        + ",mamulad:'" + m.getAd().replaceAll("'", "") + "'"
+        + ",mamulad:'" + StringEscapeUtils.escapeEcmaScript(m.getAd()) + "'"
         + ",mamulkod:'" + m.getKod() + "'"
-        + ",hammadde:'" + m.getHammadde().replaceAll("'", "") + "'"
+        + ",hammadde:'" + StringEscapeUtils.escapeEcmaScript(m.getHammadde()) + "'"
         + ",hammaddegkrno:'" + m.getHammaddegkrno() + "'"
-        + ",yarimamul:'" + m.getYarimamul().replaceAll("'", "") + "'"
+        + ",yarimamul:'" + StringEscapeUtils.escapeEcmaScript(m.getYarimamul()) + "'"
         + ",yarimamulgkrno:'" + m.getYarimamulgkrno() + "'"
-        + ",firmaad:'" + m.getFirmaad().replaceAll("'", "") + "'"
+        + ",firmaad:'" + StringEscapeUtils.escapeEcmaScript(m.getFirmaad()) + "'"
         + ",cevrimsure:" + m.getCevrimsuresi()
         + ",agirlik:" + m.getAgirlik() + "}");
             delimeter = ",";

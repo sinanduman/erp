@@ -5,6 +5,7 @@
 <%@ page import="erp.util.Util" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.time.LocalDate" %>
+<%@ page import="org.apache.commons.text.StringEscapeUtils" %>
 <!doctype html>
 <html lang="en" ng-app="mamulApp">
 <head>
@@ -61,24 +62,24 @@
             out.println(delimeter
         + " { id:" + m.getId()
         + ",mamulid:" + m.getId()
-        + ",mamulad:'" + m.getAd().replaceAll("'", "") + "'"
+        + ",mamulad:'" + StringEscapeUtils.escapeEcmaScript(m.getAd()) + "'"
         + ",mamulkod:'" + m.getKod() + "'"
         + ",esmamulid:" + m.getEsmamulid()
-        + ",esmamulad:'" + m.getEsmamulad().replaceAll("'", "") + "'"
+        + ",esmamulad:'" + StringEscapeUtils.escapeEcmaScript(m.getEsmamulad()) + "'"
         + ",esmamulkod:'" + m.getEsmamulkod() + "'"
-        + ",hammadde:'" + m.getHammadde().replaceAll("'", "") + "'"
+        + ",hammadde:'" + StringEscapeUtils.escapeEcmaScript(m.getHammadde()) + "'"
         + ",hammaddegkrno:'" + m.getHammaddegkrno() + "'"
-        + ",yarimamul:'" + m.getYarimamul().replaceAll("'", "") + "'"
+        + ",yarimamul:'" + StringEscapeUtils.escapeEcmaScript(m.getYarimamul()) + "'"
         + ",yarimamulgkrno:'" + m.getYarimamulgkrno() + "'"
         + ",firmaid:" + m.getFirmaid()
-        + ",firmaad:'" + m.getFirmaad().replaceAll("'", "") + "'"
+        + ",firmaad:'" + StringEscapeUtils.escapeEcmaScript(m.getFirmaad()) + "'"
         + ",cevrimsure:" + m.getCevrimsuresi() + "}");
             delimeter = ",";
         }%>];
     let mamul2 = [
         <%delimeter = "";
         for (Mamul m : mamultum) {
-            out.println(delimeter + " { label:'" + m.getKod() + " ["+m.getAd().replaceAll("'", "") +"]',id:" + m.getId() + "}");
+            out.println(delimeter + " { label:'" + m.getKod() + " [" + StringEscapeUtils.escapeEcmaScript(m.getAd()) +"]',id:" + m.getId() + "}");
             delimeter = ",";
         }%>];
     let bakimTarihi = [];
@@ -198,7 +199,7 @@
                     <select class="form-control big" id="hammadde" name="hammadde">
                         <%
                             for (Bilesen h : hammadde) {
-                                out.println("<option value='" + h.getId() + "'>" + h.getAd().replaceAll("\"", "") + " [" + h.getKod() + "]" + " - " + h.getFirmaad() + "</option>");
+                                out.println("<option value='" + h.getId() + "'>" + StringEscapeUtils.escapeEcmaScript(h.getAd()) + " [" + h.getKod() + "]" + " - " + StringEscapeUtils.escapeEcmaScript(h.getFirmaad()) + "</option>");
                             }
                         %>
                     </select>
@@ -210,7 +211,7 @@
                     <select class="form-control big" id="yarimamul" name="yarimamul">
                         <%
                             for (Bilesen y : yarimamul) {
-                                out.println("<option value='" + y.getId() + "'>" + y.getAd().replaceAll("\"", "") + " [" + y.getKod() + "]" + " - " + y.getFirmaad() + "</option>");
+                                out.println("<option value='" + y.getId() + "'>" + StringEscapeUtils.escapeEcmaScript(y.getAd()) + " [" + y.getKod() + "]" + " - " + StringEscapeUtils.escapeEcmaScript(y.getFirmaad()) + "</option>");
                             }
                         %>
                     </select>
@@ -350,7 +351,7 @@
                     <tr id="tr<%=m.getId()%>"
                             <%= (m.getDurum() == 0 ? " style='background-color:darkKhaki;'" : "") %> >
                         <td><input type="text" class="form-control xm" value="<%= m.getKod() %>" name=liste_kod<%=m.getId()%> id="liste_kod<%=m.getId()%>"></td>
-                        <td><input type="text" class="form-control" value="<%= m.getAd().replaceAll("\"", "") %>" name=liste_ad<%=m.getId()%> id="liste_ad<%=m.getId()%>"></td>
+                        <td><input type="text" class="form-control" value="<%= StringEscapeUtils.escapeEcmaScript(m.getAd()) %>" name=liste_ad<%=m.getId()%> id="liste_ad<%=m.getId()%>"></td>
                         <td>
                             <select class="form-control xss" name=liste_cevrimsuresi<%=m.getId()%>
                                     id="liste_cevrimsuresi<%=m.getId()%>">

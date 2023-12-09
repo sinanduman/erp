@@ -3,6 +3,7 @@ package erp.dao;
 import erp.servlet.ConnectionManager;
 import erp.entity.Makina;
 import erp.util.Util;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,13 +36,13 @@ public class MakinaDao implements Serializable, BaseDao {
         ResultSet rs;
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(searchQuery)) {
-            rs = pstmt.executeQuery();
             logger.info(pstmt.toString());
+            rs = pstmt.executeQuery();
             while (rs.next()) {
                 temp.add(new Makina(rs));
             }
-        } catch (SQLException e) {
-            logger.error("Error: " + e);
+        } catch (Exception e) {
+            logger.error(ExceptionUtils.getStackTrace(e));
         }
         return temp;
     }
@@ -59,8 +60,8 @@ public class MakinaDao implements Serializable, BaseDao {
             logger.info(pstmt.toString());
             pstmt.executeUpdate();
 
-        } catch (SQLException e) {
-            logger.error("Error: " + e);
+        } catch (Exception e) {
+            logger.error(ExceptionUtils.getStackTrace(e));
             retVal = e.getMessage();
         }
         return retVal;
@@ -79,8 +80,8 @@ public class MakinaDao implements Serializable, BaseDao {
             if (rs.next()) {
                 result = rs.getString(1);
             }
-        } catch (SQLException e) {
-            logger.error("Error: " + e);
+        } catch (Exception e) {
+            logger.error(ExceptionUtils.getStackTrace(e));
             result = e.getMessage();
         }
         return result;
@@ -98,8 +99,8 @@ public class MakinaDao implements Serializable, BaseDao {
             pstmt.setInt(3, Integer.parseInt(id));
             logger.info(pstmt.toString());
             pstmt.executeUpdate();
-        } catch (SQLException e) {
-            logger.error("Error: " + e);
+        } catch (Exception e) {
+            logger.error(ExceptionUtils.getStackTrace(e));
             result = e.getMessage();
         }
         return result;

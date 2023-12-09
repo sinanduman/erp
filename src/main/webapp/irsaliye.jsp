@@ -3,6 +3,7 @@
 <%@ page import="erp.entity.*,erp.util.Util" %>
 <%@ page import="java.text.SimpleDateFormat,java.util.Date" %>
 <%@ page import="java.util.List" %>
+<%@ page import="org.apache.commons.text.StringEscapeUtils" %>
 <!doctype html>
 <html lang="en">
 <head>
@@ -71,20 +72,20 @@
             out.println(delimeter
             + " { id:" + s.getId()
             + ",mamulid:" + s.getBilesenid()
-            + ",mamulad:'" + s.getBilesenad().replaceAll("'", "") + "'"
+            + ",mamulad:'" + StringEscapeUtils.escapeEcmaScript(s.getBilesenad()) + "'"
             + ",mamulkod:'" + s.getBilesenkod() + "'"
             + ",gkrno:'" + s.getGkrnostr() + "'"
             + ",miktar:'" + s.getMiktarstr() + "'"
             + ",stokid:'" + s.getStokidstr() + "'"
             + ",firmaid:" + s.getFirmaid()
-            + ",firmaad:'" + s.getFirmaad().replaceAll("'", "") + "'}");
+            + ",firmaad:'" + StringEscapeUtils.escapeEcmaScript(s.getFirmaad()) + "'}");
             delimeter = ",";
         }%>];
 
     let mamul2 = [
         <%delimeter = "";
         for (Stok s : stok) {
-            out.println(delimeter + " { value:'"+ s.getBilesenkod() + "', label:'" + s.getBilesenkod() + " ["+ s.getBilesenad() +"]',id:" + s.getBilesenid() + "}");
+            out.println(delimeter + " { value:'"+ s.getBilesenkod() + "', label:'" + s.getBilesenkod() + " ["+ StringEscapeUtils.escapeEcmaScript(s.getBilesenad())  +"]',id:" + s.getBilesenid() + "}");
             delimeter = ",";
         }%>];
 </script>
@@ -275,7 +276,7 @@
                     miktar: "<%=ib.getMiktar()%>",
                     gkrno: "<%=ib.getGkrno()%>",
                     stokid: "<%=ib.getStokid()%>",
-                    not: "<%=(ib.getNot() == null) ? "" : ib.getNot().replaceAll("\"", "")%>"
+                    not: "<%=(ib.getNot() == null) ? "" : StringEscapeUtils.escapeEcmaScript(ib.getNot()) %>"
                 };
                 paket[<%=ib.getId()%>] = pakettemp;
             </script>
@@ -304,7 +305,7 @@
             %>
             <tr id="tr<%=ib.getId()%>">
                 <%
-                    not = (ib.getNot() == null) ? "" : ib.getNot().replaceAll("\"", "");
+                    not = (ib.getNot() == null) ? "" : StringEscapeUtils.escapeEcmaScript(ib.getNot());
                 %>
                 <td nowrap="nowrap"><%=Util.getTarihTR(ib.getOlusturmatarihi())%>
                 </td>

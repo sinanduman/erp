@@ -5,6 +5,7 @@
 <%@ page import="java.util.Map" %>
 <%@ page import="java.util.HashMap" %>
 <%@ page import="erp.model.FiyatTip" %>
+<%@ page import="org.apache.commons.text.StringEscapeUtils" %>
 <%@ page contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!doctype html>
@@ -61,10 +62,10 @@
             out.println(delimeter
         + " { id:" + m.getId()
         + ",bilesenid:" + m.getId()
-        + ",bilesenad:'" + m.getAd().replaceAll("'", "") + "'"
+        + ",bilesenad:'" + StringEscapeUtils.escapeEcmaScript(m.getAd()) + "'"
         + ",bilesenkod:'" + m.getKod() + "'"
         + ",value:'" + m.getKod() + "'"
-        + ",label:'" + m.getKod() + " ["+ m.getAd().replaceAll("'", "") + "]'" + "}");
+        + ",label:'" + m.getKod() + " ["+ StringEscapeUtils.escapeEcmaScript(m.getAd()) + "]'" + "}");
             delimeter = ",";
         }%>];
     let mamuldef = mamul;
@@ -78,10 +79,10 @@
             out.println(delimeter
         + " { id:" + b.getId()
         + ",bilesenid:" + b.getId()
-        + ",bilesenad:'" + b.getAd().replaceAll("'", "") + "'"
+        + ",bilesenad:'" + StringEscapeUtils.escapeEcmaScript(b.getAd()) + "'"
         + ",bilesenkod:'" + b.getKod() + "'"
      + ",value:'" + b.getKod() + "'"
-        + ",label:'" + b.getKod() + " ["+ b.getAd().replaceAll("'", "") + "]'" + "}");
+        + ",label:'" + b.getKod() + " ["+ StringEscapeUtils.escapeEcmaScript(b.getAd()) + "]'" + "}");
             delimeter = ",";
         }%>];
 
@@ -94,10 +95,10 @@
             out.println(delimeter
         + " { id:" + b.getId()
         + ",bilesenid:" + b.getId()
-        + ",bilesenad:'" + b.getAd().replaceAll("'", "") + "'"
+        + ",bilesenad:'" + StringEscapeUtils.escapeEcmaScript(b.getAd()) + "'"
         + ",bilesenkod:'" + b.getKod() + "'"
      + ",value:'" + b.getKod() + "'"
-        + ",label:'" + b.getKod() + " ["+ b.getAd().replaceAll("'", "") + "]'" + "}");
+        + ",label:'" + b.getKod() + " ["+ StringEscapeUtils.escapeEcmaScript(b.getAd()) + "]'" + "}");
             delimeter = ",";
         }%>];
 
@@ -192,7 +193,7 @@
     <div class="row" style="font-size:12px;">
         <table class="tableplan" width="50%">
             <%
-                if (stokdetay != null && stokdetay.size() > 0) {
+                if (stokdetay != null && !stokdetay.isEmpty()) {
                     stokrapor = stokdetay;
                 }
                 for (StokRapor sr : stokrapor) {

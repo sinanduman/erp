@@ -54,7 +54,7 @@
 				</div>
 			</div>
 			<div class="form-group col-xs-8">
-				<label for="adsoy" class="col-xs-3 control-label text-baslik">Makina Tipi: </label>
+				<label for="makina_tip" class="col-xs-3 control-label text-baslik">Makina Tipi: </label>
 				<div>
 					<select class="form-control big" id="makina_tip" name="makina_tip">
 						<%
