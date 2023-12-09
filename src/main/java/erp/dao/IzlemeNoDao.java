@@ -4,6 +4,7 @@ import erp.entity.Genel;
 import erp.entity.IzlemeNo;
 import erp.servlet.ConnectionManager;
 import erp.util.Util;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,8 +55,8 @@ public class IzlemeNoDao implements Serializable, BaseDao {
                         rs.getInt("kullanildi"))
                 );
             }
-        } catch (SQLException e) {
-            logger.error("Error: " + e);
+        } catch (Exception e) {
+            logger.error(ExceptionUtils.getStackTrace(e));
         }
         return temp;
     }
@@ -71,8 +72,8 @@ public class IzlemeNoDao implements Serializable, BaseDao {
             logger.info(pstmt.toString());
             pstmt.executeUpdate();
             temp = izlemeNoKontrol(mamulid, kullanildi, null);
-        } catch (SQLException e) {
-            logger.error("Error: " + e);
+        } catch (Exception e) {
+            logger.error(ExceptionUtils.getStackTrace(e));
         }
         return temp;
     }
@@ -89,8 +90,8 @@ public class IzlemeNoDao implements Serializable, BaseDao {
             pstmt.executeUpdate();
             logger.info(pstmt.toString());
             temp = izlemeNoKontrol(mamulid, kullanildi, null);
-        } catch (SQLException e) {
-            logger.error("Error: " + e);
+        } catch (Exception e) {
+            logger.error(ExceptionUtils.getStackTrace(e));
         }
         return temp;
     }
@@ -123,8 +124,8 @@ public class IzlemeNoDao implements Serializable, BaseDao {
                         rs.getInt("kullanildi"))
                 );
             }
-        } catch (SQLException e) {
-            logger.error("Error: " + e);
+        } catch (Exception e) {
+            logger.error(ExceptionUtils.getStackTrace(e));
         }
         return temp;
     }

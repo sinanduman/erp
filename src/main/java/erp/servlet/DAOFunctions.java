@@ -2,6 +2,7 @@ package erp.servlet;
 
 import erp.dao.BaseDao;
 import erp.entity.Birim;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,12 +27,13 @@ public class DAOFunctions implements Serializable {
         ResultSet rs;
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(searchQuery)) {
+            logger.info(pstmt.toString());
             rs = pstmt.executeQuery();
             while (rs.next()) {
                 temp.add(new Birim(rs));
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            logger.error(ExceptionUtils.getStackTrace(e));
         }
         return temp;
     }
@@ -47,12 +49,11 @@ public class DAOFunctions implements Serializable {
              PreparedStatement pstmt = conn.prepareStatement(selectQuery)) {
             logger.info(pstmt.toString());
             rs = pstmt.executeQuery();
-
             if (rs.next()) {
                 result = rs.getInt(1);
             }
-        } catch (SQLException e) {
-            logger.error("Error: " + e);
+        } catch (Exception e) {
+            logger.error(ExceptionUtils.getStackTrace(e));
         }
         return result;
     }
@@ -66,13 +67,13 @@ public class DAOFunctions implements Serializable {
         ResultSet rs;
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(selectQuery)) {
+            logger.info(pstmt.toString());
             rs = pstmt.executeQuery();
-
             if (rs.next()) {
                 result = rs.getInt(1);
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            logger.error(ExceptionUtils.getStackTrace(e));
         }
         return result;
     }
@@ -89,12 +90,13 @@ public class DAOFunctions implements Serializable {
         ResultSet rs;
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(selectQuery)) {
+            logger.info(pstmt.toString());
             rs = pstmt.executeQuery();
             if (rs.next()) {
                 result = rs.getInt(1);
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            logger.error(ExceptionUtils.getStackTrace(e));
         }
         return result;
     }

@@ -137,7 +137,7 @@ public class ExcelUretimServlet extends HttpServlet implements Serializable {
             workbook.write(outByteStream);
             byte [] outArray = outByteStream.toByteArray();
             response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-            response.setHeader("Expires:", "0"); // eliminates browser caching
+            response.setHeader("Cache-Control", "private, no-store, no-cache, must-revalidate");
             response.setContentLength(outArray.length);
             response.setHeader("Content-Disposition", "attachment; filename="+ "excel_uretim_" + excelbastarih +"_"+  excelbittarih + ".xls");
             OutputStream outStream = response.getOutputStream();

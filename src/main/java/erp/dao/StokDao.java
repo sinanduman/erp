@@ -5,6 +5,7 @@ import erp.model.BilesenTip;
 import erp.entity.Stok;
 import erp.entity.StokRapor;
 import erp.util.Util;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,8 +43,8 @@ public class StokDao implements Serializable, BaseDao {
             if (rs.next()) {
                 sum = rs.getInt(1);
             }
-        } catch (SQLException e) {
-            logger.error("Error: " + e);
+        } catch (Exception e) {
+            logger.error(ExceptionUtils.getStackTrace(e));
         }
         if (Boolean.parseBoolean(iade)) {
             if (sum == null) sum = 0;
@@ -101,9 +102,9 @@ public class StokDao implements Serializable, BaseDao {
             if (rs.next()) {
                 retVal = rs.getString(1);
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             retVal = e.getMessage();
-            logger.error("Error: " + e);
+            logger.error(ExceptionUtils.getStackTrace(e));
         }
         return retVal;
     }
@@ -144,7 +145,7 @@ public class StokDao implements Serializable, BaseDao {
                 retVal = rs.getString(1);
             }
         } catch (Exception e) {
-            logger.error("Error: " + e);
+            logger.error(ExceptionUtils.getStackTrace(e));
         }
         return retVal;
     }
@@ -164,8 +165,8 @@ public class StokDao implements Serializable, BaseDao {
             if (rs.next()) {
                 retVal = rs.getString(1);
             }
-        } catch (SQLException e) {
-            logger.error("Error: " + e);
+        } catch (Exception e) {
+            logger.error(ExceptionUtils.getStackTrace(e));
         }
         return retVal;
     }
@@ -210,8 +211,8 @@ public class StokDao implements Serializable, BaseDao {
                         rs.getString("bilesenkod"))
                 );
             }
-        } catch (SQLException e) {
-            logger.error("Error: " + e);
+        } catch (Exception e) {
+            logger.error(ExceptionUtils.getStackTrace(e));
         }
         return temp;
     }
@@ -263,8 +264,8 @@ public class StokDao implements Serializable, BaseDao {
                 ));
             }
 
-        } catch (SQLException e) {
-            logger.error("Error: " + e);
+        } catch (Exception e) {
+            logger.error(ExceptionUtils.getStackTrace(e));
         }
         return temp;
     }
@@ -309,8 +310,8 @@ public class StokDao implements Serializable, BaseDao {
             while (rs.next()) {
                 temp.add(new Stok(rs));
             }
-        } catch (SQLException e) {
-            logger.error("Error: " + e);
+        } catch (Exception e) {
+            logger.error(ExceptionUtils.getStackTrace(e));
         }
         return temp;
     }
@@ -345,8 +346,8 @@ public class StokDao implements Serializable, BaseDao {
                         null,// kalan
                         rs.getTimestamp("tarih")));
             }
-        } catch (SQLException e) {
-            logger.error("Error: " + e);
+        } catch (Exception e) {
+            logger.error(ExceptionUtils.getStackTrace(e));
         }
         return temp;
     }
@@ -368,8 +369,8 @@ public class StokDao implements Serializable, BaseDao {
             while (rs.next()) {
                 temp.add(new StokRapor(rs));
             }
-        } catch (SQLException e) {
-            logger.error(e.getMessage());
+        } catch (Exception e) {
+            logger.error(ExceptionUtils.getStackTrace(e));
         }
         return temp;
     }
@@ -380,12 +381,13 @@ public class StokDao implements Serializable, BaseDao {
 
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(searchQuery)) {
+            logger.info(pstmt.toString());
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
                 retVal = rs.getInt("hammadde_sayi");
             }
-        } catch (SQLException e) {
-            logger.error(e.getMessage());
+        } catch (Exception e) {
+            logger.error(ExceptionUtils.getStackTrace(e));
         }
         return retVal;
     }
@@ -396,12 +398,13 @@ public class StokDao implements Serializable, BaseDao {
 
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(searchQuery)) {
+            logger.info(pstmt.toString());
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
                 retVal = rs.getInt("yarimamul_sayi");
             }
-        } catch (SQLException e) {
-            logger.error(e.getMessage());
+        } catch (Exception e) {
+            logger.error(ExceptionUtils.getStackTrace(e));
         }
         return retVal;
     }
@@ -412,12 +415,13 @@ public class StokDao implements Serializable, BaseDao {
 
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(searchQuery)) {
+            logger.info(pstmt.toString());
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
                 retVal = rs.getInt("mamul_sayi");
             }
-        } catch (SQLException e) {
-            logger.error(e.getMessage());
+        } catch (Exception e) {
+            logger.error(ExceptionUtils.getStackTrace(e));
         }
         return retVal;
     }

@@ -4,6 +4,7 @@ import erp.servlet.ConnectionManager;
 import erp.model.UretimDurum;
 import erp.entity.UretimPlan;
 import erp.util.Util;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,13 +29,12 @@ public class UretimDao implements Serializable, BaseDao {
              PreparedStatement pstmt = conn.prepareStatement(deleteQuery)) {
             pstmt.setInt(1, uretimplanid);
             logger.info(pstmt.toString());
-
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
                 retVal = rs.getString(1);
             }
-        } catch (SQLException e) {
-            logger.error("Error: " + e);
+        } catch (Exception e) {
+            logger.error(ExceptionUtils.getStackTrace(e));
         }
         return retVal;
     }
@@ -47,13 +47,12 @@ public class UretimDao implements Serializable, BaseDao {
              PreparedStatement pstmt = conn.prepareStatement(planQuery)) {
             pstmt.setInt(1, uretimplanid);
             logger.info(pstmt.toString());
-
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
                 retVal = rs.getString(1);
             }
-        } catch (SQLException e) {
-            logger.error("Error: " + e);
+        } catch (Exception e) {
+            logger.error(ExceptionUtils.getStackTrace(e));
         }
         return retVal;
     }
@@ -115,8 +114,8 @@ public class UretimDao implements Serializable, BaseDao {
 
             logger.info(pstmt.toString());
             result = pstmt.executeUpdate();
-        } catch (SQLException e) {
-            logger.error("Error: " + e);
+        } catch (Exception e) {
+            logger.error(ExceptionUtils.getStackTrace(e));
         }
         return result;
     }
@@ -137,9 +136,9 @@ public class UretimDao implements Serializable, BaseDao {
             logger.info(pstmt.toString());
 
             pstmt.executeUpdate();
-        } catch (SQLException e) {
+        } catch (Exception e) {
             result = e.getMessage();
-            logger.error("Error: " + e);
+            logger.error(ExceptionUtils.getStackTrace(e));
         }
         return result;
     }
@@ -195,8 +194,8 @@ public class UretimDao implements Serializable, BaseDao {
                         rs.getInt("cevrimsuresi"))
                 );
             }
-        } catch (SQLException e) {
-            logger.error("Error: " + e);
+        } catch (Exception e) {
+            logger.error(ExceptionUtils.getStackTrace(e));
         }
         return temp;
     }
@@ -213,7 +212,6 @@ public class UretimDao implements Serializable, BaseDao {
             long start = System.currentTimeMillis();
             rs = pstmt.executeQuery();
             logger.info(pstmt.toString() + (System.currentTimeMillis()-start) +"ms.");
-
             while (rs.next()) {
                 temp.add(new UretimPlan(
                         rs.getInt("id"),
@@ -250,8 +248,8 @@ public class UretimDao implements Serializable, BaseDao {
                         rs.getInt("cevrimsuresi"))
                 );
             }
-        } catch (SQLException e) {
-            logger.error("Error: " + e);
+        } catch (Exception e) {
+            logger.error(ExceptionUtils.getStackTrace(e));
         }
         return temp;
     }
@@ -305,8 +303,8 @@ public class UretimDao implements Serializable, BaseDao {
                         rs.getInt("cevrimsuresi"))
                 );
             }
-        } catch (SQLException e) {
-            logger.error(e.getMessage());
+        } catch (Exception e) {
+            logger.error(ExceptionUtils.getStackTrace(e));
         }
         return temp;
     }

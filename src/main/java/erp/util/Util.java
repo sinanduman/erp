@@ -5,6 +5,7 @@ import erp.entity.Calisan;
 import erp.entity.Genel;
 import erp.entity.Mamul;
 import erp.model.Aylar;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -123,8 +124,8 @@ public class Util {
         Date date = new Date();
         try {
             date = df.parse(dateinfo);
-        } catch (ParseException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            logger.error(ExceptionUtils.getStackTrace(e));
         }
         returnValue = new Timestamp(date.getTime());
         return returnValue;
@@ -185,8 +186,8 @@ public class Util {
                 while (digest.length() < 32) { // 40 for SHA-1
                     digest = "0" + digest;
                 }
-            } catch (NoSuchAlgorithmException e) {
-                e.printStackTrace();
+            } catch (Exception e) {
+                logger.error(ExceptionUtils.getStackTrace(e));
             }
         }
         return digest;
