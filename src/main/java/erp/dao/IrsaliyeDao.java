@@ -5,6 +5,7 @@ import erp.entity.Irsaliye;
 import erp.entity.IrsaliyeBilesen;
 import erp.model.IrsaliyeTip;
 import erp.util.Util;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,14 +32,13 @@ public class IrsaliyeDao implements Serializable, BaseDao {
              PreparedStatement  pstmt = conn.prepareStatement(updateQuery)) {
             pstmt.setInt(1, Integer.parseInt(irsaliyeid));
             logger.info(pstmt.toString());
-
             rs = pstmt.executeQuery();
             if (rs.next()) {
                 result = rs.getString(1);
                 rs.close();
             }
-        } catch (SQLException e) {
-            logger.error("Error: " + e);
+        } catch (Exception e) {
+            logger.error(ExceptionUtils.getStackTrace(e));
         }
         return result;
     }
@@ -53,8 +53,8 @@ public class IrsaliyeDao implements Serializable, BaseDao {
             pstmt.setInt(1, Integer.parseInt(irsaliyebilesenid));
             logger.info(pstmt.toString());
             result = pstmt.executeUpdate();
-        } catch (SQLException e) {
-            logger.error("Error: " + e);
+        } catch (Exception e) {
+            logger.error(ExceptionUtils.getStackTrace(e));
         }
         return result;
     }
@@ -73,8 +73,8 @@ public class IrsaliyeDao implements Serializable, BaseDao {
             if (rs.next()) {
                 result = rs.getString(1);
             }
-        } catch (SQLException e) {
-            logger.error("Error: " + e);
+        } catch (Exception e) {
+            logger.error(ExceptionUtils.getStackTrace(e));
         }
         return result;
     }
@@ -94,8 +94,8 @@ public class IrsaliyeDao implements Serializable, BaseDao {
                 result = rs.getString(1);
                 rs.close();
             }
-        } catch (SQLException e) {
-            logger.error("Error: " + e);
+        } catch (Exception e) {
+            logger.error(ExceptionUtils.getStackTrace(e));
         }
         return result;
     }
@@ -110,8 +110,8 @@ public class IrsaliyeDao implements Serializable, BaseDao {
             pstmt.setInt(1, Integer.parseInt(irsaliyeid));
             logger.info(pstmt.toString());
             retVal = pstmt.executeUpdate();
-        } catch (SQLException e) {
-            logger.error("Error: " + e);
+        } catch (Exception e) {
+            logger.error(ExceptionUtils.getStackTrace(e));
         }
         return retVal;
     }
@@ -131,14 +131,13 @@ public class IrsaliyeDao implements Serializable, BaseDao {
             pstmt.setInt(5, miktar);
             pstmt.setString(6, not);
             logger.info(pstmt.toString());
-
             rs = pstmt.executeQuery();
             if (rs.next()) {
                 retVal = rs.getString(1);
                 rs.close();
             }
-        } catch (SQLException e) {
-            logger.error("Error: " + e);
+        } catch (Exception e) {
+            logger.error(ExceptionUtils.getStackTrace(e));
         }
         return retVal;
     }
@@ -160,7 +159,7 @@ public class IrsaliyeDao implements Serializable, BaseDao {
                 newIrsaliyeId = rs.getInt(1);
             }
         } catch (Exception e) {
-            logger.error("Error: " + e);
+            logger.error(ExceptionUtils.getStackTrace(e));
         }
         return newIrsaliyeId;
     }
@@ -184,8 +183,8 @@ public class IrsaliyeDao implements Serializable, BaseDao {
             if (rs.next()) {
                 retVal = rs.getString(1);
             }
-        } catch (SQLException e) {
-            logger.error("Error: " + e);
+        } catch (Exception e) {
+            logger.error(ExceptionUtils.getStackTrace(e));
         }
         return retVal;
     }
@@ -213,8 +212,8 @@ public class IrsaliyeDao implements Serializable, BaseDao {
             while (rs.next()) {
                 temp.add(new Irsaliye(rs));
             }
-        } catch (SQLException e) {
-            logger.error("Error: " + e);
+        } catch (Exception e) {
+            logger.error(ExceptionUtils.getStackTrace(e));
         }
         return temp;
     }
@@ -239,8 +238,8 @@ public class IrsaliyeDao implements Serializable, BaseDao {
             while (rs.next()) {
                 temp.add(new Irsaliye(rs));
             }
-        } catch (SQLException e) {
-            logger.error("Error: " + e);
+        } catch (Exception e) {
+            logger.error(ExceptionUtils.getStackTrace(e));
         }
         return temp;
     }
@@ -277,8 +276,8 @@ public class IrsaliyeDao implements Serializable, BaseDao {
             while (rs.next()) {
                 temp.add(new IrsaliyeBilesen(rs));
             }
-        } catch (SQLException e) {
-            logger.error("Error: " + e);
+        } catch (Exception e) {
+            logger.error(ExceptionUtils.getStackTrace(e));
         }
         return temp;
     }
@@ -314,8 +313,8 @@ public class IrsaliyeDao implements Serializable, BaseDao {
             while (rs.next()) {
                 temp.add(new IrsaliyeBilesen(rs));
             }
-        } catch (SQLException e) {
-            logger.error("Error: " + e);
+        } catch (Exception e) {
+            logger.error(ExceptionUtils.getStackTrace(e));
         }
         return temp;
     }

@@ -5,6 +5,7 @@ import erp.model.BilesenTip;
 import erp.entity.Mamul;
 import erp.entity.MamulBilesen;
 import erp.util.Util;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,8 +47,8 @@ public class MamulDao implements Serializable, BaseDao {
                     int retVal = mamulBakimTarihEkle(Integer.parseInt(newMamulId), Integer.parseInt(calisanId), bakimTarihi);
                 }
             }
-        } catch (SQLException e) {
-            logger.error("Error: " + e);
+        } catch (Exception e) {
+            logger.error(ExceptionUtils.getStackTrace(e));
             newMamulId = e.getMessage();
         }
         return newMamulId;
@@ -63,8 +64,8 @@ public class MamulDao implements Serializable, BaseDao {
             pstmt.setFloat(4, miktar);
             logger.info(pstmt.toString());
             pstmt.executeUpdate();
-        } catch (SQLException e) {
-            logger.error("Error: " + e);
+        } catch (Exception e) {
+            logger.error(ExceptionUtils.getStackTrace(e));
         }
     }
 
@@ -81,8 +82,8 @@ public class MamulDao implements Serializable, BaseDao {
             if (rs.next()) {
                 result = rs.getString(1);
             }
-        } catch (SQLException e) {
-            logger.error("Error: " + e);
+        } catch (Exception e) {
+            logger.error(ExceptionUtils.getStackTrace(e));
             result = e.getMessage();
         }
         return result;
@@ -112,8 +113,8 @@ public class MamulDao implements Serializable, BaseDao {
             if(retVal > 0){
                 retVal = mamulBakimTarihEkle(Integer.parseInt(mamulid), Integer.parseInt(calisanId), bakimTarihi);
             }
-        } catch (SQLException e) {
-            logger.error("Error: " + e);
+        } catch (Exception e) {
+            logger.error(ExceptionUtils.getStackTrace(e));
             result = e.getMessage();
         }
         return result;
@@ -130,8 +131,8 @@ public class MamulDao implements Serializable, BaseDao {
             pstmt.setInt(3, Integer.parseInt(bilesenid));
             logger.info(pstmt.toString());
             pstmt.executeUpdate();
-        } catch (SQLException e) {
-            logger.error("Error: " + e);
+        } catch (Exception e) {
+            logger.error(ExceptionUtils.getStackTrace(e));
             result = e.getMessage();
         }
         return result;
@@ -164,8 +165,8 @@ public class MamulDao implements Serializable, BaseDao {
             while (rs.next()) {
                 temp.add(new Mamul(rs));
             }
-        } catch (SQLException e) {
-            logger.error("Error: " + e);
+        } catch (Exception e) {
+            logger.error(ExceptionUtils.getStackTrace(e));
         }
         return temp;
     }
@@ -189,8 +190,8 @@ public class MamulDao implements Serializable, BaseDao {
             while (rs.next()) {
                 temp.add(new Mamul(rs));
             }
-        } catch (SQLException e) {
-            logger.error("Error: " + e);
+        } catch (Exception e) {
+            logger.error(ExceptionUtils.getStackTrace(e));
         }
         return temp;
     }
@@ -209,8 +210,8 @@ public class MamulDao implements Serializable, BaseDao {
             while (rs.next()) {
                 temp.add(new MamulBilesen(rs));
             }
-        } catch (SQLException e) {
-            logger.error("Error: " + e);
+        } catch (Exception e) {
+            logger.error(ExceptionUtils.getStackTrace(e));
         }
         return temp;
     }
@@ -227,8 +228,8 @@ public class MamulDao implements Serializable, BaseDao {
             pstmt.setDate(4, Util.convertToSqlDate(LocalDate.now()));
             logger.info(pstmt.toString());
             retVal = pstmt.executeUpdate();
-        } catch (SQLException e) {
-            logger.error("Error: " + e);
+        } catch (Exception e) {
+            logger.error(ExceptionUtils.getStackTrace(e));
         }
         return retVal;
     }

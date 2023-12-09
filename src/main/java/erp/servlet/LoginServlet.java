@@ -6,6 +6,7 @@ import erp.dao.LoginDao;
 import erp.dao.StokDao;
 import erp.entity.Greeting;
 import erp.entity.User;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -68,16 +69,16 @@ public class LoginServlet extends HttpServlet implements Serializable {
                 request.getSession().setAttribute("mamulbadge", mamulBadge);
                 try {
                     request.getRequestDispatcher(successPage).forward(request, response);
-                } catch (ServletException | IOException e) {
-                    logger.error("Error: " + e);
+                } catch (Exception e) {
+                    logger.error(ExceptionUtils.getStackTrace(e));
                 }
             }
         } else {
             try {
                 request.getSession().setAttribute("message", "Kullanıcı adı veya Şifre yanlış!");
                 request.getRequestDispatcher(errorPage).forward(request, response);
-            } catch (ServletException | IOException e) {
-                logger.error("Error: " + e);
+            } catch (Exception e) {
+                logger.error(ExceptionUtils.getStackTrace(e));
             }
         }
     }

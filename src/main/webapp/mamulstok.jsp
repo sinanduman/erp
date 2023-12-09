@@ -3,6 +3,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="erp.entity.*" %>
 <%@ page import="erp.model.BirimTip" %>
+<%@ page import="org.apache.commons.text.StringEscapeUtils" %>
 <%@ page contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!doctype html>
@@ -55,21 +56,21 @@
             out.println(delimeter
         + " { id:" + m.getId()
         + ",mamulid:" + m.getId()
-        + ",mamulad:'" + m.getAd().replaceAll("'", "") + "'"
+        + ",mamulad:'" + StringEscapeUtils.escapeEcmaScript(m.getAd()) + "'"
         + ",mamulkod:'" + m.getKod() + "'"
-        + ",hammadde:'" + m.getHammadde().replaceAll("'", "") + "'"
+        + ",hammadde:'" + StringEscapeUtils.escapeEcmaScript(m.getHammadde()) + "'"
         + ",hammaddegkrno:'" + m.getHammaddegkrno() + "'"
-        + ",yarimamul:'" + m.getYarimamul().replaceAll("'", "") + "'"
+        + ",yarimamul:'" + StringEscapeUtils.escapeEcmaScript(m.getYarimamul()) + "'"
         + ",yarimamulgkrno:'" + m.getYarimamulgkrno() + "'"
         + ",firmaid:" + m.getFirmaid()
-        + ",firmaad:'" + m.getFirmaad().replaceAll("'", "") + "'"
+        + ",firmaad:'" + StringEscapeUtils.escapeEcmaScript(m.getFirmaad()) + "'"
         + ",cevrimsure:" + m.getCevrimsuresi() + "}");
             delimeter = ",";
         }%>];
     let mamul2 = [
         <%delimeter = "";
         for (Mamul m : mamul) {
-            out.println(delimeter + " { value:'"+ m.getKod() + "', label:'" + m.getKod() + " ["+m.getAd().replaceAll("'", "") +"]',id:" + m.getId() + "}");
+            out.println(delimeter + " { value:'"+ m.getKod() + "', label:'" + m.getKod() + " [" + StringEscapeUtils.escapeEcmaScript(m.getAd()) +"]',id:" + m.getId() + "}");
             delimeter = ",";
         }%>];
 

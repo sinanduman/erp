@@ -154,7 +154,7 @@ public class ExcelBakimServlet extends HttpServlet implements Serializable {
             workbook.write(outByteStream);
             byte [] outArray = outByteStream.toByteArray();
             response.setContentType("application/vnd.ms-excel");
-            response.setHeader("Expires:", "0"); // eliminates browser caching
+            response.setHeader("Cache-Control", "private, no-store, no-cache, must-revalidate");
             response.setContentLength(outArray.length);
             response.setHeader("Content-Disposition", "attachment; filename="+ "excelbakim_" + ((mamulid==null || mamulid.isEmpty())? "" : mamulid + "_") + bit_tarih + ".xls");
             OutputStream outStream = response.getOutputStream();

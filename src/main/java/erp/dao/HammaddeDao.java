@@ -1,6 +1,7 @@
 package erp.dao;
 
 import erp.servlet.ConnectionManager;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,8 +34,8 @@ public class HammaddeDao implements Serializable, BaseDao {
             pstmt.setInt(8, Integer.parseInt(kritikEsik));
             logger.info(pstmt.toString());
             pstmt.executeUpdate();
-        } catch (SQLException e) {
-            logger.error("Error: " + e);
+        } catch (Exception e) {
+            logger.error(ExceptionUtils.getStackTrace(e));
             result = e.getMessage();
         }
         return result;

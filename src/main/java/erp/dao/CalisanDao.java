@@ -3,6 +3,7 @@ package erp.dao;
 import erp.servlet.ConnectionManager;
 import erp.entity.Calisan;
 import erp.util.Util;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,13 +33,13 @@ public class CalisanDao implements Serializable, BaseDao {
         ResultSet rs;
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(searchQuery)) {
-            logger.info(searchQuery);
+            logger.info(pstmt.toString());
             rs = pstmt.executeQuery();
             while (rs.next()) {
                 temp.add(new Calisan(rs));
             }
-        } catch (SQLException e) {
-            logger.error("Error: " + e);
+        } catch (Exception e) {
+            logger.error(ExceptionUtils.getStackTrace(e));
         }
         return temp;
     }
@@ -55,8 +56,8 @@ public class CalisanDao implements Serializable, BaseDao {
             pstmt.setString(3, gorev);
             logger.info(pstmt.toString());
             pstmt.executeUpdate();
-        } catch (SQLException e) {
-            logger.error("Error: " + e);
+        } catch (Exception e) {
+            logger.error(ExceptionUtils.getStackTrace(e));
             retVal = e.getMessage();
         }
         return retVal;
@@ -78,8 +79,8 @@ public class CalisanDao implements Serializable, BaseDao {
             pstmt.setInt(5, Integer.parseInt(id));
             logger.info(pstmt.toString());
             pstmt.executeUpdate();
-        } catch (SQLException e) {
-            logger.error("Error: " + e);
+        } catch (Exception e) {
+            logger.error(ExceptionUtils.getStackTrace(e));
             result = e.getMessage();
         }
         return result;
@@ -94,13 +95,12 @@ public class CalisanDao implements Serializable, BaseDao {
              PreparedStatement pstmt = conn.prepareStatement(updateQuery)) {
             pstmt.setInt(1, Integer.parseInt(id));
             logger.info(pstmt.toString());
-
             rs = pstmt.executeQuery();
             if (rs.next()) {
                 result = rs.getString(1);
             }
-        } catch (SQLException e) {
-            logger.error("Error: " + e);
+        } catch (Exception e) {
+            logger.error(ExceptionUtils.getStackTrace(e));
             result = e.getMessage();
         }
         return result;

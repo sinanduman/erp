@@ -3,6 +3,7 @@ package erp.dao;
 import erp.servlet.ConnectionManager;
 import erp.entity.Siparis;
 import erp.model.SiparisTip;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,8 +39,8 @@ public class SiparisDao implements Serializable, BaseDao {
                 newSiparisId = rs.getInt(1);
             }
             temp = siparisListeGetir(SiparisTip.BEKLEYEN);
-        } catch (SQLException e) {
-            logger.error("Error: " + e);
+        } catch (Exception e) {
+            logger.error(ExceptionUtils.getStackTrace(e));
         }
         return temp;
     }
@@ -70,8 +71,8 @@ public class SiparisDao implements Serializable, BaseDao {
             while (rs.next()) {
                 temp.add(new Siparis(rs));
             }
-        } catch (SQLException e) {
-            logger.error("Error: " + e);
+        } catch (Exception e) {
+            logger.error(ExceptionUtils.getStackTrace(e));
         }
         return temp;
     }

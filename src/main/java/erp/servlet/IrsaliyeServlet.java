@@ -10,7 +10,10 @@ import erp.util.Util;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
@@ -27,6 +30,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -44,7 +52,8 @@ public class IrsaliyeServlet extends HttpServlet implements Serializable {
     private static final Logger logger = LoggerFactory.getLogger(IrsaliyeServlet.class);
     // location to store file uploaded
     private static final String CATALINA_HOME = System.getProperty("catalina.home");
-    private static final String UPLOAD_DIRECTORY = "/upload/excel";
+    private static final String UPLOAD_DIRECTORY = "/upload";
+    private static final String EXCEL_DIRECTORY = "/excel";
     private static final String EXCEL_MIME_TYPE = "application/octet-stream";
 
     // upload settings
@@ -178,26 +187,18 @@ public class IrsaliyeServlet extends HttpServlet implements Serializable {
         // sets maximum size of request (include file + form data)
         upload.setSizeMax(MAX_REQUEST_SIZE);
 
-        // constructs the directory path to store upload file
-        // this path is relative to application's directory
-        String uploadPath = CATALINA_HOME + UPLOAD_DIRECTORY;
-
         // creates the directory if it does not exist
-        File uploadDir = new File(uploadPath);
-        if (!uploadDir.exists()) {
-            uploadDir.mkdir();
-        }
+        createUploadFolder();
 
         try {
             List<FileItem> formItems = upload.parseRequest(request);
             /*First form fields, later file part*/
-            if (formItems != null && formItems.size() > 0) {
+            if (formItems != null && !formItems.isEmpty()) {
                 getFormFieldsWithFile(formItems);
                 /*Binary excel file*/
                 for (FileItem item : formItems) {
                     if (!item.isFormField()) {
-                        String fileName = new File(item.getName()).getName();
-                        String filePath = uploadPath + File.separator + fileName;
+                        String filePath = getFileFullPath(item);
                         File storeFile = new File(filePath);
                         // saves the file on disk
                         item.write(storeFile);
@@ -220,6 +221,37 @@ public class IrsaliyeServlet extends HttpServlet implements Serializable {
         return retVal;
     }
 
+    private String getFileFullPath(FileItem item) {
+        String filePrefix = "irsaliye_upload_";
+        String fileSystemName = String.valueOf(System.currentTimeMillis());
+        String fileName = new File(item.getName()).getName();
+        String extension = FilenameUtils.getExtension(fileName);
+        return getUploadFolder() + File.separator + filePrefix + fileSystemName + "." + extension;
+    }
+
+    private void createUploadFolder() {
+        //:: Upload klasörü yoksa onu oluşturur
+        //:: Excel klasörü yoksa onu oluşturur
+        String uploadPath = CATALINA_HOME + UPLOAD_DIRECTORY;
+        String excelPath = uploadPath + EXCEL_DIRECTORY;
+        try {
+            Path uPath = Paths.get(uploadPath);
+            Path ePath = Paths.get(excelPath);
+            if (!Files.exists(uPath)) {
+                Files.createDirectory(uPath);
+            }
+            if (!Files.exists(ePath)) {
+                Files.createDirectory(ePath);
+            }
+        } catch (Exception e) {
+            logger.error(ExceptionUtils.getStackTrace(e));
+        }
+    }
+
+    private String getUploadFolder() {
+        return CATALINA_HOME + UPLOAD_DIRECTORY + EXCEL_DIRECTORY;
+    }
+
     private boolean processExcelFile(File storeFile, String irsaliyeId, List<Stok> stok) {
         boolean retVal = false;
         String message = "";
@@ -240,11 +272,14 @@ public class IrsaliyeServlet extends HttpServlet implements Serializable {
             Iterator<Row> rowIter = mySheet.rowIterator();
             int rCount = 0;
             boolean emptyLine = false;
+            boolean irsaliyeExists = false;
             String pipe = "";
             while (rowIter.hasNext() && !emptyLine) {
                 XSSFRow myRow = (XSSFRow) rowIter.next();
-                /*Ilk satiri almamak icin*/
-                if (rCount++ < 3) /* satir baslangici */
+                irsaliyeExists = isIrsaliyeInfoExists(myRow);
+                emptyLine = isIrsaliyeInfoEmpty(myRow);
+                //:: Irsaliye kaydı içermeyen satırları almamak için
+                if (!irsaliyeExists || emptyLine)
                     continue;
 
                 IrsaliyeUploadData uploadData = new IrsaliyeUploadData();
@@ -300,9 +335,24 @@ public class IrsaliyeServlet extends HttpServlet implements Serializable {
                 retVal = true;
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(ExceptionUtils.getStackTrace(e));
         }
         return retVal;
+    }
+
+    private boolean isIrsaliyeInfoExists(XSSFRow myRow) {
+        XSSFCell myCell_0 = myRow.getCell(0);
+        XSSFCell myCell_1 = myRow.getCell(1);
+        return myCell_0.getCellTypeEnum().equals(CellType.NUMERIC) && myCell_1.getCellTypeEnum().equals(CellType.STRING);
+    }
+
+    private boolean isIrsaliyeInfoEmpty(XSSFRow myRow) {
+        XSSFCell myCell_0 = myRow.getCell(0);
+        XSSFCell myCell_1 = myRow.getCell(1);
+        return myCell_0.getRawValue() == null ||
+                myCell_1.getRawValue() == null ||
+                myCell_0.getRawValue().trim().isEmpty() ||
+                myCell_1.getRawValue().trim().isEmpty();
     }
 
     private int irsaliyeEkle() {

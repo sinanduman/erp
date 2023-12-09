@@ -5,6 +5,7 @@
 <%@ page import="erp.model.BilesenTip" %>
 <%@ page import="erp.util.Util" %>
 <%@ page import="java.util.List" %>
+<%@ page import="org.apache.commons.text.StringEscapeUtils" %>
 <!doctype html>
 <html lang="en">
 <head>
@@ -58,18 +59,18 @@
             out.println(delimeter
         + " { id:" + b.getId()
         + ",bilesenid:" + b.getId()
-        + ",bilesenad:'" + b.getAd().replaceAll("'", "") + "'"
+        + ",bilesenad:'" + StringEscapeUtils.escapeEcmaScript(b.getAd()) + "'"
         + ",bilesenkod:'" + b.getKod() + "'"
         + ",bilesentipid:" + b.getBilesentipid()
         + ",bilesentipad:'" + b.getBilesentipad() + "'"
         + ",firmaid:" + b.getFirmaid()
-        + ",firmaad:'" + b.getFirmaad().replaceAll("'", "") + "'" + "}");
+        + ",firmaad:'" + StringEscapeUtils.escapeEcmaScript(b.getFirmaad()) + "'" + "}");
             delimeter = ",";
         }%>];
     let bilesen2 = [
         <%delimeter = "";
         for (Bilesen b : hammadde) {
-            out.println(delimeter + " { value:'"+ b.getKod() + "', label:'" + b.getKod() + " ["+b.getAd().replaceAll("'", "") +"]',id:" + b.getId() + "}");
+            out.println(delimeter + " { value:'"+ b.getKod() + "', label:'" + b.getKod() + " [" + StringEscapeUtils.escapeEcmaScript(b.getAd()) +"]',id:" + b.getId() + "}");
             delimeter = ",";
         }%>];
 
