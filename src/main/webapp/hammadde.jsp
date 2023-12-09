@@ -8,6 +8,7 @@
 <%@ page import="erp.model.FiyatTip" %>
 <%@ page import="erp.util.Util" %>
 <%@ page import="java.util.List" %>
+<%@ page import="org.apache.commons.text.StringEscapeUtils" %>
 <!doctype html>
 <html lang="en">
 <head>
@@ -60,18 +61,18 @@
             out.println(delimeter
         + " { id:" + b.getId()
         + ",bilesenid:" + b.getId()
-        + ",bilesenad:'" + b.getAd().replaceAll("'", "") + "'"
+        + ",bilesenad:'" + StringEscapeUtils.escapeEcmaScript(b.getAd()) + "'"
         + ",bilesenkod:'" + b.getKod() + "'"
         + ",bilesentipid:" + b.getBilesentipid()
         + ",bilesentipad:'" + b.getBilesentipad() + "'"
         + ",firmaid:" + b.getFirmaid()
-        + ",firmaad:'" + b.getFirmaad().replaceAll("'", "") + "'" + "}");
+        + ",firmaad:'" + StringEscapeUtils.escapeEcmaScript(b.getFirmaad()) + "'" + "}");
             delimeter = ",";
         }%>];
     let bilesen2 = [
         <%delimeter = "";
         for (Bilesen b : hammaddetum) {
-            out.println(delimeter + " { label:'" + b.getKod() + " ["+b.getAd().replaceAll("'", "") +"]',id:" + b.getId() + "}");
+            out.println(delimeter + " { label:'" + b.getKod() + " [" + StringEscapeUtils.escapeEcmaScript(b.getAd()) +"]',id:" + b.getId() + "}");
             delimeter = ",";
         }%>];
 
@@ -247,7 +248,7 @@
                 <form name=action_form<%= h.getId()%> id="action_form<%= h.getId()%>">
                     <tr id="tr<%=h.getId()%>" <%= (h.getDurum()==0 ? "style='background-color:darkKhaki;'" : "") %>>
                         <td><input type="text" class="form-control small" value="<%= h.getKod() %>" id="liste_kod<%=h.getId()%>" autocomplete="off"></td>
-                        <td><input type="text" class="form-control" value="<%= h.getAd().replaceAll("\"", "") %>" id="liste_ad<%=h.getId()%>" autocomplete="off"></td>
+                        <td><input type="text" class="form-control" value="<%= StringEscapeUtils.escapeEcmaScript(h.getAd()) %>" id="liste_ad<%=h.getId()%>" autocomplete="off"></td>
                         <td style="vertical-align: center;"><span><%= h.getBilesentipad() %></span><input type="hidden" id="liste_bilesentipid<%=h.getId()%>" value="<%=h.getBilesentipid()%>"/></td>
                         <td>
                             <select class="form-control xs" name="liste_birimid" id="liste_birimid">

@@ -1,6 +1,7 @@
 <%@ page import="erp.entity.*" %>
 <%@ page import="erp.util.Util" %>
 <%@ page import="java.util.List" %>
+<%@ page import="org.apache.commons.text.StringEscapeUtils" %>
 <%@ page contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!doctype html>
@@ -50,7 +51,7 @@
             out.println(delimeter
         + " { id:" + b.getId()
         + ",bilesenid:" + b.getId()
-        + ",bilesenad:'" + b.getAd().replaceAll("'", "") + "'"
+        + ",bilesenad:'" + StringEscapeUtils.escapeEcmaScript(b.getAd()) + "'"
         + ",bilesenkod:'" + b.getKod() + "'"
         + ",bilesentipid:" + b.getBilesentipid()
         + ",bilesentipad:'" + b.getBilesentipad() + "'" + "}");
@@ -62,20 +63,20 @@
             out.println(delimeter
         + " { id:" + m.getId()
         + ",mamulid:" + m.getId()
-        + ",mamulad:'" + m.getAd().replaceAll("'", "") + "'"
+        + ",mamulad:'" + StringEscapeUtils.escapeEcmaScript(m.getAd()) + "'"
         + ",mamulkod:'" + m.getKod() + "'"
         + ",esmamulid:" + m.getEsmamulid()
-        + ",esmamulad:'" + m.getEsmamulad().replaceAll("'", "") + "'"
+        + ",esmamulad:'" + StringEscapeUtils.escapeEcmaScript(m.getEsmamulad()) + "'"
         + ",esmamulkod:'" + m.getEsmamulkod() + "'"
-        + ",hammadde:'" + m.getHammadde().replaceAll("'", "") + "'"
+        + ",hammadde:'" + StringEscapeUtils.escapeEcmaScript(m.getHammadde()) + "'"
         + ",hammaddegkrno:'" + m.getHammaddegkrno() + "'"
         + ",hammaddeagir:'" + m.getHammaddemiktar() + "'"
         + ",hammaddemamulbasi:'" + m.getHammaddemamulbasi() + "'"
-        + ",yarimamul:'" + m.getYarimamul().replaceAll("'", "") + "'"
+        + ",yarimamul:'" + StringEscapeUtils.escapeEcmaScript(m.getYarimamul()) + "'"
         + ",yarimamulgkrno:'" + m.getYarimamulgkrno() + "'"
         + ",yarimamulagir:'" + m.getYarimamulmiktar() + "'"
         + ",yarimamulmamulbasi:'" + m.getYarimamulmamulbasi() + "'"
-        + ",firmaad:'" + m.getFirmaad().replaceAll("'", "") + "'"
+        + ",firmaad:'" + StringEscapeUtils.escapeEcmaScript(m.getFirmaad()) + "'"
         + ",figur:" + m.getFigur()
         + ",cevrimsure:" + m.getCevrimsuresi() + "}");
             delimeter = ",";
@@ -84,7 +85,7 @@
         <%delimeter = "";
         for (Mamul m : mamul) {
             // out.println(delimeter + " { label:'" + m.getKod() + "'" + ",id:" + m.getId() + "}");
-            out.println(delimeter + " { value:'"+ m.getKod() + "', label:'" + m.getKod() + " ["+m.getAd().replaceAll("'", "") +"]',id:" + m.getId() + "}");
+            out.println(delimeter + " { value:'"+ m.getKod() + "', label:'" + m.getKod() + " [" + StringEscapeUtils.escapeEcmaScript(m.getAd()) +"]',id:" + m.getId() + "}");
             delimeter = ",";
         }%>];
 
