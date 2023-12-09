@@ -1,9 +1,9 @@
 package erp.dao;
 
-import erp.servlet.ConnectionManager;
-import erp.model.BilesenTip;
 import erp.entity.Stok;
 import erp.entity.StokRapor;
+import erp.model.BilesenTip;
+import erp.servlet.ConnectionManager;
 import erp.util.Util;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
@@ -184,7 +184,7 @@ public class StokDao implements Serializable, BaseDao {
              PreparedStatement pstmt = conn.prepareStatement(searchQuery)) {
             long start = System.currentTimeMillis();
             rs = pstmt.executeQuery();
-            logger.info(pstmt.toString() + (System.currentTimeMillis()-start) +"ms.");
+            logger.info(pstmt.toString() + (System.currentTimeMillis() - start) + "ms.");
             while (rs.next()) {
                 temp.add(new Stok(rs.getInt("id"),
                         rs.getInt("bilesenid"),
@@ -220,7 +220,7 @@ public class StokDao implements Serializable, BaseDao {
     public List<Stok> stokListeRapor(String tablename, int offset, String filterPage) {
         List<Stok> temp = new ArrayList<Stok>();
 
-        String pageFilter = Util.getPageFilter (offset);
+        String pageFilter = Util.getPageFilter(offset);
         String filter0 = filterPage;
 
         String searchQuery = "SELECT e.*, f.ad firmaad FROM " + tablename + " e"
@@ -273,7 +273,7 @@ public class StokDao implements Serializable, BaseDao {
     public List<Stok> stokListeGetirTum(BilesenTip bilesentip, Integer bilesenid, int offset, Map<String, String> param) {
         List<Stok> temp = new ArrayList<Stok>();
 
-        String pageFilter = Util.getPageFilter (offset, param);
+        String pageFilter = Util.getPageFilter(offset, param);
         String join0 = " join " + bilesentip.tablo() + " b on b.id=s.bilesenid";
         String filter0 = " and b.bilesentipid IN (" + bilesentip.id() + ") ";
 
@@ -288,23 +288,24 @@ public class StokDao implements Serializable, BaseDao {
                 : "";
 
         String searchQuery = "select m2.kod mamulkod, s.*, b.ad bilesenad, b.kod bilesenkod, "
+                + " coalesce(s.giristarihi, s.cikistarihi) as islemtarihi, "
                 + " bt.id bilesentipid, bt.ad bilesentipad, br.id birimid, br.ad birimad, "
                 + " f.id firmaid, f.ad firmaad, '' as mamuldetay, (sum(CASE WHEN s.islemyonu = 0 THEN s.miktar ELSE -1*miktar END) "
                 + " OVER (PARTITION BY s.bilesenid ORDER BY s.id)) kalan "
-                + " from      " + BaseDao.STOK       + " s"
+                + " from      " + BaseDao.STOK + " s"
                 + " left join " + BaseDao.URETIMPLAN + " p on p.id = s.planid"
-                + " left join " + BaseDao.MAMUL      + " m2 on m2.id = p.mamulid " + join0
+                + " left join " + BaseDao.MAMUL + " m2 on m2.id = p.mamulid " + join0
                 + " join      " + BaseDao.BILESENTIP + " bt on bt.id = b.bilesentipid"
-                + " left join " + BaseDao.BIRIM      + " br on br.id = b.birimid"
-                + " join      " + BaseDao.FIRMA      + " f on f.id = b.firmaid "
+                + " left join " + BaseDao.BIRIM + " br on br.id = b.birimid"
+                + " join      " + BaseDao.FIRMA + " f on f.id = b.firmaid "
                 + " where 1=1 " + filter0 + filter1 + filter2
-                + " order by s.id desc "
+                + " order by islemtarihi desc, s.id desc "
                 + pageFilter;
 
         // connect to DB
         ResultSet rs;
         try (Connection conn = connectionManager.getConnection();
-             PreparedStatement  pstmt = conn.prepareStatement(searchQuery)) {
+             PreparedStatement pstmt = conn.prepareStatement(searchQuery)) {
             logger.info(pstmt.toString());
             rs = pstmt.executeQuery();
             while (rs.next()) {
@@ -319,7 +320,7 @@ public class StokDao implements Serializable, BaseDao {
     public List<StokRapor> stokBilesenRapor(String tablename, String filter, int offset) {
         List<StokRapor> temp = new ArrayList<StokRapor>();
 
-        String pageFilter = Util.getPageFilter (offset);
+        String pageFilter = Util.getPageFilter(offset);
         String searchQuery = "select * from " + tablename
                 + filter
                 + pageFilter;
@@ -355,7 +356,7 @@ public class StokDao implements Serializable, BaseDao {
     public List<StokRapor> stokBilesenDetayRapor(String tablename, String filter, int offset) {
         List<StokRapor> temp = new ArrayList<StokRapor>();
 
-        String pageFilter = Util.getPageFilter (offset);
+        String pageFilter = Util.getPageFilter(offset);
         String searchQuery = "select * from " + tablename
                 + filter
                 + pageFilter;
