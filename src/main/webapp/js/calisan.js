@@ -32,7 +32,12 @@ function updateCalisanGo(url,id,action_form,islem){
             }
         }).done(function( msg ) {
             if(is_number( msg )){
-                $("#tr"+id).css('background-color','darkkhaki');
+                let selectedValue = $("#liste_calisandurum"+id).val();
+                if (selectedValue &&  selectedValue == 0) {
+                    $("#tr"+id).css('background-color','darkkhaki');
+                } else {
+                    $("#tr"+id).css('background-color','');
+                }
                 alert( alert_mesaj +" Çalışan bilgisi başarıyla GÜNCELLENDİ" );
             }
             else{

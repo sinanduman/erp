@@ -40,7 +40,7 @@ public class CalisanServlet extends HttpServlet implements Serializable {
         String message      = "";
         
         String islemid = request.getParameter("islemid");
-        if(islemid != null && islemid != "" ) {
+        if(islemid != null && !islemid.isEmpty()) {
             String result = "";
             switch (Integer.parseInt(islemid)) {
                 case 1:
