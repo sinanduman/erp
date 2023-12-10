@@ -8,6 +8,7 @@ import erp.entity.Bakim;
 import erp.entity.Calisan;
 import erp.entity.Mamul;
 import erp.util.Util;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFFont;
@@ -84,84 +85,86 @@ public class ExcelBakimServlet extends HttpServlet implements Serializable {
 
             List<Bakim> bakimrapor = bakimDao.bakimRapor(tableName,0, filter0, mamulid);
 
-            Workbook workbook = new XSSFWorkbook();
-            Sheet sheet = workbook.createSheet();
 
-            int cnt = 0;
-            Map<Integer, Object[]> data = new TreeMap<Integer, Object[]>();
+            try (Workbook workbook = new XSSFWorkbook()) {
+                Sheet sheet = workbook.createSheet();
 
-            data.put(++cnt, new Object[]{
-                            "Sonraki Bakım Zamanı",
-                            "Mamül Kod",
-                            "Mamül Ad",
-                            "Son Bakım Zamanı",
-                            "Üretim Miktarı",
-                            "Baskı Sayısı",
-                            "Bakıma Kalan Baskı"
-                    }
-            );
-            for (Bakim r : bakimrapor) {
+                int cnt = 0;
+                Map<Integer, Object[]> data = new TreeMap<Integer, Object[]>();
+
                 data.put(++cnt, new Object[]{
-                        mamulmap.get(r.getMamulid()) == null ? "" : mamulmap.get(r.getMamulid()).getKod(),
-                        mamulmap.get(r.getMamulid()) == null ? "" : mamulmap.get(r.getMamulid()).getAd(),
-                        calisanmap.get(r.getCalisanid()) == null ? "" : calisanmap.get(r.getCalisanid()).getFullName(),
-                        Util.getTarihTR(r.getBakimtarihi()),
-                        r.getUretimMiktar(),
-                        r.getBaskiSayisi(),
-                        r.getKalanBaski()
-                });
-            }
+                                "Sonraki Bakım Zamanı",
+                                "Mamül Kod",
+                                "Mamül Ad",
+                                "Son Bakım Zamanı",
+                                "Üretim Miktarı",
+                                "Baskı Sayısı",
+                                "Bakıma Kalan Baskı"
+                        }
+                );
+                for (Bakim r : bakimrapor) {
+                    data.put(++cnt, new Object[]{
+                            mamulmap.get(r.getMamulid()) == null ? "" : mamulmap.get(r.getMamulid()).getKod(),
+                            mamulmap.get(r.getMamulid()) == null ? "" : mamulmap.get(r.getMamulid()).getAd(),
+                            calisanmap.get(r.getCalisanid()) == null ? "" : calisanmap.get(r.getCalisanid()).getFullName(),
+                            Util.getTarihTR(r.getBakimtarihi()),
+                            r.getUretimMiktar(),
+                            r.getBaskiSayisi(),
+                            r.getKalanBaski()
+                    });
+                }
 
-            Set<Integer> keyset = data.keySet();
-            int rownum = 0;
-            for (Integer key : keyset) {
-                Row row = sheet.createRow(rownum++);
-                Object [] objArr = data.get(key);
-                int cellnum = 0;
-                for (Object obj : objArr) {
-                    Cell cell = row.createCell(cellnum++);                    
-                    if(obj instanceof Date) {
-                        cell.setCellValue((Date)obj);
-                    }
-                    else if(obj instanceof Boolean) {
-                        cell.setCellValue((Boolean)obj);
-                    }
-                    else if(obj instanceof String) {
-                        cell.setCellValue((String)obj);
-                    }                        
-                    else if(obj instanceof Double) {
-                        cell.setCellValue((Double)obj);
-                    }                        
-                    else if(obj instanceof Integer) {
-                        cell.setCellValue((Integer)obj);
-                    }
-                    if(key == 1) {
-                        CellStyle style = workbook.createCellStyle();
-                        XSSFFont font = (XSSFFont) workbook.createFont();
-                        font.setColor(HSSFColor.WHITE.index);
-                        style.setFont(font);
-                        style.setFillBackgroundColor( HSSFColor.RED.index );
-                        style.setFillPattern(CellStyle.SOLID_FOREGROUND);
-                        cell.setCellStyle(style);
+                Set<Integer> keyset = data.keySet();
+                int rownum = 0;
+                for (Integer key : keyset) {
+                    Row row = sheet.createRow(rownum++);
+                    Object[] objArr = data.get(key);
+                    int cellnum = 0;
+                    for (Object obj : objArr) {
+                        Cell cell = row.createCell(cellnum++);
+                        if (obj instanceof Date) {
+                            cell.setCellValue((Date) obj);
+                        } else if (obj instanceof Boolean) {
+                            cell.setCellValue((Boolean) obj);
+                        } else if (obj instanceof String) {
+                            cell.setCellValue((String) obj);
+                        } else if (obj instanceof Double) {
+                            cell.setCellValue((Double) obj);
+                        } else if (obj instanceof Integer) {
+                            cell.setCellValue((Integer) obj);
+                        }
+                        if (key == 1) {
+                            CellStyle style = workbook.createCellStyle();
+                            XSSFFont font = (XSSFFont) workbook.createFont();
+                            font.setColor(HSSFColor.WHITE.index);
+                            style.setFont(font);
+                            style.setFillBackgroundColor(HSSFColor.RED.index);
+                            style.setFillPattern(CellStyle.SOLID_FOREGROUND);
+                            cell.setCellStyle(style);
+                        }
                     }
                 }
+
+                logger.info("Excel written successfully..");
+
+                // write it as an excel attachment
+                try (ByteArrayOutputStream outByteStream = new ByteArrayOutputStream()) {
+                    workbook.write(outByteStream);
+                    byte[] outArray = outByteStream.toByteArray();
+                    response.setContentType("application/vnd.ms-excel");
+                    response.setHeader("Cache-Control", "private, no-store, no-cache, must-revalidate");
+                    response.setContentLength(outArray.length);
+                    response.setHeader("Content-Disposition", "attachment; filename=" + "excelbakim_" + ((mamulid == null || mamulid.isEmpty()) ? "" : mamulid + "_") + bit_tarih + ".xlsx");
+                    OutputStream outStream = response.getOutputStream();
+                    outStream.write(outArray);
+                    outStream.flush();
+                    outStream.close();
+                } catch (Exception e) {
+                    logger.error(ExceptionUtils.getStackTrace(e));
+                }
+            } catch (Exception e) {
+                logger.error(ExceptionUtils.getStackTrace(e));
             }
-            
-            logger.info("Excel written successfully..");
-            
-            // write it as an excel attachment
-            ByteArrayOutputStream outByteStream = new ByteArrayOutputStream();
-            workbook.write(outByteStream);
-            byte [] outArray = outByteStream.toByteArray();
-            response.setContentType("application/vnd.ms-excel");
-            response.setHeader("Cache-Control", "private, no-store, no-cache, must-revalidate");
-            response.setContentLength(outArray.length);
-            response.setHeader("Content-Disposition", "attachment; filename="+ "excelbakim_" + ((mamulid==null || mamulid.isEmpty())? "" : mamulid + "_") + bit_tarih + ".xls");
-            OutputStream outStream = response.getOutputStream();
-            outStream.write(outArray);
-            outStream.flush();
-            outStream.close();
-            workbook.close();
         }
         else {
             request.getRequestDispatcher("index.jsp").forward(request, response);
