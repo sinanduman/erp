@@ -4,6 +4,7 @@ import erp.dao.IrsaliyeDao;
 import erp.entity.IrsaliyeBilesen;
 import erp.model.IrsaliyeTip;
 import erp.util.Util;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFFont;
@@ -54,96 +55,97 @@ public class ExcelSevkServlet extends HttpServlet implements Serializable {
             
             List<IrsaliyeBilesen> irsaliyebilesen = irsaliyeDao.irsaliyeBilesenListeTum(IrsaliyeTip.ONAYLANDI, 1, excelirsaliyeid, excelfirmaid, exceltarih, exceltarih, 0, excelmamulid);
             
-            Workbook workbook = new XSSFWorkbook();
-            //Sheet sheeti    = workbook.createSheet("Irsaliye");
-            Sheet sheetib   = workbook.createSheet("IrsaliyeBilesen");
-            //int cnti        = 0;
-            int cntib       = 0;
-            Map<Integer, Object[]> dataib   = new TreeMap<Integer, Object[]>();
-            
-            dataib.put(++cntib, new Object[] {
-                            "Gönderim Tarihi",
-                            "İrsaliye No",
-                            "Sıra No",
-                            "Mamül Adı",
-                            "Mamül Kodu",
-                            "Firma",
-                            "İzleme No",
-                            "Miktarı"
-                            }
-            );
-            
-            int sayac = 0;
-            int irsaliyeid= 0;
-            for(IrsaliyeBilesen sr: irsaliyebilesen) {
-                
-                if(irsaliyeid != sr.getIrsaliyeid()) {
-                    sayac = 0;
-                    irsaliyeid = sr.getIrsaliyeid();
-                }
-                dataib.put(++cntib, new Object[] {
-                                Util.getTarih(sr.getGonderimtarihi()),
-                                sr.getIrsaliyeno(),
-                                ++sayac,
-                                sr.getMamulad(),
-                                sr.getMamulkod(),
-                                sr.getFirmaad(),
-                                sr.getGkrno(),
-                                sr.getMiktar()
-                                });
-            }
+            try (Workbook workbook = new XSSFWorkbook()) {
+                //Sheet sheeti    = workbook.createSheet("Irsaliye");
+                Sheet sheetib = workbook.createSheet("IrsaliyeBilesen");
+                //int cnti        = 0;
+                int cntib = 0;
+                Map<Integer, Object[]> dataib = new TreeMap<Integer, Object[]>();
 
-            Set<Integer> keysetib = dataib.keySet();
-            int rownumib = 0;
-            for (Integer key : keysetib) {
-                Row row = sheetib.createRow(rownumib++);
-                Object [] objArr = dataib.get(key);
-                int cellnum = 0;
-                for (Object obj : objArr) {
-                    Cell cell = row.createCell(cellnum++);                    
-                    if(obj instanceof Date) {
-                        cell.setCellValue((Date)obj);
+                dataib.put(++cntib, new Object[]{
+                                "Gönderim Tarihi",
+                                "İrsaliye No",
+                                "Sıra No",
+                                "Mamül Adı",
+                                "Mamül Kodu",
+                                "Firma",
+                                "İzleme No",
+                                "Miktarı"
+                        }
+                );
+
+                int sayac = 0;
+                int irsaliyeid = 0;
+                for (IrsaliyeBilesen sr : irsaliyebilesen) {
+
+                    if (irsaliyeid != sr.getIrsaliyeid()) {
+                        sayac = 0;
+                        irsaliyeid = sr.getIrsaliyeid();
                     }
-                    else if(obj instanceof Boolean) {
-                        cell.setCellValue((Boolean)obj);
-                    }
-                    else if(obj instanceof String) {
-                        cell.setCellValue((String)obj);
-                    }                        
-                    else if(obj instanceof Double) {
-                        cell.setCellValue((Double)obj);
-                    }                        
-                    else if(obj instanceof Integer) {
-                        cell.setCellValue((Integer)obj);
-                    }
-                    if(key == 1) {
-                        CellStyle style = workbook.createCellStyle();
-                        XSSFFont font   = (XSSFFont) workbook.createFont();
-                        font.setColor(HSSFColor.WHITE.index);
-                        style.setFont(font);
-                        style.setFillBackgroundColor( HSSFColor.RED.index );
-                        style.setFillPattern(CellStyle.SOLID_FOREGROUND);
-                        cell.setCellStyle(style);
+                    dataib.put(++cntib, new Object[]{
+                            Util.getTarih(sr.getGonderimtarihi()),
+                            sr.getIrsaliyeno(),
+                            ++sayac,
+                            sr.getMamulad(),
+                            sr.getMamulkod(),
+                            sr.getFirmaad(),
+                            sr.getGkrno(),
+                            sr.getMiktar()
+                    });
+                }
+
+                Set<Integer> keysetib = dataib.keySet();
+                int rownumib = 0;
+                for (Integer key : keysetib) {
+                    Row row = sheetib.createRow(rownumib++);
+                    Object[] objArr = dataib.get(key);
+                    int cellnum = 0;
+                    for (Object obj : objArr) {
+                        Cell cell = row.createCell(cellnum++);
+                        if (obj instanceof Date) {
+                            cell.setCellValue((Date) obj);
+                        } else if (obj instanceof Boolean) {
+                            cell.setCellValue((Boolean) obj);
+                        } else if (obj instanceof String) {
+                            cell.setCellValue((String) obj);
+                        } else if (obj instanceof Double) {
+                            cell.setCellValue((Double) obj);
+                        } else if (obj instanceof Integer) {
+                            cell.setCellValue((Integer) obj);
+                        }
+                        if (key == 1) {
+                            CellStyle style = workbook.createCellStyle();
+                            XSSFFont font = (XSSFFont) workbook.createFont();
+                            font.setColor(HSSFColor.WHITE.index);
+                            style.setFont(font);
+                            style.setFillBackgroundColor(HSSFColor.RED.index);
+                            style.setFillPattern(CellStyle.SOLID_FOREGROUND);
+                            cell.setCellStyle(style);
+                        }
                     }
                 }
+
+                logger.info("Excel written successfully..");
+
+                // write it as an excel attachment
+                try (ByteArrayOutputStream outByteStream = new ByteArrayOutputStream()) {
+                    workbook.write(outByteStream);
+                    byte[] outArray = outByteStream.toByteArray();
+                    response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+                    //:: eliminates browser caching
+                    response.setHeader("Cache-Control", "private, no-store, no-cache, must-revalidate");
+                    response.setContentLength(outArray.length);
+                    response.setHeader("Content-Disposition", "attachment; filename=" + "excel_sevk_" + exceltarih + ".xlsx");
+                    OutputStream outStream = response.getOutputStream();
+                    outStream.write(outArray);
+                    outStream.flush();
+                    outStream.close();
+                } catch (Exception e) {
+                    logger.error(ExceptionUtils.getStackTrace(e));
+                }
+            } catch (Exception e) {
+                logger.error(ExceptionUtils.getStackTrace(e));
             }
-            
-            logger.info("Excel written successfully..");
-            
-            // write it as an excel attachment
-            ByteArrayOutputStream outByteStream = new ByteArrayOutputStream();
-            workbook.write(outByteStream);
-            byte [] outArray = outByteStream.toByteArray();
-            response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-            //:: eliminates browser caching
-            response.setHeader("Cache-Control", "private, no-store, no-cache, must-revalidate");
-            response.setContentLength(outArray.length);
-            response.setHeader("Content-Disposition", "attachment; filename="+ "excel_sevk_" + exceltarih + ".xls");
-            OutputStream outStream = response.getOutputStream();
-            outStream.write(outArray);
-            outStream.flush();
-            outStream.close();
-            workbook.close();
         }
         else {
             request.getRequestDispatcher("index.jsp").forward(request, response);

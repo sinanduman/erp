@@ -124,7 +124,7 @@
                         <td>
                             <div class="form-group">
                                 <div>
-                                    <select class="form-control xs" name="liste_calisandurum" id="liste_calisandurum">
+                                    <select class="form-control xs" name="liste_calisandurum" id="liste_calisandurum<%=c.getId()%>">
                                         <%
                                             if (c.getDurum() == 1) {
                                                 out.println("<option value='" + 1 + "' selected>Aktif</option>");
