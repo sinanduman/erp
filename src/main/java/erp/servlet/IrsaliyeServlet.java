@@ -1,5 +1,6 @@
 package erp.servlet;
 
+import erp.dao.BaseDao;
 import erp.dao.FirmaDao;
 import erp.dao.IrsaliyeDao;
 import erp.dao.StokDao;
@@ -33,6 +34,9 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -41,6 +45,8 @@ import java.util.List;
 
 @WebServlet("/irsaliye")
 public class IrsaliyeServlet extends HttpServlet implements Serializable {
+    @Inject
+    ConnectionManager connectionManager;
     @Inject
     IrsaliyeDao irsaliyeDao;
     @Inject
@@ -322,16 +328,20 @@ public class IrsaliyeServlet extends HttpServlet implements Serializable {
                     pipe = "<br/>";
                 }
                 else {
-                    message = irsaliyeBilesenEkle(uploadData.getMamulId(), uploadData.getMiktar(), uploadData.getNot(), newIrsaliyeId);
-                    if (!message.equals("0")){
-                        if(Util.isNumeric(message)){
-                            message = "<strong>" + uploadData.getMamulKodu() + "</strong>, " + uploadData.getNot() + " için <strong style='color:green;'>"+ message +"</strong> adet daha ekleyiniz!";
-                            pageFlash.append(pipe + message);
-                            pipe = "<br/>";
+                    if (mamulExists(uploadData.getMamulId())) {
+                        message = irsaliyeBilesenEkle(uploadData.getMamulId(), uploadData.getMiktar(), uploadData.getNot(), newIrsaliyeId);
+                        if (!message.equals("0")) {
+                            if (Util.isNumeric(message)) {
+                                message = "<strong>" + uploadData.getMamulKodu() + "</strong>, " + uploadData.getNot() + " için <strong style='color:green;'>" + message + "</strong> adet daha ekleyiniz!";
+                                pageFlash.append(pipe + message);
+                                pipe = "<br/>";
+                            }
                         }
+                    } else {
+                        logger.error("[{}] mamul kodu sistemde kayıtlı değil!", uploadData.getMamulId());
                     }
                 }
-                System.out.println(message);
+                logger.info(message);
                 retVal = true;
             }
         } catch (Exception e) {
@@ -340,10 +350,28 @@ public class IrsaliyeServlet extends HttpServlet implements Serializable {
         return retVal;
     }
 
+    private boolean mamulExists(String mamulId) {
+        int count = 0;
+        String searchQuery = "SELECT count(*) mamul_count FROM " + BaseDao.MAMUL + " m WHERE m.id = ?";
+
+        try (Connection conn = connectionManager.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(searchQuery)) {
+            pstmt.setInt(1, Integer.parseInt(mamulId));
+            logger.info(pstmt.toString());
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                count = rs.getInt("mamul_count");
+            }
+        } catch (Exception e) {
+            logger.error(ExceptionUtils.getStackTrace(e));
+        }
+        return count > 0;
+    }
+
     private boolean isIrsaliyeInfoExists(XSSFRow myRow) {
         XSSFCell myCell_0 = myRow.getCell(0);
         XSSFCell myCell_1 = myRow.getCell(1);
-        return myCell_0.getCellTypeEnum().equals(CellType.NUMERIC) && myCell_1.getCellTypeEnum().equals(CellType.STRING);
+        return myCell_0.getCellTypeEnum().equals(CellType.NUMERIC) && !myCell_1.getCellTypeEnum().equals(CellType.BLANK);
     }
 
     private boolean isIrsaliyeInfoEmpty(XSSFRow myRow) {
@@ -379,8 +407,9 @@ public class IrsaliyeServlet extends HttpServlet implements Serializable {
     private String getMamuldIdFromMamulKod(String mamulKodu, List<Stok> stok) {
         for (Stok s : stok) {
             String str = s.getBilesenkod();
-            str = str.replaceFirst("^0+", "");
-            if (str.equals(String.valueOf(Long.valueOf(mamulKodu))))
+            String strNum = s.getBilesenkod();
+            strNum = strNum.replaceFirst("^0+", "");
+            if (str.equals(mamulKodu) || strNum.equals(mamulKodu))
                 return String.valueOf(s.getBilesenid());
         }
         return "0";
