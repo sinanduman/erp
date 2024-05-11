@@ -63,13 +63,11 @@ public class UretimPlanServlet extends HttpServlet implements Serializable {
         
 
         if(Integer.parseInt(uretimplanid)>0) {
-            String hedefuretim  = request.getParameter("hedefuretim");
             String gercekuretim = request.getParameter("gercekuretim");
             String hata         = request.getParameter("hata");
             String hataid       = request.getParameter("hatasebepid");
             message = uretimDao.uretimPlanGuncelle(
                             Integer.parseInt(gercekuretim),
-                            Integer.parseInt(hedefuretim),
                             (hata == null || hata.isEmpty()) ? 0 : Integer.parseInt(hata),
                             Integer.parseInt(hataid),
                             Integer.parseInt(uretimplanid)

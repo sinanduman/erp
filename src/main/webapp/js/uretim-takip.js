@@ -94,7 +94,7 @@ $("#uretimekle").click(function(){
                 islemid:        3,
                 uretimplanid:	$("#uretimplanid").val(),
                 mamulid:		$("#mamulid").val(),
-                uretilenmiktar:	uretimadet
+                uretilenmiktar:	$("#esmamulid").val() == '' ? uretimadet : uretimadet * 2
             },
             beforeSend: function ( xhr ) {
             },
@@ -197,6 +197,7 @@ function uretimtakipok(planid){
                     //$("#div"+planid).css("display","none");
                     OK.show( planid + " No'lu Üretim Takibi ONAYLANDI" );
                     $("#div"+planid).html("<span class='text-danger'><strong>onaylandı</strong></span>");
+                    $("#uretimiptal").trigger( "click" );
                 }
                 else{
                     alert( msg );

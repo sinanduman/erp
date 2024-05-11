@@ -120,19 +120,18 @@ public class UretimDao implements Serializable, BaseDao {
         return result;
     }
 
-    public String uretimPlanGuncelle(Integer gerceklesenmiktar, Integer planlananmiktar, Integer hatalimiktar, Integer hataid, Integer uretimplanid) {
+    public String uretimPlanGuncelle(Integer gerceklesenmiktar, Integer hatalimiktar, Integer hataid, Integer uretimplanid) {
         String result = "0";
         String updateQuery = "update " + BaseDao.URETIMPLAN
-                + " set uretilenmiktar =?, planlananmiktar =?, hatalimiktar =?, hataid =?"
+                + " set uretilenmiktar =?, hatalimiktar =?, hataid =?"
                 + " where id =?";
         // connect to DB
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(updateQuery)) {
             pstmt.setInt(1, gerceklesenmiktar);
-            pstmt.setInt(2, planlananmiktar);
-            pstmt.setInt(3, hatalimiktar);
-            pstmt.setInt(4, hataid);
-            pstmt.setInt(5, uretimplanid);
+            pstmt.setInt(2, hatalimiktar);
+            pstmt.setInt(3, hataid);
+            pstmt.setInt(4, uretimplanid);
             logger.info(pstmt.toString());
 
             pstmt.executeUpdate();

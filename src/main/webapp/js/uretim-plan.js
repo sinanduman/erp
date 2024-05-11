@@ -82,6 +82,9 @@ $("#uretimplanguncelle").click(function(){
     else if($("#hata").val()=="" && is_positive($("#hatasebepid").val())){
         alert("Açıklama seçili!\n\Hedeflenen üretim, Gerçekleşen üretimden yüksek olmalı!\n");
     }
+    else if(parseInt($("#gercekuretim").val()) > parseInt($("#hedefuretim").val())){
+        alert("Gerçekleşen üretim, Hedeflenen üretimden yüksek olamaz!\n");
+    }
     else{
         document.uretimplanform.submit();
     }

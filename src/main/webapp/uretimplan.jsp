@@ -193,7 +193,7 @@
                 <label for="hedefuretim" class="text-baslik">Hedef Ürt.</label>
                 <div>
                     <input type="text" class="form-control xs text-right" name="hedefuretim" id="hedefuretim"
-                           readonly="readonly" autocomplete="off"><span class="birim">Ad.</span>
+                           readonly autocomplete="off" disabled><span class="birim">Ad.</span>
                     <input type="hidden" name="hedefuretimhidden" id="hedefuretimhidden">
                 </div>
             </div>
