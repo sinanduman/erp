@@ -49,6 +49,9 @@
     String bas_tarih = (String) request.getAttribute("bas_tarih");
     String bit_tarih = (String) request.getAttribute("bit_tarih");
     String excelsql = (String) request.getAttribute("excelsql");
+
+    String siralama = (String) request.getAttribute("siralama");
+    String siralamayon = (String) request.getAttribute("siralamayon");
 %>
 
 <script type="text/javascript">
@@ -118,6 +121,8 @@
                 <div>
                     <button type="button" class="btn btn-danger" name="raporgetir" id="raporgetir">Rapor Getir</button>
                     <input type="hidden" name="raporgetirid" id="raporgetirid" value="0">
+                    <input type="hidden" name="siralama" id="siralama" value="">
+                    <input type="hidden" name="siralamayon" id="siralamayon" value="<%=siralamayon%>">
                 </div>
             </div>
 
@@ -138,12 +143,12 @@
                 if (sayac++ == 0) {
             %>
             <tr>
-                <th>Tarih</th>
+                <th id="th_islemtarihi">Tarih</th>
                 <th>Firma</th>
                 <th>Bileşen Kod</th>
                 <th>Bileşen Ad</th>
                 <th>Miktar</th>
-                <th>GKR. No</th>
+                <th id="th_gkrno">GKR. No</th>
                 <th>İrsaliye No</th>
                 <th>Lot/Batch No</th>
                 <th>Açıklama</th>
@@ -235,6 +240,32 @@
 
 <script type="text/javascript">
     $(function () {
+        $("#th_gkrno").on("click", function () {
+            $("#siralama").val("gkrno");
+            if ($("#siralamayon").val() == "") {
+                $("#siralamayon").val("desc");
+            } else {
+                if ($("#siralamayon").val() == "desc") {
+                    $("#siralamayon").val("asc");
+                } else {
+                    $("#siralamayon").val("desc");
+                }
+            }
+            $("#gkrlisteform").submit();
+        });
+        $("#th_islemtarihi").on("click", function () {
+            $("#siralama").val("islemtarihi");
+            if ($("#siralamayon").val() == "") {
+                $("#siralamayon").val("desc");
+            } else {
+                if ($("#siralamayon").val() == "desc") {
+                    $("#siralamayon").val("asc");
+                } else {
+                    $("#siralamayon").val("desc");
+                }
+            }
+            $("#gkrlisteform").submit();
+        });
         $('#bas_tarih').datepicker({
             inline: true,
             format: 'dd-mm-yy',

@@ -2,6 +2,8 @@ package erp.servlet;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,6 +56,8 @@ public class GkrListeServlet extends HttpServlet implements Serializable {
         String bas_tarih    = request.getParameter("bas_tarih");
         String bit_tarih    = request.getParameter("bit_tarih");
         String page         = request.getParameter("page");
+        String siralama     = request.getParameter("siralama");
+        String siralamayon  = request.getParameter("siralamayon");
         String excelsql     = "";
         String filter0      = "";
         String filter1      = "";
@@ -72,14 +76,23 @@ public class GkrListeServlet extends HttpServlet implements Serializable {
         param.put("rowperpage", String.valueOf(Genel.ROWPERLONGPAGE));
         
         filter1 = (bilesenid==0) ? "" : " and bilesenid=" + bilesenid;
+
+        if (bas_tarih == null || bit_tarih == null || bas_tarih.isEmpty() || bit_tarih.isEmpty()) {
+            bas_tarih = LocalDate.now().minusDays(30).format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+            bit_tarih = LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        }
         
-        if(bas_tarih!=null && bit_tarih!=null && !bas_tarih.equals("") && !bit_tarih.equals("") ) {
+        if(bas_tarih!=null && bit_tarih!=null && !bas_tarih.isEmpty() && !bit_tarih.isEmpty()) {
             filter2 = andYes + 
                             " ( giristarihi BETWEEN '" + Util.date_tr_to_eng(bas_tarih) + 
                             "' AND '" + Util.date_tr_to_eng(bit_tarih) + 
                             "')";
             param.put("bas_tarih", bas_tarih);
             param.put("bit_tarih", bit_tarih);
+        }
+        if (siralama != null && !siralama.isEmpty() && siralamayon != null && !siralamayon.isEmpty()) {
+            param.put("siralama", siralama);
+            param.put("siralamayon", siralamayon);
         }
         
         filter0 = filter1 + filter2;
@@ -99,6 +112,8 @@ public class GkrListeServlet extends HttpServlet implements Serializable {
         request.setAttribute("stok", stok);
         request.setAttribute("bas_tarih", bas_tarih);
         request.setAttribute("bit_tarih", bit_tarih);
+        request.setAttribute("siralama", siralama);
+        request.setAttribute("siralamayon", siralamayon);
         request.setAttribute("totalrecord", totalrecord);
         request.setAttribute("currentpage", page0);
         request.setAttribute("noofpages", noofpages);

@@ -286,6 +286,8 @@ public class StokDao implements Serializable, BaseDao {
                 ? " and ( giristarihi BETWEEN '" + Util.date_tr_to_eng(param.get("bas_tarih")) + "' AND '"
                 + Util.date_tr_to_eng(param.get("bit_tarih")) + "')"
                 : "";
+        String order = (param != null && param.get("siralama") != null) ? param.get("siralama") : "islemtarihi";
+        String ascdesc = (param != null && param.get("siralamayon") != null) ? param.get("siralamayon") : "desc";
 
         String searchQuery = "select m2.kod mamulkod, s.*, b.ad bilesenad, b.kod bilesenkod, "
                 + " coalesce(s.giristarihi, s.cikistarihi) as islemtarihi, "
@@ -298,7 +300,7 @@ public class StokDao implements Serializable, BaseDao {
                 + " left join " + BaseDao.BIRIM + " br on br.id = b.birimid"
                 + " join      " + BaseDao.FIRMA + " f on f.id = b.firmaid "
                 + " where 1=1 " + filter0 + filter1 + filter2
-                + " order by islemtarihi desc, s.id "
+                + " order by " + order + " " + ascdesc + ", s.id "
                 + pageFilter;
 
         // connect to DB
