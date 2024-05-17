@@ -514,6 +514,10 @@ function changefun_uretim(elem, guncelle) {
                 */
             }
         }
+        if ($("#hammadde").length > 0) {
+            let selectElement = document.getElementById('hammadde');
+            sortSelect(selectElement);
+        }
     }
     if (!found) {
         clearFields();
@@ -522,5 +526,23 @@ function changefun_uretim(elem, guncelle) {
         $("#mamulizleno option").remove();
         $("#esmamulizleno option").remove();
         globalMamul = null;
+    }
+
+    function sortSelect(selElem) {
+        var tmpAry = new Array();
+        for (let i = 0; i < selElem.options.length; i++) {
+            tmpAry[i] = new Array();
+            tmpAry[i][0] = selElem.options[i].text;
+            tmpAry[i][1] = selElem.options[i].value;
+        }
+        tmpAry.sort();
+        while (selElem.options.length > 0) {
+            selElem.options[0] = null;
+        }
+        for (let i = 0; i < tmpAry.length; i++) {
+            let op = new Option(tmpAry[i][0], tmpAry[i][1]);
+            selElem.options[i] = op;
+        }
+        return;
     }
 }

@@ -143,14 +143,14 @@
                 if (sayac++ == 0) {
             %>
             <tr>
-                <th id="th_islemtarihi">Tarih</th>
-                <th>Firma</th>
-                <th>Bileşen Kod</th>
-                <th>Bileşen Ad</th>
+                <th class="order" id="th_islemtarihi">Tarih</th>
+                <th class="order" id="th_firmaid">Firma</th>
+                <th class="order" id="th_bilesenid">Bileşen Kod</th>
+                <th class="order" id="th_bilesenkod">Bileşen Ad</th>
                 <th>Miktar</th>
-                <th id="th_gkrno">GKR. No</th>
-                <th>İrsaliye No</th>
-                <th>Lot/Batch No</th>
+                <th class="order" id="th_gkrno">GKR. No</th>
+                <th class="order" id="th_irsaliyeno">İrsaliye No</th>
+                <th class="order" id="th_lot">Lot/Batch No</th>
                 <th>Açıklama</th>
             </tr>
             <%
@@ -240,6 +240,28 @@
 
 <script type="text/javascript">
     $(function () {
+        const order_elems = document.getElementsByClassName("order");
+        console.log(order_elems);
+        for (let i = 0; i < order_elems.length; i++) {
+            order_elems[i].addEventListener('click', event => {
+                let orderId = event.currentTarget.id;
+                let orderName = orderId.substring(3); //:: th_ sonrasi basladigindan
+                console.log(orderName);
+
+                $("#siralama").val(orderName);
+                if ($("#siralamayon").val() == "") {
+                    $("#siralamayon").val("desc");
+                } else {
+                    if ($("#siralamayon").val() == "desc") {
+                        $("#siralamayon").val("asc");
+                    } else {
+                        $("#siralamayon").val("desc");
+                    }
+                }
+                $("#gkrlisteform").submit();
+            });
+        }
+        /*
         $("#th_gkrno").on("click", function () {
             $("#siralama").val("gkrno");
             if ($("#siralamayon").val() == "") {
@@ -253,19 +275,8 @@
             }
             $("#gkrlisteform").submit();
         });
-        $("#th_islemtarihi").on("click", function () {
-            $("#siralama").val("islemtarihi");
-            if ($("#siralamayon").val() == "") {
-                $("#siralamayon").val("desc");
-            } else {
-                if ($("#siralamayon").val() == "desc") {
-                    $("#siralamayon").val("asc");
-                } else {
-                    $("#siralamayon").val("desc");
-                }
-            }
-            $("#gkrlisteform").submit();
-        });
+         */
+
         $('#bas_tarih').datepicker({
             inline: true,
             format: 'dd-mm-yy',

@@ -292,7 +292,7 @@ public class StokDao implements Serializable, BaseDao {
         String searchQuery = "select m2.kod mamulkod, s.*, b.ad bilesenad, b.kod bilesenkod, "
                 + " coalesce(s.giristarihi, s.cikistarihi) as islemtarihi, "
                 + " bt.id bilesentipid, bt.ad bilesentipad, br.id birimid, br.ad birimad, "
-                + " f.id firmaid, f.ad firmaad, '' as mamuldetay, (sum(CASE WHEN s.islemyonu = 0 THEN s.miktar ELSE -1*miktar END) OVER (ORDER BY coalesce(s.giristarihi, s.cikistarihi))) kalan "
+                + " f.id firmaid, f.ad firmaad, '' as mamuldetay, (sum(CASE WHEN s.islemyonu = 0 THEN s.miktar ELSE -1*miktar END) OVER (ORDER BY coalesce(s.giristarihi, s.cikistarihi), s.planid)) kalan "
                 + " from      " + BaseDao.STOK + " s"
                 + " left join " + BaseDao.URETIMPLAN + " p on p.id = s.planid"
                 + " left join " + BaseDao.MAMUL + " m2 on m2.id = p.mamulid " + join0
