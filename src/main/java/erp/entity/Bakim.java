@@ -1,5 +1,6 @@
 package erp.entity;
 
+import erp.util.Fields;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,11 +24,11 @@ public class Bakim {
     private Date islemtarihi;
 
     public Bakim(ResultSet rs) throws SQLException {
-        this.id = rs.getInt("id");
-        this.mamulid = rs.getInt("mamulid");
+        this.id = rs.getInt(Fields.ID);
+        this.mamulid = rs.getInt(Fields.MAMULID);
         this.mamulDurum = rs.getInt("mamul_durum");
-        this.calisanid = rs.getInt("calisanid");
-        this.bakimtarihi = rs.getDate ("bakimtarihi");
+        this.calisanid = rs.getInt(Fields.CALISANID);
+        this.bakimtarihi = rs.getDate("bakimtarihi");
         this.islemtarihi = rs.getDate("islemtarihi");
         this.uretimMiktar = rs.getInt("uretim_miktari");
         this.baskiSayisi = rs.getInt("baski_sayisi");

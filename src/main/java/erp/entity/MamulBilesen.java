@@ -1,5 +1,6 @@
 package erp.entity;
 
+import erp.util.Fields;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,17 +26,17 @@ public class MamulBilesen {
     private Float miktar;
 
     public MamulBilesen(ResultSet rs) throws SQLException {
-        this.id = rs.getInt("id");
-        this.mamulid = rs.getInt("mamulid");
-        this.bilesenid = rs.getInt("bilesenid");
-        this.bilesenad = rs.getString("bilesenad");
-        this.bilesenkod = rs.getString("bilesenkod");
-        this.bilesentipid = rs.getInt("bilesentipid");
-        this.bilesentipad = rs.getString("bilesentipad");
-        this.birimid = rs.getInt("birimid");
-        this.birimad = rs.getString("birimad");
-        this.firmaid = rs.getInt("firmaid");
-        this.firmaad = rs.getString("firmaad");
-        this.miktar = rs.getFloat("miktar");
+        this.id = rs.getInt(Fields.ID);
+        this.mamulid = rs.getInt(Fields.MAMULID);
+        this.bilesenid = rs.getInt(Fields.BILESENID);
+        this.bilesenad = rs.getString(Fields.BILESENAD);
+        this.bilesenkod = rs.getString(Fields.BILESENKOD);
+        this.bilesentipid = rs.getInt(Fields.BILESENTIPID);
+        this.bilesentipad = rs.getString(Fields.BILESENTIPAD);
+        this.birimid = rs.getInt(Fields.BIRIMID);
+        this.birimad = rs.getString(Fields.BIRIMAD);
+        this.firmaid = rs.getInt(Fields.FIRMAID);
+        this.firmaad = rs.getString(Fields.FIRMAAD);
+        this.miktar = rs.getFloat(Fields.MIKTAR);
     }
 }

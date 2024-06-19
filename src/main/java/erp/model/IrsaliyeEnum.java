@@ -11,11 +11,11 @@ public enum IrsaliyeEnum {
 
     private int value;
 
-    IrsaliyeEnum(int value){
+    IrsaliyeEnum(int value) {
         this.value = value;
     }
 
-    public int getValue(){
+    public int getValue() {
         return this.value;
     }
 }

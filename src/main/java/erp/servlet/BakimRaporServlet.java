@@ -1,11 +1,16 @@
 package erp.servlet;
 
-import erp.dao.*;
+import erp.dao.BakimDao;
+import erp.dao.BaseDao;
+import erp.dao.CalisanDao;
+import erp.dao.MamulDao;
 import erp.entity.Bakim;
 import erp.entity.Calisan;
 import erp.entity.Genel;
 import erp.entity.Mamul;
+import erp.util.Fields;
 import erp.util.Util;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,32 +30,33 @@ public class BakimRaporServlet extends HttpServlet implements Serializable {
     private static final Logger logger = LoggerFactory.getLogger(BakimRaporServlet.class);
 
     @Inject
-    CalisanDao calisanDao;
+    private CalisanDao calisanDao;
     @Inject
-    MamulDao mamulDao;
+    private MamulDao mamulDao;
     @Inject
-    BakimDao bakimDao;
+    private BakimDao bakimDao;
     @Inject
-    DAOFunctions daoFunctions;
-    
+    private DAOFunctions daoFunctions;
+
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doPost(request, response);
     }
-    
+
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html; charset=UTF-8");
 
-        String raporgetirid = request.getParameter("raporgetirid");
-        String mamulid      = request.getParameter("mamulid");
-        String calisanid    = request.getParameter("calisanid");
-        String bas_tarih    = request.getParameter("bas_tarih");
-        String bit_tarih    = request.getParameter("bit_tarih");
-        String page         = request.getParameter("page");
-        String excelsql     = "";
+        String mamulid = request.getParameter(Fields.MAMULID);
+        String calisanid = request.getParameter(Fields.CALISANID);
+        String bas_tarih = request.getParameter(Fields.BAS_TARIH);
+        String bit_tarih = request.getParameter(Fields.BIT_TARIH);
+        String page = request.getParameter(Fields.PAGE);
+        String excelsql = "";
 
         int totalrecord = 0;
-        int noofpages   = 0;
-        int page0       = 1;
+        int noofpages = 0;
+        int page0 = 1;
 
         List<Calisan> calisan = calisanDao.calisanListeGetirTum(0, null);
         Map<Integer, Calisan> calisanmap = Util.calisanListToMap(calisan);
@@ -58,50 +64,49 @@ public class BakimRaporServlet extends HttpServlet implements Serializable {
         List<Mamul> mamul = mamulDao.mamulListeGetir(null, 0, null);
         Map<Integer, Mamul> mamulmap = Util.mamulListToMap(mamul);
 
-        String filter0  = "";
-        String filter1  = "";
-        String filter2  = "";
-        String filter3  = "";
-        String andYes   = " AND ";
-        //String tableName = (mamulid == null || mamulid.isEmpty()) ? BaseDao.V_BAKIM_MAMUL : BaseDao.BAKIM;
+        String filter0 = "";
+        String filter1 = "";
+        String filter2 = "";
+        String filter3 = "";
+        String andYes = " AND ";
         String tableName = BaseDao.V_BAKIM_MAMUL;
 
-        if(mamulid!=null && !mamulid.equals("") ) {
-            filter1     = andYes + " mamulid = " + Integer.parseInt(mamulid);
+        if (!StringUtils.isEmpty(mamulid)) {
+            filter1 = andYes + " mamulid = " + Integer.parseInt(mamulid);
         }
-        if(calisanid!=null && !calisanid.equals("") ) {
-            filter2     = andYes + " calisanid = " + Integer.parseInt(calisanid);
+        if (!StringUtils.isEmpty(calisanid)) {
+            filter2 = andYes + " calisanid = " + Integer.parseInt(calisanid);
         }
-        if(bas_tarih!=null && bit_tarih!=null && !bas_tarih.equals("") && !bit_tarih.equals("") ) {
-            filter3     = andYes + " ( bakimtarihi BETWEEN '" + Util.date_tr_to_eng(bas_tarih) + "' AND '" + Util.date_tr_to_eng(bit_tarih) +"')";
+        if (!StringUtils.isEmpty(bas_tarih) && !StringUtils.isEmpty(bit_tarih)) {
+            filter3 = andYes + " ( bakimtarihi BETWEEN '" + Util.date_tr_to_eng(bas_tarih) + "' AND '" + Util.date_tr_to_eng(bit_tarih) + "')";
         }
         filter0 = filter1 + filter2 + filter3;
 
         // PAGING
-        totalrecord = daoFunctions.recordAgg(tableName, "COUNT", "*", " WHERE 1=1" + filter0 );
-        if(request.getParameter("page") != null)
-            page0   = Integer.parseInt(page);
-        noofpages   = (int) Math.ceil(totalrecord * 1.0 / Genel.ROWPERPAGE);
+        totalrecord = daoFunctions.recordAgg(tableName, Fields.COUNT, "*", filter0);
+        if (request.getParameter(Fields.PAGE) != null)
+            page0 = Integer.parseInt(page);
+        noofpages = (int) Math.ceil(totalrecord * 1.0 / Genel.ROWPERPAGE);
         // PAGING
 
         List<Bakim> bakimrapor = bakimDao.bakimRapor(tableName, page0, filter0, mamulid);
 
-        logger.info("noofpages: "+ noofpages + ", totalrecord: "+ totalrecord + ", " + tableName + " WHERE 1=1" + filter0 );
+        logger.info("noofpages: {}, totalrecord: {}, tablename: {}, WHERE 1=1 {}",noofpages , totalrecord, tableName, filter0);
         excelsql = filter0;
 
-        request.setAttribute("calisan", calisan);
+        request.setAttribute(Fields.CALISAN, calisan);
         request.setAttribute("calisanmap", calisanmap);
-        request.setAttribute("mamul", mamul);
+        request.setAttribute(Fields.MAMUL, mamul);
         request.setAttribute("mamulmap", mamulmap);
         request.setAttribute("bakimrapor", bakimrapor);
-        request.setAttribute("calisanid", calisanid);
-        request.setAttribute("mamulid", mamulid);
-        request.setAttribute("bas_tarih", bas_tarih);
-        request.setAttribute("bit_tarih", bit_tarih);
-        request.setAttribute("totalrecord", totalrecord);
-        request.setAttribute("currentpage", page0);
-        request.setAttribute("noofpages", noofpages);
-        request.setAttribute("excelsql", excelsql);
+        request.setAttribute(Fields.CALISANID, calisanid);
+        request.setAttribute(Fields.MAMULID, mamulid);
+        request.setAttribute(Fields.BAS_TARIH, bas_tarih);
+        request.setAttribute(Fields.BIT_TARIH, bit_tarih);
+        request.setAttribute(Fields.TOTALRECORD, totalrecord);
+        request.setAttribute(Fields.CURRENTPAGE, page0);
+        request.setAttribute(Fields.NOOFPAGES, noofpages);
+        request.setAttribute(Fields.EXCELSQL, excelsql);
         request.getRequestDispatcher("bakimrapor.jsp").forward(request, response);
     }
 }

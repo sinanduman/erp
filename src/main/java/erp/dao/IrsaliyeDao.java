@@ -1,10 +1,13 @@
 package erp.dao;
 
-import erp.servlet.ConnectionManager;
 import erp.entity.Irsaliye;
 import erp.entity.IrsaliyeBilesen;
 import erp.model.IrsaliyeTip;
+import erp.servlet.ConnectionManager;
+import erp.util.Constants;
+import erp.util.Fields;
 import erp.util.Util;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,20 +22,21 @@ import java.util.List;
 @Singleton
 public class IrsaliyeDao implements Serializable, BaseDao {
     @Inject
-    ConnectionManager connectionManager;
+    private ConnectionManager connectionManager;
     private static final Logger logger = LoggerFactory.getLogger(IrsaliyeDao.class);
 
     public String irsaliyeSil(String irsaliyeid) {
         String result = "0";
-        String updateQuery = "select " + BaseDao.F_IRSALIYE_SIL + "(?)";
+        String updateQuery = Fields.SELECT + BaseDao.F_IRSALIYE_SIL + "(?)";
 
         // connect to DB
         ResultSet rs;
         try (Connection conn = connectionManager.getConnection();
-             PreparedStatement  pstmt = conn.prepareStatement(updateQuery)) {
+             PreparedStatement pstmt = conn.prepareStatement(updateQuery)) {
+            long start = System.currentTimeMillis();
             pstmt.setInt(1, Integer.parseInt(irsaliyeid));
-            logger.info(pstmt.toString());
             rs = pstmt.executeQuery();
+            logger.info(Constants.LOG_FORMAT, pstmt, (System.currentTimeMillis() - start));
             if (rs.next()) {
                 result = rs.getString(1);
                 rs.close();
@@ -50,9 +54,10 @@ public class IrsaliyeDao implements Serializable, BaseDao {
         // connect to DB
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(updateQuery)) {
+            long start = System.currentTimeMillis();
             pstmt.setInt(1, Integer.parseInt(irsaliyebilesenid));
-            logger.info(pstmt.toString());
             result = pstmt.executeUpdate();
+            logger.info(Constants.LOG_FORMAT, pstmt, (System.currentTimeMillis() - start));
         } catch (Exception e) {
             logger.error(ExceptionUtils.getStackTrace(e));
         }
@@ -61,15 +66,16 @@ public class IrsaliyeDao implements Serializable, BaseDao {
 
     public String irsaliyeNoKontrol(String irsaliyeno) {
         String result = "0";
-        String updateQuery = "select count(*) from " + BaseDao.IRSALIYE + " where trim(irsaliyeno) = ?";
+        String selectQuery = Fields.SELECT + "count(*) from " + BaseDao.IRSALIYE + " where trim(irsaliyeno) = ?";
 
         // connect to DB
         ResultSet rs;
         try (Connection conn = connectionManager.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(updateQuery)) {
+             PreparedStatement pstmt = conn.prepareStatement(selectQuery)) {
+            long start = System.currentTimeMillis();
             pstmt.setString(1, irsaliyeno);
-            logger.info(pstmt.toString());
             rs = pstmt.executeQuery();
+            logger.info(Constants.LOG_FORMAT, pstmt, (System.currentTimeMillis() - start));
             if (rs.next()) {
                 result = rs.getString(1);
             }
@@ -81,15 +87,16 @@ public class IrsaliyeDao implements Serializable, BaseDao {
 
     public String irsaliyeOnayla(String irsaliyeid) {
         String result = "0";
-        String updateQuery = "SELECT " + BaseDao.F_IRSALIYE_ONAYLA + "(?)";
+        String updateQuery = Fields.SELECT + BaseDao.F_IRSALIYE_ONAYLA + "(?)";
 
         // connect to DB
         ResultSet rs;
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(updateQuery)) {
+            long start = System.currentTimeMillis();
             pstmt.setInt(1, Integer.parseInt(irsaliyeid));
-            logger.info(pstmt.toString());
             rs = pstmt.executeQuery();
+            logger.info(Constants.LOG_FORMAT, pstmt, (System.currentTimeMillis() - start));
             if (rs.next()) {
                 result = rs.getString(1);
                 rs.close();
@@ -102,14 +109,16 @@ public class IrsaliyeDao implements Serializable, BaseDao {
 
     public int irsaliyeKapat(String irsaliyeid) {
         int retVal = 0;
-        String updateQuery = "update " + BaseDao.IRSALIYE + " set kapatildi=1 where id = ?";
+        String updateQuery = Fields.UPDATE + BaseDao.IRSALIYE
+                + Fields.SET + "kapatildi=1 "
+                + Fields.WHERE + "id = ?";
         // connect to DB
-        ResultSet rs;
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(updateQuery)) {
+            long start = System.currentTimeMillis();
             pstmt.setInt(1, Integer.parseInt(irsaliyeid));
-            logger.info(pstmt.toString());
             retVal = pstmt.executeUpdate();
+            logger.info(Constants.LOG_FORMAT, pstmt, (System.currentTimeMillis() - start));
         } catch (Exception e) {
             logger.error(ExceptionUtils.getStackTrace(e));
         }
@@ -118,20 +127,21 @@ public class IrsaliyeDao implements Serializable, BaseDao {
 
     public String irsaliyeBilesenGuncelle(int irsaliyeid, int irsaliyebilesenid, int mamulid, int gkrno, int miktar, String not) {
         String retVal = "-1";
-        String updateQuery = "SELECT " + BaseDao.F_IRSALIYEBILESEN_GUNCELLE + "(?,?,?,?,?,?,?)";
+        String selectQuery = Fields.SELECT + BaseDao.F_IRSALIYEBILESEN_GUNCELLE + "(?,?,?,?,?,?,?)";
 
         // connect to DB
         ResultSet rs;
         try (Connection conn = connectionManager.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(updateQuery)) {
+             PreparedStatement pstmt = conn.prepareStatement(selectQuery)) {
+            long start = System.currentTimeMillis();
             pstmt.setInt(1, irsaliyeid);
             pstmt.setInt(2, irsaliyebilesenid);
             pstmt.setInt(3, mamulid);
             pstmt.setInt(4, gkrno);
             pstmt.setInt(5, miktar);
             pstmt.setString(6, not);
-            logger.info(pstmt.toString());
             rs = pstmt.executeQuery();
+            logger.info(Constants.LOG_FORMAT, pstmt, (System.currentTimeMillis() - start));
             if (rs.next()) {
                 retVal = rs.getString(1);
                 rs.close();
@@ -143,18 +153,19 @@ public class IrsaliyeDao implements Serializable, BaseDao {
     }
 
     public int irsaliyeEkle(String irsaliyeno, String tarih, String firmaid) {
-        String insertQuery = "insert into " + BaseDao.IRSALIYE + "(irsaliyeno, olusturmatarihi, firmaid) values (?,?,?)";
+        String insertQuery = Fields.INSERT_INTO + BaseDao.IRSALIYE + "(irsaliyeno, olusturmatarihi, firmaid) values (?,?,?)";
 
         ResultSet rs;
         int newIrsaliyeId = -1;
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(insertQuery, Statement.RETURN_GENERATED_KEYS)) {
+            long start = System.currentTimeMillis();
             pstmt.setString(1, irsaliyeno);
             pstmt.setTimestamp(2, Util.date_tr_to_timestamp(tarih));
             pstmt.setInt(3, Integer.parseInt(firmaid));
-            logger.info(pstmt.toString());
             pstmt.executeUpdate();
             rs = pstmt.getGeneratedKeys();
+            logger.info(Constants.LOG_FORMAT, pstmt, (System.currentTimeMillis() - start));
             if (rs.next()) {
                 newIrsaliyeId = rs.getInt(1);
             }
@@ -171,6 +182,7 @@ public class IrsaliyeDao implements Serializable, BaseDao {
         ResultSet rs;
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(insertQuery)) {
+            long start = System.currentTimeMillis();
             pstmt.setInt(1, irsaliyeid);
             pstmt.setInt(2, mamulid);
             pstmt.setInt(3, miktar);
@@ -178,8 +190,8 @@ public class IrsaliyeDao implements Serializable, BaseDao {
                 pstmt.setString(4, not);
             else
                 pstmt.setNull(4, Types.VARCHAR);
-            logger.info(pstmt.toString());
             rs = pstmt.executeQuery();
+            logger.info(Constants.LOG_FORMAT, pstmt, (System.currentTimeMillis() - start));
             if (rs.next()) {
                 retVal = rs.getString(1);
             }
@@ -190,17 +202,18 @@ public class IrsaliyeDao implements Serializable, BaseDao {
     }
 
     public List<Irsaliye> irsaliyeListeGetirTum(IrsaliyeTip irsaliyetip, int offset, String irsaliyeid, String firmaid, String tarih) {
-        List<Irsaliye> temp = new ArrayList<Irsaliye>();
-        String pageFilter = Util.getPageFilter (offset);
-        String irsaliyeFilter = (irsaliyeid == null) ? "" : " and i.id = " + Integer.parseInt(irsaliyeid) + " ";
-        String tarihFilter = (tarih == null) ? "" : " and date(gonderimtarihi) = '" + Util.date_tr_to_eng(tarih) + "' ";
-        String firmaFilter = (firmaid == null) ? "" : " and f.id= " + Integer.parseInt(firmaid) + " ";
+        List<Irsaliye> temp = new ArrayList<>();
+        String pageFilter = Util.getPageFilter(offset);
+        String irsaliyeFilter = StringUtils.isEmpty(irsaliyeid) ? "" : " and i.id = " + Integer.parseInt(irsaliyeid) + " ";
+        String tarihFilter = StringUtils.isEmpty(tarih) ? "" : " and date(gonderimtarihi) = '" + Util.date_tr_to_eng(tarih) + "' ";
+        String firmaFilter = StringUtils.isEmpty(firmaid) ? "" : " and f.id= " + Integer.parseInt(firmaid) + " ";
 
-        String searchQuery = "select i.*, f.ad firmaad from " + BaseDao.IRSALIYE + " i "
-                + " left join " + BaseDao.FIRMA + " f on f.id=i.firmaid"
-                + " where i.kapatildi=1 and i.onaylandi =? "
+        String searchQuery = Fields.SELECT + "i.*, f.ad firmaad "
+                + Fields.FROM + BaseDao.IRSALIYE + " i "
+                + Fields.LEFT_JOIN + BaseDao.FIRMA + " f on f.id=i.firmaid"
+                + Fields.WHERE + "i.kapatildi=1 and i.onaylandi =? "
                 + firmaFilter + irsaliyeFilter + tarihFilter
-                + " order by i.id DESC "
+                + Fields.ORDER_BY + "i.id DESC "
                 + pageFilter;
         ResultSet rs;
         try (Connection conn = connectionManager.getConnection();
@@ -208,7 +221,7 @@ public class IrsaliyeDao implements Serializable, BaseDao {
             long start = System.currentTimeMillis();
             pstmt.setInt(1, irsaliyetip.value());
             rs = pstmt.executeQuery();
-            logger.info(pstmt.toString() + (System.currentTimeMillis()-start) +"ms.");
+            logger.info(Constants.LOG_FORMAT, pstmt, (System.currentTimeMillis() - start));
             while (rs.next()) {
                 temp.add(new Irsaliye(rs));
             }
@@ -219,12 +232,13 @@ public class IrsaliyeDao implements Serializable, BaseDao {
     }
 
     public List<Irsaliye> irsaliyeListeGetirKapaliTum(IrsaliyeTip irsaliyetip, int offset) {
-        List<Irsaliye> temp = new ArrayList<Irsaliye>();
-        String pageFilter = Util.getPageFilter (offset);
-        String searchQuery = "select i.*, f.ad firmaad from " + BaseDao.IRSALIYE + " i "
-                + " left join " + BaseDao.FIRMA + " f on f.id=i.firmaid "
-                + " where i.kapatildi= ? "
-                + " order by i.id DESC "
+        List<Irsaliye> temp = new ArrayList<>();
+        String pageFilter = Util.getPageFilter(offset);
+        String searchQuery = Fields.SELECT + "i.*, f.ad firmaad "
+                + Fields.FROM + BaseDao.IRSALIYE + " i "
+                + Fields.LEFT_JOIN + BaseDao.FIRMA + " f on f.id=i.firmaid "
+                + Fields.WHERE + "i.kapatildi= ? "
+                + Fields.ORDER_BY + "i.id DESC "
                 + pageFilter;
 
         ResultSet rs;
@@ -233,8 +247,7 @@ public class IrsaliyeDao implements Serializable, BaseDao {
             long start = System.currentTimeMillis();
             pstmt.setInt(1, irsaliyetip.value());
             rs = pstmt.executeQuery();
-            logger.info(pstmt.toString() + (System.currentTimeMillis()-start) +"ms.");
-
+            logger.info(Constants.LOG_FORMAT, pstmt, (System.currentTimeMillis() - start));
             while (rs.next()) {
                 temp.add(new Irsaliye(rs));
             }
@@ -245,25 +258,24 @@ public class IrsaliyeDao implements Serializable, BaseDao {
     }
 
     public List<IrsaliyeBilesen> irsaliyeBilesenListeGetirTum(IrsaliyeTip irsaliyetip, int onaylandi, String irsaliyeid, String firmaid, String tarih, int offset) {
-        List<IrsaliyeBilesen> temp = new ArrayList<IrsaliyeBilesen>();
+        List<IrsaliyeBilesen> temp = new ArrayList<>();
 
-        String pageFilter = Util.getPageFilter (offset);
-        String irsaliyeFilter = (irsaliyeid == null) ? "" : " and x.id = " + Integer.parseInt(irsaliyeid) + " ";
-        String tarihFilter = (tarih == null) ? "" : " and date(gonderimtarihi) = '" + Util.date_tr_to_eng(tarih) + "' ";
-        String firmaFilter = (firmaid == null) ? "" : " and f.id = " + Integer.parseInt(firmaid) + " ";
+        String pageFilter = Util.getPageFilter(offset);
+        String irsaliyeFilter = StringUtils.isEmpty(irsaliyeid) ? "" : " and x.id = " + Integer.parseInt(irsaliyeid) + " ";
+        String tarihFilter = StringUtils.isEmpty(tarih) ? "" : " and date(gonderimtarihi) = '" + Util.date_tr_to_eng(tarih) + "' ";
+        String firmaFilter = StringUtils.isEmpty(firmaid) ? "" : " and f.id = " + Integer.parseInt(firmaid) + " ";
 
         /* acik olan irsaliye bilsenlerini getirir */
-        String searchQuery = "select ib.*, i.olusturmatarihi, i.gonderimtarihi, i.irsaliyeno, "
-                + " i.firmaid irsaliyefirmaid, m.ad mamulad, m.kod mamulkod, fb.id firmaid, fb.ad firmaad "
-                + " from " + BaseDao.IRSALIYEBILESEN + " ib "
-                + " join (select x.* from " + BaseDao.IRSALIYE + " x left join " + BaseDao.FIRMA + " f on f.id = x.firmaid where x.kapatildi=? and x.onaylandi=? "
+        String searchQuery = Fields.SELECT + "ib.*, i.olusturmatarihi, i.gonderimtarihi, i.irsaliyeno, i.firmaid irsaliyefirmaid, m.ad mamulad, m.kod mamulkod, fb.id firmaid, fb.ad firmaad "
+                + Fields.FROM + BaseDao.IRSALIYEBILESEN + " ib "
+                + Fields.JOIN + "(select x.* from " + BaseDao.IRSALIYE + " x left join " + BaseDao.FIRMA + " f on f.id = x.firmaid where x.kapatildi=? and x.onaylandi=? "
                 + firmaFilter + irsaliyeFilter + tarihFilter
-                + " order by x.id DESC "
+                + Fields.ORDER_BY + "x.id DESC "
                 + pageFilter
                 + " ) i on i.id=ib.irsaliyeid "
-                + " join " + BaseDao.MAMUL + " m on m.id = ib.mamulid "
-                + " join " + BaseDao.FIRMA + " fb on fb.id = m.firmaid "
-                + " order by i.id desc, ib.id ";
+                + Fields.JOIN + BaseDao.MAMUL + " m on m.id = ib.mamulid "
+                + Fields.JOIN + BaseDao.FIRMA + " fb on fb.id = m.firmaid "
+                + Fields.ORDER_BY + "i.id desc, ib.id ";
         // connect to DB
         ResultSet rs;
         try (Connection conn = connectionManager.getConnection();
@@ -272,7 +284,7 @@ public class IrsaliyeDao implements Serializable, BaseDao {
             pstmt.setInt(1, irsaliyetip.value());
             pstmt.setInt(2, onaylandi);
             rs = pstmt.executeQuery();
-            logger.info(pstmt.toString() + (System.currentTimeMillis()-start) +"ms.");
+            logger.info(Constants.LOG_FORMAT, pstmt, (System.currentTimeMillis() - start));
             while (rs.next()) {
                 temp.add(new IrsaliyeBilesen(rs));
             }
@@ -283,24 +295,23 @@ public class IrsaliyeDao implements Serializable, BaseDao {
     }
 
     public List<IrsaliyeBilesen> irsaliyeBilesenListeTum(IrsaliyeTip irsaliyetip, int onaylandi, String irsaliyeid, String firmaid, String bas_tarih, String bit_tarih, int offset, String mamulid) {
-        List<IrsaliyeBilesen> temp = new ArrayList<IrsaliyeBilesen>();
+        List<IrsaliyeBilesen> temp = new ArrayList<>();
 
-        String pageFilter = Util.getPageFilter (offset);
-        String irsaliyeFilter = (irsaliyeid == null || irsaliyeid.equals("")) ? "" : " and e.id = " + Integer.parseInt(irsaliyeid) + " ";
-        String tarihFilter = (bas_tarih != null && bit_tarih != null) ? " and (date(gonderimtarihi) BETWEEN '" + Util.date_tr_to_eng(bas_tarih) + "' AND '" + Util.date_tr_to_eng(bit_tarih) + "')" : "";
-        String firmaFilter = (firmaid == null || firmaid.equals("")) ? "" : " and e.firmaid = " + Integer.parseInt(firmaid) + " ";
-        String mamulFilter = (mamulid == null || mamulid.equals("")) ? "" : " where ib.mamulid = " + Integer.parseInt(mamulid) + " ";
-        String mamulFilterIrs = (mamulid == null || mamulid.equals("")) ? "" : " and exists (select 1 from " + BaseDao.IRSALIYEBILESEN + " ib where e.id = ib.irsaliyeid and ib.mamulid = " + Integer.parseInt(mamulid) + ") ";
+        String pageFilter = Util.getPageFilter(offset);
+        String irsaliyeFilter = StringUtils.isEmpty(irsaliyeid) ? "" : " and e.id = " + Integer.parseInt(irsaliyeid) + " ";
+        String tarihFilter = !StringUtils.isEmpty(bas_tarih) && !StringUtils.isEmpty(bit_tarih) ? " and (date(gonderimtarihi) BETWEEN '" + Util.date_tr_to_eng(bas_tarih) + "' AND '" + Util.date_tr_to_eng(bit_tarih) + "')" : "";
+        String firmaFilter = StringUtils.isEmpty(firmaid) ? "" : " and e.firmaid = " + Integer.parseInt(firmaid) + " ";
+        String mamulFilter = StringUtils.isEmpty(mamulid) ? "" : " where ib.mamulid = " + Integer.parseInt(mamulid) + " ";
+        String mamulFilterIrs = StringUtils.isEmpty(mamulid) ? "" : " and exists (select 1 from " + BaseDao.IRSALIYEBILESEN + " ib where e.id = ib.irsaliyeid and ib.mamulid = " + Integer.parseInt(mamulid) + ") ";
 
         /* acik olan irsaliye bilsenlerini getirir */
-        String searchQuery = "select ib.*, i.olusturmatarihi, i.gonderimtarihi, i.irsaliyeno,"
-                + " i.firmaid irsaliyefirmaid, m.ad mamulad, m.kod mamulkod, f.id firmaid, f.ad firmaad"
-                + " from " + BaseDao.IRSALIYEBILESEN + " ib"
-                + " join (select * from " + BaseDao.IRSALIYE + " e where e.kapatildi=? and e.onaylandi=? " + firmaFilter + irsaliyeFilter + tarihFilter + mamulFilterIrs + " order by e.id DESC " + pageFilter + ") i on i.id=ib.irsaliyeid"
-                + " join " + BaseDao.MAMUL + " m on m.id = ib.mamulid"
-                + " join " + BaseDao.FIRMA + " f on f.id = i.firmaid"
+        String searchQuery = Fields.SELECT + "ib.*, i.olusturmatarihi, i.gonderimtarihi, i.irsaliyeno, i.firmaid irsaliyefirmaid, m.ad mamulad, m.kod mamulkod, f.id firmaid, f.ad firmaad"
+                + Fields.FROM + BaseDao.IRSALIYEBILESEN + " ib"
+                + Fields.JOIN + "(select * from " + BaseDao.IRSALIYE + " e where e.kapatildi=? and e.onaylandi=? " + firmaFilter + irsaliyeFilter + tarihFilter + mamulFilterIrs + " order by e.id DESC " + pageFilter + ") i on i.id=ib.irsaliyeid"
+                + Fields.JOIN + BaseDao.MAMUL + " m on m.id = ib.mamulid"
+                + Fields.JOIN + BaseDao.FIRMA + " f on f.id = i.firmaid"
                 + mamulFilter
-                + " order by i.id desc, ib.id";
+                + Fields.ORDER_BY + "i.id desc, ib.id";
         // connect to DB
         ResultSet rs;
         try (Connection conn = connectionManager.getConnection();
@@ -309,7 +320,7 @@ public class IrsaliyeDao implements Serializable, BaseDao {
             pstmt.setInt(1, irsaliyetip.value());
             pstmt.setInt(2, onaylandi);
             rs = pstmt.executeQuery();
-            logger.info(pstmt.toString() + (System.currentTimeMillis()-start) +"ms.");
+            logger.info(Constants.LOG_FORMAT, pstmt, (System.currentTimeMillis() - start));
             while (rs.next()) {
                 temp.add(new IrsaliyeBilesen(rs));
             }

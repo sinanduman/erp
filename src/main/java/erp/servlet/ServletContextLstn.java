@@ -1,6 +1,7 @@
 package erp.servlet;
 
 import erp.entity.Calisan;
+import erp.util.Fields;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,14 +19,15 @@ public class ServletContextLstn implements ServletContextListener {
     public void contextInitialized(ServletContextEvent event) {
         ServletContext context = event.getServletContext();
 
-		@SuppressWarnings("unchecked")
+        @SuppressWarnings("unchecked")
         List<Calisan> calisan = (ArrayList<Calisan>) context.getAttribute("calisan");
         if (calisan == null) {
             logger.info("No calisan mevcut");
-            calisan = new ArrayList<Calisan>();
-            context.setAttribute("calisan", calisan);
+            calisan = new ArrayList<>();
+            context.setAttribute(Fields.CALISAN, calisan);
         }
     }
 
-    public void contextDestroyed(ServletContextEvent sce) {}
+    public void contextDestroyed(ServletContextEvent sce) {
+    }
 }

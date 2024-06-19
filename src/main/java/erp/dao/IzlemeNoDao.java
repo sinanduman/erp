@@ -3,6 +3,8 @@ package erp.dao;
 import erp.entity.Genel;
 import erp.entity.IzlemeNo;
 import erp.servlet.ConnectionManager;
+import erp.util.Constants;
+import erp.util.Fields;
 import erp.util.Util;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
@@ -14,7 +16,6 @@ import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,19 +24,20 @@ import java.util.Map;
 @Singleton
 public class IzlemeNoDao implements Serializable, BaseDao {
     @Inject
-    ConnectionManager connectionManager;
+    private ConnectionManager connectionManager;
     private static final Logger logger = LoggerFactory.getLogger(IzlemeNoDao.class);
 
     public List<IzlemeNo> izlemeNoTum(String tablename, String filter, int offset) {
-        List<IzlemeNo> temp = new ArrayList<IzlemeNo>();
+        List<IzlemeNo> temp = new ArrayList<>();
 
         Map<String, String> param = new HashMap<>();
         param.put("rowperpage", String.valueOf(Genel.ROWPERLONGPAGE));
 
-        String pageFilter = Util.getPageFilter (offset, param);
-        String searchQuery = "SELECT * FROM (SELECT * FROM " + tablename + ") e"
-                + " WHERE 1=1 " + filter
-                + " ORDER BY e.kullanildi_tarih DESC, e.gkrno DESC " + pageFilter;
+        String pageFilter = Util.getPageFilter(offset, param);
+        String searchQuery = Fields.SELECT + "*"
+                + Fields.FROM + "(SELECT * FROM " + tablename + ") e"
+                + Fields.WHERE + "1=1 " + filter
+                + Fields.ORDER_BY + "e.kullanildi_tarih DESC, e.gkrno DESC " + pageFilter;
 
         // connect to DB
         ResultSet rs;
@@ -43,16 +45,16 @@ public class IzlemeNoDao implements Serializable, BaseDao {
              PreparedStatement pstmt = conn.prepareStatement(searchQuery)) {
             long start = System.currentTimeMillis();
             rs = pstmt.executeQuery();
-            logger.info(pstmt.toString() + (System.currentTimeMillis()-start) +"ms.");
+            logger.info(Constants.LOG_FORMAT, pstmt, (System.currentTimeMillis() - start));
             while (rs.next()) {
                 temp.add(new IzlemeNo(
-                        rs.getInt("id"),
-                        rs.getInt("gkrno"),
+                        rs.getInt(Fields.ID),
+                        rs.getInt(Fields.GKRNO),
                         rs.getDate("kullanildi_tarih"),
-                        rs.getString("kod"),
-                        rs.getString("ad"),
-                        rs.getInt("miktar"),
-                        rs.getInt("kullanildi"))
+                        rs.getString(Fields.KOD),
+                        rs.getString(Fields.AD),
+                        rs.getInt(Fields.MIKTAR),
+                        rs.getInt(Fields.KULLANILDI))
                 );
             }
         } catch (Exception e) {
@@ -63,14 +65,15 @@ public class IzlemeNoDao implements Serializable, BaseDao {
 
     public List<IzlemeNo> izlemeNoUret(String mamulid, String kullanildi) {
         List<IzlemeNo> temp = new ArrayList<IzlemeNo>();
-        String updateQuery = "insert into " + BaseDao.IZLEMENO + "(mamulid) values(?)";
+        String updateQuery = Fields.INSERT_INTO + BaseDao.IZLEMENO + "(mamulid) values(?)";
 
         // connect to DB
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(updateQuery)) {
+            long start = System.currentTimeMillis();
             pstmt.setInt(1, Integer.parseInt(mamulid));
-            logger.info(pstmt.toString());
             pstmt.executeUpdate();
+            logger.info(Constants.LOG_FORMAT, pstmt, (System.currentTimeMillis() - start));
             temp = izlemeNoKontrol(mamulid, kullanildi, null);
         } catch (Exception e) {
             logger.error(ExceptionUtils.getStackTrace(e));
@@ -79,16 +82,19 @@ public class IzlemeNoDao implements Serializable, BaseDao {
     }
 
     public List<IzlemeNo> izlemeNoSil(String mamulid, String gkrno, String kullanildi) {
-        List<IzlemeNo> temp = new ArrayList<IzlemeNo>();
-        String updateQuery = "delete from " + BaseDao.IZLEMENO + " where mamulid =? and gkrno =? and kullanildi = 0";
+        List<IzlemeNo> temp = new ArrayList<>();
+        String updateQuery = Fields.DELETE
+                + Fields.FROM + BaseDao.IZLEMENO
+                + Fields.WHERE + "mamulid =? and gkrno =? and kullanildi = 0";
 
         // connect to DB
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(updateQuery)) {
+            long start = System.currentTimeMillis();
             pstmt.setInt(1, Integer.parseInt(mamulid));
             pstmt.setInt(2, Integer.parseInt(gkrno));
             pstmt.executeUpdate();
-            logger.info(pstmt.toString());
+            logger.info(Constants.LOG_FORMAT, pstmt, (System.currentTimeMillis() - start));
             temp = izlemeNoKontrol(mamulid, kullanildi, null);
         } catch (Exception e) {
             logger.error(ExceptionUtils.getStackTrace(e));
@@ -98,30 +104,32 @@ public class IzlemeNoDao implements Serializable, BaseDao {
 
     public List<IzlemeNo> izlemeNoKontrol(String mamulid, String kullanildi, Integer rownumber) {
         rownumber = (rownumber == null) ? Genel.ROWPERPAGE : rownumber;
-        List<IzlemeNo> temp = new ArrayList<IzlemeNo>();
-        String updateQuery = "select i.*, m.ad mamulad, m.kod mamulkod"
-                + " from " + BaseDao.IZLEMENO + " i"
-                + " join " + BaseDao.MAMUL + " m on m.id=i.mamulid"
-                + " where mamulid = ? and kullanildi <= ? order by gkrno desc limit ?";
+        List<IzlemeNo> temp = new ArrayList<>();
+        String updateQuery = Fields.SELECT + "i.*, m.ad mamulad, m.kod mamulkod"
+                + Fields.FROM + BaseDao.IZLEMENO + " i"
+                + Fields.JOIN + BaseDao.MAMUL + " m on m.id=i.mamulid"
+                + Fields.WHERE + "mamulid = ? and kullanildi <= ? "
+                + Fields.ORDER_BY + "gkrno desc limit ?";
 
         // connect to DB
         ResultSet rs;
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(updateQuery)) {
+            long start = System.currentTimeMillis();
             pstmt.setInt(1, Integer.parseInt(mamulid));
             pstmt.setInt(2, Integer.parseInt(kullanildi));
             pstmt.setInt(3, rownumber);
-            logger.info(pstmt.toString());
             rs = pstmt.executeQuery();
+            logger.info(Constants.LOG_FORMAT, pstmt, (System.currentTimeMillis() - start));
             while (rs.next()) {
                 temp.add(new IzlemeNo(
-                        rs.getInt("mamulid"),
-                        rs.getInt("gkrno"),
+                        rs.getInt(Fields.MAMULID),
+                        rs.getInt(Fields.GKRNO),
                         rs.getDate("kullanildi_tarih"),
-                        rs.getString("mamulkod"),
-                        rs.getString("mamulad"),
+                        rs.getString(Fields.MAMULKOD),
+                        rs.getString(Fields.MAMULAD),
                         0, /* Ilk Uretim */
-                        rs.getInt("kullanildi"))
+                        rs.getInt(Fields.KULLANILDI))
                 );
             }
         } catch (Exception e) {

@@ -1,5 +1,6 @@
 package erp.entity;
 
+import erp.util.Fields;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -37,30 +38,30 @@ public class Stok {
     private String mamulkod;
 
     public Stok(ResultSet rs) throws SQLException {
-        this.id = rs.getInt("id");
-        this.bilesenid = rs.getInt("bilesenid");
-        this.bilesenad = rs.getString("bilesenad");
-        this.bilesenkod = rs.getString("bilesenkod");
-        this.bilesentipid = rs.getInt("bilesentipid");
-        this.bilesentipad = rs.getString("bilesentipad");
-        this.birimid = rs.getInt("birimid");
-        this.birimad = rs.getString("birimad");
-        this.firmaid = rs.getInt("firmaid");
-        this.firmaad = rs.getString("firmaad");
-        this.miktar = rs.getLong("miktar");
-        this.kalan = rs.getLong("kalan");
-        this.gkrno = rs.getString("gkrno");
-        this.irsaliyeno = rs.getString("irsaliyeno");
-        this.lot = rs.getString("lot");
-        this.giristarihi = rs.getTimestamp("giristarihi");
-        this.cikistarihi = rs.getTimestamp("cikistarihi");
-        this.not = rs.getString("not");
-        if (!rs.getString("mamuldetay").isEmpty()) {
-            this.miktarstr = (rs.getString("mamuldetay")).split("\\|")[0]; /* 0: Miktar */
-            this.gkrnostr = (rs.getString("mamuldetay")).split("\\|")[1]; /* 1: GkrNo */
-            this.stokidstr = (rs.getString("mamuldetay")).split("\\|")[2]; /* 1: StokId */
+        this.id = rs.getInt(Fields.ID);
+        this.bilesenid = rs.getInt(Fields.BILESENID);
+        this.bilesenad = rs.getString(Fields.BILESENAD);
+        this.bilesenkod = rs.getString(Fields.BILESENKOD);
+        this.bilesentipid = rs.getInt(Fields.BILESENTIPID);
+        this.bilesentipad = rs.getString(Fields.BILESENTIPAD);
+        this.birimid = rs.getInt(Fields.BIRIMID);
+        this.birimad = rs.getString(Fields.BIRIMAD);
+        this.firmaid = rs.getInt(Fields.FIRMAID);
+        this.firmaad = rs.getString(Fields.FIRMAAD);
+        this.miktar = rs.getLong(Fields.MIKTAR);
+        this.kalan = rs.getLong(Fields.KALAN);
+        this.gkrno = rs.getString(Fields.GKRNO);
+        this.irsaliyeno = rs.getString(Fields.IRSALIYENO);
+        this.lot = rs.getString(Fields.LOT);
+        this.giristarihi = rs.getTimestamp(Fields.GIRISTARIHI);
+        this.cikistarihi = rs.getTimestamp(Fields.CIKISTARIHI);
+        this.not = rs.getString(Fields.NOT);
+        if (!rs.getString(Fields.MAMULDETAY).isEmpty()) {
+            this.miktarstr = (rs.getString(Fields.MAMULDETAY)).split("\\|")[0]; /* 0: Miktar */
+            this.gkrnostr = (rs.getString(Fields.MAMULDETAY)).split("\\|")[1]; /* 1: GkrNo */
+            this.stokidstr = (rs.getString(Fields.MAMULDETAY)).split("\\|")[2]; /* 1: StokId */
         }
-        this.islemyonu = rs.getInt("islemyonu");
-        this.mamulkod = rs.getString("mamulkod");
+        this.islemyonu = rs.getInt(Fields.ISLEMYONU);
+        this.mamulkod = rs.getString(Fields.MAMULKOD);
     }
 }

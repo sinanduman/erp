@@ -1,5 +1,6 @@
 package erp.entity;
 
+import erp.util.Fields;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,9 +18,9 @@ public class Makina {
     private String makinatipad;
 
     public Makina(ResultSet rs) throws SQLException {
-        this.id = rs.getInt("id");
-        this.ad = rs.getString("ad");
-        this.makinatipid = rs.getInt("makinatipid");
-        this.makinatipad = rs.getString("makinatipad");
+        this.id = rs.getInt(Fields.ID);
+        this.ad = rs.getString(Fields.AD);
+        this.makinatipid = rs.getInt(Fields.MAKINATIPID);
+        this.makinatipad = rs.getString(Fields.MAKINATIPAD);
     }
 }

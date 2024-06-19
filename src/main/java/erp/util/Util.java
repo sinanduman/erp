@@ -11,10 +11,8 @@ import org.slf4j.LoggerFactory;
 
 import java.math.BigInteger;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.sql.Timestamp;
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
@@ -22,7 +20,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Util {
+public final class Util {
+    private Util() {
+    }
+
+    public static String DATE_TR_FORMAT = "[0-9]{2}-[0-9]{2}-[0-9]{4}";
+    public static String DATE_EN_FORMAT = "[0-9]{4}-[0-9]{2}-[0-9]{2}";
 
     public static long BASKI_SAYISI = 20000;
 
@@ -60,7 +63,7 @@ public class Util {
     public static String date_tr_to_month(String dateinfo) {
         String returnValue = dateinfo;
         Integer tmp = 1;
-        if (returnValue.matches("[0-9]{2}-[0-9]{2}-[0-9]{4}")) {
+        if (returnValue.matches(DATE_TR_FORMAT)) {
             tmp = Integer.parseInt(dateinfo.substring(3, 5));
             for (Aylar a : Aylar.values()) {
                 if (a.value() == tmp) {
@@ -72,18 +75,18 @@ public class Util {
     }
 
     public static String date_tr_to_eng(String dateinfo) {
-        logger.info("Before: " + dateinfo);
+        logger.info("Before: {}", dateinfo);
         String returnValue = dateinfo;
-        if (returnValue.matches("[0-9]{2}-[0-9]{2}-[0-9]{4}")) {
+        if (returnValue.matches(DATE_TR_FORMAT)) {
             returnValue = dateinfo.substring(6) + "-" + dateinfo.substring(3, 5) + "-" + dateinfo.substring(0, 2);
         }
-        logger.info("After: " + dateinfo);
+        logger.info("After: {}", dateinfo);
         return returnValue;
     }
 
     public static String date_eng_to_tr(String dateinfo) {
         String returnValue = dateinfo;
-        if (returnValue.matches("[0-9]{4}-[0-9]{2}-[0-9]{2}")) {
+        if (returnValue.matches(DATE_EN_FORMAT)) {
             returnValue = dateinfo.substring(8) + "-" + dateinfo.substring(5, 7) + "-" + dateinfo.substring(0, 4);
         }
         return returnValue;
@@ -107,7 +110,7 @@ public class Util {
 
     public static boolean isDate(String str) {
         boolean returnValue = false;
-        if (str.matches("[0-9]{4}-[0-9]{2}-[0-9]{2}") || str.matches("[0-9]{2}-[0-9]{2}-[0-9]{4}")) {
+        if (str.matches(DATE_EN_FORMAT) || str.matches(DATE_TR_FORMAT)) {
             returnValue = true;
         }
         return returnValue;
@@ -170,7 +173,7 @@ public class Util {
         return (offset == 0) ? "" : " offset " + (offset - 1) * rowperpage + " limit " + rowperpage;
     }
 
-    public static String getPageFilter(int offset){
+    public static String getPageFilter(int offset) {
         return getPageFilter(offset, null);
     }
 
@@ -193,14 +196,14 @@ public class Util {
         return digest;
     }
 
-    public static Object nullToEmpty(Object val){
+    public static Object nullToEmpty(Object val) {
         if (val == null)
             return "";
         else
             return val;
     }
 
-    public static Object nullToNow(Object val){
+    public static Object nullToNow(Object val) {
         if (val == null)
             return new Date();
         else
@@ -215,25 +218,25 @@ public class Util {
         return date_eng_to_tr(dateToConvert.toString());
     }
 
-    public static Map<Integer, Calisan> calisanListToMap(List<Calisan> calisanList){
+    public static Map<Integer, Calisan> calisanListToMap(List<Calisan> calisanList) {
         Map<Integer, Calisan> tempMap = new HashMap<>();
-        for(Calisan v : calisanList){
+        for (Calisan v : calisanList) {
             tempMap.putIfAbsent(v.getId(), v);
         }
         return tempMap;
     }
 
-    public static Map<Integer, Mamul> mamulListToMap(List<Mamul> mamulList){
+    public static Map<Integer, Mamul> mamulListToMap(List<Mamul> mamulList) {
         Map<Integer, Mamul> tempMap = new HashMap<>();
-        for(Mamul v : mamulList){
+        for (Mamul v : mamulList) {
             tempMap.putIfAbsent(v.getId(), v);
         }
         return tempMap;
     }
 
-    public static Map<Integer, Bilesen> bilesenListToMap(List<Bilesen> mamulList){
+    public static Map<Integer, Bilesen> bilesenListToMap(List<Bilesen> mamulList) {
         Map<Integer, Bilesen> tempMap = new HashMap<>();
-        for(Bilesen v : mamulList){
+        for (Bilesen v : mamulList) {
             tempMap.putIfAbsent(v.getId(), v);
         }
         return tempMap;

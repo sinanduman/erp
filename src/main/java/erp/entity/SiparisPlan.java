@@ -1,5 +1,6 @@
 package erp.entity;
 
+import erp.util.Fields;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -32,22 +33,22 @@ public class SiparisPlan {
     private String not;
 
     public SiparisPlan(ResultSet rs) throws SQLException {
-        this.id = rs.getInt("id");
-        this.siparisid = rs.getInt("siparisid");
-        this.bilesenad = rs.getString("bilesenad");
-        this.miktar = rs.getInt("miktar");
-        this.makinaid = rs.getInt("makinaid");
-        this.makinaad = rs.getString("makinaad");
-        this.calisanid = rs.getInt("calisanid");
+        this.id = rs.getInt(Fields.ID);
+        this.siparisid = rs.getInt(Fields.SIPARISID);
+        this.bilesenad = rs.getString(Fields.BILESENAD);
+        this.miktar = rs.getInt(Fields.MIKTAR);
+        this.makinaid = rs.getInt(Fields.MAKINAID);
+        this.makinaad = rs.getString(Fields.MAKINAAD);
+        this.calisanid = rs.getInt(Fields.CALISANID);
         this.calisanad = rs.getString("calisanad");
         this.calisansoyad = rs.getString("calisansoyad");
-        this.tarih = rs.getDate("tarih");
-        this.baszaman = rs.getTime("bassaat");
-        this.bitzaman = rs.getTime("bitsaat");
-        this.hataid = rs.getInt("hataid");
+        this.tarih = rs.getDate(Fields.TARIH);
+        this.baszaman = rs.getTime(Fields.BASSAAT);
+        this.bitzaman = rs.getTime(Fields.BITSAAT);
+        this.hataid = rs.getInt(Fields.HATAID);
         this.hatamiktar = rs.getInt("hatamiktar");
-        this.durusid = rs.getInt("durusid");
-        this.not = rs.getString("not");
+        this.durusid = rs.getInt(Fields.DURUSID);
+        this.not = rs.getString(Fields.NOT);
     }
 
     public String getCalisanFullName() {
@@ -59,48 +60,39 @@ public class SiparisPlan {
     }
 
     public String getTarih() {
-        String date = (this.tarih != null) ? (new SimpleDateFormat("yyyy-MM-dd").format(tarih)) : "";
-        return date;
+        return (this.tarih != null) ? (new SimpleDateFormat("yyyy-MM-dd").format(tarih)) : "";
     }
 
     public String getTarihTR() {
-        String date = (this.tarih != null) ? (new SimpleDateFormat("dd-MM-yyyy").format(tarih)) : "";
-        return date;
+        return (this.tarih != null) ? (new SimpleDateFormat("dd-MM-yyyy").format(tarih)) : "";
     }
 
     public String getTarihTRShort() {
-        String date = (this.tarih != null) ? (new SimpleDateFormat("dd.MM.yy").format(tarih)) : "";
-        return date;
+        return (this.tarih != null) ? (new SimpleDateFormat("dd.MM.yy").format(tarih)) : "";
     }
 
     public String getBasZaman() {
-        String date = (this.baszaman != null) ? (new SimpleDateFormat("HH:mm").format(baszaman)) : "";
-        return date;
+        return (this.baszaman != null) ? (new SimpleDateFormat("HH:mm").format(baszaman)) : "";
     }
 
     public String getBasSaat() {
-        String date = (this.baszaman != null) ? (new SimpleDateFormat("HH").format(baszaman)) : "";
-        return date;
+        return (this.baszaman != null) ? (new SimpleDateFormat("HH").format(baszaman)) : "";
     }
 
     public String getBasDakika() {
-        String date = (this.baszaman != null) ? (new SimpleDateFormat("mm").format(baszaman)) : "";
-        return date;
+        return (this.baszaman != null) ? (new SimpleDateFormat("mm").format(baszaman)) : "";
     }
 
     public String getBitZaman() {
-        String date = (this.bitzaman != null) ? (new SimpleDateFormat("HH:mm").format(bitzaman)) : "";
-        return date;
+        return (this.bitzaman != null) ? (new SimpleDateFormat("HH:mm").format(bitzaman)) : "";
     }
 
     public String getBitSaat() {
-        String date = (this.bitzaman != null) ? (new SimpleDateFormat("HH").format(bitzaman)) : "";
-        return date;
+        return (this.bitzaman != null) ? (new SimpleDateFormat("HH").format(bitzaman)) : "";
     }
 
     public String getBitDakika() {
-        String date = (this.bitzaman != null) ? (new SimpleDateFormat("mm").format(bitzaman)) : "";
-        return date;
+        return (this.bitzaman != null) ? (new SimpleDateFormat("mm").format(bitzaman)) : "";
     }
 
     public String getNot() {

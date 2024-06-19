@@ -1,5 +1,6 @@
 package erp.entity;
 
+import erp.util.Fields;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -29,20 +30,20 @@ public class IrsaliyeBilesen {
     private Integer irsaliyefirmaid;
 
     public IrsaliyeBilesen(ResultSet rs) throws SQLException {
-        this.id = rs.getInt("id");
-        this.irsaliyeid = rs.getInt("irsaliyeid");
-        this.irsaliyeno = rs.getString("irsaliyeno");
-        this.firmaid = rs.getInt("firmaid");
-        this.firmaad = rs.getString("firmaad");
-        this.mamulid = rs.getInt("mamulid");
-        this.mamulad = rs.getString("mamulad");
-        this.mamulkod = rs.getString("mamulkod");
-        this.gkrno = rs.getInt("gkrno");
-        this.stokid = rs.getInt("stokid");
-        this.miktar = rs.getInt("miktar");
+        this.id = rs.getInt(Fields.ID);
+        this.irsaliyeid = rs.getInt(Fields.IRSALIYEID);
+        this.irsaliyeno = rs.getString(Fields.IRSALIYENO);
+        this.firmaid = rs.getInt(Fields.FIRMAID);
+        this.firmaad = rs.getString(Fields.FIRMAAD);
+        this.mamulid = rs.getInt(Fields.MAMULID);
+        this.mamulad = rs.getString(Fields.MAMULAD);
+        this.mamulkod = rs.getString(Fields.MAMULKOD);
+        this.gkrno = rs.getInt(Fields.GKRNO);
+        this.stokid = rs.getInt(Fields.STOKID);
+        this.miktar = rs.getInt(Fields.MIKTAR);
         this.olusturmatarihi = rs.getTimestamp("olusturmatarihi");
         this.gonderimtarihi = rs.getTimestamp("gonderimtarihi");
-        this.not = rs.getString("not");
+        this.not = rs.getString(Fields.NOT);
         this.irsaliyefirmaid = rs.getInt("irsaliyefirmaid");
     }
 }

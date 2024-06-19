@@ -1,7 +1,9 @@
 package erp.entity;
 
 import erp.util.Util;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.sql.Time;
 import java.text.SimpleDateFormat;
@@ -128,7 +130,7 @@ public class UretimPlan {
         if (hatalimiktar == null || hatalimiktar == 0) {
             return 0;
         }
-        return Util.Round((uretilenmiktar - (uretilenmiktar-hatalimiktar)) * 100, uretilenmiktar);
+        return Util.Round((uretilenmiktar - (uretilenmiktar - hatalimiktar)) * 100, uretilenmiktar);
     }
 
 }

@@ -5,11 +5,11 @@ public enum ResultTip {
     OK(1),
     ERROR(2);
     private Integer value;
-    
+
     ResultTip(Integer value) {
         this.value = value;
     }
-    
+
     public Integer value() {
         return value;
     }

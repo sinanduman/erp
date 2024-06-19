@@ -1,5 +1,6 @@
 package erp.entity;
 
+import erp.util.Fields;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,22 +28,21 @@ public class StokRapor {
     private Timestamp tarih;
 
     public StokRapor(ResultSet rs) throws SQLException {
-        this.stokid = rs.getInt("id");
-        this.bilesenid = rs.getInt("bilesenid");
-        this.islemyonu = rs.getInt("islemyonu");
-        this.bilesenad = rs.getString("ad");
-        this.bilesenkod = rs.getString("kod");
-        this.bilesentipid = rs.getInt("bilesentipid");
-        this.bilesentipad = rs.getString("bilesentipad");
-        this.firmaid = rs.getInt("firmaid");
-        this.firmaad = rs.getString("firmaad");
-        this.miktar = rs.getInt("miktar");
-        this.kalan = rs.getInt("kalan");
-        this.tarih = rs.getTimestamp("tarih");
+        this.stokid = rs.getInt(Fields.ID);
+        this.bilesenid = rs.getInt(Fields.BILESENID);
+        this.islemyonu = rs.getInt(Fields.ISLEMYONU);
+        this.bilesenad = rs.getString(Fields.AD);
+        this.bilesenkod = rs.getString(Fields.KOD);
+        this.bilesentipid = rs.getInt(Fields.BILESENTIPID);
+        this.bilesentipad = rs.getString(Fields.BILESENTIPAD);
+        this.firmaid = rs.getInt(Fields.FIRMAID);
+        this.firmaad = rs.getString(Fields.FIRMAAD);
+        this.miktar = rs.getInt(Fields.MIKTAR);
+        this.kalan = rs.getInt(Fields.KALAN);
+        this.tarih = rs.getTimestamp(Fields.TARIH);
     }
 
     public String getTarih() {
-        String date = (this.tarih != null) ? (new SimpleDateFormat("yyyy-MM-dd HH:mm").format(tarih)) : "";
-        return date;
+        return (this.tarih != null) ? (new SimpleDateFormat("yyyy-MM-dd HH:mm").format(tarih)) : "";
     }
 }

@@ -7,6 +7,7 @@ import erp.dao.StokDao;
 import erp.entity.*;
 import erp.model.IrsaliyeEnum;
 import erp.model.IrsaliyeTip;
+import erp.util.Fields;
 import erp.util.Util;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
@@ -37,8 +38,6 @@ import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -46,15 +45,15 @@ import java.util.List;
 @WebServlet("/irsaliye")
 public class IrsaliyeServlet extends HttpServlet implements Serializable {
     @Inject
-    ConnectionManager connectionManager;
+    private ConnectionManager connectionManager;
     @Inject
-    IrsaliyeDao irsaliyeDao;
+    private IrsaliyeDao irsaliyeDao;
     @Inject
-    FirmaDao firmaDao;
+    private FirmaDao firmaDao;
     @Inject
-    StokDao stokDao;
+    private StokDao stokDao;
     @Inject
-    DAOFunctions daoFunctions;
+    private DAOFunctions daoFunctions;
     private static final Logger logger = LoggerFactory.getLogger(IrsaliyeServlet.class);
     // location to store file uploaded
     private static final String CATALINA_HOME = System.getProperty("catalina.home");
@@ -79,28 +78,29 @@ public class IrsaliyeServlet extends HttpServlet implements Serializable {
     private String r_firmaid;
     private StringBuffer pageFlash = new StringBuffer("");
 
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doPost(request, response);
     }
 
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html; charset=UTF-8");
         String message = "";
-        Boolean ajaxInAction = false;
-        Boolean excelRowsProcessed = false;
+        boolean ajaxInAction = false;
+        boolean excelRowsProcessed = false;
         List<Stok> stok = null;
 
         if (ServletFileUpload.isMultipartContent(request)) {
-            if(stok == null)
+            if (stok == null)
                 stok = stokDao.stokMamulListeGetirTum(null, 1);
             excelRowsProcessed = processUploadRequest(request, response, stok);
-        }
-        else {
+        } else {
             getFormFieldsWithoutFile(request);
         }
 
         if (r_islemid != null) {
-            Integer islemid = Integer.parseInt(r_islemid);
+            int islemid = Integer.parseInt(r_islemid);
             /* with ajax */
             if (islemid == IrsaliyeEnum.IRSALIYE_SIL.getValue()) {
                 ajaxInAction = true;
@@ -124,7 +124,7 @@ public class IrsaliyeServlet extends HttpServlet implements Serializable {
                 out.print(result);
             } else {
                 /* no ajax */
-                logger.info("islemid :" + islemid);
+                logger.info("islemid : {}", islemid);
                 if (islemid == IrsaliyeEnum.IRSALIYE_BILESEN_GUNCELLE.getValue()) {
                     int irsaliyeid = Integer.parseInt(r_irsaliyeid);
                     int irsaliyebilesenid = Integer.parseInt(r_irsaliyebilesenid);
@@ -138,22 +138,22 @@ public class IrsaliyeServlet extends HttpServlet implements Serializable {
                     irsaliyeDao.irsaliyeKapat(r_irsaliyeid);
                 } else {
                     int irsaliyeid = Integer.parseInt(r_irsaliyeid);
-                    logger.info("irsaliyeid :" + irsaliyeid);
+                    logger.info("irsaliyeid : {}", irsaliyeid);
                     /* 0:Insert */
                     if (IrsaliyeEnum.IRSALIYE_EKLE.getValue() == irsaliyeid) {
                         irsaliyeid = irsaliyeEkle();
                     }
-                    if(!excelRowsProcessed)
+                    if (!excelRowsProcessed)
                         message = irsaliyeBilesenEkle(r_mamulid, r_miktar, r_not, irsaliyeid);
                 }
             }
         }
 
         if (!ajaxInAction) {
-            if(!excelRowsProcessed){
+            if (!excelRowsProcessed) {
                 pageFlash = new StringBuffer("");
             }
-            if(stok == null)
+            if (stok == null)
                 stok = stokDao.stokMamulListeGetirTum(null, 1);
             List<Firma> firma = firmaDao.firmaListeGetirTum(0);
             List<Irsaliye> irsaliye = irsaliyeDao.irsaliyeListeGetirTum(IrsaliyeTip.OPEN, 0, null, null, null);
@@ -163,11 +163,11 @@ public class IrsaliyeServlet extends HttpServlet implements Serializable {
             List<IrsaliyeBilesen> irsaliyebilesenopen = irsaliyeDao.irsaliyeBilesenListeGetirTum(IrsaliyeTip.OPEN, 0, null, null, null, 0);
             List<IrsaliyeBilesen> irsaliyebilesencompleted = irsaliyeDao.irsaliyeBilesenListeGetirTum(IrsaliyeTip.COMPLETED, 0, null, null, null, 0);
 
-            request.setAttribute("firma", firma);
-            request.setAttribute("stok", stok);
-            request.setAttribute("message", message);
+            request.setAttribute(Fields.FIRMA, firma);
+            request.setAttribute(Fields.STOK, stok);
+            request.setAttribute(Fields.MESSAGE, message);
             request.setAttribute("pageflash", pageFlash);
-            request.setAttribute("irsaliye", irsaliye);
+            request.setAttribute(Fields.IRSALIYE, irsaliye);
             request.setAttribute("irsaliyekapali", irsaliyekapali);
             request.setAttribute("irsaliyebilesenopen", irsaliyebilesenopen);
             request.setAttribute("irsaliyebilesencompleted", irsaliyebilesencompleted);
@@ -216,12 +216,12 @@ public class IrsaliyeServlet extends HttpServlet implements Serializable {
                         if (mimeType.equals(EXCEL_MIME_TYPE)) {
                             retVal = processExcelFile(storeFile, r_irsaliyeid, stok);
                         }
-                        request.getSession().setAttribute("message", "Dosya başarıyla yüklendi.");
+                        request.getSession().setAttribute(Fields.MESSAGE, "Dosya başarıyla yüklendi.");
                     }
                 }
             }
         } catch (Exception ex) {
-            request.getSession().setAttribute("message", "There was an error: " + ex.getMessage());
+            request.getSession().setAttribute(Fields.MESSAGE, "There was an error: " + ex.getMessage());
         }
         // request.getRequestDispatcher("irsaliye.jsp").forward(request, response);
         return retVal;
@@ -296,16 +296,16 @@ public class IrsaliyeServlet extends HttpServlet implements Serializable {
                     String cellValue = myCell.getCellType() == XSSFCell.CELL_TYPE_NUMERIC ? String.valueOf(myCell.getRawValue()) : myCell.getStringCellValue();
                     switch (myCell.getColumnIndex()) {
                         case 1:
-                            if(cellValue.trim().isEmpty()) {
+                            if (cellValue.trim().isEmpty()) {
                                 emptyLine = true;
-                            }
-                            else {
+                            } else {
                                 uploadData.setMamulKodu(cellValue);
                                 uploadData.setMamulId(getMamuldIdFromMamulKod(cellValue, stok));
                             }
                             break;
                         case 2:
                             uploadData.setNot(cellValue);
+                            break;
                         case 3:
                             uploadData.setMiktar(cellValue);
                             break;
@@ -318,16 +318,14 @@ public class IrsaliyeServlet extends HttpServlet implements Serializable {
                 if (Integer.parseInt(r_irsaliyeid) == 0) {
                     newIrsaliyeId = irsaliyeEkle();
                     r_irsaliyeid = String.valueOf(newIrsaliyeId);
-                }
-                else {
+                } else {
                     newIrsaliyeId = Integer.parseInt(r_irsaliyeid);
                 }
-                if(uploadData.getMamulId().equals("0")) {
+                if (uploadData.getMamulId().equals("0")) {
                     message = "<strong>" + uploadData.getMamulKodu() + "</strong>, " + uploadData.getNot() + " Stok'ta bulunamadı!";
                     pageFlash.append(pipe + message);
                     pipe = "<br/>";
-                }
-                else {
+                } else {
                     if (mamulExists(uploadData.getMamulId())) {
                         message = irsaliyeBilesenEkle(uploadData.getMamulId(), uploadData.getMiktar(), uploadData.getNot(), newIrsaliyeId);
                         if (!message.equals("0")) {
@@ -357,7 +355,7 @@ public class IrsaliyeServlet extends HttpServlet implements Serializable {
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(searchQuery)) {
             pstmt.setInt(1, Integer.parseInt(mamulId));
-            logger.info(pstmt.toString());
+            logger.info("{}", pstmt);
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
                 count = rs.getInt("mamul_count");
@@ -398,9 +396,9 @@ public class IrsaliyeServlet extends HttpServlet implements Serializable {
 
     private String irsaliyeBilesenEkle(String mamulId, String miktar, String not, int newIrsaliyeId) {
         return irsaliyeDao.irsaliyeBilesenEkle(
-                            newIrsaliyeId,
-                            Integer.parseInt(mamulId),
-                            Integer.parseInt(miktar),
+                newIrsaliyeId,
+                Integer.parseInt(mamulId),
+                Integer.parseInt(miktar),
                 not);
     }
 
@@ -415,41 +413,41 @@ public class IrsaliyeServlet extends HttpServlet implements Serializable {
         return "0";
     }
 
-    private void getFormFieldsWithoutFile(HttpServletRequest request){
-        r_islemid = request.getParameter("islemid");
-        r_irsaliyeid = request.getParameter("irsaliyeid");
-        r_irsaliyebilesenid = request.getParameter("irsaliyebilesenid");
-        r_irsaliyeno = request.getParameter("irsaliyeno");
-        r_mamulid = request.getParameter("mamulid");
-        r_gkrno = request.getParameter("gkrno");
-        r_miktar = request.getParameter("miktar");
-        r_not = request.getParameter("not");
-        r_tarih = request.getParameter("tarih");
-        r_firmaid = request.getParameter("firmaid");
+    private void getFormFieldsWithoutFile(HttpServletRequest request) {
+        r_islemid = request.getParameter(Fields.ISLEMID);
+        r_irsaliyeid = request.getParameter(Fields.IRSALIYEID);
+        r_irsaliyebilesenid = request.getParameter(Fields.IRSALIYEBILESENID);
+        r_irsaliyeno = request.getParameter(Fields.IRSALIYENO);
+        r_mamulid = request.getParameter(Fields.MAMULID);
+        r_gkrno = request.getParameter(Fields.GKRNO);
+        r_miktar = request.getParameter(Fields.MIKTAR);
+        r_not = request.getParameter(Fields.NOT);
+        r_tarih = request.getParameter(Fields.TARIH);
+        r_firmaid = request.getParameter(Fields.FIRMAID);
     }
 
-    private void getFormFieldsWithFile(List<FileItem> formItems){
+    private void getFormFieldsWithFile(List<FileItem> formItems) {
         for (FileItem item : formItems) {
             if (item.isFormField()) {
-                if (item.getFieldName().equals("islemid")) {
+                if (item.getFieldName().equals(Fields.ISLEMID)) {
                     r_islemid = item.getString();
-                } else if (item.getFieldName().equals("irsaliyeid")) {
+                } else if (item.getFieldName().equals(Fields.IRSALIYEID)) {
                     r_irsaliyeid = item.getString();
-                } else if (item.getFieldName().equals("irsaliyebilesenid")) {
+                } else if (item.getFieldName().equals(Fields.IRSALIYEBILESENID)) {
                     r_irsaliyebilesenid = item.getString();
-                } else if (item.getFieldName().equals("irsaliyeno")) {
+                } else if (item.getFieldName().equals(Fields.IRSALIYENO)) {
                     r_irsaliyeno = item.getString();
-                } else if (item.getFieldName().equals("mamulid")) {
+                } else if (item.getFieldName().equals(Fields.MAMULID)) {
                     r_mamulid = item.getString();
-                } else if (item.getFieldName().equals("gkrno")) {
+                } else if (item.getFieldName().equals(Fields.GKRNO)) {
                     r_gkrno = item.getString();
-                } else if (item.getFieldName().equals("miktar")) {
+                } else if (item.getFieldName().equals(Fields.MIKTAR)) {
                     r_miktar = item.getString();
-                } else if (item.getFieldName().equals("not")) {
+                } else if (item.getFieldName().equals(Fields.NOT)) {
                     r_not = item.getString();
-                } else if (item.getFieldName().equals("tarih")) {
+                } else if (item.getFieldName().equals(Fields.TARIH)) {
                     r_tarih = item.getString();
-                } else if (item.getFieldName().equals("firmaid")) {
+                } else if (item.getFieldName().equals(Fields.FIRMAID)) {
                     r_firmaid = item.getString();
                 }
             }

@@ -1,5 +1,6 @@
 package erp.entity;
 
+import erp.util.Fields;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,14 +23,14 @@ public class IzlemeNo {
     private Integer miktar;
 
     public IzlemeNo(ResultSet rs) throws SQLException {
-        this.id = rs.getInt("id");
-        this.mamulid = rs.getInt("mamulid");
-        this.gkrno = rs.getInt("gkrno");
-        this.kullanildi = rs.getInt("kullanildi");
+        this.id = rs.getInt(Fields.ID);
+        this.mamulid = rs.getInt(Fields.MAMULID);
+        this.gkrno = rs.getInt(Fields.GKRNO);
+        this.kullanildi = rs.getInt(Fields.KULLANILDI);
         this.kullanildi_tarih = rs.getDate("kullanildi_tarih");
-        this.mamulkod = rs.getString("kod");
-        this.mamulad = rs.getString("ad");
-        this.miktar = rs.getInt("miktar");
+        this.mamulkod = rs.getString(Fields.KOD);
+        this.mamulad = rs.getString(Fields.AD);
+        this.miktar = rs.getInt(Fields.MIKTAR);
     }
 
     public IzlemeNo(Integer mamulid, Integer gkrno, Date kullanildi_tarih,

@@ -4,8 +4,12 @@ import erp.dao.BaseDao;
 import erp.dao.BilesenDao;
 import erp.dao.FirmaDao;
 import erp.dao.StokDao;
-import erp.entity.*;
+import erp.entity.Bilesen;
+import erp.entity.Firma;
+import erp.entity.Genel;
+import erp.entity.Stok;
 import erp.model.BilesenTip;
+import erp.util.Fields;
 import erp.util.Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,75 +31,75 @@ public class HammaddeStokServlet extends HttpServlet implements Serializable {
     private static final Logger logger = LoggerFactory.getLogger(HammaddeStokServlet.class);
 
     @Inject
-    BilesenDao bilesenDao;
+    private BilesenDao bilesenDao;
     @Inject
-    FirmaDao firmaDao;
+    private FirmaDao firmaDao;
     @Inject
-    StokDao stokDao;
+    private StokDao stokDao;
     @Inject
-    DAOFunctions daoFunctions;
+    private DAOFunctions daoFunctions;
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        
+
         List<Bilesen> hammadde = bilesenDao.bilesenListeGetirTum(null, 0, null, null);
         List<Firma> firma = firmaDao.firmaListeGetirTum(0);
         List<Stok> stok = new ArrayList<Stok>();
 
-        String stoklisteid  = request.getParameter("stoklisteid");
-        String bilesenid    = request.getParameter("bilesenid");
-        
+        String stoklisteid = request.getParameter(Fields.STOKLISTEID);
+        String bilesenid = request.getParameter(Fields.BILESENID);
+
         int totalrecord = 0;
-        int page        = 1;
-        int noofpages   = 0;
-        int sumagg      = 0;
-        
-        if(stoklisteid != null && Integer.parseInt(stoklisteid) == 1) {
+        int page = 1;
+        int noofpages = 0;
+        int sumagg = 0;
+
+        if (stoklisteid != null && Integer.parseInt(stoklisteid) == 1) {
             // PAGING
-            totalrecord = daoFunctions.recordCount(BaseDao.V_STOKBILESEN," where bilesenid= " + Integer.parseInt(bilesenid) );
-            sumagg      = daoFunctions.recordAgg(BaseDao.V_STOKMIKTAR, "sum", "miktar", " where bilesenid= " + Integer.parseInt(bilesenid));
-            if(request.getParameter("page") != null)
-                page    = Integer.parseInt(request.getParameter("page"));        
-            noofpages   = (int) Math.ceil(totalrecord * 1.0 / Genel.ROWPERPAGE);
+            totalrecord = daoFunctions.recordAgg(BaseDao.V_STOKBILESEN, Fields.COUNT, "*", "AND bilesenid=" + Integer.parseInt(bilesenid));
+            sumagg = daoFunctions.recordAgg(BaseDao.V_STOKMIKTAR, Fields.SUM, Fields.MIKTAR, "AND bilesenid=" + Integer.parseInt(bilesenid));
+            if (request.getParameter(Fields.PAGE) != null)
+                page = Integer.parseInt(request.getParameter(Fields.PAGE));
+            noofpages = (int) Math.ceil(totalrecord * 1.0 / Genel.ROWPERPAGE);
             // PAGING
-            stok        = stokDao.stokListeGetirTum(BilesenTip.HAMMADDEYARIMAMUL, Integer.parseInt(bilesenid), page, null);
+            stok = stokDao.stokListeGetirTum(BilesenTip.HAMMADDEYARIMAMUL, Integer.parseInt(bilesenid), page, null);
         }
-        
-        request.setAttribute("hammadde", hammadde);
-        request.setAttribute("firma", firma);
-        request.setAttribute("stok", stok);
-        request.setAttribute("bilesenid", bilesenid);
-        request.setAttribute("totalrecord", totalrecord);
-        request.setAttribute("currentpage", page);
-        request.setAttribute("noofpages", noofpages);
-        request.setAttribute("sumagg", sumagg);
+
+        request.setAttribute(Fields.HAMMADDE, hammadde);
+        request.setAttribute(Fields.FIRMA, firma);
+        request.setAttribute(Fields.STOK, stok);
+        request.setAttribute(Fields.BILESENID, bilesenid);
+        request.setAttribute(Fields.TOTALRECORD, totalrecord);
+        request.setAttribute(Fields.CURRENTPAGE, page);
+        request.setAttribute(Fields.NOOFPAGES, noofpages);
+        request.setAttribute(Fields.SUMAGG, sumagg);
         request.getRequestDispatcher("hammaddestok.jsp").forward(request, response);
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html; charset=UTF-8");
 
-        String bilesenid    = request.getParameter("bilesenid");
-        String bilesenekleid= request.getParameter("bilesenekleid");        
-        String message      = null;
-        Boolean ajaxInAction= false;
-        
-        if(request.getParameter("islemid")!=null) {
-            Integer islemid     = Integer.parseInt(request.getParameter("islemid"));
-            String tarih        = request.getParameter("tarih");
-            String gkrno        = request.getParameter("gkrno");
-            String miktar       = request.getParameter("miktar");
-            String iade         = request.getParameter("iade");
-            String bilesentipid = request.getParameter("bilesentipid");
+        String bilesenid = request.getParameter(Fields.BILESENID);
+        String bilesenekleid = request.getParameter("bilesenekleid");
+        String message = null;
+        boolean ajaxInAction = false;
+
+        if (request.getParameter(Fields.ISLEMID) != null) {
+            Integer islemid = Integer.parseInt(request.getParameter(Fields.ISLEMID));
+            String tarih = request.getParameter(Fields.TARIH);
+            String gkrno = request.getParameter(Fields.GKRNO);
+            String miktar = request.getParameter(Fields.MIKTAR);
+            String iade = request.getParameter(Fields.IADE);
+            String bilesentipid = request.getParameter(Fields.BILESENTIPID);
             /* with ajax */
             if (islemid == 6) {
-                ajaxInAction    = true;
-                String result   = stokDao.stokKontrol(tarih, gkrno, miktar, iade, bilesenid, bilesentipid);
+                ajaxInAction = true;
+                String result = stokDao.stokKontrol(tarih, gkrno, miktar, iade, bilesenid, bilesentipid);
                 PrintWriter out = response.getWriter();
                 out.print(result);
-            }            
-            logger.info("tarih: " + tarih + ", gkrno: " + gkrno + ", miktar: " + miktar + ", iade: " + iade);
+            }
+            logger.info("tarih:{}, gkrno: {}, miktar: {}, iade: {}", tarih, gkrno, miktar, iade);
         }
-        
+
         if (!ajaxInAction) {
             List<Stok> stok;
 
@@ -103,56 +107,55 @@ public class HammaddeStokServlet extends HttpServlet implements Serializable {
             int page = 1;
             int noofpages;
             int sumagg;
-            
-            if(bilesenekleid.equals("1")) {
+
+            if (bilesenekleid.equals("1")) {
                 String result;
-                String iade= request.getParameter("iade");
-                if(iade==null) {
+                String iade = request.getParameter("iade");
+                if (iade == null) {
                     result = stokDao.stokEkle(
-                                    request.getParameter("bilesenid"),
-                                    request.getParameter("miktar"),
-                                    request.getParameter("irsaliyeno"),
-                                    request.getParameter("lot"),
-                                    Util.gkrnoNumberCheck(request.getParameter("lot")), /* gkrno */
-                                    request.getParameter("tarih"),
-                                    request.getParameter("not")
-                                    );
-                }
-                else {
+                            request.getParameter(Fields.BILESENID),
+                            request.getParameter(Fields.MIKTAR),
+                            request.getParameter(Fields.IRSALIYENO),
+                            request.getParameter(Fields.LOT),
+                            Util.gkrnoNumberCheck(request.getParameter(Fields.LOT)), /* gkrno */
+                            request.getParameter(Fields.TARIH),
+                            request.getParameter(Fields.NOT)
+                    );
+                } else {
                     result = stokDao.stokDus(
-                                    request.getParameter("bilesenid"),
-                                    request.getParameter("miktar"),
-                                    request.getParameter("irsaliyeno"),
-                                    request.getParameter("lot"),
-                                    request.getParameter("lot"), /* gkrno*/
-                                    request.getParameter("tarih"),
-                                    request.getParameter("not")
-                                    );
+                            request.getParameter(Fields.BILESENID),
+                            request.getParameter(Fields.MIKTAR),
+                            request.getParameter(Fields.IRSALIYENO),
+                            request.getParameter(Fields.LOT),
+                            request.getParameter(Fields.LOT), /* gkrno*/
+                            request.getParameter(Fields.TARIH),
+                            request.getParameter(Fields.NOT)
+                    );
                 }
-                message = result.equals("0")?"Hata oluştu!..":"";
+                message = result.equals("0") ? "Hata oluştu!.." : "";
             }
-            
+
             // PAGING
-            totalrecord = daoFunctions.recordCount(BaseDao.V_STOKBILESEN," where bilesenid= " +  Integer.parseInt(bilesenid));
-            sumagg      = daoFunctions.recordAgg(BaseDao.V_STOKMIKTAR, "sum", "miktar", " where bilesenid= " +  Integer.parseInt(bilesenid));
-            if(request.getParameter("page") != null)
-                page = Integer.parseInt(request.getParameter("page"));
+            totalrecord = daoFunctions.recordAgg(BaseDao.V_STOKBILESEN, Fields.COUNT, "*", "AND bilesenid=" + Integer.parseInt(bilesenid));
+            sumagg = daoFunctions.recordAgg(BaseDao.V_STOKMIKTAR, Fields.SUM, Fields.MIKTAR, "AND bilesenid=" + Integer.parseInt(bilesenid));
+            if (request.getParameter(Fields.PAGE) != null)
+                page = Integer.parseInt(request.getParameter(Fields.PAGE));
             noofpages = (int) Math.ceil(totalrecord * 1.0 / Genel.ROWPERPAGE);
             // PAGING
             stok = stokDao.stokListeGetirTum(BilesenTip.HAMMADDEYARIMAMUL, Integer.parseInt(bilesenid), page, null);
-            
+
             List<Bilesen> hammadde = bilesenDao.bilesenListeGetirTum(null, 0, null, null);
             List<Firma> firma = firmaDao.firmaListeGetirTum(0);
-            
-            request.setAttribute("hammadde", hammadde);
-            request.setAttribute("firma", firma);
-            request.setAttribute("stok", stok);
-            request.setAttribute("bilesenid", bilesenid);
-            request.setAttribute("totalrecord", totalrecord);
-            request.setAttribute("currentpage", page);
-            request.setAttribute("noofpages", noofpages);
-            request.setAttribute("sumagg", sumagg);
-            request.setAttribute("message", message);
+
+            request.setAttribute(Fields.HAMMADDE, hammadde);
+            request.setAttribute(Fields.FIRMA, firma);
+            request.setAttribute(Fields.STOK, stok);
+            request.setAttribute(Fields.BILESENID, bilesenid);
+            request.setAttribute(Fields.TOTALRECORD, totalrecord);
+            request.setAttribute(Fields.CURRENTPAGE, page);
+            request.setAttribute(Fields.NOOFPAGES, noofpages);
+            request.setAttribute(Fields.SUMAGG, sumagg);
+            request.setAttribute(Fields.MESSAGE, message);
             request.getRequestDispatcher("hammaddestok.jsp").forward(request, response);
         }
     }

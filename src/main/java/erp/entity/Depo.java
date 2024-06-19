@@ -1,5 +1,6 @@
 package erp.entity;
 
+import erp.util.Fields;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,7 +16,7 @@ public class Depo {
     private String ad;
 
     public Depo(ResultSet rs) throws SQLException {
-        this.id = rs.getInt("id");
-        this.ad = rs.getString("ad");
+        this.id = rs.getInt(Fields.ID);
+        this.ad = rs.getString(Fields.AD);
     }
 }

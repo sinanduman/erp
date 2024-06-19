@@ -1,15 +1,18 @@
 package erp.servlet;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
+import erp.dao.BaseDao;
+import erp.dao.StokDao;
+import erp.entity.Stok;
+import erp.model.BilesenTip;
+import erp.util.Fields;
+import erp.util.Util;
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFFont;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import javax.servlet.ServletException;
@@ -17,48 +20,36 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import erp.dao.BaseDao;
-import erp.dao.StokDao;
-import erp.model.BilesenTip;
-import erp.util.Util;
-import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.apache.poi.hssf.util.HSSFColor;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFFont;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-
-import erp.entity.Stok;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.Serializable;
+import java.util.*;
 
 @WebServlet("/excelmamul")
 public class ExcelMamulServlet extends HttpServlet implements Serializable {
-	private static final Logger logger = LoggerFactory.getLogger(ExcelMamulServlet.class);
+    private static final Logger logger = LoggerFactory.getLogger(ExcelMamulServlet.class);
 
-	@Inject
-	StokDao stokDao;
-	@Inject
-	DAOFunctions daoFunctions;
+    @Inject
+    private StokDao stokDao;
+    @Inject
+    private DAOFunctions daoFunctions;
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	    doPost(request, response);
-	}
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        doPost(request, response);
+    }
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         String excelegonder = request.getParameter("excelegonder");
-        String exceltarih   = request.getParameter("exceltarih");
-        String excelsql     = request.getParameter("excelsql");
-        
-        logger.info("excelsql: " + excelsql);
-        
-        if(excelegonder!=null && excelegonder.equals("1")) {
+        String exceltarih = request.getParameter("exceltarih");
+        String excelsql = request.getParameter("excelsql");
 
-            int sumagg      = daoFunctions.recordAgg(BaseDao.V_STOKMIKTAR, "sum", "miktar", " where bilesenid= " +  Integer.parseInt(excelsql));
+        logger.info("excelsql: {}", excelsql);
+
+        if (excelegonder != null && excelegonder.equals("1")) {
+
+            int sumagg = daoFunctions.recordAgg(BaseDao.V_STOKMIKTAR, Fields.SUM, Fields.MIKTAR, "AND bilesenid=" + Integer.parseInt(excelsql));
             List<Stok> stok = stokDao.stokListeGetirTum(BilesenTip.MAMUL, Integer.parseInt(excelsql), 0, null);
 
             try (Workbook workbook = new XSSFWorkbook()) {
@@ -75,7 +66,7 @@ public class ExcelMamulServlet extends HttpServlet implements Serializable {
 
                 Map<Integer, Object[]> data = new TreeMap<Integer, Object[]>();
 
-                if (stok.size() > 0) {
+                if (!stok.isEmpty()) {
                     urunkodu = stok.get(0).getBilesenkod();
                     urunadi = stok.get(0).getBilesenad();
                     prefix = urunkodu;
@@ -172,9 +163,8 @@ public class ExcelMamulServlet extends HttpServlet implements Serializable {
             } catch (Exception e) {
                 logger.error(ExceptionUtils.getStackTrace(e));
             }
-        }
-        else {
+        } else {
             request.getRequestDispatcher("index.jsp").forward(request, response);
         }
-	}
+    }
 }

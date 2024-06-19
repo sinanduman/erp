@@ -26,27 +26,28 @@ import java.util.*;
 
 @WebServlet("/exceluretim")
 public class ExcelUretimServlet extends HttpServlet implements Serializable {
-	private static final Logger logger = LoggerFactory.getLogger(ExcelUretimServlet.class);
+    private static final Logger logger = LoggerFactory.getLogger(ExcelUretimServlet.class);
 
-	@Inject
-	UretimDao uretimDao;
+    @Inject
+    private UretimDao uretimDao;
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	    doPost(request, response);
-	}
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        doPost(request, response);
+    }
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         String excelegonder = request.getParameter("excelegonder");
-        String excelbastarih= request.getParameter("excelbastarih");
-        String excelbittarih= request.getParameter("excelbittarih");
-        String excelsql     = request.getParameter("excelsql");
-        String tablename    = BaseDao.V_URETIMPLAN_TUM_PLAN;
-        
-        
+        String excelbastarih = request.getParameter("excelbastarih");
+        String excelbittarih = request.getParameter("excelbittarih");
+        String excelsql = request.getParameter("excelsql");
+        String tablename = BaseDao.V_URETIMPLAN_TUM_PLAN;
+
+
         logger.info("excelsql: " + excelsql);
-        
-        if(excelegonder!=null && excelegonder.equals("1")) {
-            
+
+        if (excelegonder != null && excelegonder.equals("1")) {
+
             List<UretimPlan> stokrapor = uretimDao.uretimBilesenRapor(tablename, 0, excelsql);
 
             try (Workbook workbook = new XSSFWorkbook()) {
@@ -147,9 +148,8 @@ public class ExcelUretimServlet extends HttpServlet implements Serializable {
             } catch (Exception e) {
                 logger.error(ExceptionUtils.getStackTrace(e));
             }
-        }
-        else {
+        } else {
             request.getRequestDispatcher("index.jsp").forward(request, response);
         }
-	}
+    }
 }

@@ -8,6 +8,7 @@ import erp.entity.Bakim;
 import erp.entity.Calisan;
 import erp.entity.Mamul;
 import erp.util.Util;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.*;
@@ -30,29 +31,30 @@ import java.util.*;
 
 @WebServlet("/excelbakim")
 public class ExcelBakimServlet extends HttpServlet implements Serializable {
-	private static final Logger logger = LoggerFactory.getLogger(ExcelBakimServlet.class);
+    private static final Logger logger = LoggerFactory.getLogger(ExcelBakimServlet.class);
 
     @Inject
-    MamulDao mamulDao;
-	@Inject
-    CalisanDao calisanDao;
+    private MamulDao mamulDao;
     @Inject
-    BakimDao bakimDao;
-	@Inject
-	DAOFunctions daoFunctions;
+    private CalisanDao calisanDao;
+    @Inject
+    private BakimDao bakimDao;
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	    doPost(request, response);
-	}
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        doPost(request, response);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         String excelegonder = request.getParameter("excelegonder");
-        String exceltarih   = request.getParameter("exceltarih");
-        String excelsql     = request.getParameter("excelsql");
-        
-        logger.info("excelsql: " + excelsql);
-        
-        if(excelegonder!=null && excelegonder.equals("1")) {
+        String exceltarih = request.getParameter("exceltarih");
+        String excelsql = request.getParameter("excelsql");
+
+        logger.info("excelsql: {}", excelsql);
+
+        if (StringUtils.equals(excelegonder, "1")) {
 
             String mamulid = request.getParameter("excelmamulid");
             String calisanid = request.getParameter("excelcalisanid");
@@ -72,25 +74,24 @@ public class ExcelBakimServlet extends HttpServlet implements Serializable {
             String andYes = " AND ";
             String tableName = BaseDao.V_BAKIM_MAMUL;
 
-            if (mamulid != null && !mamulid.isEmpty()) {
+            if (!StringUtils.isEmpty(mamulid)) {
                 filter1 = andYes + " mamulid = " + Integer.parseInt(mamulid);
             }
-            if (calisanid != null && !calisanid.equals("")) {
+            if (!StringUtils.isEmpty(calisanid)) {
                 filter2 = andYes + " calisanid = " + Integer.parseInt(calisanid);
             }
-            if (bas_tarih != null && bit_tarih != null && !bas_tarih.equals("") && !bit_tarih.equals("")) {
+            if (!StringUtils.isEmpty(bas_tarih) && !StringUtils.isEmpty(bit_tarih)) {
                 filter3 = andYes + " ( bakimtarihi BETWEEN '" + Util.date_tr_to_eng(bas_tarih) + "' AND '" + Util.date_tr_to_eng(bit_tarih) + "')";
             }
             filter0 = filter1 + filter2 + filter3;
 
-            List<Bakim> bakimrapor = bakimDao.bakimRapor(tableName,0, filter0, mamulid);
-
+            List<Bakim> bakimrapor = bakimDao.bakimRapor(tableName, 0, filter0, mamulid);
 
             try (Workbook workbook = new XSSFWorkbook()) {
                 Sheet sheet = workbook.createSheet();
 
                 int cnt = 0;
-                Map<Integer, Object[]> data = new TreeMap<Integer, Object[]>();
+                Map<Integer, Object[]> data = new TreeMap<>();
 
                 data.put(++cnt, new Object[]{
                                 "Sonraki Bakım Zamanı",
@@ -136,10 +137,10 @@ public class ExcelBakimServlet extends HttpServlet implements Serializable {
                         if (key == 1) {
                             CellStyle style = workbook.createCellStyle();
                             XSSFFont font = (XSSFFont) workbook.createFont();
-                            font.setColor(HSSFColor.WHITE.index);
+                            font.setColor(HSSFColor.HSSFColorPredefined.WHITE.getIndex());
                             style.setFont(font);
-                            style.setFillBackgroundColor(HSSFColor.RED.index);
-                            style.setFillPattern(CellStyle.SOLID_FOREGROUND);
+                            style.setFillBackgroundColor(HSSFColor.HSSFColorPredefined.RED.getIndex());
+                            style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
                             cell.setCellStyle(style);
                         }
                     }
@@ -154,7 +155,7 @@ public class ExcelBakimServlet extends HttpServlet implements Serializable {
                     response.setContentType("application/vnd.ms-excel");
                     response.setHeader("Cache-Control", "private, no-store, no-cache, must-revalidate");
                     response.setContentLength(outArray.length);
-                    response.setHeader("Content-Disposition", "attachment; filename=" + "excelbakim_" + ((mamulid == null || mamulid.isEmpty()) ? "" : mamulid + "_") + bit_tarih + ".xlsx");
+                    response.setHeader("Content-Disposition", "attachment; filename=" + "excelbakim_" + (StringUtils.isEmpty(mamulid) ? "" : mamulid + "_") + bit_tarih + ".xlsx");
                     OutputStream outStream = response.getOutputStream();
                     outStream.write(outArray);
                     outStream.flush();
@@ -165,9 +166,8 @@ public class ExcelBakimServlet extends HttpServlet implements Serializable {
             } catch (Exception e) {
                 logger.error(ExceptionUtils.getStackTrace(e));
             }
-        }
-        else {
+        } else {
             request.getRequestDispatcher("index.jsp").forward(request, response);
         }
-	}
+    }
 }

@@ -1,9 +1,15 @@
 package erp.servlet;
 
-import java.io.IOException;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import erp.dao.BaseDao;
+import erp.dao.FirmaDao;
+import erp.dao.IrsaliyeDao;
+import erp.dao.MamulDao;
+import erp.entity.*;
+import erp.model.IrsaliyeTip;
+import erp.util.Fields;
+import erp.util.Util;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import javax.servlet.ServletException;
@@ -11,48 +17,40 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import erp.dao.BaseDao;
-import erp.dao.FirmaDao;
-import erp.dao.IrsaliyeDao;
-import erp.dao.MamulDao;
-import erp.entity.Firma;
-import erp.entity.Genel;
-import erp.entity.Irsaliye;
-import erp.entity.IrsaliyeBilesen;
-import erp.model.IrsaliyeTip;
-import erp.entity.Mamul;
-import erp.util.Util;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @WebServlet("/sevkrapor")
 public class SevkRaporServlet extends HttpServlet implements Serializable {
     private static final Logger logger = LoggerFactory.getLogger(SevkRaporServlet.class);
 
     @Inject
-    FirmaDao firmaDao;
+    private FirmaDao firmaDao;
     @Inject
-    MamulDao mamulDao;
+    private MamulDao mamulDao;
     @Inject
-    IrsaliyeDao irsaliyeDao;
+    private IrsaliyeDao irsaliyeDao;
     @Inject
-    DAOFunctions daoFunctions;
+    private DAOFunctions daoFunctions;
 
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doPost(request, response);
     }
 
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html; charset=UTF-8");
 
-        String raporgetirid = request.getParameter("raporgetirid");
-        String irsaliyeid = request.getParameter("irsaliyeid");
-        String irsaliyeno = request.getParameter("irsaliyeno");
-        String firmaid = request.getParameter("firmaid");
-        String tarih = request.getParameter("tarih");
-        String mamulid = request.getParameter("mamulid");
-        String page = request.getParameter("page");
+        String raporgetirid = request.getParameter(Fields.RAPORGETIRID);
+        String irsaliyeid = request.getParameter(Fields.IRSALIYEID);
+        String irsaliyeno = request.getParameter(Fields.IRSALIYENO);
+        String firmaid = request.getParameter(Fields.FIRMAID);
+        String tarih = request.getParameter(Fields.TARIH);
+        String mamulid = request.getParameter(Fields.MAMULID);
+        String page = request.getParameter(Fields.PAGE);
         String excelsql = "";
 
         List<Firma> firma = firmaDao.firmaListeGetirTum(0);
@@ -66,7 +64,6 @@ public class SevkRaporServlet extends HttpServlet implements Serializable {
         List<IrsaliyeBilesen> irsaliyebilesenonaylandi = new ArrayList<IrsaliyeBilesen>();
 
         if (raporgetirid != null || page != null) {
-            String tablename = BaseDao.IRSALIYE;
             String filter0 = "";
             String filter1 = "";
             String filter2 = "";
@@ -85,8 +82,7 @@ public class SevkRaporServlet extends HttpServlet implements Serializable {
             }
             if (tarih != null && !tarih.trim().isEmpty()) {
                 filter3 = andYes + " ( date(gonderimtarihi) = '" + Util.date_tr_to_eng(tarih) + "')";
-            }
-            else{
+            } else {
                 tarih = null;
             }
             if (mamulid != null && Util.isNumeric(mamulid)) {
@@ -97,32 +93,32 @@ public class SevkRaporServlet extends HttpServlet implements Serializable {
             filter0 = filter1 + filter2 + filter3 + filter4;
 
             // PAGING
-            totalrecord = daoFunctions.recordAgg(tablename, "COUNT", "*", " WHERE 1=1" + filter0);
-            if (request.getParameter("page") != null)
-                page0 = Integer.parseInt(request.getParameter("page"));
+            totalrecord = daoFunctions.recordAgg(BaseDao.IRSALIYE, Fields.COUNT, "*", filter0);
+            if (request.getParameter(Fields.PAGE) != null)
+                page0 = Integer.parseInt(request.getParameter(Fields.PAGE));
             noofpages = (int) Math.ceil(totalrecord * 1.0 / Genel.ROWPERPAGE);
             // PAGING
 
-            logger.info("noofpages: " + noofpages + ", totalrecord: " + totalrecord + ", " + tablename + " WHERE 1=1" + filter0);
+            logger.info("noofpages: " + noofpages + ", totalrecord: " + totalrecord + ", " + BaseDao.IRSALIYE + " WHERE 1=1" + filter0);
 
             irsaliyebilesenonaylandi = irsaliyeDao.irsaliyeBilesenListeTum(IrsaliyeTip.ONAYLANDI, 1, irsaliyeid, firmaid, tarih, tarih, page0, mamulid);
 
             excelsql = filter0;
         }
 
-        request.setAttribute("mamul", mamul);
-        request.setAttribute("firma", firma);
-        request.setAttribute("irsaliyeid", irsaliyeid);
-        request.setAttribute("irsaliyeno", irsaliyeno);
+        request.setAttribute(Fields.MAMUL, mamul);
+        request.setAttribute(Fields.FIRMA, firma);
+        request.setAttribute(Fields.IRSALIYEID, irsaliyeid);
+        request.setAttribute(Fields.IRSALIYENO, irsaliyeno);
         request.setAttribute("irsaliyejson", irsaliyejson);
         request.setAttribute("irsaliyebilesenonaylandi", irsaliyebilesenonaylandi);
-        request.setAttribute("firmaid", firmaid);
-        request.setAttribute("tarih", tarih);
-        request.setAttribute("mamulid", mamulid);
-        request.setAttribute("totalrecord", totalrecord);
-        request.setAttribute("currentpage", page0);
-        request.setAttribute("noofpages", noofpages);
-        request.setAttribute("excelsql", excelsql);
+        request.setAttribute(Fields.FIRMAID, firmaid);
+        request.setAttribute(Fields.TARIH, tarih);
+        request.setAttribute(Fields.MAMULID, mamulid);
+        request.setAttribute(Fields.TOTALRECORD, totalrecord);
+        request.setAttribute(Fields.CURRENTPAGE, page0);
+        request.setAttribute(Fields.NOOFPAGES, noofpages);
+        request.setAttribute(Fields.EXCELSQL, excelsql);
         request.getRequestDispatcher("sevkrapor.jsp").forward(request, response);
     }
 }

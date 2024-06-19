@@ -22,39 +22,41 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Serializable;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 @WebServlet("/excelsevk")
 public class ExcelSevkServlet extends HttpServlet implements Serializable {
-	private static final Logger logger = LoggerFactory.getLogger(ExcelSevkServlet.class);
+    private static final Logger logger = LoggerFactory.getLogger(ExcelSevkServlet.class);
 
-	@Inject
-	IrsaliyeDao irsaliyeDao;
+    @Inject
+    private IrsaliyeDao irsaliyeDao;
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	    doPost(request, response);
-	}
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	    response.setCharacterEncoding("UTF-8");
-        
-        String excelegonder     = request.getParameter("excelegonder");
-        String excelirsaliyeid  = request.getParameter("excelirsaliyeid");
-        String excelfirmaid     = request.getParameter("excelfirmaid");
-        String excelmamulid     = request.getParameter("excelmamulid");
-        String exceltarih       = request.getParameter("exceltarih");
-        String excelsql         = request.getParameter("excelsql");
-        
-        excelirsaliyeid = (Util.isNotEmptyOrNull(excelirsaliyeid))?excelirsaliyeid:null;
-        excelfirmaid    = (Util.isNotEmptyOrNull(excelfirmaid))?excelfirmaid:null;
-        exceltarih      = (Util.isNotEmptyOrNull(exceltarih))?exceltarih:null;
-        excelmamulid    = (Util.isNotEmptyOrNull(excelmamulid))?excelmamulid:null;
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        doPost(request, response);
+    }
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setCharacterEncoding(StandardCharsets.UTF_8.toString());
+
+        String excelegonder = request.getParameter("excelegonder");
+        String excelirsaliyeid = request.getParameter("excelirsaliyeid");
+        String excelfirmaid = request.getParameter("excelfirmaid");
+        String excelmamulid = request.getParameter("excelmamulid");
+        String exceltarih = request.getParameter("exceltarih");
+        String excelsql = request.getParameter("excelsql");
+
+        excelirsaliyeid = (Util.isNotEmptyOrNull(excelirsaliyeid)) ? excelirsaliyeid : null;
+        excelfirmaid = (Util.isNotEmptyOrNull(excelfirmaid)) ? excelfirmaid : null;
+        exceltarih = (Util.isNotEmptyOrNull(exceltarih)) ? exceltarih : null;
+        excelmamulid = (Util.isNotEmptyOrNull(excelmamulid)) ? excelmamulid : null;
 
         logger.info("excelsql: " + excelsql);
-        
-        if(excelegonder!=null && excelegonder.equals("1")) {
-            
+
+        if (excelegonder != null && excelegonder.equals("1")) {
+
             List<IrsaliyeBilesen> irsaliyebilesen = irsaliyeDao.irsaliyeBilesenListeTum(IrsaliyeTip.ONAYLANDI, 1, excelirsaliyeid, excelfirmaid, exceltarih, exceltarih, 0, excelmamulid);
-            
+
             try (Workbook workbook = new XSSFWorkbook()) {
                 //Sheet sheeti    = workbook.createSheet("Irsaliye");
                 Sheet sheetib = workbook.createSheet("IrsaliyeBilesen");
@@ -146,9 +148,8 @@ public class ExcelSevkServlet extends HttpServlet implements Serializable {
             } catch (Exception e) {
                 logger.error(ExceptionUtils.getStackTrace(e));
             }
-        }
-        else {
+        } else {
             request.getRequestDispatcher("index.jsp").forward(request, response);
         }
-	}
+    }
 }

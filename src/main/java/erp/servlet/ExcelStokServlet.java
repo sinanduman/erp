@@ -1,15 +1,20 @@
 package erp.servlet;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
+import erp.dao.BilesenDao;
+import erp.dao.StokDao;
+import erp.entity.Bilesen;
+import erp.entity.StokRapor;
+import erp.model.BilesenTip;
+import erp.model.FiyatTip;
+import erp.util.Fields;
+import erp.util.Util;
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFFont;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import javax.servlet.ServletException;
@@ -17,70 +22,54 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import erp.dao.BilesenDao;
-import erp.dao.StokDao;
-import erp.entity.Bilesen;
-import erp.model.BilesenTip;
-import erp.entity.StokRapor;
-import erp.model.FiyatTip;
-import erp.util.Util;
-import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.apache.poi.hssf.util.HSSFColor;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFFont;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.Serializable;
+import java.util.*;
 
 @WebServlet("/excelstok")
 public class ExcelStokServlet extends HttpServlet implements Serializable {
-	private static final Logger logger = LoggerFactory.getLogger(ExcelStokServlet.class);
+    private static final Logger logger = LoggerFactory.getLogger(ExcelStokServlet.class);
 
     @Inject
-    BilesenDao bilesenDao;
+    private BilesenDao bilesenDao;
+    @Inject
+    private StokDao stokDao;
 
-	@Inject
-	StokDao stokDao;
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        doPost(request, response);
+    }
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	    doPost(request, response);
-	}
-
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         String excelegonder = request.getParameter("excelegonder");
-        String exceltarih   = request.getParameter("exceltarih");
-        String exceldetay   = request.getParameter("exceldetay");
+        String exceltarih = request.getParameter("exceltarih");
+        String exceldetay = request.getParameter("exceldetay");
         String exceldetayid = request.getParameter("exceldetayid");
         String excelstoktip = request.getParameter("excelstoktip");
-        String excelsql     = request.getParameter("excelsql");
-        String tablename    = request.getParameter("tablename");
-        String excelazalan  = request.getParameter("excelazalan");
+        String excelsql = request.getParameter("excelsql");
+        String tablename = request.getParameter("tablename");
+        String excelazalan = request.getParameter("excelazalan");
         boolean fiyatDetayGoster = excelstoktip != null && excelstoktip.equals("1") && excelazalan.equals("0");
-        
-        logger.info("excelsql: " + excelsql);
-        
-        if(excelegonder!=null && excelegonder.equals("1")) {
-            String prefix       = "";
-            String prefixDetay  = "";
+
+        logger.info("excelsql: {}", excelsql);
+
+        if (excelegonder != null && excelegonder.equals("1")) {
+            String prefix = "";
+            String prefixDetay = "";
 
             List<StokRapor> stokrapor;
-            
-            if(Util.isNotEmptyOrNull(exceldetay) && Util.isNotEmptyOrNull(exceldetayid) && Util.isNumeric(exceldetayid)) {
-                stokrapor   = stokDao.stokBilesenDetayRapor(tablename, excelsql, 0);
+
+            if (Util.isNotEmptyOrNull(exceldetay) && Util.isNotEmptyOrNull(exceldetayid) && Util.isNumeric(exceldetayid)) {
+                stokrapor = stokDao.stokBilesenDetayRapor(tablename, excelsql, 0);
                 prefixDetay = "_detay";
-            }
-            else{
+            } else {
                 stokrapor = stokDao.stokBilesenRapor(tablename, excelsql, 0);
             }
             List<Bilesen> bilesen = bilesenDao.bilesenListeGetirTum(BilesenTip.HAMMADDEYARIMAMUL, 0, null, null);
             Map<Integer, Bilesen> bilesenmap = Util.bilesenListToMap(bilesen);
-            
+
             try (Workbook workbook = new XSSFWorkbook()) {
                 Sheet sheet = workbook.createSheet();
 
@@ -161,17 +150,17 @@ public class ExcelStokServlet extends HttpServlet implements Serializable {
                     }
 
                     if (cnt == 2) {
-                        logger.info("tipid " + sr.getBilesentipid());
+                        logger.info("tipid {}", sr.getBilesentipid());
                         int i = sr.getBilesentipid();
                         switch (i) {
                             case 1:
-                                prefix = "hammadde";
+                                prefix = Fields.HAMMADDE;
                                 break;
                             case 2:
-                                prefix = "yarimamul";
+                                prefix = Fields.YARIMAMUL;
                                 break;
                             case 3:
-                                prefix = "mamul";
+                                prefix = Fields.MAMUL;
                                 break;
                         }
                     }
@@ -228,9 +217,8 @@ public class ExcelStokServlet extends HttpServlet implements Serializable {
             } catch (Exception e) {
                 logger.error(ExceptionUtils.getStackTrace(e));
             }
-        }
-        else {
+        } else {
             request.getRequestDispatcher("index.jsp").forward(request, response);
         }
-	}
+    }
 }

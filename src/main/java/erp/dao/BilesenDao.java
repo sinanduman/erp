@@ -1,8 +1,10 @@
 package erp.dao;
 
-import erp.servlet.ConnectionManager;
 import erp.entity.Bilesen;
 import erp.model.BilesenTip;
+import erp.servlet.ConnectionManager;
+import erp.util.Constants;
+import erp.util.Fields;
 import erp.util.Util;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
@@ -11,39 +13,43 @@ import org.slf4j.LoggerFactory;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.io.Serializable;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
 @Singleton
 public class BilesenDao implements Serializable, BaseDao {
     @Inject
-    ConnectionManager connectionManager;
+    private ConnectionManager connectionManager;
     private static final Logger logger = LoggerFactory.getLogger(BilesenDao.class);
 
     public List<Bilesen> bilesenListeGetirTum(BilesenTip bilesentip, int offset, Integer bilesenid, Integer durum) {
-        List<Bilesen> temp = new ArrayList<Bilesen>();
-        String pageFilter = Util.getPageFilter (offset);
+        List<Bilesen> temp = new ArrayList<>();
+        String pageFilter = Util.getPageFilter(offset);
         String filter1 = (bilesentip == null) ? "" : " and bilesentipid in (" + bilesentip.id() + ")";
         String filter2 = (bilesenid == null) ? "" : " and b.id = " + bilesenid;
         String filter3 = (durum == null) ? "" : " and b.durum = " + durum;
         String filter0 = " where 1=1" + filter1 + filter2 + filter3;
 
-        String searchQuery = "select b.*, bt.ad bilesentipad, f.ad firmaad, bm.ad birimad"
-                + " from " + BaseDao.BILESEN + " b"
-                + " join " + BaseDao.BILESENTIP + " bt on bt.id = b.bilesentipid"
-                + " left join " + BaseDao.BIRIM + " bm on bm.id = b.birimid"
-                + " join " + BaseDao.FIRMA + " f on f.id = b.firmaid"
-                + " join " + BaseDao.PARA + " p on p.id = b.fiyatid"
+        String searchQuery = Fields.SELECT + "b.*, bt.ad bilesentipad, f.ad firmaad, bm.ad birimad"
+                + Fields.FROM + BaseDao.BILESEN + " b"
+                + Fields.JOIN + BaseDao.BILESENTIP + " bt on bt.id = b.bilesentipid"
+                + Fields.LEFT_JOIN + BaseDao.BIRIM + " bm on bm.id = b.birimid"
+                + Fields.JOIN + BaseDao.FIRMA + " f on f.id = b.firmaid"
+                + Fields.JOIN + BaseDao.PARA + " p on p.id = b.fiyatid"
                 + filter0
-                + " order by b.id desc " + pageFilter;
+                + Fields.ORDER_BY + "b.id desc " + pageFilter;
 
         // connect to DB
         ResultSet rs;
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(searchQuery)) {
-            logger.info(pstmt.toString());
+            long start = System.currentTimeMillis();
             rs = pstmt.executeQuery();
+            logger.info(Constants.LOG_FORMAT, pstmt, (System.currentTimeMillis() - start));
             while (rs.next()) {
                 temp.add(new Bilesen(rs));
             }
@@ -55,14 +61,15 @@ public class BilesenDao implements Serializable, BaseDao {
 
     public String bilesenSil(String bilesenid) {
         String result = "0";
-        String updateQuery = "select " + BaseDao.F_BILESEN_SIL + "(?)";
+        String updateQuery = Fields.SELECT + BaseDao.F_BILESEN_SIL + "(?)";
         // connect to DB
         ResultSet rs;
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(updateQuery)) {
+            long start = System.currentTimeMillis();
             pstmt.setInt(1, Integer.parseInt(bilesenid));
-            logger.info(pstmt.toString());
             rs = pstmt.executeQuery();
+            logger.info(Constants.LOG_FORMAT, pstmt, (System.currentTimeMillis() - start));
             if (rs.next()) {
                 result = rs.getString(1);
             }
@@ -75,13 +82,14 @@ public class BilesenDao implements Serializable, BaseDao {
 
     public String bilesenGuncelle(String bilesenid, String birimid, String firmaid, String bilesenkod, String bilesenad, String durum, String fiyatId, String fiyat, String kritikEsik) {
         String result = "0";
-        String updateQuery = "update " + BaseDao.BILESEN
-                + " set birimid =?, firmaid =?, kod =?, ad =?, durum =?, fiyatid =?, fiyat =?, kritikesik =?"
-                + " where id =?";
+        String updateQuery = Fields.UPDATE + BaseDao.BILESEN
+                + Fields.SET + "birimid =?, firmaid =?, kod =?, ad =?, durum =?, fiyatid =?, fiyat =?, kritikesik =?"
+                + Fields.WHERE + "id =?";
 
         // connect to DB
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(updateQuery)) {
+            long start = System.currentTimeMillis();
             if (birimid != null)
                 pstmt.setInt(1, Integer.parseInt(birimid));
             else
@@ -94,9 +102,8 @@ public class BilesenDao implements Serializable, BaseDao {
             pstmt.setDouble(7, Double.parseDouble(fiyat));
             pstmt.setInt(8, Integer.parseInt(kritikEsik));
             pstmt.setInt(9, Integer.parseInt(bilesenid));
-            logger.info(pstmt.toString());
-
             pstmt.executeUpdate();
+            logger.info(Constants.LOG_FORMAT, pstmt, (System.currentTimeMillis() - start));
         } catch (Exception e) {
             logger.error(ExceptionUtils.getStackTrace(e));
             result = e.getMessage();

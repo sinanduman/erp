@@ -1,5 +1,6 @@
 package erp.entity;
 
+import erp.util.Fields;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -28,19 +29,19 @@ public class Bilesen {
     private Integer durum;
 
     public Bilesen(ResultSet rs) throws SQLException {
-        this.id = rs.getInt("id");
-        this.ad = rs.getString("ad");
-        this.kod = rs.getString("kod");
-        this.bilesentipid = rs.getInt("bilesentipid");
-        this.bilesentipad = rs.getString("bilesentipad");
-        this.birimid = rs.getInt("birimid");
-        this.birimad = rs.getString("birimad");
-        this.firmaid = rs.getInt("firmaid");
-        this.firmaad = rs.getString("firmaad");
-        this.fiyatId = rs.getInt("fiyatId");
-        this.fiyat = rs.getDouble("fiyat");
-        this.kritikesik = rs.getInt("kritikesik");
+        this.id = rs.getInt(Fields.ID);
+        this.ad = rs.getString(Fields.AD);
+        this.kod = rs.getString(Fields.KOD);
+        this.bilesentipid = rs.getInt(Fields.BILESENTIPID);
+        this.bilesentipad = rs.getString(Fields.BILESENTIPAD);
+        this.birimid = rs.getInt(Fields.BIRIMID);
+        this.birimad = rs.getString(Fields.BIRIMAD);
+        this.firmaid = rs.getInt(Fields.FIRMAID);
+        this.firmaad = rs.getString(Fields.FIRMAAD);
+        this.fiyatId = rs.getInt(Fields.FIYATID);
+        this.fiyat = rs.getDouble(Fields.FIYAT);
+        this.kritikesik = rs.getInt(Fields.KRITIKESIK);
         this.eklemetarihi = rs.getDate("eklemetarihi");
-        this.durum = rs.getInt("durum");
+        this.durum = rs.getInt(Fields.DURUM);
     }
 }

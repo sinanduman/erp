@@ -1,9 +1,8 @@
 package erp.servlet;
 
 import erp.dao.UretimDao;
-import erp.model.UretimDurum;
 import erp.entity.UretimPlan;
-
+import erp.model.UretimDurum;
 import erp.util.Util;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.poi.hssf.util.HSSFColor;
@@ -19,7 +18,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -28,25 +26,26 @@ import java.util.*;
 
 @WebServlet("/excel")
 public class ExcelServlet extends HttpServlet implements Serializable {
-	private static final Logger logger = LoggerFactory.getLogger(ExcelServlet.class);
+    private static final Logger logger = LoggerFactory.getLogger(ExcelServlet.class);
 
-	@Inject
-	UretimDao uretimDao;
+    @Inject
+    private UretimDao uretimDao;
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	    doPost(request, response);
-	}
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        doPost(request, response);
+    }
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         String excelegonder = request.getParameter("excelegonder");
-        String exceltarih   = request.getParameter("exceltarih");
-        String excelsql     = request.getParameter("excelsql");
-        
-        logger.info("xls: " +excelsql);
-        
-        if(excelegonder!=null && excelegonder.equals("1")) {
-            
-            List<UretimPlan> uretimplan = uretimDao.uretimPlanListeGetirExcel(UretimDurum.TAMAMLANMIS,exceltarih, excelsql);
+        String exceltarih = request.getParameter("exceltarih");
+        String excelsql = request.getParameter("excelsql");
+
+        logger.info("xls: " + excelsql);
+
+        if (excelegonder != null && excelegonder.equals("1")) {
+
+            List<UretimPlan> uretimplan = uretimDao.uretimPlanListeGetirExcel(UretimDurum.TAMAMLANMIS, exceltarih, excelsql);
 
             try (Workbook workbook = new XSSFWorkbook()) {
                 Sheet sheet = workbook.createSheet();
@@ -148,9 +147,8 @@ public class ExcelServlet extends HttpServlet implements Serializable {
             } catch (Exception e) {
                 logger.error(ExceptionUtils.getStackTrace(e));
             }
-        }
-        else {
+        } else {
             request.getRequestDispatcher("index.jsp").forward(request, response);
         }
-	}
+    }
 }

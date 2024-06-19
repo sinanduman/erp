@@ -1,5 +1,6 @@
 package erp.entity;
 
+import erp.util.Fields;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,7 +25,7 @@ public class User {
     }
 
     public User(ResultSet rs) throws SQLException {
-        this.id = rs.getInt("id");
+        this.id = rs.getInt(Fields.ID);
         this.name = rs.getString("name");
         this.surname = rs.getString("surname");
         this.username = rs.getString("username");

@@ -4,6 +4,8 @@ import erp.entity.Stok;
 import erp.entity.StokRapor;
 import erp.model.BilesenTip;
 import erp.servlet.ConnectionManager;
+import erp.util.Constants;
+import erp.util.Fields;
 import erp.util.Util;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
@@ -21,16 +23,16 @@ import java.util.Map;
 @Singleton
 public class StokDao implements Serializable, BaseDao {
     @Inject
-    ConnectionManager connectionManager;
+    private ConnectionManager connectionManager;
     private static final Logger logger = LoggerFactory.getLogger(StokDao.class);
 
     public String stokKontrol(String tarih, String gkrno, String miktar, String iade, String bilesenid, String bilesentipid) {
         Integer sum = null;
         String result = "0";
-        String selectQuery = "select sum(case when islemyonu =0 then miktar else -1*miktar end)"
-                + " from " + BaseDao.STOK
-                + " where bilesenid =? and gkrno =?"
-                + " group by gkrno";
+        String selectQuery = Fields.SELECT + "sum(case when islemyonu =0 then miktar else -1*miktar end)"
+                + Fields.FROM + BaseDao.STOK
+                + Fields.WHERE + "bilesenid =? and gkrno =?"
+                + Fields.GROUP_BY + "gkrno";
 
         // connect to DB
         ResultSet rs;
@@ -39,7 +41,7 @@ public class StokDao implements Serializable, BaseDao {
             pstmt.setInt(1, Integer.parseInt(bilesenid));
             pstmt.setInt(2, Integer.parseInt(gkrno));
             rs = pstmt.executeQuery();
-            logger.info(pstmt.toString());
+            logger.info("{}", pstmt);
             if (rs.next()) {
                 sum = rs.getInt(1);
             }
@@ -70,7 +72,7 @@ public class StokDao implements Serializable, BaseDao {
 
     public String stokEkle(String bilesenid, String miktar, String irsaliyeno, String lot, String gkrno, String tarih, String not) {
         String retVal = "0";
-        String insertQuery = "SELECT " + BaseDao.F_STOK_EKLE + "(?,?,?,?,?,?,?,?)";
+        String insertQuery = Fields.SELECT + BaseDao.F_STOK_EKLE + "(?,?,?,?,?,?,?,?)";
 
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(insertQuery)) {
@@ -97,7 +99,7 @@ public class StokDao implements Serializable, BaseDao {
                 pstmt.setTimestamp(8, Util.date_tr_to_timestamp(tarih));
             else
                 pstmt.setNull(8, Types.TIMESTAMP);
-            logger.info(pstmt.toString());
+            logger.info("{}", pstmt);
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
                 retVal = rs.getString(1);
@@ -111,7 +113,7 @@ public class StokDao implements Serializable, BaseDao {
 
     public String stokDus(String bilesenid, String miktar, String irsaliyeno, String lot, String gkrno, String tarih, String not) {
         String retVal = "-1";
-        String updateQuery = "SELECT " + BaseDao.F_STOK_DUS + "(?,?,?,?,?,?,?,?)";
+        String updateQuery = Fields.SELECT + BaseDao.F_STOK_DUS + "(?,?,?,?,?,?,?,?)";
 
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(updateQuery)) {
@@ -139,7 +141,7 @@ public class StokDao implements Serializable, BaseDao {
             else
                 pstmt.setNull(8, Types.TIMESTAMP);
 
-            logger.info(pstmt.toString());
+            logger.info("{}", pstmt);
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
                 retVal = rs.getString(1);
@@ -152,7 +154,7 @@ public class StokDao implements Serializable, BaseDao {
 
     public String stokYeterli(Integer uretimplanid, Integer mamulid, Integer uretilenmiktar) {
         String retVal = "0";
-        String insertQuery = "SELECT " + BaseDao.F_STOK_YETERLI + "(?,?,?)";
+        String insertQuery = Fields.SELECT + BaseDao.F_STOK_YETERLI + "(?,?,?)";
 
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(insertQuery)) {
@@ -160,7 +162,7 @@ public class StokDao implements Serializable, BaseDao {
             pstmt.setInt(2, mamulid);
             pstmt.setInt(3, uretilenmiktar);
 
-            logger.info(pstmt.toString());
+            logger.info("{}", pstmt);
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
                 retVal = rs.getString(1);
@@ -172,11 +174,11 @@ public class StokDao implements Serializable, BaseDao {
     }
 
     public List<Stok> stokMamulListeGetirTum(Integer mamulid, Integer durum) {
-        List<Stok> temp = new ArrayList<Stok>();
-        String filter0 = " where 1=1";
+        List<Stok> temp = new ArrayList<>();
+        String filter0 = Fields.WHERE + "1=1";
         String filter1 = (mamulid == null) ? "" : " and bilesenid = " + mamulid;
         String filter2 = (durum == null) ? "" : " and durum = " + durum;
-        String searchQuery = "select * from " + BaseDao.V_STOKMAMUL_TUM + filter0 + filter1 + filter2;
+        String searchQuery = Fields.SELECT + "*" + Fields.FROM + BaseDao.V_STOKMAMUL_TUM + filter0 + filter1 + filter2;
         logger.info(searchQuery);
         // connect to DB
         ResultSet rs;
@@ -184,31 +186,31 @@ public class StokDao implements Serializable, BaseDao {
              PreparedStatement pstmt = conn.prepareStatement(searchQuery)) {
             long start = System.currentTimeMillis();
             rs = pstmt.executeQuery();
-            logger.info(pstmt.toString() + (System.currentTimeMillis() - start) + "ms.");
+            logger.info(Constants.LOG_FORMAT, pstmt, (System.currentTimeMillis() - start));
             while (rs.next()) {
-                temp.add(new Stok(rs.getInt("id"),
-                        rs.getInt("bilesenid"),
-                        rs.getString("bilesenad"),
-                        rs.getString("bilesenkod"),
-                        rs.getInt("bilesentipid"),
-                        rs.getString("bilesentipad"),
-                        rs.getInt("birimid"),
-                        rs.getString("birimad"),
-                        rs.getInt("firmaid"),
-                        rs.getString("firmaad"),
-                        rs.getLong("miktar"),
+                temp.add(new Stok(rs.getInt(Fields.ID),
+                        rs.getInt(Fields.BILESENID),
+                        rs.getString(Fields.BILESENAD),
+                        rs.getString(Fields.BILESENKOD),
+                        rs.getInt(Fields.BILESENTIPID),
+                        rs.getString(Fields.BILESENTIPAD),
+                        rs.getInt(Fields.BIRIMID),
+                        rs.getString(Fields.BIRIMAD),
+                        rs.getInt(Fields.FIRMAID),
+                        rs.getString(Fields.FIRMAAD),
+                        rs.getLong(Fields.MIKTAR),
                         null, // Stok: Kalan
-                        rs.getString("gkrno"),
-                        rs.getString("irsaliyeno"),
-                        rs.getString("lot"),
-                        rs.getTimestamp("giristarihi"),
-                        rs.getTimestamp("cikistarihi"),
-                        rs.getString("not"),
-                        (rs.getString("mamuldetay")).split("\\|")[0], /* 0: Miktar */
-                        (rs.getString("mamuldetay")).split("\\|")[1], /* 1: GkrNo */
-                        (rs.getString("mamuldetay")).split("\\|")[2], /* 1: StokId */
-                        rs.getInt("islemyonu"),
-                        rs.getString("bilesenkod"))
+                        rs.getString(Fields.GKRNO),
+                        rs.getString(Fields.IRSALIYENO),
+                        rs.getString(Fields.LOT),
+                        rs.getTimestamp(Fields.GIRISTARIHI),
+                        rs.getTimestamp(Fields.CIKISTARIHI),
+                        rs.getString(Fields.NOT),
+                        (rs.getString(Fields.MAMULDETAY)).split("\\|")[0], /* 0: Miktar */
+                        (rs.getString(Fields.MAMULDETAY)).split("\\|")[1], /* 1: GkrNo */
+                        (rs.getString(Fields.MAMULDETAY)).split("\\|")[2], /* 1: StokId */
+                        rs.getInt(Fields.ISLEMYONU),
+                        rs.getString(Fields.BILESENKOD))
                 );
             }
         } catch (Exception e) {
@@ -218,7 +220,7 @@ public class StokDao implements Serializable, BaseDao {
     }
 
     public List<Stok> stokListeRapor(String tablename, int offset, String filterPage) {
-        List<Stok> temp = new ArrayList<Stok>();
+        List<Stok> temp = new ArrayList<>();
 
         String pageFilter = Util.getPageFilter(offset);
         String filter0 = filterPage;
@@ -234,32 +236,32 @@ public class StokDao implements Serializable, BaseDao {
         ResultSet rs;
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(searchQuery)) {
-            logger.info(pstmt.toString());
+            logger.info("{}", pstmt);
             rs = pstmt.executeQuery();
             while (rs.next()) {
                 temp.add(new Stok(
-                        rs.getInt("id"),
-                        rs.getInt("bilesenid"),
-                        rs.getString("bilesenad"),
-                        rs.getString("bilesenkod"),
-                        rs.getInt("bilesentipid"),
-                        rs.getString("bilesentipad"),
-                        rs.getInt("birimid"),
-                        rs.getString("birimad"),
-                        rs.getInt("firmaid"),
-                        rs.getString("firmaad"),
-                        rs.getLong("miktar"),
+                        rs.getInt(Fields.ID),
+                        rs.getInt(Fields.BILESENID),
+                        rs.getString(Fields.BILESENAD),
+                        rs.getString(Fields.BILESENKOD),
+                        rs.getInt(Fields.BILESENTIPID),
+                        rs.getString(Fields.BILESENTIPAD),
+                        rs.getInt(Fields.BIRIMID),
+                        rs.getString(Fields.BIRIMAD),
+                        rs.getInt(Fields.FIRMAID),
+                        rs.getString(Fields.FIRMAAD),
+                        rs.getLong(Fields.MIKTAR),
                         null, // rs.getInt("kalan"),
-                        rs.getString("gkrno"),
-                        rs.getString("irsaliyeno"),
-                        rs.getString("lot"),
-                        rs.getTimestamp("giristarihi"),
-                        rs.getTimestamp("cikistarihi"),
-                        rs.getString("not"),
+                        rs.getString(Fields.GKRNO),
+                        rs.getString(Fields.IRSALIYENO),
+                        rs.getString(Fields.LOT),
+                        rs.getTimestamp(Fields.GIRISTARIHI),
+                        rs.getTimestamp(Fields.CIKISTARIHI),
+                        rs.getString(Fields.NOT),
                         null, // rs.getString("miktarstr"),
                         null, // rs.getString("gkrnostr"),
                         null, // rs.getString("stokidstr"),
-                        rs.getInt("islemyonu"),
+                        rs.getInt(Fields.ISLEMYONU),
                         null // rs.getString("mamulkod")
                 ));
             }
@@ -271,33 +273,33 @@ public class StokDao implements Serializable, BaseDao {
     }
 
     public List<Stok> stokListeGetirTum(BilesenTip bilesentip, Integer bilesenid, int offset, Map<String, String> param) {
-        List<Stok> temp = new ArrayList<Stok>();
+        List<Stok> temp = new ArrayList<>();
 
         String pageFilter = Util.getPageFilter(offset, param);
-        String join0 = " join " + bilesentip.tablo() + " b on b.id=s.bilesenid";
+        String join0 = Fields.JOIN + bilesentip.tablo() + " b on b.id=s.bilesenid";
         String filter0 = " and b.bilesentipid IN (" + bilesentip.id() + ") ";
 
         if (bilesenid != 0)
             filter0 = filter0 + " and s.bilesenid = " + bilesenid;
 
-        String filter1 = (param == null) ? "" : " and islemyonu=" + param.get("islemyonu");
+        String filter1 = (param == null) ? "" : " and islemyonu=" + param.get(Fields.ISLEMYONU);
         String filter2 = (param == null) ? ""
-                : (param.get("bas_tarih") != null)
-                ? " and ( giristarihi BETWEEN '" + Util.date_tr_to_eng(param.get("bas_tarih")) + "' AND '"
-                + Util.date_tr_to_eng(param.get("bit_tarih")) + "')"
+                : (param.get(Fields.BAS_TARIH) != null)
+                ? " and ( giristarihi BETWEEN '" + Util.date_tr_to_eng(param.get(Fields.BAS_TARIH)) + "' AND '"
+                + Util.date_tr_to_eng(param.get(Fields.BIT_TARIH)) + "')"
                 : "";
-        String order = (param != null && param.get("siralama") != null) ? param.get("siralama") : "islemtarihi";
-        String ascdesc = (param != null && param.get("siralamayon") != null) ? param.get("siralamayon") : "desc";
+        String order = (param != null && param.get(Fields.SIRALAMA) != null) ? param.get(Fields.SIRALAMA) : "islemtarihi";
+        String ascdesc = (param != null && param.get(Fields.SIRALAMAYON) != null) ? param.get(Fields.SIRALAMAYON) : "desc";
 
         String searchQuery = "select m2.kod mamulkod, s.*, b.ad bilesenad, b.kod bilesenkod, "
                 + " coalesce(s.giristarihi, s.cikistarihi) as islemtarihi, "
                 + " bt.id bilesentipid, bt.ad bilesentipad, br.id birimid, br.ad birimad, "
                 + " f.id firmaid, f.ad firmaad, '' as mamuldetay, (sum(CASE WHEN s.islemyonu = 0 THEN s.miktar ELSE -1*miktar END) OVER (ORDER BY coalesce(s.giristarihi, s.cikistarihi), s.planid)) kalan "
                 + " from      " + BaseDao.STOK + " s"
-                + " left join " + BaseDao.URETIMPLAN + " p on p.id = s.planid"
-                + " left join " + BaseDao.MAMUL + " m2 on m2.id = p.mamulid " + join0
+                + Fields.LEFT_JOIN + BaseDao.URETIMPLAN + " p on p.id = s.planid"
+                + Fields.LEFT_JOIN + BaseDao.MAMUL + " m2 on m2.id = p.mamulid " + join0
                 + " join      " + BaseDao.BILESENTIP + " bt on bt.id = b.bilesentipid"
-                + " left join " + BaseDao.BIRIM + " br on br.id = b.birimid"
+                + Fields.LEFT_JOIN + BaseDao.BIRIM + " br on br.id = b.birimid"
                 + " join      " + BaseDao.FIRMA + " f on f.id = b.firmaid "
                 + " where 1=1 " + filter0 + filter1 + filter2
                 + " order by " + order + " " + ascdesc + ", s.id "
@@ -307,7 +309,7 @@ public class StokDao implements Serializable, BaseDao {
         ResultSet rs;
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(searchQuery)) {
-            logger.info(pstmt.toString());
+            logger.info("{}", pstmt);
             rs = pstmt.executeQuery();
             while (rs.next()) {
                 temp.add(new Stok(rs));
@@ -319,7 +321,7 @@ public class StokDao implements Serializable, BaseDao {
     }
 
     public List<StokRapor> stokBilesenRapor(String tablename, String filter, int offset) {
-        List<StokRapor> temp = new ArrayList<StokRapor>();
+        List<StokRapor> temp = new ArrayList<>();
 
         String pageFilter = Util.getPageFilter(offset);
         String searchQuery = "select * from " + tablename
@@ -330,23 +332,23 @@ public class StokDao implements Serializable, BaseDao {
         ResultSet rs;
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(searchQuery)) {
-            logger.info(pstmt.toString());
+            logger.info("{}", pstmt);
             rs = pstmt.executeQuery();
             int index = 0;
             while (rs.next()) {
                 temp.add(new StokRapor(
                         ++index,
-                        rs.getInt("bilesenid"),
-                        rs.getInt("islemyonu"),
-                        rs.getString("ad"),
-                        rs.getString("kod"),
-                        rs.getInt("bilesentipid"),
-                        rs.getString("bilesentipad"),
-                        rs.getInt("firmaid"),
-                        rs.getString("firmaad"),
-                        rs.getInt("miktar"),
+                        rs.getInt(Fields.BILESENID),
+                        rs.getInt(Fields.ISLEMYONU),
+                        rs.getString(Fields.AD),
+                        rs.getString(Fields.KOD),
+                        rs.getInt(Fields.BILESENTIPID),
+                        rs.getString(Fields.BILESENTIPAD),
+                        rs.getInt(Fields.FIRMAID),
+                        rs.getString(Fields.FIRMAAD),
+                        rs.getInt(Fields.MIKTAR),
                         null,// kalan
-                        rs.getTimestamp("tarih")));
+                        rs.getTimestamp(Fields.TARIH)));
             }
         } catch (Exception e) {
             logger.error(ExceptionUtils.getStackTrace(e));
@@ -355,10 +357,11 @@ public class StokDao implements Serializable, BaseDao {
     }
 
     public List<StokRapor> stokBilesenDetayRapor(String tablename, String filter, int offset) {
-        List<StokRapor> temp = new ArrayList<StokRapor>();
+        List<StokRapor> temp = new ArrayList<>();
 
         String pageFilter = Util.getPageFilter(offset);
-        String searchQuery = "select * from " + tablename
+        String searchQuery = Fields.SELECT + "*"
+                + Fields.FROM + tablename
                 + filter
                 + pageFilter;
 
@@ -366,7 +369,7 @@ public class StokDao implements Serializable, BaseDao {
         ResultSet rs;
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(searchQuery)) {
-            logger.info(pstmt.toString());
+            logger.info("{}", pstmt);
             rs = pstmt.executeQuery();
             while (rs.next()) {
                 temp.add(new StokRapor(rs));
@@ -383,7 +386,7 @@ public class StokDao implements Serializable, BaseDao {
 
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(searchQuery)) {
-            logger.info(pstmt.toString());
+            logger.info("{}", pstmt);
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
                 retVal = rs.getInt("hammadde_sayi");
@@ -400,7 +403,7 @@ public class StokDao implements Serializable, BaseDao {
 
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(searchQuery)) {
-            logger.info(pstmt.toString());
+            logger.info("{}", pstmt);
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
                 retVal = rs.getInt("yarimamul_sayi");
@@ -417,7 +420,7 @@ public class StokDao implements Serializable, BaseDao {
 
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(searchQuery)) {
-            logger.info(pstmt.toString());
+            logger.info("{}", pstmt);
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
                 retVal = rs.getInt("mamul_sayi");

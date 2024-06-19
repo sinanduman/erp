@@ -1,5 +1,6 @@
 package erp.entity;
 
+import erp.util.Fields;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,11 +19,11 @@ public class Calisan {
     private Integer durum;
 
     public Calisan(ResultSet rs) throws SQLException {
-        this.id = rs.getInt("id");
-        this.ad = rs.getString("ad");
-        this.soyad = rs.getString("soyad");
-        this.gorev = rs.getString("gorev");
-        this.durum = rs.getInt("durum");
+        this.id = rs.getInt(Fields.ID);
+        this.ad = rs.getString(Fields.AD);
+        this.soyad = rs.getString(Fields.SOYAD);
+        this.gorev = rs.getString(Fields.GOREV);
+        this.durum = rs.getInt(Fields.DURUM);
     }
 
     public String getFullName() {

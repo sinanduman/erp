@@ -1,5 +1,6 @@
 package erp.entity;
 
+import erp.util.Fields;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,8 +17,8 @@ public class DurusSebep {
     private String kod;
 
     public DurusSebep(ResultSet rs) throws SQLException {
-        this.id = rs.getInt("id");
-        this.ad = rs.getString("ad");
-        this.kod = rs.getString("kod");
+        this.id = rs.getInt(Fields.ID);
+        this.ad = rs.getString(Fields.AD);
+        this.kod = rs.getString(Fields.KOD);
     }
 }

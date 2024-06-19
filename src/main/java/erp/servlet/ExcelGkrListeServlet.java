@@ -1,14 +1,17 @@
 package erp.servlet;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.Serializable;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
+import erp.dao.BaseDao;
+import erp.dao.StokDao;
+import erp.entity.Stok;
+import erp.model.BilesenTip;
+import erp.util.Util;
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFFont;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import javax.servlet.ServletException;
@@ -16,48 +19,35 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import erp.dao.BaseDao;
-import erp.dao.StokDao;
-import erp.model.BilesenTip;
-import erp.util.Util;
-import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.apache.poi.hssf.util.HSSFColor;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFFont;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-
-import erp.entity.Stok;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.Serializable;
+import java.util.*;
 
 @WebServlet("/excelgkrliste")
 public class ExcelGkrListeServlet extends HttpServlet implements Serializable {
-	private static final Logger logger = LoggerFactory.getLogger(ExcelGkrListeServlet.class);
+    private static final Logger logger = LoggerFactory.getLogger(ExcelGkrListeServlet.class);
 
-	@Inject
-	StokDao stokDao;
+    @Inject
+    private StokDao stokDao;
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	    doPost(request, response);
-	}
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        doPost(request, response);
+    }
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         String excelegonder = request.getParameter("excelegonder");
-        String excelbastarih= request.getParameter("excelbastarih");
-        String excelbittarih= request.getParameter("excelbittarih");
-        String excelsql     = request.getParameter("excelsql");
-        String tablename    = BaseDao.V_STOKBILESEN;
-                
+        String excelbastarih = request.getParameter("excelbastarih");
+        String excelbittarih = request.getParameter("excelbittarih");
+        String excelsql = request.getParameter("excelsql");
+        String tablename = BaseDao.V_STOKBILESEN;
+
         logger.info("excelsql: " + excelsql);
-        
-        if(excelegonder!=null && excelegonder.equals("1")) {
-            
+
+        if (excelegonder != null && excelegonder.equals("1")) {
+
             List<Stok> stokrapor = stokDao.stokListeRapor(tablename, 0, excelsql);
 
             try (Workbook workbook = new XSSFWorkbook()) {
@@ -158,9 +148,8 @@ public class ExcelGkrListeServlet extends HttpServlet implements Serializable {
             } catch (Exception e) {
                 logger.error(ExceptionUtils.getStackTrace(e));
             }
-        }
-        else {
+        } else {
             request.getRequestDispatcher("index.jsp").forward(request, response);
         }
-	}
+    }
 }

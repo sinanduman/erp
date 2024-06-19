@@ -1,5 +1,6 @@
 package erp.entity;
 
+import erp.util.Fields;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,21 +22,19 @@ public class Irsaliye {
     private String firmaad;
 
     public Irsaliye(ResultSet rs) throws SQLException {
-        this.id = rs.getInt("id");
-        this.irsaliyeno = rs.getString("irsaliyeno");
+        this.id = rs.getInt(Fields.ID);
+        this.irsaliyeno = rs.getString(Fields.IRSALIYENO);
         this.olusturmatarihi = rs.getTimestamp("olusturmatarihi");
         this.gonderimtarihi = rs.getTimestamp("gonderimtarihi");
-        this.firmaid = rs.getInt("firmaid");
-        this.firmaad = rs.getString("firmaad");
+        this.firmaid = rs.getInt(Fields.FIRMAID);
+        this.firmaad = rs.getString(Fields.FIRMAAD);
     }
 
     public String getOlusturmatarihiTR() {
-        String date = (this.olusturmatarihi != null) ? (new SimpleDateFormat("dd-MM-yyyy").format(olusturmatarihi)) : "";
-        return date;
+        return (this.olusturmatarihi != null) ? (new SimpleDateFormat("dd-MM-yyyy").format(olusturmatarihi)) : "";
     }
 
     public String getGonderimtarihiTR() {
-        String date = (this.gonderimtarihi != null) ? (new SimpleDateFormat("dd-MM-yyyy").format(gonderimtarihi)) : "";
-        return date;
+        return (this.gonderimtarihi != null) ? (new SimpleDateFormat("dd-MM-yyyy").format(gonderimtarihi)) : "";
     }
 }
