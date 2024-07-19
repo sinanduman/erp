@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
@@ -12,7 +13,7 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class IzlemeNo {
+public class IzlemeNo implements Serializable {
     private Integer id;
     private Integer mamulid;
     private Integer gkrno;
@@ -27,7 +28,7 @@ public class IzlemeNo {
         this.mamulid = rs.getInt(Fields.MAMULID);
         this.gkrno = rs.getInt(Fields.GKRNO);
         this.kullanildi = rs.getInt(Fields.KULLANILDI);
-        this.kullanildi_tarih = rs.getDate("kullanildi_tarih");
+        this.kullanildi_tarih = rs.getDate(Fields.KULLANILDI_TARIH);
         this.mamulkod = rs.getString(Fields.KOD);
         this.mamulad = rs.getString(Fields.AD);
         this.miktar = rs.getInt(Fields.MIKTAR);

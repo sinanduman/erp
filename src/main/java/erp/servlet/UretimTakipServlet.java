@@ -57,7 +57,7 @@ public class UretimTakipServlet extends HttpServlet implements Serializable {
         String message = "";
         boolean ajaxInAction = false;
 
-        logger.info(request.getParameter(Fields.ISLEMID));
+        logger.info("islemid: {}", request.getParameter(Fields.ISLEMID));
         if (request.getParameter(Fields.ISLEMID) != null) {
             int islemid = request.getParameter(Fields.ISLEMID) == null ? -1 : Integer.parseInt(request.getParameter(Fields.ISLEMID));
             String uretimplanid = request.getParameter(Fields.URETIMPLANID);
@@ -86,7 +86,7 @@ public class UretimTakipServlet extends HttpServlet implements Serializable {
                 PrintWriter out = response.getWriter();
                 out.print(result);
             } else if (islemid == 0) { /* Takip ekleme */
-                logger.info("islemid: " + request.getParameter(Fields.ISLEMID));
+                logger.info("islemid: {}", request.getParameter(Fields.ISLEMID));
                 String baszaman = request.getParameter("bassaat").toString() + ":" + request.getParameter("basdakika").toString() + ":" + "00";
                 String bitzaman = request.getParameter("bitsaat").toString() + ":" + request.getParameter("bitdakika").toString() + ":" + "00";
                 String hataliad = (request.getParameter(Fields.HATALIADET).trim().isEmpty()) ? "0" : request.getParameter(Fields.HATALIADET);

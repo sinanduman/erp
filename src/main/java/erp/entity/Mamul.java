@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -13,7 +14,7 @@ import java.sql.SQLException;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Mamul {
+public class Mamul implements Serializable {
     private Integer id;
     private String ad;
     private String kod;

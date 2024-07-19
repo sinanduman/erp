@@ -112,9 +112,6 @@ public class MamulStokServlet extends HttpServlet implements Serializable {
         }
 
         if (!ajaxInAction) {
-
-            List<Stok> stok = new ArrayList<>();
-
             int totalrecord = 0;
             int page = 1;
             int noofpages = 0;
@@ -152,7 +149,7 @@ public class MamulStokServlet extends HttpServlet implements Serializable {
             if (request.getParameter(Fields.PAGE) != null)
                 page = Integer.parseInt(request.getParameter(Fields.PAGE));
             noofpages = (int) Math.ceil(totalrecord * 1.0 / Genel.ROWPERPAGE);
-            stok = stokDao.stokListeGetirTum(BilesenTip.MAMUL, Integer.parseInt(mamulid), page, null);
+            List<Stok> stok = stokDao.stokListeGetirTum(BilesenTip.MAMUL, Integer.parseInt(mamulid), page, null);
 
             List<Mamul> mamul = mamulDao.mamulListeStokGetir(null, 0, 1);
 

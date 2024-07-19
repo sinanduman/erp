@@ -39,7 +39,7 @@ public class LoginDao implements Serializable, BaseDao {
             boolean more = rs.next();
             // if user does not exist set the isValid variable to false
             if (!more) {
-                System.out.println("Sorry, you are not a registered user! Please sign up first");
+                logger.error("Sorry, you are not a registered user! Please sign up first");
             }
             // if user exists set the isValid variable to true
             else {

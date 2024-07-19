@@ -39,7 +39,10 @@ public class MamulDao implements Serializable, BaseDao {
             pstmt.setInt(5, Integer.parseInt(firmaid));
             pstmt.setInt(6, Integer.parseInt(figur));
             pstmt.setInt(7, Integer.parseInt(mamulBaskiSayisi));
-            logger.info("{}", pstmt);
+
+            long start = System.currentTimeMillis();
+            pstmt.executeUpdate();
+            logger.info(Constants.LOG_FORMAT, pstmt, (System.currentTimeMillis() - start));
             pstmt.executeUpdate();
             rs = pstmt.getGeneratedKeys();
             if (rs.next()) {

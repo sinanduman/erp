@@ -44,7 +44,7 @@ public class ExcelGkrListeServlet extends HttpServlet implements Serializable {
         String excelsql = request.getParameter("excelsql");
         String tablename = BaseDao.V_STOKBILESEN;
 
-        logger.info("excelsql: " + excelsql);
+        logger.info("excelsql: {}", excelsql);
 
         if (excelegonder != null && excelegonder.equals("1")) {
 
@@ -54,7 +54,7 @@ public class ExcelGkrListeServlet extends HttpServlet implements Serializable {
                 Sheet sheet = workbook.createSheet();
 
                 int cnt = 0;
-                Map<Integer, Object[]> data = new TreeMap<Integer, Object[]>();
+                Map<Integer, Object[]> data = new TreeMap<>();
 
                 data.put(++cnt, new Object[]{
                                 "Tarih",
@@ -73,7 +73,7 @@ public class ExcelGkrListeServlet extends HttpServlet implements Serializable {
                     String smiktar = "";
                     Double dmkitar = 0.0;
                     Long imiktar = 0L;
-                    if (sr.getBilesentipid() == BilesenTip.HAMMADDE.value()) {
+                    if (sr.getBilesentipid().intValue() == BilesenTip.HAMMADDE.value()) {
                         if ((Long.valueOf(sr.getMiktar()) / 1000.0) > (Long.valueOf(sr.getMiktar()) / 1000)) {
                             dmkitar = (Long.valueOf(sr.getMiktar())) / 1000.0;
                             smiktar = dmkitar.toString() + " Kg.";
@@ -119,10 +119,10 @@ public class ExcelGkrListeServlet extends HttpServlet implements Serializable {
                         if (key == 1) {
                             CellStyle style = workbook.createCellStyle();
                             XSSFFont font = (XSSFFont) workbook.createFont();
-                            font.setColor(HSSFColor.WHITE.index);
+                            font.setColor(HSSFColor.HSSFColorPredefined.WHITE.getIndex());
                             style.setFont(font);
-                            style.setFillBackgroundColor(HSSFColor.RED.index);
-                            style.setFillPattern(CellStyle.SOLID_FOREGROUND);
+                            style.setFillBackgroundColor(HSSFColor.HSSFColorPredefined.RED.getIndex());
+                            style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
                             cell.setCellStyle(style);
                         }
                     }

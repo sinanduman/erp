@@ -107,7 +107,7 @@ public class IzlemeNoServlet extends HttpServlet implements Serializable {
                 PrintWriter out = response.getWriter();
                 out.print(IzlemeNoStr(result));
             }
-            logger.info("mamulid: " + mamulid + ", result: " + mamulid);
+            logger.info("mamulid: {}, result: {}", mamulid, mamulid);
         }
 
         if (!ajaxInAction) {
@@ -117,7 +117,7 @@ public class IzlemeNoServlet extends HttpServlet implements Serializable {
 
             filter1 = (bilesenid == 0) ? "" : " and id=" + bilesenid;
 
-            if (bas_tarih != null && bit_tarih != null && !bas_tarih.equals("") && !bit_tarih.equals("")) {
+            if (bas_tarih != null && bit_tarih != null && !bas_tarih.isEmpty() && !bit_tarih.isEmpty()) {
                 filter2 = andYes +
                         " ( kullanildi_tarih BETWEEN '" + Util.date_tr_to_eng(bas_tarih) +
                         "' AND '" + Util.date_tr_to_eng(bit_tarih) +

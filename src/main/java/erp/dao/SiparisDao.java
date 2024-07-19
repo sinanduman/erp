@@ -25,7 +25,7 @@ public class SiparisDao implements Serializable, BaseDao {
     private static final Logger logger = LoggerFactory.getLogger(SiparisDao.class);
 
     public List<Siparis> siparisEkle(String bilesenid, String miktar, String not) {
-        List<Siparis> temp = new ArrayList<Siparis>();
+        List<Siparis> temp = new ArrayList<>();
         String insertQuery = Fields.INSERT_INTO + BaseDao.SIPARIS + " (bilesenid, miktar, \"not\") values (?,?,?)";
 
         // connect to DB

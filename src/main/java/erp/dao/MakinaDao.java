@@ -2,6 +2,7 @@ package erp.dao;
 
 import erp.entity.Makina;
 import erp.servlet.ConnectionManager;
+import erp.util.Constants;
 import erp.util.Fields;
 import erp.util.Util;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -36,8 +37,9 @@ public class MakinaDao implements Serializable, BaseDao {
         ResultSet rs;
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(searchQuery)) {
-            logger.info("{}", pstmt);
+            long start = System.currentTimeMillis();
             rs = pstmt.executeQuery();
+            logger.info(Constants.LOG_FORMAT, pstmt, (System.currentTimeMillis() - start));
             while (rs.next()) {
                 temp.add(new Makina(rs));
             }

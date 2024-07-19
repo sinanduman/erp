@@ -44,7 +44,7 @@ public class ExcelUretimServlet extends HttpServlet implements Serializable {
         String tablename = BaseDao.V_URETIMPLAN_TUM_PLAN;
 
 
-        logger.info("excelsql: " + excelsql);
+        logger.info("excelsql: {}", excelsql);
 
         if (excelegonder != null && excelegonder.equals("1")) {
 
@@ -54,7 +54,7 @@ public class ExcelUretimServlet extends HttpServlet implements Serializable {
                 Sheet sheet = workbook.createSheet();
 
                 int cnt = 0;
-                Map<Integer, Object[]> data = new TreeMap<Integer, Object[]>();
+                Map<Integer, Object[]> data = new TreeMap<>();
 
                 data.put(++cnt, new Object[]{
                                 "Tarih",
@@ -119,10 +119,10 @@ public class ExcelUretimServlet extends HttpServlet implements Serializable {
                         if (key == 1) {
                             CellStyle style = workbook.createCellStyle();
                             XSSFFont font = (XSSFFont) workbook.createFont();
-                            font.setColor(HSSFColor.WHITE.index);
+                            font.setColor(HSSFColor.HSSFColorPredefined.WHITE.getIndex());
                             style.setFont(font);
-                            style.setFillBackgroundColor(HSSFColor.RED.index);
-                            style.setFillPattern(CellStyle.SOLID_FOREGROUND);
+                            style.setFillBackgroundColor(HSSFColor.HSSFColorPredefined.RED.getIndex());
+                            style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
                             cell.setCellStyle(style);
                         }
                     }

@@ -134,10 +134,10 @@ public class ExcelMamulServlet extends HttpServlet implements Serializable {
                         if (key < 4) {
                             CellStyle style = workbook.createCellStyle();
                             XSSFFont font = (XSSFFont) workbook.createFont();
-                            font.setColor(HSSFColor.WHITE.index);
+                            font.setColor(HSSFColor.HSSFColorPredefined.WHITE.getIndex());
                             style.setFont(font);
-                            style.setFillBackgroundColor(HSSFColor.RED.index);
-                            style.setFillPattern(CellStyle.SOLID_FOREGROUND);
+                            style.setFillBackgroundColor(HSSFColor.HSSFColorPredefined.RED.getIndex());
+                            style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
                             cell.setCellStyle(style);
                         }
                     }

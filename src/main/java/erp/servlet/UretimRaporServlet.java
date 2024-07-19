@@ -86,7 +86,7 @@ public class UretimRaporServlet extends HttpServlet implements Serializable {
             if (firmaid != null && !firmaid.equals("")) {
                 filter4 = andYes + " firmaid = " + Integer.parseInt(firmaid);
             }
-            if (bas_tarih != null && bit_tarih != null && !bas_tarih.equals("") && !bit_tarih.equals("")) {
+            if (bas_tarih != null && bit_tarih != null && !bas_tarih.isEmpty() && !bit_tarih.isEmpty()) {
                 filter5 = andYes + " ( tarih BETWEEN '" + Util.date_tr_to_eng(bas_tarih) + "' AND '" + Util.date_tr_to_eng(bit_tarih) + "')";
             }
             filter0 = filter1 + filter2 + filter3 + filter4 + filter5;
@@ -99,7 +99,7 @@ public class UretimRaporServlet extends HttpServlet implements Serializable {
             // PAGING
 
             stokrapor = uretimDao.uretimBilesenRapor(BaseDao.V_URETIMPLAN_TUM_PLAN, page0, filter0);
-            logger.info("noofpages: " + noofpages + ", totalrecord: " + totalrecord + ", " + BaseDao.V_URETIMPLAN_TUM_PLAN + " WHERE 1=1" + filter0);
+            logger.info("noofpages: {}, totalrecord: {}, {} WHERE 1=1 {}", noofpages, totalrecord, BaseDao.V_URETIMPLAN_TUM_PLAN, filter0);
             excelsql = filter0;
         }
 

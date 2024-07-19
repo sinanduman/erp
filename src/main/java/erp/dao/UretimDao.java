@@ -27,11 +27,13 @@ public class UretimDao implements Serializable, BaseDao {
         String retVal = "0";
         String deleteQuery = Fields.SELECT + BaseDao.F_PLAN_SIL + "(?)";
         // connect to DB
+        ResultSet rs;
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(deleteQuery)) {
             pstmt.setInt(1, uretimplanid);
-            logger.info("{}", pstmt);
-            ResultSet rs = pstmt.executeQuery();
+            long start = System.currentTimeMillis();
+            rs = pstmt.executeQuery();
+            logger.info(Constants.LOG_FORMAT, pstmt, (System.currentTimeMillis() - start));
             if (rs.next()) {
                 retVal = rs.getString(1);
             }

@@ -50,7 +50,7 @@ public class IzlemeNoDao implements Serializable, BaseDao {
                 temp.add(new IzlemeNo(
                         rs.getInt(Fields.ID),
                         rs.getInt(Fields.GKRNO),
-                        rs.getDate("kullanildi_tarih"),
+                        rs.getDate(Fields.KULLANILDI_TARIH),
                         rs.getString(Fields.KOD),
                         rs.getString(Fields.AD),
                         rs.getInt(Fields.MIKTAR),
@@ -125,7 +125,7 @@ public class IzlemeNoDao implements Serializable, BaseDao {
                 temp.add(new IzlemeNo(
                         rs.getInt(Fields.MAMULID),
                         rs.getInt(Fields.GKRNO),
-                        rs.getDate("kullanildi_tarih"),
+                        rs.getDate(Fields.KULLANILDI_TARIH),
                         rs.getString(Fields.MAMULKOD),
                         rs.getString(Fields.MAMULAD),
                         0, /* Ilk Uretim */

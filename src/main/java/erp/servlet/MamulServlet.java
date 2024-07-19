@@ -106,7 +106,7 @@ public class MamulServlet extends HttpServlet implements Serializable {
                         String bilesenid = request.getParameter("bilesenid_" + i);
                         String birimid = request.getParameter("birimid_" + i);
                         String miktar = request.getParameter("miktar_" + i);
-                        logger.info("newMamulId: " + newMamulId + ", bilesenid: " + bilesenid);
+                        logger.info("newMamulId: {}, bilesenid: {}", newMamulId, bilesenid);
                         mamulDao.mamulBilesenEkle(
                                 Integer.parseInt(newMamulId),
                                 Integer.parseInt(bilesenid),

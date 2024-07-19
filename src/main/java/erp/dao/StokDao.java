@@ -40,8 +40,9 @@ public class StokDao implements Serializable, BaseDao {
              PreparedStatement pstmt = conn.prepareStatement(selectQuery)) {
             pstmt.setInt(1, Integer.parseInt(bilesenid));
             pstmt.setInt(2, Integer.parseInt(gkrno));
+            long start = System.currentTimeMillis();
             rs = pstmt.executeQuery();
-            logger.info("{}", pstmt);
+            logger.info(Constants.LOG_FORMAT, pstmt, (System.currentTimeMillis() - start));
             if (rs.next()) {
                 sum = rs.getInt(1);
             }

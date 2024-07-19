@@ -28,7 +28,11 @@ public class CalisanDao implements Serializable, BaseDao {
         List<Calisan> temp = new ArrayList<>();
         String pageFilter = Util.getPageFilter(offset);
         String durumFilter = (durum != null && durum == 1) ? " where durum = 1 " : "";
-        String searchQuery = "select * from " + BaseDao.CALISAN + durumFilter + " order by ad " + pageFilter;
+        String searchQuery = Fields.SELECT + "*"
+                + Fields.FROM + BaseDao.CALISAN
+                + durumFilter
+                + Fields.ORDER_BY + "ad "
+                + pageFilter;
 
         // connect to DB
         ResultSet rs;

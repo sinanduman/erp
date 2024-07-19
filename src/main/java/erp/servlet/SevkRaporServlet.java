@@ -99,7 +99,7 @@ public class SevkRaporServlet extends HttpServlet implements Serializable {
             noofpages = (int) Math.ceil(totalrecord * 1.0 / Genel.ROWPERPAGE);
             // PAGING
 
-            logger.info("noofpages: " + noofpages + ", totalrecord: " + totalrecord + ", " + BaseDao.IRSALIYE + " WHERE 1=1" + filter0);
+            logger.info("noofpages: {}, totalrecord: {}, {} WHERE 1=1 {}", noofpages, totalrecord, BaseDao.IRSALIYE, filter0);
 
             irsaliyebilesenonaylandi = irsaliyeDao.irsaliyeBilesenListeTum(IrsaliyeTip.ONAYLANDI, 1, irsaliyeid, firmaid, tarih, tarih, page0, mamulid);
 

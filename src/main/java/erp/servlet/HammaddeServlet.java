@@ -54,9 +54,7 @@ public class HammaddeServlet extends HttpServlet implements Serializable {
         int noofpages = (int) Math.ceil(totalrecord * 1.0 / Genel.ROWPERPAGE);
 
         List<Bilesen> hammaddetum = bilesenDao.bilesenListeGetirTum(null, 0, null, null);
-        ;
         List<Bilesen> hammadde = bilesenDao.bilesenListeGetirTum(null, page, (Util.isNotEmptyOrNull(bilesenid)) ? Integer.parseInt(bilesenid) : null, null);
-        ;
 
         token = Util.getToken();
         request.setAttribute(Fields.TOKEN, token);

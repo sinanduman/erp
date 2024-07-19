@@ -59,12 +59,10 @@ public class AjaxUtils extends HttpServlet implements Serializable {
             pstmt.setString(2, gorev);
             pstmt.executeUpdate();
 
-
             rs = pstmt2.executeQuery();
 
             while (rs.next()) {
-                temp.add(new Calisan(rs)
-                );
+                temp.add(new Calisan(rs));
             }
         } catch (Exception e) {
             logger.error(ExceptionUtils.getStackTrace(e));

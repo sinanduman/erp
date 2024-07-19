@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -12,7 +13,7 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UretimPlan {
+public class UretimPlan implements Serializable {
     private Integer id;
     private Integer mamulid;
     private String mamulad;
@@ -60,58 +61,47 @@ public class UretimPlan {
     }
 
     public String getBaszaman() {
-        String date = (this.baszaman != null) ? (new SimpleDateFormat("HH:mm").format(baszaman)) : "";
-        return date;
+        return (this.baszaman != null) ? (new SimpleDateFormat("HH:mm").format(baszaman)) : "";
     }
 
     public String getBitzaman() {
-        String date = (this.bitzaman != null) ? (new SimpleDateFormat("HH:mm").format(bitzaman)) : "";
-        return date;
+        return (this.bitzaman != null) ? (new SimpleDateFormat("HH:mm").format(bitzaman)) : "";
     }
 
     public String getTarih() {
-        String date = (this.tarih != null) ? (new SimpleDateFormat("yyyy-MM-dd").format(tarih)) : "";
-        return date;
+        return (this.tarih != null) ? (new SimpleDateFormat("yyyy-MM-dd").format(tarih)) : "";
     }
 
     public String getTarihTR() {
-        String date = (this.tarih != null) ? (new SimpleDateFormat("dd-MM-yyyy").format(tarih)) : "";
-        return date;
+        return (this.tarih != null) ? (new SimpleDateFormat("dd-MM-yyyy").format(tarih)) : "";
     }
 
     public String getTarihTRShort() {
-        String date = (this.tarih != null) ? (new SimpleDateFormat("dd.MM.yy").format(tarih)) : "";
-        return date;
+        return (this.tarih != null) ? (new SimpleDateFormat("dd.MM.yy").format(tarih)) : "";
     }
 
     public String getBasZaman() {
-        String date = (this.baszaman != null) ? (new SimpleDateFormat("HH:mm").format(baszaman)) : "";
-        return date;
+        return (this.baszaman != null) ? (new SimpleDateFormat("HH:mm").format(baszaman)) : "";
     }
 
     public String getBasSaat() {
-        String date = (this.baszaman != null) ? (new SimpleDateFormat("HH").format(baszaman)) : "";
-        return date;
+        return (this.baszaman != null) ? (new SimpleDateFormat("HH").format(baszaman)) : "";
     }
 
     public String getBasDakika() {
-        String date = (this.baszaman != null) ? (new SimpleDateFormat("mm").format(baszaman)) : "";
-        return date;
+        return (this.baszaman != null) ? (new SimpleDateFormat("mm").format(baszaman)) : "";
     }
 
     public String getBitZaman() {
-        String date = (this.bitzaman != null) ? (new SimpleDateFormat("HH:mm").format(bitzaman)) : "";
-        return date;
+        return (this.bitzaman != null) ? (new SimpleDateFormat("HH:mm").format(bitzaman)) : "";
     }
 
     public String getBitSaat() {
-        String date = (this.bitzaman != null) ? (new SimpleDateFormat("HH").format(bitzaman)) : "";
-        return date;
+        return (this.bitzaman != null) ? (new SimpleDateFormat("HH").format(bitzaman)) : "";
     }
 
     public String getBitDakika() {
-        String date = (this.bitzaman != null) ? (new SimpleDateFormat("mm").format(bitzaman)) : "";
-        return date;
+        return (this.bitzaman != null) ? (new SimpleDateFormat("mm").format(bitzaman)) : "";
     }
 
     public Integer getFark() {

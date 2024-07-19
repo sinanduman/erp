@@ -124,8 +124,8 @@ public class ExcelStokServlet extends HttpServlet implements Serializable {
                                 sr.getTarih(),
                                 (sr.getIslemyonu() == 0) ? " + " : " - ",
                                 //((sr.getBilesentipid()==BilesenTip.HAMMADDE.value()) ? Util.Round(sr.getMiktar(),1000) : sr.getMiktar() ),
-                                ((sr.getBilesentipid() == BilesenTip.HAMMADDE.value()) ? Util.Round(sr.getMiktar() / 1000.0, 2.0) : sr.getMiktar()),
-                                ((sr.getBilesentipid() == BilesenTip.HAMMADDE.value()) ? Util.Round(sr.getKalan() / 1000.0, 2.0) : sr.getKalan())
+                                ((sr.getBilesentipid().intValue() == BilesenTip.HAMMADDE.value()) ? Util.Round(sr.getMiktar() / 1000.0, 2.0) : sr.getMiktar()),
+                                ((sr.getBilesentipid().intValue() == BilesenTip.HAMMADDE.value()) ? Util.Round(sr.getKalan() / 1000.0, 2.0) : sr.getKalan())
                         });
                     } else {
                         if (fiyatDetayGoster) {
@@ -136,7 +136,7 @@ public class ExcelStokServlet extends HttpServlet implements Serializable {
                                     bilesenmap.get(sr.getBilesenid()).getFiyat(),
                                     FiyatTip.getAdKod(bilesenmap.get(sr.getBilesenid()).getFiyatId()),
                                     sr.getTarih(),
-                                    ((sr.getBilesentipid() == BilesenTip.HAMMADDE.value()) ? Util.Round(sr.getMiktar(), 1000) : sr.getMiktar()),
+                                    ((sr.getBilesentipid().intValue() == BilesenTip.HAMMADDE.value()) ? Util.Round(sr.getMiktar(), 1000) : sr.getMiktar()),
                             });
                         } else {
                             data.put(++cnt, new Object[]{
@@ -144,7 +144,7 @@ public class ExcelStokServlet extends HttpServlet implements Serializable {
                                     sr.getBilesenad(),
                                     sr.getFirmaad(),
                                     sr.getTarih(),
-                                    ((sr.getBilesentipid() == BilesenTip.HAMMADDE.value()) ? Util.Round(sr.getMiktar(), 1000) : sr.getMiktar()),
+                                    ((sr.getBilesentipid().intValue() == BilesenTip.HAMMADDE.value()) ? Util.Round(sr.getMiktar(), 1000) : sr.getMiktar()),
                             });
                         }
                     }
@@ -188,10 +188,10 @@ public class ExcelStokServlet extends HttpServlet implements Serializable {
                         if (key == 1) {
                             CellStyle style = workbook.createCellStyle();
                             XSSFFont font = (XSSFFont) workbook.createFont();
-                            font.setColor(HSSFColor.WHITE.index);
+                            font.setColor(HSSFColor.HSSFColorPredefined.WHITE.getIndex());
                             style.setFont(font);
-                            style.setFillBackgroundColor(HSSFColor.RED.index);
-                            style.setFillPattern(CellStyle.SOLID_FOREGROUND);
+                            style.setFillBackgroundColor(HSSFColor.HSSFColorPredefined.RED.getIndex());
+                            style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
                             cell.setCellStyle(style);
                         }
                     }

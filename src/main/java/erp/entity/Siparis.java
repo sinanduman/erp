@@ -13,7 +13,7 @@ import java.text.SimpleDateFormat;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Siparis {
+public class Siparis implements java.io.Serializable {
     private Integer id;
     private Integer bilesenid;
     private String bilesenad;

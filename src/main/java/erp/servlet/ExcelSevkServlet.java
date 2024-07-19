@@ -51,7 +51,7 @@ public class ExcelSevkServlet extends HttpServlet implements Serializable {
         exceltarih = (Util.isNotEmptyOrNull(exceltarih)) ? exceltarih : null;
         excelmamulid = (Util.isNotEmptyOrNull(excelmamulid)) ? excelmamulid : null;
 
-        logger.info("excelsql: " + excelsql);
+        logger.info("excelsql: {}", excelsql);
 
         if (excelegonder != null && excelegonder.equals("1")) {
 
@@ -118,10 +118,10 @@ public class ExcelSevkServlet extends HttpServlet implements Serializable {
                         if (key == 1) {
                             CellStyle style = workbook.createCellStyle();
                             XSSFFont font = (XSSFFont) workbook.createFont();
-                            font.setColor(HSSFColor.WHITE.index);
+                            font.setColor(HSSFColor.HSSFColorPredefined.WHITE.getIndex());
                             style.setFont(font);
-                            style.setFillBackgroundColor(HSSFColor.RED.index);
-                            style.setFillPattern(CellStyle.SOLID_FOREGROUND);
+                            style.setFillBackgroundColor(HSSFColor.HSSFColorPredefined.RED.getIndex());
+                            style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
                             cell.setCellStyle(style);
                         }
                     }

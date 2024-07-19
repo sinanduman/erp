@@ -135,6 +135,7 @@ public final class Fields {
     public static final String FIYATID = "fiyatid";
     public static final String KRITIKESIK = "kritikesik";
     public static final String KULLANILDI = "kullanildi";
+    public static final String KULLANILDI_TARIH = "kullanildi_tarih";
     public static final String CEVRIMSURESI = "cevrimsuresi";
     public static final String AGIRLIK = "agirlik";
     public static final String FIGUR = "figur";

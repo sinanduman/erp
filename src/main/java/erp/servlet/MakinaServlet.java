@@ -69,13 +69,11 @@ public class MakinaServlet extends HttpServlet implements Serializable {
             }
         }
         if (!ajaxIncluded) {
-            List<Makina> makina = new ArrayList<>();
-
             int totalrecord = daoFunctions.recordAgg(BaseDao.MAKINA, Fields.COUNT, "*", "");
             int page = 1;
             if (request.getParameter(Fields.PAGE) != null)
                 page = Integer.parseInt(request.getParameter(Fields.PAGE));
-            makina = makinaDao.makinaListeGetirTum(page);
+            List<Makina> makina = makinaDao.makinaListeGetirTum(page);
 
             int noofpages = (int) Math.ceil(totalrecord * 1.0 / Genel.ROWPERPAGE);
 
