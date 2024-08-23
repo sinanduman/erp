@@ -8,6 +8,7 @@ public final class Fields {
     public static final String SELECT = " SELECT ";
     public static final String FROM = " FROM ";
     public static final String WHERE = " WHERE ";
+    public static final String WHERE_11 = " WHERE 1=1 ";
     public static final String JOIN = " JOIN ";
     public static final String LEFT_JOIN = " LEFT JOIN ";
     public static final String UPDATE = " UPDATE ";

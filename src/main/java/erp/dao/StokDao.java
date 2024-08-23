@@ -176,7 +176,7 @@ public class StokDao implements Serializable, BaseDao {
 
     public List<Stok> stokMamulListeGetirTum(Integer mamulid, Integer durum) {
         List<Stok> temp = new ArrayList<>();
-        String filter0 = Fields.WHERE + "1=1";
+        String filter0 = Fields.WHERE_11;
         String filter1 = (mamulid == null) ? "" : " and bilesenid = " + mamulid;
         String filter2 = (durum == null) ? "" : " and durum = " + durum;
         String searchQuery = Fields.SELECT + "*" + Fields.FROM + BaseDao.V_STOKMAMUL_TUM + filter0 + filter1 + filter2;
@@ -226,10 +226,11 @@ public class StokDao implements Serializable, BaseDao {
         String pageFilter = Util.getPageFilter(offset);
         String filter0 = filterPage;
 
-        String searchQuery = "SELECT e.*, f.ad firmaad FROM " + tablename + " e"
-                + " JOIN " + BaseDao.FIRMA + " f on f.id = e.firmaid"
-                + " WHERE 1=1 " + filter0 + " and islemyonu = 0"
-                + " ORDER BY e.giristarihi, e.id "
+        String searchQuery = "SELECT e.*, f.ad firmaad "
+                + Fields.FROM + tablename + " e"
+                + Fields.JOIN + BaseDao.FIRMA + " f on f.id = e.firmaid"
+                + Fields.WHERE_11 + filter0 + " and islemyonu = 0"
+                + Fields.ORDER_BY + " e.giristarihi, e.id "
                 + pageFilter;
 
         logger.info(searchQuery);
@@ -289,21 +290,22 @@ public class StokDao implements Serializable, BaseDao {
                 ? " and ( giristarihi BETWEEN '" + Util.date_tr_to_eng(param.get(Fields.BAS_TARIH)) + "' AND '"
                 + Util.date_tr_to_eng(param.get(Fields.BIT_TARIH)) + "')"
                 : "";
-        String order = (param != null && param.get(Fields.SIRALAMA) != null) ? param.get(Fields.SIRALAMA) : "islemtarihi";
-        String ascdesc = (param != null && param.get(Fields.SIRALAMAYON) != null) ? param.get(Fields.SIRALAMAYON) : "desc";
+        String order = (param != null && param.get(Fields.SIRALAMA) != null) ? param.get(Fields.SIRALAMA) : " islemtarihi ";
+        String ascdesc = (param != null && param.get(Fields.SIRALAMAYON) != null) ? param.get(Fields.SIRALAMAYON) : " desc ";
 
         String searchQuery = "select m2.kod mamulkod, s.*, b.ad bilesenad, b.kod bilesenkod, "
                 + " coalesce(s.giristarihi, s.cikistarihi) as islemtarihi, "
                 + " bt.id bilesentipid, bt.ad bilesentipad, br.id birimid, br.ad birimad, "
                 + " f.id firmaid, f.ad firmaad, '' as mamuldetay, (sum(CASE WHEN s.islemyonu = 0 THEN s.miktar ELSE -1*miktar END) OVER (ORDER BY coalesce(s.giristarihi, s.cikistarihi), s.planid)) kalan "
-                + " from      " + BaseDao.STOK + " s"
+                + Fields.FROM + BaseDao.STOK + " s "
                 + Fields.LEFT_JOIN + BaseDao.URETIMPLAN + " p on p.id = s.planid"
-                + Fields.LEFT_JOIN + BaseDao.MAMUL + " m2 on m2.id = p.mamulid " + join0
-                + " join      " + BaseDao.BILESENTIP + " bt on bt.id = b.bilesentipid"
+                + Fields.LEFT_JOIN + BaseDao.MAMUL + " m2 on m2.id = p.mamulid "
+                + join0
+                + Fields.JOIN + BaseDao.BILESENTIP + " bt on bt.id = b.bilesentipid"
                 + Fields.LEFT_JOIN + BaseDao.BIRIM + " br on br.id = b.birimid"
-                + " join      " + BaseDao.FIRMA + " f on f.id = b.firmaid "
-                + " where 1=1 " + filter0 + filter1 + filter2
-                + " order by " + order + " " + ascdesc + ", s.id "
+                + Fields.JOIN + BaseDao.FIRMA + " f on f.id = b.firmaid "
+                + Fields.WHERE_11 + filter0 + filter1 + filter2
+                + Fields.ORDER_BY + order + ascdesc + ", s.id " + ascdesc
                 + pageFilter;
 
         // connect to DB
