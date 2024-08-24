@@ -61,7 +61,7 @@ public class SevkRaporServlet extends HttpServlet implements Serializable {
 
         List<Mamul> mamul = mamulDao.mamulListeGetir(null, 0, null);
         List<Irsaliye> irsaliyejson = irsaliyeDao.irsaliyeListeGetirTum(IrsaliyeTip.ONAYLANDI, 0, null, null, null);
-        List<IrsaliyeBilesen> irsaliyebilesenonaylandi = new ArrayList<IrsaliyeBilesen>();
+        List<IrsaliyeBilesen> irsaliyebilesenonaylandi = new ArrayList<>();
 
         if (raporgetirid != null || page != null) {
             String filter0 = "";

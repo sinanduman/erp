@@ -43,7 +43,7 @@ public class HammaddeStokServlet extends HttpServlet implements Serializable {
 
         List<Bilesen> hammadde = bilesenDao.bilesenListeGetirTum(null, 0, null, null);
         List<Firma> firma = firmaDao.firmaListeGetirTum(0);
-        List<Stok> stok = new ArrayList<Stok>();
+        List<Stok> stok = new ArrayList<>();
 
         String stoklisteid = request.getParameter(Fields.STOKLISTEID);
         String bilesenid = request.getParameter(Fields.BILESENID);

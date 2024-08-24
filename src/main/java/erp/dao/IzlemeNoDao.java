@@ -64,7 +64,7 @@ public class IzlemeNoDao implements Serializable, BaseDao {
     }
 
     public List<IzlemeNo> izlemeNoUret(String mamulid, String kullanildi) {
-        List<IzlemeNo> temp = new ArrayList<IzlemeNo>();
+        List<IzlemeNo> temp = new ArrayList<>();
         String updateQuery = Fields.INSERT_INTO + BaseDao.IZLEMENO + "(mamulid) values(?)";
 
         // connect to DB

@@ -50,7 +50,7 @@ public class SiparisDao implements Serializable, BaseDao {
     }
 
     public List<Siparis> siparisListeGetir(SiparisTip siparis) {
-        List<Siparis> temp = new ArrayList<Siparis>();
+        List<Siparis> temp = new ArrayList<>();
 
         String filter = "";
         if (siparis == SiparisTip.BEKLEYEN) {

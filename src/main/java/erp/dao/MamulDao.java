@@ -176,7 +176,7 @@ public class MamulDao implements Serializable, BaseDao {
     }
 
     public List<Mamul> mamulListeStokGetir(Integer mamulid, int offset, Integer durum) {
-        List<Mamul> temp = new ArrayList<Mamul>();
+        List<Mamul> temp = new ArrayList<>();
         String pageFilter = Util.getPageFilter(offset);
         String baseFilter = " where 1=1";
         String queryFilter0 = (mamulid == null) ? "" : " and id = " + mamulid;
@@ -201,7 +201,7 @@ public class MamulDao implements Serializable, BaseDao {
     }
 
     public List<MamulBilesen> mamulBilesenListeGetirTum(Integer mamulid) {
-        List<MamulBilesen> temp = new ArrayList<MamulBilesen>();
+        List<MamulBilesen> temp = new ArrayList<>();
         String queryFilter = (mamulid == null) ? "" : " where mamulid = " + mamulid;
         String searchQuery = "select * from  " + BaseDao.V_MAMULBILESEN_TUM + queryFilter;
         // connect to DB

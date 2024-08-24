@@ -147,7 +147,7 @@ public class UretimDao implements Serializable, BaseDao {
     }
 
     public List<UretimPlan> uretimPlanListeGetir(UretimDurum uretimdurum, int offset, String filter, final String view) {
-        List<UretimPlan> temp = new ArrayList<UretimPlan>();
+        List<UretimPlan> temp = new ArrayList<>();
 
         String pageFilter = Util.getPageFilter(offset);
         String filter0 = " where tamamlandi=" + uretimdurum.value() + " " + filter;
@@ -204,7 +204,7 @@ public class UretimDao implements Serializable, BaseDao {
     }
 
     public List<UretimPlan> uretimPlanListeGetirExcel(UretimDurum uretimdurum, String tarih, final String excelsql) {
-        List<UretimPlan> temp = new ArrayList<UretimPlan>();
+        List<UretimPlan> temp = new ArrayList<>();
 
         logger.info("excel: " + excelsql);
         // String searchQuery ="SELECT * FROM irfan.uretimplantum WHERE
@@ -258,7 +258,7 @@ public class UretimDao implements Serializable, BaseDao {
     }
 
     public List<UretimPlan> uretimBilesenRapor(String tablename, int offset, String filterPage) {
-        List<UretimPlan> temp = new ArrayList<UretimPlan>();
+        List<UretimPlan> temp = new ArrayList<>();
         String pageFilter = Util.getPageFilter(offset);
         String searchQuery = "SELECT * FROM " + tablename
                 + " WHERE 1=1 " + filterPage
