@@ -43,7 +43,6 @@ public class MamulDao implements Serializable, BaseDao {
             long start = System.currentTimeMillis();
             pstmt.executeUpdate();
             logger.info(Constants.LOG_FORMAT, pstmt, (System.currentTimeMillis() - start));
-            pstmt.executeUpdate();
             rs = pstmt.getGeneratedKeys();
             if (rs.next()) {
                 newMamulId = String.valueOf(rs.getInt(1));
