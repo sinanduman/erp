@@ -290,13 +290,13 @@ public class StokDao implements Serializable, BaseDao {
                 ? " and ( giristarihi BETWEEN '" + Util.date_tr_to_eng(param.get(Fields.BAS_TARIH)) + "' AND '"
                 + Util.date_tr_to_eng(param.get(Fields.BIT_TARIH)) + "')"
                 : "";
-        String order = (param != null && param.get(Fields.SIRALAMA) != null) ? param.get(Fields.SIRALAMA) : " s.id ";
+        String order = (param != null && param.get(Fields.SIRALAMA) != null) ? param.get(Fields.SIRALAMA) : " islemtarihi ";
         String ascdesc = (param != null && param.get(Fields.SIRALAMAYON) != null) ? param.get(Fields.SIRALAMAYON) : " desc ";
 
         String searchQuery = "select m2.kod mamulkod, s.*, b.ad bilesenad, b.kod bilesenkod, "
                 + " coalesce(s.giristarihi, s.cikistarihi) as islemtarihi, "
                 + " bt.id bilesentipid, bt.ad bilesentipad, br.id birimid, br.ad birimad, "
-                + " f.id firmaid, f.ad firmaad, '' as mamuldetay, (sum(CASE WHEN s.islemyonu = 0 THEN s.miktar ELSE -1*miktar END) OVER (ORDER BY s.id)) kalan "
+                + " f.id firmaid, f.ad firmaad, '' as mamuldetay, (sum(CASE WHEN s.islemyonu = 0 THEN s.miktar ELSE -1*miktar END) OVER (ORDER BY coalesce(s.giristarihi, s.cikistarihi), s.id desc)) kalan "
                 + Fields.FROM + BaseDao.STOK + " s "
                 + Fields.LEFT_JOIN + BaseDao.URETIMPLAN + " p on p.id = s.planid"
                 + Fields.LEFT_JOIN + BaseDao.MAMUL + " m2 on m2.id = p.mamulid "
