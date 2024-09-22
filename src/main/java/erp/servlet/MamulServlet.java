@@ -5,6 +5,8 @@ import erp.entity.*;
 import erp.model.BilesenTip;
 import erp.util.Fields;
 import erp.util.Util;
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.apache.commons.text.StringEscapeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,15 +56,15 @@ public class MamulServlet extends HttpServlet implements Serializable {
                     message = mamulDao.mamulGuncelle(
                             new String(request.getParameter(Fields.BILESENID).getBytes(StandardCharsets.UTF_8)),
                             new String(request.getParameter(Fields.FIRMAID).getBytes(StandardCharsets.UTF_8)),
-                            new String(request.getParameter(Fields.BILESENKOD).getBytes(StandardCharsets.UTF_8)),
-                            new String(request.getParameter(Fields.BILESENAD).getBytes(StandardCharsets.UTF_8)),
+                            StringEscapeUtils.unescapeEcmaScript(new String(request.getParameter(Fields.BILESENKOD).getBytes(StandardCharsets.UTF_8))),
+                            StringEscapeUtils.unescapeEcmaScript(new String(request.getParameter(Fields.BILESENAD).getBytes(StandardCharsets.UTF_8))),
                             new String(request.getParameter(Fields.FIGUR).getBytes(StandardCharsets.UTF_8)),
                             new String(request.getParameter(Fields.CEVRIMSURESI).getBytes(StandardCharsets.UTF_8)),
                             new String(request.getParameter(Fields.ESMAMULID).getBytes(StandardCharsets.UTF_8)),
                             new String(request.getParameter(Fields.DURUM).getBytes(StandardCharsets.UTF_8)),
                             new String(request.getParameter(Fields.KRITIKESIK).getBytes(StandardCharsets.UTF_8)),
-                            new String(request.getParameter("bakimtarihi").getBytes(StandardCharsets.UTF_8)),
-                            new String(request.getParameter("baskisayisi").getBytes(StandardCharsets.UTF_8)),
+                            new String(request.getParameter(Fields.BAKIMTARIHI).getBytes(StandardCharsets.UTF_8)),
+                            new String(request.getParameter(Fields.BASKISAYISI).getBytes(StandardCharsets.UTF_8)),
                             new String(request.getParameter(Fields.CALISANID).getBytes(StandardCharsets.UTF_8))
                     );
                     break;
@@ -102,17 +104,22 @@ public class MamulServlet extends HttpServlet implements Serializable {
                 } else {
                     message = "0"; //Basarili
                     int bilesenSayisi = Integer.parseInt(request.getParameter("bilesen_length"));
-                    for (int i = 0; i < bilesenSayisi; i++) {
-                        String bilesenid = request.getParameter("bilesenid_" + i);
-                        String birimid = request.getParameter("birimid_" + i);
-                        String miktar = request.getParameter("miktar_" + i);
-                        logger.info("newMamulId: {}, bilesenid: {}", newMamulId, bilesenid);
-                        mamulDao.mamulBilesenEkle(
-                                Integer.parseInt(newMamulId),
-                                Integer.parseInt(bilesenid),
-                                Integer.parseInt(birimid),
-                                Float.parseFloat(miktar)
-                        );
+                    try {
+                        for (int i = 0; i < bilesenSayisi; i++) {
+                            String bilesenid = request.getParameter("bilesenid_" + i);
+                            String birimid = request.getParameter("birimid_" + i);
+                            String miktar = request.getParameter("miktar_" + i);
+                            logger.info("newMamulId: {}, bilesenid: {}", newMamulId, bilesenid);
+                            mamulDao.mamulBilesenEkle(
+                                    Integer.parseInt(newMamulId),
+                                    Integer.parseInt(bilesenid),
+                                    Integer.parseInt(birimid),
+                                    Float.parseFloat(miktar)
+                            );
+                        }
+                    } catch (Exception e) {
+                        message = e.getMessage();
+                        logger.error("Kayıt sırasında hata oluştu: {}", ExceptionUtils.getStackTrace(e));
                     }
                 }
             } else {

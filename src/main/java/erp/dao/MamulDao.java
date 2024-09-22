@@ -155,7 +155,7 @@ public class MamulDao implements Serializable, BaseDao {
                 + queryFilter
                 + " ) x"
                 + " where ranko = 1"
-                + " ORDER BY ad"
+                + " ORDER BY x.id desc"
                 + pageFilter;
 
         // connect to DB

@@ -5,6 +5,7 @@ import erp.entity.*;
 import erp.model.UretimDurum;
 import erp.util.Fields;
 import erp.util.Util;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,29 +50,34 @@ public class UretimPlanServlet extends HttpServlet implements Serializable {
         String uretimplanid = request.getParameter(Fields.URETIMPLANID) == null ? "0" : request.getParameter(Fields.URETIMPLANID);
         String excelsql = "";
         String message = "";
-        String tarih = (request.getParameter(Fields.TARIH) == null || request.getParameter(Fields.TARIH).equals("")) ? Util.getTarih(new Date()) : Util.date_tr_to_eng(request.getParameter(Fields.TARIH));
-        String makinaid = (request.getParameter(Fields.MAKINAID) == null || request.getParameter(Fields.MAKINAID).equals("")) ? "" : request.getParameter(Fields.MAKINAID);
+        String tarih = (request.getParameter(Fields.TARIH) == null || request.getParameter(Fields.TARIH).isEmpty()) ? Util.getTarih(new Date()) : Util.date_tr_to_eng(request.getParameter(Fields.TARIH));
+        String makinaid = (request.getParameter(Fields.MAKINAID) == null || request.getParameter(Fields.MAKINAID).isEmpty()) ? "" : request.getParameter(Fields.MAKINAID);
         String filter1 = "";
         String filter2 = "";
         String filter0 = "";
 
         filter1 = " and tarih='" + Util.date_tr_to_eng(tarih) + "'";
-        if (!makinaid.equals("")) {
+        if (!makinaid.isEmpty()) {
             filter2 = " and makinaid=" + makinaid;
         }
         filter0 = filter1 + filter2;
 
-
-        if (Integer.parseInt(uretimplanid) > 0) {
-            String gercekuretim = request.getParameter(Fields.GERCEKURETIM);
-            String hata = request.getParameter(Fields.HATA);
-            String hataid = request.getParameter(Fields.HATASEBEPID);
-            message = uretimDao.uretimPlanGuncelle(
-                    Integer.parseInt(gercekuretim),
-                    (hata == null || hata.isEmpty()) ? 0 : Integer.parseInt(hata),
-                    Integer.parseInt(hataid),
-                    Integer.parseInt(uretimplanid)
-            );
+        try {
+            if (Integer.parseInt(uretimplanid) > 0) {
+                String gercekuretim = request.getParameter(Fields.GERCEKURETIM);
+                String hata = request.getParameter(Fields.HATA);
+                String hataid = request.getParameter(Fields.HATASEBEPID);
+                message = uretimDao.uretimPlanGuncelle(
+                        Integer.parseInt(gercekuretim),
+                        (hata == null || hata.isEmpty()) ? 0 : Integer.parseInt(hata),
+                        Integer.parseInt(hataid),
+                        Integer.parseInt(uretimplanid),
+                        Integer.parseInt(makinaid)
+                );
+            }
+        } catch (Exception e) {
+            message = e.getMessage();
+            logger.error("Üretim Plan kaydında hata oluştu: {} ", ExceptionUtils.getStackTrace(e));
         }
 
         excelsql = "SELECT * FROM " + BaseDao.V_URETIMPLAN_TUM_PLAN + " WHERE tamamlandi=1 " + filter0;

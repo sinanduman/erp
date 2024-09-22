@@ -124,10 +124,10 @@ public class UretimDao implements Serializable, BaseDao {
         return result;
     }
 
-    public String uretimPlanGuncelle(Integer gerceklesenmiktar, Integer hatalimiktar, Integer hataid, Integer uretimplanid) {
+    public String uretimPlanGuncelle(Integer gerceklesenmiktar, Integer hatalimiktar, Integer hataid, Integer uretimplanid, Integer makinaid) {
         String result = "0";
         String updateQuery = Fields.UPDATE + BaseDao.URETIMPLAN
-                + " set uretilenmiktar =?, hatalimiktar =?, hataid =?"
+                + " set uretilenmiktar =?, hatalimiktar =?, hataid =?, makinaid=?"
                 + " where id =?";
         // connect to DB
         try (Connection conn = connectionManager.getConnection();
@@ -135,7 +135,8 @@ public class UretimDao implements Serializable, BaseDao {
             pstmt.setInt(1, gerceklesenmiktar);
             pstmt.setInt(2, hatalimiktar);
             pstmt.setInt(3, hataid);
-            pstmt.setInt(4, uretimplanid);
+            pstmt.setInt(4, makinaid);
+            pstmt.setInt(5, uretimplanid);
             logger.info("{}", pstmt);
 
             pstmt.executeUpdate();

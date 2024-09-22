@@ -63,10 +63,10 @@
         + " { id:" + m.getId()
         + ",mamulid:" + m.getId()
         + ",mamulad:'" + StringEscapeUtils.escapeEcmaScript(m.getAd()) + "'"
-        + ",mamulkod:'" + m.getKod() + "'"
+        + ",mamulkod:'" + StringEscapeUtils.escapeEcmaScript(m.getKod()) + "'"
         + ",esmamulid:" + m.getEsmamulid()
         + ",esmamulad:'" + StringEscapeUtils.escapeEcmaScript(m.getEsmamulad()) + "'"
-        + ",esmamulkod:'" + m.getEsmamulkod() + "'"
+        + ",esmamulkod:'" + StringEscapeUtils.escapeEcmaScript(m.getEsmamulkod()) + "'"
         + ",hammadde:'" + StringEscapeUtils.escapeEcmaScript(m.getHammadde()) + "'"
         + ",hammaddegkrno:'" + m.getHammaddegkrno() + "'"
         + ",yarimamul:'" + StringEscapeUtils.escapeEcmaScript(m.getYarimamul()) + "'"
@@ -79,7 +79,19 @@
     let mamul2 = [
         <%delimeter = "";
         for (Mamul m : mamultum) {
-            out.println(delimeter + " { label:'" + m.getKod() + " [" + StringEscapeUtils.escapeEcmaScript(m.getAd()) +"]',id:" + m.getId() + "}");
+            out.println(delimeter + " { label:'" + StringEscapeUtils.escapeEcmaScript(m.getKod()) + " [" + StringEscapeUtils.escapeEcmaScript(m.getAd()) +"]',id:" + m.getId() + "}");
+            delimeter = ",";
+        }%>];
+    let hammaddeAuto = [
+        <%delimeter = "";
+        for (Bilesen h : hammadde) {
+            out.println(delimeter + " { label:'" + StringEscapeUtils.escapeEcmaScript(h.getKod()) + " -> " + StringEscapeUtils.escapeEcmaScript(h.getAd()) +"',id:" + h.getId() + "}");
+            delimeter = ",";
+        }%>];
+    let yarimamulAuto = [
+        <%delimeter = "";
+        for (Bilesen y : yarimamul) {
+            out.println(delimeter + " { label:'" + StringEscapeUtils.escapeEcmaScript(y.getKod()) + " -> " + StringEscapeUtils.escapeEcmaScript(y.getAd()) +"',id:" + y.getId() + "}");
             delimeter = ",";
         }%>];
     let bakimTarihi = [];
@@ -121,7 +133,7 @@
                     <select class="form-control big" name="mamulfirma" id="mamulfirma">
                         <%
                             for (Firma f : firma) {
-                                out.println("<option value='" + f.getId() + "'>" + f.getAd() + "</option>");
+                                out.println("<option value='" + f.getId() + "'>" + StringEscapeUtils.escapeEcmaScript(f.getAd()) + "</option>");
                             }
                         %>
                     </select>
@@ -168,7 +180,7 @@
                     <%
                         for (Calisan c : calisan) {
                             if (c.getDurum() == 1)
-                                out.println("<option value='" + c.getId() + "'>" + c.getFullName() + "</option>");
+                                out.println("<option value='" + c.getId() + "'>" + StringEscapeUtils.escapeEcmaScript(c.getFullName()) + "</option>");
                         }
                     %>
                     </select>
@@ -196,25 +208,15 @@
             <div class="form-group col-xs-8" ng-model="mamulTypeUretim" ng-show="showState()">
                 <label for="hammadde" class="col-xs-3 control-label text-baslik">Hammadde: </label>
                 <div>
-                    <select class="form-control big" id="hammadde" name="hammadde">
-                        <%
-                            for (Bilesen h : hammadde) {
-                                out.println("<option value='" + h.getId() + "'>" + StringEscapeUtils.escapeEcmaScript(h.getAd()) + " [" + h.getKod() + "]" + " - " + StringEscapeUtils.escapeEcmaScript(h.getFirmaad()) + "</option>");
-                            }
-                        %>
-                    </select>
+                    <input type="text" class="form-control big" name="hammadde" id="hammadde" placeholder="Hammadde" autocomplete="off">
+                    <input type="hidden" name="hammaddeid" id="hammaddeid">
                 </div>
             </div>
             <div class="form-group col-xs-8" ng-model="mamulTypeMontaj" ng-hide="showState()">
                 <label for="yarimamul" class="col-xs-3 control-label text-baslik">Yarımamül: </label>
                 <div>
-                    <select class="form-control big" id="yarimamul" name="yarimamul">
-                        <%
-                            for (Bilesen y : yarimamul) {
-                                out.println("<option value='" + y.getId() + "'>" + StringEscapeUtils.escapeEcmaScript(y.getAd()) + " [" + y.getKod() + "]" + " - " + StringEscapeUtils.escapeEcmaScript(y.getFirmaad()) + "</option>");
-                            }
-                        %>
-                    </select>
+                    <input type="text" class="form-control big" name="yarimamul" id="yarimamul" placeholder="Yarımamuül" autocomplete="off">
+                    <input type="hidden" name="yarimamulid" id="yarimamulid">
                 </div>
             </div>
             <div class="form-group col-xs-8">
@@ -392,9 +394,9 @@
                                 <%
                                     for (Firma f : firma) {
                                         if (f.getId() == m.getFirmaid()) {
-                                            out.println("<option value='" + f.getId() + "' selected>" + f.getAd() + "</option>");
+                                            out.println("<option value='" + f.getId() + "' selected>" + StringEscapeUtils.escapeEcmaScript(f.getAd()) + "</option>");
                                         } else {
-                                            out.println("<option value='" + f.getId() + "'>" + f.getAd() + "</option>");
+                                            out.println("<option value='" + f.getId() + "'>" + StringEscapeUtils.escapeEcmaScript(f.getAd()) + "</option>");
                                         }
                                     }
                                 %>
@@ -423,9 +425,9 @@
                                 <%
                                     for (Calisan c : calisan) {
                                         if (m.getCalisanId().intValue() == c.getId()) {
-                                            out.println("<option value='" + c.getId() + "' selected>" + c.getFullName() + "</option>");
+                                            out.println("<option value='" + c.getId() + "' selected>" + StringEscapeUtils.escapeEcmaScript(c.getFullName()) + "</option>");
                                         } else {
-                                            out.println("<option value='" + c.getId() + "'>" + c.getFullName() + "</option>");
+                                            out.println("<option value='" + c.getId() + "'>" + StringEscapeUtils.escapeEcmaScript(c.getFullName()) + "</option>");
                                         }
                                     }
                                 %>
@@ -576,6 +578,7 @@
             }).datepicker("option", "dateFormat", "dd-mm-yy").datepicker("setDate", elementVal);
         }
     });
+
     $("#mamulkodara").autocomplete({
         source: mamul2,
         minLength: 1,
