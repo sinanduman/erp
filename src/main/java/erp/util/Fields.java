@@ -145,4 +145,7 @@ public final class Fields {
     public static final String ESMAMULID = "esmamulid";
     public static final String ESMAMULAD = "esmamulad";
     public static final String ESMAMULKOD = "esmamulkod";
+
+    public static final String BAKIMTARIHI = "bakimtarihi";
+    public static final String BASKISAYISI = "baskisayisi";
 }

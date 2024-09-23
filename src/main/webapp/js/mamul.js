@@ -18,13 +18,15 @@ mamulApp.controller('MamulCtrl',['$scope', function($scope){
         {id:2, ad:"KG"}
     ];
     $scope.on = function(){
-        document.mamulform.birimid_select.selectedIndex	= $scope.birimler[0].id;
-        document.mamulform.birimid.value				= document.mamulform.birimid_select.value;
+        document.mamulform.birimid_select.selectedIndex = $scope.birimler[0].id;
+        document.mamulform.birimid.value                = document.mamulform.birimid_select.value;
+        document.mamulform.miktar.value                 = "";
         show = true;
     };
     $scope.off = function(){
-        document.mamulform.birimid_select.selectedIndex	= $scope.birimler[1].id;
-        document.mamulform.birimid.value				= document.mamulform.birimid_select.value;
+        document.mamulform.birimid_select.selectedIndex = $scope.birimler[1].id;
+        document.mamulform.birimid.value                = document.mamulform.birimid_select.value;
+        document.mamulform.miktar.value                 = "";
         show = false;
     };
     $scope.showState = function(){
@@ -35,53 +37,61 @@ mamulApp.controller('MamulCtrl',['$scope', function($scope){
             alert("Bileşen Miktarı NÜMERİK bir değer olmalı!");
             return false;
         }
+        if (!(is_positive(document.mamulform.hammaddeid.value) || is_positive(document.mamulform.yarimamulid.value))) {
+            alert("Bileşen Bilgisi BOŞ olamaz!");
+            return false;
+        }
         if($scope.yenibilesen.id == null) {
             $scope.yenibilesen.id = uid++;
-            $scope.yenibilesen.hammaddead	= document.mamulform.hammadde.options[document.mamulform.hammadde.selectedIndex].text;
-            $scope.yenibilesen.hammaddeid	= document.mamulform.hammadde.options[document.mamulform.hammadde.selectedIndex].value;
-            $scope.yenibilesen.yarimamulad	= document.mamulform.yarimamul.options[document.mamulform.yarimamul.selectedIndex].text;
-            $scope.yenibilesen.yarimamulid	= document.mamulform.yarimamul.options[document.mamulform.yarimamul.selectedIndex].value;
-            $scope.yenibilesen.birimad		= document.mamulform.birimid_select.options[document.mamulform.birimid_select.selectedIndex].text;
-            $scope.yenibilesen.birimid		= document.mamulform.birimid_select.options[document.mamulform.birimid_select.selectedIndex].value;
+            $scope.yenibilesen.hammaddead  = document.mamulform.hammadde.value;
+            $scope.yenibilesen.hammaddeid  = document.mamulform.hammaddeid.value;
+            $scope.yenibilesen.yarimamulad = document.mamulform.yarimamul.value;
+            $scope.yenibilesen.yarimamulid = document.mamulform.yarimamulid.value;
+            $scope.yenibilesen.birimad     = document.mamulform.birimid_select.options[document.mamulform.birimid_select.selectedIndex].text;
+            $scope.yenibilesen.birimid     = document.mamulform.birimid_select.options[document.mamulform.birimid_select.selectedIndex].value;
             if(show){
-                $scope.yenibilesen.uretimtipid	= $scope.tip[0].id;
-                $scope.yenibilesen.uretimtip	= $scope.tip[0].ad;
-                $scope.yenibilesen.bilesenid	= $scope.yenibilesen.hammaddeid;
-                $scope.yenibilesen.bilesenad	= $scope.yenibilesen.hammaddead;
+                $scope.yenibilesen.uretimtipid  = $scope.tip[0].id;
+                $scope.yenibilesen.uretimtip    = $scope.tip[0].ad;
+                $scope.yenibilesen.bilesenid    = $scope.yenibilesen.hammaddeid;
+                $scope.yenibilesen.bilesenad    = $scope.yenibilesen.hammaddead;
             }
             else{
-                $scope.yenibilesen.uretimtipid	= $scope.tip[1].id;
-                $scope.yenibilesen.uretimtip	= $scope.tip[1].ad;
-                $scope.yenibilesen.bilesenid	= $scope.yenibilesen.yarimamulid;
-                $scope.yenibilesen.bilesenad	= $scope.yenibilesen.yarimamulad;
+                $scope.yenibilesen.uretimtipid  = $scope.tip[1].id;
+                $scope.yenibilesen.uretimtip    = $scope.tip[1].ad;
+                $scope.yenibilesen.bilesenid    = $scope.yenibilesen.yarimamulid;
+                $scope.yenibilesen.bilesenad    = $scope.yenibilesen.yarimamulad;
             }
             $scope.bilesenler.push($scope.yenibilesen);
         } else {
             for(i in $scope.bilesenler) {
                 if($scope.bilesenler[i].id == $scope.yenibilesen.id) {
-                    $scope.yenibilesen.hammaddead 	= document.mamulform.hammadde.options[document.mamulform.hammadde.selectedIndex].text;
-                    $scope.yenibilesen.hammaddeid 	= document.mamulform.hammadde.options[document.mamulform.hammadde.selectedIndex].value;
-                    $scope.yenibilesen.yarimamulad	= document.mamulform.yarimamul.options[document.mamulform.yarimamul.selectedIndex].text;
-                    $scope.yenibilesen.yarimamulid	= document.mamulform.yarimamul.options[document.mamulform.yarimamul.selectedIndex].value;
-                    $scope.yenibilesen.birimad		= document.mamulform.birimid_select.options[document.mamulform.birimid_select.selectedIndex].text;
-                    $scope.yenibilesen.birimid		= document.mamulform.birimid_select.options[document.mamulform.birimid_select.selectedIndex].value;
+                    $scope.yenibilesen.hammaddead   = document.mamulform.hammadde.options[document.mamulform.hammadde.selectedIndex].text;
+                    $scope.yenibilesen.hammaddeid   = document.mamulform.hammadde.options[document.mamulform.hammadde.selectedIndex].value;
+                    $scope.yenibilesen.yarimamulad  = document.mamulform.yarimamul.options[document.mamulform.yarimamul.selectedIndex].text;
+                    $scope.yenibilesen.yarimamulid  = document.mamulform.yarimamul.options[document.mamulform.yarimamul.selectedIndex].value;
+                    $scope.yenibilesen.birimad      = document.mamulform.birimid_select.options[document.mamulform.birimid_select.selectedIndex].text;
+                    $scope.yenibilesen.birimid      = document.mamulform.birimid_select.options[document.mamulform.birimid_select.selectedIndex].value;
                     if(show){
-                        $scope.yenibilesen.uretimtipid	= $scope.tip[0].id;
-                        $scope.yenibilesen.uretimtip	= $scope.tip[0].ad;
-                        $scope.yenibilesen.bilesenid	= $scope.yenibilesen.hammaddeid;
-                        $scope.yenibilesen.bilesenad	= $scope.yenibilesen.hammaddead;
+                        $scope.yenibilesen.uretimtipid  = $scope.tip[0].id;
+                        $scope.yenibilesen.uretimtip    = $scope.tip[0].ad;
+                        $scope.yenibilesen.bilesenid    = $scope.yenibilesen.hammaddeid;
+                        $scope.yenibilesen.bilesenad    = $scope.yenibilesen.hammaddead;
                     }
                     else{
-                        $scope.yenibilesen.uretimtipid	= $scope.tip[1].id;
-                        $scope.yenibilesen.uretimtip	= $scope.tip[1].ad;
-                        $scope.yenibilesen.bilesenid	= $scope.yenibilesen.yarimamulid;
-                        $scope.yenibilesen.bilesenad	= $scope.yenibilesen.yarimamulad;
+                        $scope.yenibilesen.uretimtipid  = $scope.tip[1].id;
+                        $scope.yenibilesen.uretimtip    = $scope.tip[1].ad;
+                        $scope.yenibilesen.bilesenid    = $scope.yenibilesen.yarimamulid;
+                        $scope.yenibilesen.bilesenad    = $scope.yenibilesen.yarimamulad;
                     }
                     $scope.bilesenler[i] = $scope.yenibilesen;
                 }
             }
         }
         $scope.yenibilesen = {};
+        $("#hammadde").val("");
+        $("#hammaddeid").val("");
+        $("#yarimamul").val("");
+        $("#yarimamulid").val("");
         document.mamulform.bilesen_ekle.textContent = mamulislemtip.add;
     };
 
@@ -91,19 +101,14 @@ mamulApp.controller('MamulCtrl',['$scope', function($scope){
         } else {
             let mamulad = document.mamulform.mamulad.value;
             let mamulkod = document.mamulform.mamulkod.value;
-            let mamulcevrim = document.mamulform.mamulcevrim.value;
             let mamulsonbakim = document.mamulform.mamulsonbakim.value;
 
-            if($.trim(mamulad)=="" || $.trim(mamulkod)=="" || $.trim(mamulcevrim)=="" || $.trim(mamulsonbakim)=="" ){
-                alert("Mamül ADI, KODU, ÇEVRİMSÜRESİ veya SONBAKIM tarihi boş olamaz!");
+            if($.trim(mamulad) === "" || $.trim(mamulkod) === "" || $.trim(mamulsonbakim) === "" ){
+                alert("Mamül ADI, KODU ve SONBAKIM tarihi boş olamaz!");
                 return false;
             }
-            else{
-                if(!is_positive(mamulcevrim)){
-                    alert("Çevrimsüresi NÜMERİK bir değer olmalı!");
-                    return false;
-                }
-                else if (!is_trdate(mamulsonbakim)){
+            else {
+                if (!is_trdate(mamulsonbakim)){
                     alert("SONBAKIM tarihi geçerli bir tarih değil!");
                     return false;
                 }
@@ -117,22 +122,22 @@ mamulApp.controller('MamulCtrl',['$scope', function($scope){
     $scope.edit = function(id) {
         for(i in $scope.bilesenler) {
             if($scope.bilesenler[i].id == id) {
-                document.mamulform.birimid_select.value	= $scope.bilesenler[i].birimid;
-                document.mamulform.birimid.value		= $scope.bilesenler[i].birimid;
+                document.mamulform.birimid_select.value = $scope.bilesenler[i].birimid;
+                document.mamulform.birimid.value        = $scope.bilesenler[i].birimid;
 
                 /*1:Hammadde, 2:Yarimamul */
                 if($scope.bilesenler[i].uretimtipid==2){
-                    $scope.bilesenler[i].uretimtip		= $scope.tip[1].ad;
-                    $scope.bilesenler[i].uretimtipid	= $scope.tip[1].id;
-                    document.mamulform.yarimamul.value	= $scope.bilesenler[i].yarimamulid;
+                    $scope.bilesenler[i].uretimtip      = $scope.tip[1].ad;
+                    $scope.bilesenler[i].uretimtipid    = $scope.tip[1].id;
+                    document.mamulform.yarimamul.value  = $scope.bilesenler[i].yarimamulid;
                     document.mamulform.bilesenTipRadio[1].checked = true;
                     $scope.off();
                     $scope.showState();
                 }
                 else{
-                    $scope.bilesenler[i].uretimtip		= $scope.tip[0].ad;
-                    $scope.bilesenler[i].uretimtipid	= $scope.tip[0].id;
-                    document.mamulform.hammadde.value	= $scope.bilesenler[i].hammaddeid;
+                    $scope.bilesenler[i].uretimtip      = $scope.tip[0].ad;
+                    $scope.bilesenler[i].uretimtipid    = $scope.tip[0].id;
+                    document.mamulform.hammadde.value   = $scope.bilesenler[i].hammaddeid;
                     document.mamulform.bilesenTipRadio[0].checked = true;
                     $scope.on();
                     $scope.showState();
@@ -153,25 +158,75 @@ mamulApp.controller('MamulCtrl',['$scope', function($scope){
     };
 }]);
 
-function YariMamulEkleCtrl($scope) {
-    $scope.yarimamulEkle = function(){
-        var message	= "";
-        if($.trim(document.yarimamul_form.yarimamulkod.value)==""){
-            message += "Yarımamül Kodu giriniz!\n";
+$("#hammadde").autocomplete({
+    source: hammaddeAuto,
+    minLength: 1,
+    select: function (event, ui) {
+        //:: console.log(ui.item)
+        //:: console.log(ui.item.value)
+        changefunBilesen(ui.item, 1);
+    },
+    change: function (event, ui) {
+        if (!(ui.item)) {
+            $("#hammadde").val("")
+            $("#hammaddeid").val("")
         }
-        if($.trim(document.yarimamul_form.yarimamulad.value)==""){
-            message += "Yarımamül Adı giriniz!\n";
+    }
+});
+
+$("#yarimamul").autocomplete({
+    source: yarimamulAuto,
+    minLength: 1,
+    select: function (event, ui) {
+        //:: console.log(ui.item)
+        //:: console.log(ui.item.value)
+        changefunBilesen(ui.item, 2);
+    },
+    change: function (event, ui) {
+        if (!(ui.item)) {
+            $("#yarimamul").val("")
+            $("#yarimamulid").val("")
         }
-        if(message!=""){
-            alert(message);
-            return false;
-        }
-        else{
-            if(confirm('Yarımamül EKLEMEYİ onaylıyor musun?')){
-                document.yarimamul_form.submit();
+    }
+});
+
+$("#hammadde, #yarimamul").on("change", function (ui, event) {
+    if ($(this).val().trim().length === 0) {
+        $("#hammadde").val("");
+        $("#hammaddeid").val("");
+        $("#yarimamul").val("");
+        $("#yarimamulid").val("");
+    }
+});
+
+function changefunBilesen(elem, tip) {
+    let found = false;
+    if (tip === 1) {
+        if (elem != null) {
+            for (i in hammaddeAuto) {
+                /* autocomplete alanina birden fazla alan ekler */
+                if (elem.id === hammaddeAuto[i].id) {
+                    found = true;
+                    $("#hammaddeid").val(hammaddeAuto[i].id);
+                }
             }
         }
-    };
+    } else {
+        if (elem != null) {
+            for (i in yarimamulAuto) {
+                /* autocomplete alanina birden fazla alan ekler */
+                if (elem.id === yarimamulAuto[i].id) {
+                    found = true;
+                    $("#yarimamulid").val(yarimamulAuto[i].id);
+                }
+            }
+        }
+    }
+
+    if (!found) {
+        $("#hammaddeid").val("");
+        $("#yarimamulid").val("");
+    }
 }
 
 function updateMamulGo(url,id,action_form,islem){

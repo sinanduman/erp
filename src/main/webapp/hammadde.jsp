@@ -229,6 +229,7 @@
                 <% for (Bilesen h : hammadde) { %>
                 <% if (sayac++ == 0) { %>
                 <tr>
+                    <td><label class="text-success">Tarih</label></td>
                     <td><label class="text-success">Malzeme Kodu</label></td>
                     <td><label class="text-success">Malzeme Adı</label></td>
                     <td nowrap><label class="text-success">Malzeme Tipi</label></td>
@@ -247,6 +248,7 @@
                 <% } %>
                 <form name=action_form<%= h.getId()%> id="action_form<%= h.getId()%>">
                     <tr id="tr<%=h.getId()%>" <%= (h.getDurum()==0 ? "style='background-color:darkKhaki;'" : "") %>>
+                        <td nowrap><span><%= Util.getTarihEngShort(h.getEklemetarihi()) %></span></td>
                         <td><input type="text" class="form-control small" value="<%= h.getKod() %>" id="liste_kod<%=h.getId()%>" autocomplete="off"></td>
                         <td><input type="text" class="form-control" value="<%= StringEscapeUtils.escapeEcmaScript(h.getAd()) %>" id="liste_ad<%=h.getId()%>" autocomplete="off"></td>
                         <td style="vertical-align: center;"><span><%= h.getBilesentipad() %></span><input type="hidden" id="liste_bilesentipid<%=h.getId()%>" value="<%=h.getBilesentipid()%>"/></td>
