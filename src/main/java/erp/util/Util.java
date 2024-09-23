@@ -146,6 +146,10 @@ public final class Util {
         return (tarih != null) ? (new SimpleDateFormat("dd.MM.yy").format(tarih)) : "";
     }
 
+    public static String getTarihEngShort(Date tarih) {
+        return (tarih != null) ? (new SimpleDateFormat("yy.MM.dd").format(tarih)) : "";
+    }
+
     public static double Round(int pay, int payda) {
         double temp = (pay) * 1.0 / payda;
         temp = ((double) ((int) (temp * 100))) / 100;

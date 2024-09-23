@@ -5,6 +5,7 @@
 <%@ page import="erp.util.Util" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.time.LocalDate" %>
+<%@ page import="erp.util.Util" %>
 <%@ page import="org.apache.commons.text.StringEscapeUtils" %>
 <!doctype html>
 <html lang="en" ng-app="mamulApp">
@@ -334,6 +335,7 @@
                     for (Mamul m : mamul) {
                     if (sayac++ == 0) { %>
                 <tr>
+                    <td nowrap><label class="text-success">Tarih</label></td>
                     <td nowrap><label class="text-success">Mamül Kodu</label></td>
                     <td nowrap><label class="text-success">Mamül Adı</label></td>
                     <td nowrap><label class="text-success">Çevrim</label></td>
@@ -352,6 +354,7 @@
                 <form name=action_form<%=m.getId()%> id=action_form<%=m.getId()%>>
                     <tr id="tr<%=m.getId()%>"
                             <%= (m.getDurum() == 0 ? " style='background-color:darkKhaki;'" : "") %> >
+                        <td nowrap><span><%= Util.getTarihEngShort(m.getEklemetarihi()) %></span></td>
                         <td><input type="text" class="form-control xm" value="<%= m.getKod() %>" name=liste_kod<%=m.getId()%> id="liste_kod<%=m.getId()%>"></td>
                         <td><input type="text" class="form-control" value="<%= StringEscapeUtils.escapeEcmaScript(m.getAd()) %>" name=liste_ad<%=m.getId()%> id="liste_ad<%=m.getId()%>"></td>
                         <td>
