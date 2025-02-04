@@ -3,7 +3,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="erp.entity.*" %>
 <%@ page import="erp.model.BirimTip" %>
-<%@ page import="org.apache.commons.text.StringEscapeUtils" %>
+<%@ page import="org.apache.commons.lang3.StringUtils" %>
 <%@ page contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!doctype html>
@@ -56,21 +56,21 @@
             out.println(delimeter
         + " { id:" + m.getId()
         + ",mamulid:" + m.getId()
-        + ",mamulad:'" + StringEscapeUtils.escapeEcmaScript(m.getAd()) + "'"
+        + ",mamulad:'" + StringUtils.replace(m.getAd(), "'", "\"") + "'"
         + ",mamulkod:'" + m.getKod() + "'"
-        + ",hammadde:'" + StringEscapeUtils.escapeEcmaScript(m.getHammadde()) + "'"
+        + ",hammadde:'" + StringUtils.replace(m.getHammadde(), "'", "\"") + "'"
         + ",hammaddegkrno:'" + m.getHammaddegkrno() + "'"
-        + ",yarimamul:'" + StringEscapeUtils.escapeEcmaScript(m.getYarimamul()) + "'"
+        + ",yarimamul:'" + StringUtils.replace(m.getYarimamul(), "'", "\"") + "'"
         + ",yarimamulgkrno:'" + m.getYarimamulgkrno() + "'"
         + ",firmaid:" + m.getFirmaid()
-        + ",firmaad:'" + StringEscapeUtils.escapeEcmaScript(m.getFirmaad()) + "'"
+        + ",firmaad:'" + StringUtils.replace(m.getFirmaad(), "'", "\"") + "'"
         + ",cevrimsure:" + m.getCevrimsuresi() + "}");
             delimeter = ",";
         }%>];
     let mamul2 = [
         <%delimeter = "";
         for (Mamul m : mamul) {
-            out.println(delimeter + " { value:'"+ m.getKod() + "', label:'" + m.getKod() + " [" + StringEscapeUtils.escapeEcmaScript(m.getAd()) +"]',id:" + m.getId() + "}");
+            out.println(delimeter + " { value:'"+ m.getKod() + "', label:'" + m.getKod() + " [" + StringUtils.replace(m.getAd(), "'", "\"") +"]',id:" + m.getId() + "}");
             delimeter = ",";
         }%>];
 
@@ -88,7 +88,8 @@
                 <div class="form-group">
                     <label for="mamulkod" class="text-baslik">Mamül Kodu: </label>
                     <div>
-                        <input type="text" class="form-control big" name="mamulkod" id="mamulkod" placeholder="Mamül Kodu" autocomplete="off">
+                        <input type="text" class="form-control big" name="mamulkod" id="mamulkod"
+                               placeholder="Mamül Kodu" autocomplete="off">
                         <input type="hidden" name="mamulid" id="mamulid">
                     </div>
                 </div>
@@ -96,7 +97,9 @@
                 <div class="form-group">
                     <label for="stokliste" class="text-success bgsaydam">&nbsp;&nbsp;</label>
                     <div>
-                        <button type="button" class="btn btn-danger" name="stokliste" id="stokliste" disabled="disabled">Stok Kartı Getir</button>
+                        <button type="button" class="btn btn-danger" name="stokliste" id="stokliste"
+                                disabled="disabled">Stok Kartı Getir
+                        </button>
                         <input type="hidden" name="stoklisteid" id="stoklisteid" value="0">
                     </div>
                 </div>
@@ -347,12 +350,12 @@
         <%
         if(mamulid!=null){
         %>
-            $("#mamulid").val("<%=mamulid%>");
-            //console.log("mamulid frist: " + $("#mamulid").val());
-            findmamulkod_mamulstok($("#mamulid").val());
-            $("#mamulkod").change(function () {
-                changefun_mamulstok(this);
-            });
+        $("#mamulid").val("<%=mamulid%>");
+        //console.log("mamulid frist: " + $("#mamulid").val());
+        findmamulkod_mamulstok($("#mamulid").val());
+        $("#mamulkod").change(function () {
+            changefun_mamulstok(this);
+        });
         <%
         }
         %>

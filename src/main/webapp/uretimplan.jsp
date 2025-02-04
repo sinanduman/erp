@@ -1,7 +1,7 @@
 <%@ page import="erp.entity.*" %>
 <%@ page import="erp.util.Util,java.text.SimpleDateFormat,java.util.Date" %>
 <%@ page import="java.util.List" %>
-<%@ page import="org.apache.commons.text.StringEscapeUtils" %>
+<%@ page import="org.apache.commons.lang3.StringUtils" %>
 <%@ page contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!doctype html>
@@ -53,13 +53,13 @@
             out.println(delimeter
         + " { id:" + m.getId()
         + ",mamulid:" + m.getId()
-        + ",mamulad:'" + StringEscapeUtils.escapeEcmaScript(m.getAd()) + "'"
+        + ",mamulad:'" + StringUtils.replace(m.getAd(), "'", "\"") + "'"
         + ",mamulkod:'" + m.getKod() + "'"
-        + ",hammadde:'" + StringEscapeUtils.escapeEcmaScript(m.getHammadde()) + "'"
+        + ",hammadde:'" + StringUtils.replace(m.getHammadde(), "'", "\"") + "'"
         + ",hammaddegkrno:'" + m.getHammaddegkrno() + "'"
-        + ",yarimamul:'" + StringEscapeUtils.escapeEcmaScript(m.getYarimamul()) + "'"
+        + ",yarimamul:'" + StringUtils.replace(m.getYarimamul(), "'", "\"") + "'"
         + ",yarimamulgkrno:'" + m.getYarimamulgkrno() + "'"
-        + ",firmaad:'" + StringEscapeUtils.escapeEcmaScript(m.getFirmaad()) + "'"
+        + ",firmaad:'" + StringUtils.replace(m.getFirmaad(), "'", "\"") + "'"
         + ",cevrimsure:" + m.getCevrimsuresi()
         + ",agirlik:" + m.getAgirlik() + "}");
             delimeter = ",";
@@ -120,7 +120,9 @@
             <div class="form-group">
                 <label for="uretimplanliste" class="text-success bgsaydam">&nbsp;&nbsp;</label>
                 <div>
-                    <button type="button" class="btn btn-danger" name="uretimplanliste" id="uretimplanliste">Plan Listesini Getir</button>
+                    <button type="button" class="btn btn-danger" name="uretimplanliste" id="uretimplanliste">Plan
+                        Listesini Getir
+                    </button>
                 </div>
             </div>
 
@@ -216,7 +218,8 @@
             <div class="form-group">
                 <label for="hata" class="text-baslik">Hata</label>
                 <div>
-                    <input type="text" class="form-control xss text-right" name="hata" id="hata" <%=readonly%>><span class="birim">Ad.</span>
+                    <input type="text" class="form-control xss text-right" name="hata" id="hata" <%=readonly%>><span
+                        class="birim">Ad.</span>
                 </div>
             </div>
 
@@ -347,22 +350,39 @@
                 }
             %>
             <tr id="tr<%=u.getId()%>">
-                <td nowrap><%=u.getTarihTRShort()%></td>
-                <td><%=u.getBasZaman()%></td>
-                <td><%=u.getBitZaman()%></td>
-                <td nowrap><%=u.getMakinaad()%></td>
-                <td><%=u.getCalisanShortName()%></td>
-                <td><%=u.getFirmaad()%></td>
-                <td><%=Util.splitLine(u.getHammaddead(), ";", "<br>")%></td>
-                <td><%=Util.splitLine(u.getHammaddeizlno(), ";", "<br>")%></td>
-                <td><%= u.getMamulkod() %></td>
-                <td><%= u.getMamulad() %></td>
-                <td><%= (u.getMamulizlno() == 0) ? "" : u.getMamulizlno() %></td>
-                <td class="text-right" nowrap><%= (u.getPlanlananmiktar() == 0) ? "" : u.getPlanlananmiktar() + " Ad." %></td>
-                <td class="text-right" nowrap><%= u.getUretilenmiktar() + " Ad." %></td>
-                <td class="text-right" nowrap><%= (u.getHatalimiktar() == 0) ? "" : u.getHatalimiktar() + " Ad." %></td>
-                <td class="text-right" nowrap><%= (u.getSapma() == 0) ? "" : "% " + u.getSapma() %></td>
-                <td><%= u.getHataad() %></td>
+                <td nowrap><%=u.getTarihTRShort()%>
+                </td>
+                <td><%=u.getBasZaman()%>
+                </td>
+                <td><%=u.getBitZaman()%>
+                </td>
+                <td nowrap><%=u.getMakinaad()%>
+                </td>
+                <td><%=u.getCalisanShortName()%>
+                </td>
+                <td><%=u.getFirmaad()%>
+                </td>
+                <td><%=Util.splitLine(u.getHammaddead(), ";", "<br>")%>
+                </td>
+                <td><%=Util.splitLine(u.getHammaddeizlno(), ";", "<br>")%>
+                </td>
+                <td><%= u.getMamulkod() %>
+                </td>
+                <td><%= u.getMamulad() %>
+                </td>
+                <td><%= (u.getMamulizlno() == 0) ? "" : u.getMamulizlno() %>
+                </td>
+                <td class="text-right"
+                    nowrap><%= (u.getPlanlananmiktar() == 0) ? "" : u.getPlanlananmiktar() + " Ad." %>
+                </td>
+                <td class="text-right" nowrap><%= u.getUretilenmiktar() + " Ad." %>
+                </td>
+                <td class="text-right" nowrap><%= (u.getHatalimiktar() == 0) ? "" : u.getHatalimiktar() + " Ad." %>
+                </td>
+                <td class="text-right" nowrap><%= (u.getSapma() == 0) ? "" : "% " + u.getSapma() %>
+                </td>
+                <td><%= u.getHataad() %>
+                </td>
                 <td>
                     <div class="text-center" id="div<%= u.getId() %>">
                         <a href="javascript:tr_uretimplanguncelle('#tr<%= u.getId() %>',<%= u.getId() %>);"
@@ -452,7 +472,7 @@
     function changefun(elem) {
         let found = false;
         if (elem != null) {
-            for (let j=0; j < mamul.length && !found; j++) {
+            for (let j = 0; j < mamul.length && !found; j++) {
                 if ($(elem).val() == mamul[j].mamulkod) {
                     found = true;
                     $("#mamulad").val(mamul[j].mamulad);

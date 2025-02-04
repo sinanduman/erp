@@ -6,7 +6,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="java.time.LocalDate" %>
 <%@ page import="erp.util.Util" %>
-<%@ page import="org.apache.commons.text.StringEscapeUtils" %>
+<%@ page import="org.apache.commons.lang3.StringUtils" %>
 <!doctype html>
 <html lang="en" ng-app="mamulApp">
 <head>
@@ -63,36 +63,36 @@
             out.println(delimeter
         + " { id:" + m.getId()
         + ",mamulid:" + m.getId()
-        + ",mamulad:'" + StringEscapeUtils.escapeEcmaScript(m.getAd()) + "'"
-        + ",mamulkod:'" + StringEscapeUtils.escapeEcmaScript(m.getKod()) + "'"
+        + ",mamulad:'" + StringUtils.replace(m.getAd(), "'", "\"") + "'"
+        + ",mamulkod:'" + StringUtils.replace(m.getKod(), "'", "\"") + "'"
         + ",esmamulid:" + m.getEsmamulid()
-        + ",esmamulad:'" + StringEscapeUtils.escapeEcmaScript(m.getEsmamulad()) + "'"
-        + ",esmamulkod:'" + StringEscapeUtils.escapeEcmaScript(m.getEsmamulkod()) + "'"
-        + ",hammadde:'" + StringEscapeUtils.escapeEcmaScript(m.getHammadde()) + "'"
+        + ",esmamulad:'" + StringUtils.replace(m.getEsmamulad(), "'", "\"") + "'"
+        + ",esmamulkod:'" + StringUtils.replace(m.getEsmamulkod(), "'", "\"") + "'"
+        + ",hammadde:'" + StringUtils.replace(m.getHammadde(), "'", "\"") + "'"
         + ",hammaddegkrno:'" + m.getHammaddegkrno() + "'"
-        + ",yarimamul:'" + StringEscapeUtils.escapeEcmaScript(m.getYarimamul()) + "'"
+        + ",yarimamul:'" + StringUtils.replace(m.getYarimamul(), "'", "\"") + "'"
         + ",yarimamulgkrno:'" + m.getYarimamulgkrno() + "'"
         + ",firmaid:" + m.getFirmaid()
-        + ",firmaad:'" + StringEscapeUtils.escapeEcmaScript(m.getFirmaad()) + "'"
+        + ",firmaad:'" + StringUtils.replace(m.getFirmaad(), "'", "\"") + "'"
         + ",cevrimsure:" + m.getCevrimsuresi() + "}");
             delimeter = ",";
         }%>];
     let mamul2 = [
         <%delimeter = "";
         for (Mamul m : mamultum) {
-            out.println(delimeter + " { label:'" + StringEscapeUtils.escapeEcmaScript(m.getKod()) + " [" + StringEscapeUtils.escapeEcmaScript(m.getAd()) +"]',id:" + m.getId() + "}");
+            out.println(delimeter + " { label:'" + StringUtils.replace(m.getKod(), "'", "\"") + " [" + StringUtils.replace(m.getAd(), "'", "\"") +"]',id:" + m.getId() + "}");
             delimeter = ",";
         }%>];
     let hammaddeAuto = [
         <%delimeter = "";
         for (Bilesen h : hammadde) {
-            out.println(delimeter + " { label:'" + StringEscapeUtils.escapeEcmaScript(h.getKod()) + " -> " + StringEscapeUtils.escapeEcmaScript(h.getAd()) +"',id:" + h.getId() + "}");
+            out.println(delimeter + " { label:'" + StringUtils.replace(h.getKod(), "'", "\"") + " -> " + StringUtils.replace(h.getAd(), "'", "\"") +"',id:" + h.getId() + "}");
             delimeter = ",";
         }%>];
     let yarimamulAuto = [
         <%delimeter = "";
         for (Bilesen y : yarimamul) {
-            out.println(delimeter + " { label:'" + StringEscapeUtils.escapeEcmaScript(y.getKod()) + " -> " + StringEscapeUtils.escapeEcmaScript(y.getAd()) +"',id:" + y.getId() + "}");
+            out.println(delimeter + " { label:'" + StringUtils.replace(y.getKod(), "'", "\"") + " -> " + StringUtils.replace(y.getAd(), "'", "\"") +"',id:" + y.getId() + "}");
             delimeter = ",";
         }%>];
     let bakimTarihi = [];
@@ -107,13 +107,15 @@
             <div class="form-group col-xs-8">
                 <label for="mamulkod" class="col-xs-3 control-label text-baslik">Mamül Kodu: </label>
                 <div>
-                    <input type="text" class="form-control big" name="mamulkod" id="mamulkod" ng-model="mamulkod" placeholder="Mamül Kodu" autocomplete="off">
+                    <input type="text" class="form-control big" name="mamulkod" id="mamulkod" ng-model="mamulkod"
+                           placeholder="Mamül Kodu" autocomplete="off">
                 </div>
             </div>
             <div class="form-group col-xs-8">
                 <label for="mamulad" class="col-xs-3 control-label text-baslik">Mamül Adı: </label>
                 <div>
-                    <input type="text" class="form-control big" name="mamulad" id="mamulad" ng-model="mamulad" placeholder="Mamül Adı" autocomplete="off">
+                    <input type="text" class="form-control big" name="mamulad" id="mamulad" ng-model="mamulad"
+                           placeholder="Mamül Adı" autocomplete="off">
                 </div>
             </div>
             <div class="form-group col-xs-8">
@@ -134,7 +136,7 @@
                     <select class="form-control big" name="mamulfirma" id="mamulfirma">
                         <%
                             for (Firma f : firma) {
-                                out.println("<option value='" + f.getId() + "'>" + StringEscapeUtils.escapeEcmaScript(f.getAd()) + "</option>");
+                                out.println("<option value='" + f.getId() + "'>" + StringUtils.replace(f.getAd(), "'", "\"") + "</option>");
                             }
                         %>
                     </select>
@@ -157,8 +159,8 @@
                 <div>
                     <select class="form-control big" name="mamulbaskisayisi" id="mamulbaskisayisi">
                         <%
-                            for (int i = 5000; i <= 100000; i=i+1000) {
-                                if(i==20000)
+                            for (int i = 5000; i <= 100000; i = i + 1000) {
+                                if (i == 20000)
                                     out.println("<option value='" + i + "' selected>" + i + "</option>");
                                 else
                                     out.println("<option value='" + i + "'>" + i + "</option>");
@@ -170,7 +172,8 @@
             <div class="form-group col-xs-8">
                 <label for="mamulsonbakim" class="col-xs-3 control-label text-baslik">Son Bakım Tarihi: </label>
                 <div>
-                    <input type="text" required class="form-control big" name="mamulsonbakim" id="mamulsonbakim" autocomplete="off" value="<%= LocalDate.now() %>">
+                    <input type="text" required class="form-control big" name="mamulsonbakim" id="mamulsonbakim"
+                           autocomplete="off" value="<%= LocalDate.now() %>">
                 </div>
             </div>
 
@@ -178,12 +181,12 @@
                 <label for="mamulsonbakimyapan" class="col-xs-3 control-label text-baslik">Son Bakım Yapan: </label>
                 <div>
                     <select class="form-control big" name="mamulsonbakimyapan" id="mamulsonbakimyapan">
-                    <%
-                        for (Calisan c : calisan) {
-                            if (c.getDurum() == 1)
-                                out.println("<option value='" + c.getId() + "'>" + StringEscapeUtils.escapeEcmaScript(c.getFullName()) + "</option>");
-                        }
-                    %>
+                        <%
+                            for (Calisan c : calisan) {
+                                if (c.getDurum() == 1)
+                                    out.println("<option value='" + c.getId() + "'>" + StringUtils.replace(c.getFullName(), "'", "\"") + "</option>");
+                            }
+                        %>
                     </select>
                 </div>
             </div>
@@ -209,14 +212,16 @@
             <div class="form-group col-xs-8" ng-model="mamulTypeUretim" ng-show="showState()">
                 <label for="hammadde" class="col-xs-3 control-label text-baslik">Hammadde: </label>
                 <div>
-                    <input type="text" class="form-control big" name="hammadde" id="hammadde" placeholder="Hammadde" autocomplete="off">
+                    <input type="text" class="form-control big" name="hammadde" id="hammadde" placeholder="Hammadde"
+                           autocomplete="off">
                     <input type="hidden" name="hammaddeid" id="hammaddeid">
                 </div>
             </div>
             <div class="form-group col-xs-8" ng-model="mamulTypeMontaj" ng-hide="showState()">
                 <label for="yarimamul" class="col-xs-3 control-label text-baslik">Yarımamül: </label>
                 <div>
-                    <input type="text" class="form-control big" name="yarimamul" id="yarimamul" placeholder="Yarımamuül" autocomplete="off">
+                    <input type="text" class="form-control big" name="yarimamul" id="yarimamul" placeholder="Yarımamuül"
+                           autocomplete="off">
                     <input type="hidden" name="yarimamulid" id="yarimamulid">
                 </div>
             </div>
@@ -238,7 +243,8 @@
             <div class="form-group col-xs-8">
                 <label for="miktar" class="col-xs-3 control-label text-baslik">Miktar: </label>
                 <div>
-                    <input type="number" class="form-control big" id="miktar" name="miktar" ng-model="yenibilesen.miktar"
+                    <input type="number" class="form-control big" id="miktar" name="miktar"
+                           ng-model="yenibilesen.miktar"
                            placeholder="Kullanılan Miktar" autocomplete="off">
                 </div>
             </div>
@@ -274,10 +280,13 @@
                         <a href="#" ng-click="del(bilesen.id)" title="Sil"><span
                                 class="fa fa-minus-circle fa-lg text-danger"></span></a>
 
-                        <input type="hidden" id="uretimtip_{{$index}}" name="uretimtip_{{$index}}" value="{{bilesen.uretimtipid}}">
-                        <input type="hidden" id="bilesenid_{{$index}}" name="bilesenid_{{$index}}" value="{{bilesen.bilesenid}}">
+                        <input type="hidden" id="uretimtip_{{$index}}" name="uretimtip_{{$index}}"
+                               value="{{bilesen.uretimtipid}}">
+                        <input type="hidden" id="bilesenid_{{$index}}" name="bilesenid_{{$index}}"
+                               value="{{bilesen.bilesenid}}">
                         <input type="hidden" id="miktar_{{$index}}" name="miktar_{{$index}}" value="{{bilesen.miktar}}">
-                        <input type="hidden" id="birimid_{{$index}}" name="birimid_{{$index}}" value="{{bilesen.birimid}}">
+                        <input type="hidden" id="birimid_{{$index}}" name="birimid_{{$index}}"
+                               value="{{bilesen.birimid}}">
                     </td>
                 </tr>
             </table>
@@ -301,7 +310,9 @@
             </div>
 
             <div class="form-group col-xs-2">
-                <button type="button" class="btn btn-danger" name="stokliste" id="stokliste" disabled="disabled">Mamül Getir</button>
+                <button type="button" class="btn btn-danger" name="stokliste" id="stokliste" disabled="disabled">Mamül
+                    Getir
+                </button>
                 <input type="hidden" name="stoklisteid" id="stoklisteid" value="0">
             </div>
 
@@ -314,15 +325,15 @@
         if (message.equals("-1")) {
         } else if (message.equals("0")) {
     %>
-        <div class="row alert alert-success">
-            <strong>Başarılı</strong> olarak eklendi!
-        </div>
+    <div class="row alert alert-success">
+        <strong>Başarılı</strong> olarak eklendi!
+    </div>
     <%
-        } else if (!message.equals("") && message.length() > 1) {
+    } else if (!message.equals("") && message.length() > 1) {
     %>
-        <div class="row alert alert-danger">
-            <strong>Hata! </strong><%= message %>
-        </div>
+    <div class="row alert alert-danger">
+        <strong>Hata! </strong><%= message %>
+    </div>
     <%
         }
     %>
@@ -331,9 +342,9 @@
     <div class="row" style="font-size:12px; margin-top:5px;">
         <div>
             <table class="tableplan">
-                <%  int sayac = 0;
+                <% int sayac = 0;
                     for (Mamul m : mamul) {
-                    if (sayac++ == 0) { %>
+                        if (sayac++ == 0) { %>
                 <tr>
                     <td nowrap><label class="text-success">Tarih</label></td>
                     <td nowrap><label class="text-success">Mamül Kodu</label></td>
@@ -355,20 +366,23 @@
                     <tr id="tr<%=m.getId()%>"
                             <%= (m.getDurum() == 0 ? " style='background-color:darkKhaki;'" : "") %> >
                         <td nowrap><span><%= Util.getTarihEngShort(m.getEklemetarihi()) %></span></td>
-                        <td><input type="text" class="form-control xm" value="<%= m.getKod() %>" name=liste_kod<%=m.getId()%> id="liste_kod<%=m.getId()%>"></td>
-                        <td><input type="text" class="form-control" value="<%= StringEscapeUtils.escapeEcmaScript(m.getAd()) %>" name=liste_ad<%=m.getId()%> id="liste_ad<%=m.getId()%>"></td>
+                        <td><input type="text" class="form-control xm" value="<%= m.getKod() %>"
+                                   name=liste_kod<%=m.getId()%> id="liste_kod<%=m.getId()%>"></td>
+                        <td><input type="text" class="form-control"
+                                   value="<%= StringUtils.replace(m.getAd(), "'", "\"") %>" name=liste_ad<%=m.getId()%>
+                                   id="liste_ad<%=m.getId()%>"></td>
                         <td>
                             <select class="form-control xss" name=liste_cevrimsuresi<%=m.getId()%>
                                     id="liste_cevrimsuresi<%=m.getId()%>">
-                            <%
-                                for (int i = 1; i <= 300; i++) {
-                                    if (m.getCevrimsuresi().intValue() == i) {
-                                        out.print("<option value='" + i + "' selected>" + i + "</option>");
-                                    } else {
-                                        out.print("<option value='" + i + "'>" + i + "</option>");
+                                <%
+                                    for (int i = 1; i <= 300; i++) {
+                                        if (m.getCevrimsuresi().intValue() == i) {
+                                            out.print("<option value='" + i + "' selected>" + i + "</option>");
+                                        } else {
+                                            out.print("<option value='" + i + "'>" + i + "</option>");
+                                        }
                                     }
-                                }
-                            %>
+                                %>
                             </select>
                         <td>
                             <select class="form-control xsss" name=liste_figurid<%=m.getId()%>
@@ -389,28 +403,31 @@
                                    onfocus="javascript:changeFocusId(<%=m.getId()%>);"
                                    onblur="javascript:clearId(<%=m.getId()%>);"></td>
                         <td style="vertical-align: middle;"><span id="liste_esmamulad<%= m.getId() %>"><%=
-                        m.getEsmamulid()>0 ? m.getEsmamulad() : "" %></span><input type="hidden" id="autocompleted<%=
+                        m.getEsmamulid() > 0 ? m.getEsmamulad() : "" %></span><input type="hidden" id="autocompleted<%=
                         m.getId()%>" value="0"/><input type="hidden" value="<%= m.getEsmamulid()>0 ? m.getEsmamulid()
                         : "0" %>" id="liste_esmamulid<%= m.getId() %>"></td>
                         <td>
-                            <select class="form-control xm" name=liste_firmaid<%=m.getId()%> id="liste_firmaid<%=m.getId()%>">
+                            <select class="form-control xm" name=liste_firmaid<%=m.getId()%>
+                                    id="liste_firmaid<%=m.getId()%>">
                                 <%
                                     for (Firma f : firma) {
-                                        if (f.getId() == m.getFirmaid()) {
-                                            out.println("<option value='" + f.getId() + "' selected>" + StringEscapeUtils.escapeEcmaScript(f.getAd()) + "</option>");
+                                        if (f.getId().intValue() == m.getFirmaid()) {
+                                            out.println("<option value='" + f.getId() + "' selected>" + StringUtils.replace(f.getAd(), "'", "\"") + "</option>");
                                         } else {
-                                            out.println("<option value='" + f.getId() + "'>" + StringEscapeUtils.escapeEcmaScript(f.getAd()) + "</option>");
+                                            out.println("<option value='" + f.getId() + "'>" + StringUtils.replace(f.getAd(), "'", "\"") + "</option>");
                                         }
                                     }
                                 %>
                             </select>
                         </td>
-                        <td><input type="number" class="form-control xss" value="<%= m.getKritikEsik() %>" name=liste_kritikesik<%=m.getId()%> id="liste_kritikesik<%=m.getId()%>"></td>
+                        <td><input type="number" class="form-control xss" value="<%= m.getKritikEsik() %>"
+                                   name=liste_kritikesik<%=m.getId()%> id="liste_kritikesik<%=m.getId()%>"></td>
                         <td>
-                            <select class="form-control xsu" name="liste_baskisayisi<%=m.getId()%>" id="liste_baskisayisi<%=m.getId()%>">
+                            <select class="form-control xsu" name="liste_baskisayisi<%=m.getId()%>"
+                                    id="liste_baskisayisi<%=m.getId()%>">
                                 <%
-                                    for (int i = 5000; i <= 100000; i=i+1000) {
-                                        if(i == m.getBaskiSayisi().intValue())
+                                    for (int i = 5000; i <= 100000; i = i + 1000) {
+                                        if (i == m.getBaskiSayisi().intValue())
                                             out.println("<option value='" + i + "' selected>" + i + "</option>");
                                         else
                                             out.println("<option value='" + i + "'>" + i + "</option>");
@@ -418,19 +435,22 @@
                                 %>
                             </select>
                         </td>
-                        <td><input type="text" class="form-control xt" value="<%= Util.getTarihTR(m.getBakimTarihi()) %>" name=liste_bakimtarihi<%=m.getId()%> id="liste_bakimtarihi<%=m.getId()%>"></td>
+                        <td><input type="text" class="form-control xt"
+                                   value="<%= Util.getTarihTR(m.getBakimTarihi()) %>"
+                                   name=liste_bakimtarihi<%=m.getId()%> id="liste_bakimtarihi<%=m.getId()%>"></td>
                         <script type="text/javascript">
                             bakimTarihi.push(<%=m.getId()%>);
                         </script>
 
                         <td>
-                            <select class="form-control xt" id="liste_calisanid<%=m.getId()%>" name="liste_calisanid<%=m.getId()%>">
+                            <select class="form-control xt" id="liste_calisanid<%=m.getId()%>"
+                                    name="liste_calisanid<%=m.getId()%>">
                                 <%
                                     for (Calisan c : calisan) {
                                         if (m.getCalisanId().intValue() == c.getId()) {
-                                            out.println("<option value='" + c.getId() + "' selected>" + StringEscapeUtils.escapeEcmaScript(c.getFullName()) + "</option>");
+                                            out.println("<option value='" + c.getId() + "' selected>" + StringUtils.replace(c.getFullName(), "'", "\"") + "</option>");
                                         } else {
-                                            out.println("<option value='" + c.getId() + "'>" + StringEscapeUtils.escapeEcmaScript(c.getFullName()) + "</option>");
+                                            out.println("<option value='" + c.getId() + "'>" + StringUtils.replace(c.getFullName(), "'", "\"") + "</option>");
                                         }
                                     }
                                 %>
@@ -465,7 +485,7 @@
                                title="Güncelle"><span class="fa fa-sync fa-lg text-warning"></span></a>
                             <a href="javascript:deleteMamulGo('mamul','<%=m.getId()%>','document.action_form<%=m.getId()%>',3);"
                                title="Sil"><span class="fa fa-minus-circle fa-lg text-danger"></span></a>
-                            <%  } %>
+                            <% } %>
                         </td>
                     </tr>
                     <tr id="tr_mam_detay<%= m.getId() %>" style="display:none;">
@@ -489,11 +509,16 @@
                                 </tr>
                                 <% } %><%-- if tablo baslik --%>
                                 <tr id="tr_mam_bilesen_detay_<%= m.getId() %>_<%= j.getBilesenid() %>">
-                                    <td><%= sayacbilesen %></td>
-                                    <td><%= j.getBilesenad() %></td>
-                                    <td><%= j.getBilesenkod() %></td>
-                                    <td><%= j.getBilesentipad() %></td>
-                                    <td><%= j.getBirimad() %></td>
+                                    <td><%= sayacbilesen %>
+                                    </td>
+                                    <td><%= j.getBilesenad() %>
+                                    </td>
+                                    <td><%= j.getBilesenkod() %>
+                                    </td>
+                                    <td><%= j.getBilesentipad() %>
+                                    </td>
+                                    <td><%= j.getBirimad() %>
+                                    </td>
                                     <td>
                                         <%
                                             /* Hammadde Gramaj Guncelleme*/
@@ -507,14 +532,14 @@
                                                     val = vale.toString();
                                                 }
                                                 if (admin != null && admin.equals("1")) { %>
-                                                    <input type="text" class="form-control xs" value="<%= val %>"
-                                                    name="mamulbilesen_miktar<%= j.getBilesenid() %>"
-                                                    id="mamulbilesen_miktar<%= j.getBilesenid() %>">
+                                        <input type="text" class="form-control xs" value="<%= val %>"
+                                               name="mamulbilesen_miktar<%= j.getBilesenid() %>"
+                                               id="mamulbilesen_miktar<%= j.getBilesenid() %>">
                                         <% } else { %>
                                         <%= j.getMiktar() %>
                                         <% }
                                         } else {
-                                                if (admin != null && admin.equals("1")) { %>
+                                            if (admin != null && admin.equals("1")) { %>
                                         <select class='form-control xs'
                                                 name='mamulbilesen_miktar<%= j.getBilesenid() %>'
                                                 id='mamulbilesen_miktar<%= j.getBilesenid() %>'>
@@ -530,7 +555,8 @@
                                         </select>
                                         <% } else { %>
                                         <%= j.getMiktar().intValue() %>
-                                        <% }} %>
+                                        <% }
+                                        } %>
                                     </td>
                                     <% if (admin != null && admin.equals("1")) { %>
                                     <td class="text-center"><a
@@ -539,7 +565,8 @@
                                     </td>
                                     <% } %>
                                 </tr>
-                                <% }} %> <%-- mamulbilesen --%>
+                                <% }
+                                } %> <%-- mamulbilesen --%>
                             </table>
                         </td>
                     </tr>
@@ -571,8 +598,8 @@
             firstDay: 1,
         }).datepicker("option", "dateFormat", "dd-mm-yy").datepicker("setDate", "today");
 
-        for(let i = 0; i < bakimTarihi.length; i++){
-            let element = $("#liste_bakimtarihi"+ bakimTarihi[i]);
+        for (let i = 0; i < bakimTarihi.length; i++) {
+            let element = $("#liste_bakimtarihi" + bakimTarihi[i]);
             let elementVal = element.val();
             element.datepicker({
                 inline: true,

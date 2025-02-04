@@ -1,7 +1,7 @@
 <%@ page import="erp.entity.*" %>
 <%@ page import="erp.util.Util" %>
 <%@ page import="java.util.List" %>
-<%@ page import="org.apache.commons.text.StringEscapeUtils" %>
+<%@ page import="org.apache.commons.lang3.StringUtils" %>
 <%@ page contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!doctype html>
@@ -51,7 +51,7 @@
             out.println(delimeter
         + " { id:" + b.getId()
         + ",bilesenid:" + b.getId()
-        + ",bilesenad:'" + StringEscapeUtils.escapeEcmaScript(b.getAd()) + "'"
+        + ",bilesenad:'" + StringUtils.replace(b.getAd(), "'", "\"") + "'"
         + ",bilesenkod:'" + b.getKod() + "'"
         + ",bilesentipid:" + b.getBilesentipid()
         + ",bilesentipad:'" + b.getBilesentipad() + "'" + "}");
@@ -63,20 +63,20 @@
             out.println(delimeter
         + " { id:" + m.getId()
         + ",mamulid:" + m.getId()
-        + ",mamulad:'" + StringEscapeUtils.escapeEcmaScript(m.getAd()) + "'"
+        + ",mamulad:'" + StringUtils.replace(m.getAd(), "'", "\"") + "'"
         + ",mamulkod:'" + m.getKod() + "'"
         + ",esmamulid:" + m.getEsmamulid()
-        + ",esmamulad:'" + StringEscapeUtils.escapeEcmaScript(m.getEsmamulad()) + "'"
+        + ",esmamulad:'" + StringUtils.replace(m.getEsmamulad(), "'", "\"") + "'"
         + ",esmamulkod:'" + m.getEsmamulkod() + "'"
-        + ",hammadde:'" + StringEscapeUtils.escapeEcmaScript(m.getHammadde()) + "'"
+        + ",hammadde:'" + StringUtils.replace(m.getHammadde(), "'", "\"") + "'"
         + ",hammaddegkrno:'" + m.getHammaddegkrno() + "'"
         + ",hammaddeagir:'" + m.getHammaddemiktar() + "'"
         + ",hammaddemamulbasi:'" + m.getHammaddemamulbasi() + "'"
-        + ",yarimamul:'" + StringEscapeUtils.escapeEcmaScript(m.getYarimamul()) + "'"
+        + ",yarimamul:'" + StringUtils.replace(m.getYarimamul(), "'", "\"") + "'"
         + ",yarimamulgkrno:'" + m.getYarimamulgkrno() + "'"
         + ",yarimamulagir:'" + m.getYarimamulmiktar() + "'"
         + ",yarimamulmamulbasi:'" + m.getYarimamulmamulbasi() + "'"
-        + ",firmaad:'" + StringEscapeUtils.escapeEcmaScript(m.getFirmaad()) + "'"
+        + ",firmaad:'" + StringUtils.replace(m.getFirmaad(), "'", "\"") + "'"
         + ",figur:" + m.getFigur()
         + ",cevrimsure:" + m.getCevrimsuresi() + "}");
             delimeter = ",";
@@ -85,7 +85,7 @@
         <%delimeter = "";
         for (Mamul m : mamul) {
             // out.println(delimeter + " { label:'" + m.getKod() + "'" + ",id:" + m.getId() + "}");
-            out.println(delimeter + " { value:'"+ m.getKod() + "', label:'" + m.getKod() + " [" + StringEscapeUtils.escapeEcmaScript(m.getAd()) +"]',id:" + m.getId() + "}");
+            out.println(delimeter + " { value:'"+ m.getKod() + "', label:'" + m.getKod() + " [" + StringUtils.replace(m.getAd(), "'", "\"") +"]',id:" + m.getId() + "}");
             delimeter = ",";
         }%>];
 
@@ -189,7 +189,7 @@
                 </div>
             </div>
 
-            <div class="form-group" id="div_mamulizno" >
+            <div class="form-group" id="div_mamulizno">
                 <label for="mamulizleno" class="text-baslik">Mamül İzl.No</label>
                 <div>
                     <select class="form-control normal" name="mamulizleno" id="mamulizleno"></select>
@@ -260,14 +260,16 @@
             <div class="form-group">
                 <label for="uretimadet" class="text-baslik">Üretim Ad.</label>
                 <div>
-                    <input type="number" class="form-control xs text-right" name="uretimadet" id="uretimadet" autocomplete="off">
+                    <input type="number" class="form-control xs text-right" name="uretimadet" id="uretimadet"
+                           autocomplete="off">
                 </div>
             </div>
 
             <div class="form-group">
                 <label for="hataliadet" class="text-baslik">Hatalı Ad.</label>
                 <div>
-                    <input type="number" class="form-control xs text-right" name="hataliadet" id="hataliadet" autocomplete="off">
+                    <input type="number" class="form-control xs text-right" name="hataliadet" id="hataliadet"
+                           autocomplete="off">
                 </div>
             </div>
 
@@ -288,7 +290,8 @@
             <div class="form-group">
                 <label for="duruszaman" class="text-baslik">Duruş Zamanı</label>
                 <div>
-                    <input type="text" class="form-control xs text-right" type="number" name="duruszaman" id="duruszaman"><span class="birim">Dk.</span>
+                    <input type="text" class="form-control xs text-right" type="number" name="duruszaman"
+                           id="duruszaman"><span class="birim">Dk.</span>
                 </div>
             </div>
 
@@ -318,7 +321,9 @@
                     <input type="hidden" name="uretimplanid" id="uretimplanid" value="0">
                     <input type="hidden" name="islemid" id="islemid" value="0">
                     <button type="button" class="btn btn-danger" name="uretimekle" id="uretimekle"> Ekle</button>
-                    <button type="button" class="btn btn-danger" name="uretimiptal" id="uretimiptal" style="display:none;">İptal</button>
+                    <button type="button" class="btn btn-danger" name="uretimiptal" id="uretimiptal"
+                            style="display:none;">İptal
+                    </button>
                 </div>
             </div>
             <div class="form-group">
@@ -337,7 +342,8 @@
             <div class="form-group">
                 <label for="tahminiuretim" class="text-baslik">Tahmini Üretim</label>
                 <div>
-                    <input type="text" class="form-control xm" name="tahminiuretim" id="tahminiuretim" readonly="readonly"><span class="birim"> Adet</span>
+                    <input type="text" class="form-control xm" name="tahminiuretim" id="tahminiuretim"
+                           readonly="readonly"><span class="birim"> Adet</span>
                 </div>
             </div>
             <div class="clearfix"></div>
@@ -416,28 +422,48 @@
                 }
             %>
             <tr id="tr<%=u.getId()%>">
-                <td class="text-right"><%=u.getId()%></td>
-                <td nowrap><%=u.getTarihTRShort()%></td>
-                <td><%=u.getBasZaman()%></td>
-                <td><%=u.getBitZaman()%></td>
-                <td nowrap><%=u.getMakinaad()%></td>
-                <td><%=u.getCalisanShortName()%></td>
-                <td><%=u.getFirmaad()%></td>
-                <td><%=Util.splitLine(u.getHammaddead(), ";", "<br>")%></td>
-                <td><%=Util.splitLine(u.getHammaddeizlno(), ";", "<br>")%></td>
-                <td><%= u.getMamulkod() %></td>
-                <td><%= u.getMamulad() %></td>
-                <td><%= u.getMamulizlno() %></td>
-                <td class="text-right"><%= u.getUretilenmiktar() %></td>
-                <td class="text-right"><%= (u.getHatalimiktar() == 0) ? "" : u.getHatalimiktar() %></td>
-                <td><%= u.getHatakodu() %></td>
-                <td><%= (u.getDuruszaman() == 0) ? "" : u.getDuruszaman() + " Dk."%></td>
-                <td><%= u.getDuruskodu() %></td>
+                <td class="text-right"><%=u.getId()%>
+                </td>
+                <td nowrap><%=u.getTarihTRShort()%>
+                </td>
+                <td><%=u.getBasZaman()%>
+                </td>
+                <td><%=u.getBitZaman()%>
+                </td>
+                <td nowrap><%=u.getMakinaad()%>
+                </td>
+                <td><%=u.getCalisanShortName()%>
+                </td>
+                <td><%=u.getFirmaad()%>
+                </td>
+                <td><%=Util.splitLine(u.getHammaddead(), ";", "<br>")%>
+                </td>
+                <td><%=Util.splitLine(u.getHammaddeizlno(), ";", "<br>")%>
+                </td>
+                <td><%= u.getMamulkod() %>
+                </td>
+                <td><%= u.getMamulad() %>
+                </td>
+                <td><%= u.getMamulizlno() %>
+                </td>
+                <td class="text-right"><%= u.getUretilenmiktar() %>
+                </td>
+                <td class="text-right"><%= (u.getHatalimiktar() == 0) ? "" : u.getHatalimiktar() %>
+                </td>
+                <td><%= u.getHatakodu() %>
+                </td>
+                <td><%= (u.getDuruszaman() == 0) ? "" : u.getDuruszaman() + " Dk."%>
+                </td>
+                <td><%= u.getDuruskodu() %>
+                </td>
                 <td nowrap>
                     <div id="div<%= u.getId() %>">
-                        <a href="javascript:uretimtakipguncelle('#tr<%= u.getId() %>','<%= u.getId() %>');" title="Güncelle"><span class="fa fa-sync fa-lg text-warning"></span></a>
-                        <a href="javascript:uretimtakipok(<%= u.getId() %>);" title="Onayla"><span class="fa fa-check-circle fa-lg text-success"></span></a>
-                        <a href="javascript:uretimtakipsil(<%= u.getId() %>);" title="Sil"><span class="fa fa-minus-circle fa-lg text-danger"></span></a>
+                        <a href="javascript:uretimtakipguncelle('#tr<%= u.getId() %>','<%= u.getId() %>');"
+                           title="Güncelle"><span class="fa fa-sync fa-lg text-warning"></span></a>
+                        <a href="javascript:uretimtakipok(<%= u.getId() %>);" title="Onayla"><span
+                                class="fa fa-check-circle fa-lg text-success"></span></a>
+                        <a href="javascript:uretimtakipsil(<%= u.getId() %>);" title="Sil"><span
+                                class="fa fa-minus-circle fa-lg text-danger"></span></a>
                     </div>
                 </td>
             </tr>
@@ -479,8 +505,7 @@
     $("#cxb_esmamul").on("change", function () {
         if ($(this).prop("checked")) {
             es_mamul_checkbox_on();
-        }
-        else{
+        } else {
             es_mamul_checkbox_off();
         }
     });

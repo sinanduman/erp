@@ -111,20 +111,24 @@
                         if (admin != null && admin.equals("1")) {
                     %>
                     <td><label class="text-success">Aksiyon</label></td>
-                    <%  } %>
+                    <% } %>
                 </tr>
                 <% } %>
                 <form name="action_form<%=c.getId()%>" id="action_form<%=c.getId()%>">
                     <tr id="tr<%=c.getId() %>" <% if (c.getDurum() == 0) {
                         out.print("style='background-color:darkKhaki;'");
                     } %>>
-                        <td><input type="text" class="form-control" value="<%= c.getAd() %>" name="liste_calisanad" id="liste_calisanad" autocomplete="off"></td>
-                        <td><input type="text" class="form-control" value="<%= c.getSoyad() %>" name="liste_calisansoyad" id="liste_calisansoyad" autocomplete="off"></td>
-                        <td><input type="text" class="form-control" value="<%= c.getGorev() %>" name="liste_calisangorev" id="liste_calisangorev" autocomplete="off"></td>
+                        <td><input type="text" class="form-control" value="<%= c.getAd() %>" name="liste_calisanad"
+                                   id="liste_calisanad" autocomplete="off"></td>
+                        <td><input type="text" class="form-control" value="<%= c.getSoyad() %>"
+                                   name="liste_calisansoyad" id="liste_calisansoyad" autocomplete="off"></td>
+                        <td><input type="text" class="form-control" value="<%= c.getGorev() %>"
+                                   name="liste_calisangorev" id="liste_calisangorev" autocomplete="off"></td>
                         <td>
                             <div class="form-group">
                                 <div>
-                                    <select class="form-control xs" name="liste_calisandurum" id="liste_calisandurum<%=c.getId()%>">
+                                    <select class="form-control xs" name="liste_calisandurum"
+                                            id="liste_calisandurum<%=c.getId()%>">
                                         <%
                                             if (c.getDurum() == 1) {
                                                 out.println("<option value='" + 1 + "' selected>Aktif</option>");
@@ -143,8 +147,10 @@
                         %>
                         <td>
                             <div id="div<%= c.getId() %>" class="text-center">
-                                <a href='javascript:updateCalisanGo("calisan", "<%=c.getId()%>", document.action_form<%=c.getId()%>,1);' title="Güncelle"><span class="fa fa-sync fa-lg text-warning"></span></a>
-                                <a href='javascript:deleteCalisanGo("calisan", "<%=c.getId()%>", document.action_form<%=c.getId()%>,3);' title="Sil"><span class="fa fa-minus-circle fa-lg text-danger"></span></a>
+                                <a href='javascript:updateCalisanGo("calisan", "<%=c.getId()%>", document.action_form<%=c.getId()%>,1);'
+                                   title="Güncelle"><span class="fa fa-sync fa-lg text-warning"></span></a>
+                                <a href='javascript:deleteCalisanGo("calisan", "<%=c.getId()%>", document.action_form<%=c.getId()%>,3);'
+                                   title="Sil"><span class="fa fa-minus-circle fa-lg text-danger"></span></a>
                             </div>
                         </td>
                         <% } %>

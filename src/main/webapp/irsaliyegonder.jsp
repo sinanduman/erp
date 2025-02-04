@@ -51,7 +51,7 @@
                 <%
                     int sayac = 0;
                     for (Irsaliye i : irsaliye) {
-                    if (sayac++ == 0) {
+                        if (sayac++ == 0) {
                 %>
                 <tr>
                     <td><label class="text-success">İrsaliye No</label></td>
@@ -62,9 +62,12 @@
                 <% } %>
                 <form name="action_form<%=i.getId()%>" id="action_form<%=i.getId()%>">
                     <tr id="tr<%=i.getId()%>">
-                        <td><%=i.getIrsaliyeno()%></td>
-                        <td><%=Util.getTarihTR(i.getOlusturmatarihi())%></td>
-                        <td><%= (i.getFirmaad() == null) ? "" : i.getFirmaad() %></td>
+                        <td><%=i.getIrsaliyeno()%>
+                        </td>
+                        <td><%=Util.getTarihTR(i.getOlusturmatarihi())%>
+                        </td>
+                        <td><%= (i.getFirmaad() == null) ? "" : i.getFirmaad() %>
+                        </td>
 
                         <td class="text-center">
                             <div id="divirsaliye<%= i.getId() %>">
@@ -77,9 +80,9 @@
                         <td colspan="5">
                             <table style="width:100%;" class="tableplan">
                                 <% int sayacbilesen = 0;
-                                for (IrsaliyeBilesen j : irsaliyebilesenonaylandi) {
-                                if (j.getIrsaliyeid().intValue() == i.getId().intValue()) {
-                                if ((sayacbilesen++ == 0)) { %>
+                                    for (IrsaliyeBilesen j : irsaliyebilesenonaylandi) {
+                                        if (j.getIrsaliyeid().intValue() == i.getId().intValue()) {
+                                            if ((sayacbilesen++ == 0)) { %>
                                 <tr>
                                     <td><label class="text-danger">Sıra No</label></td>
                                     <td><label class="text-danger">İrsaliye İd</label></td>
@@ -91,15 +94,23 @@
                                 </tr>
                                 <% } %><%-- if tablo baslik --%>
                                 <tr>
-                                    <td><%= sayacbilesen %></td>
-                                    <td><%= j.getIrsaliyeid() %></td>
-                                    <td><%= j.getMamulad() %></td>
-                                    <td><%= j.getMamulkod() %></td>
-                                    <td><%= j.getFirmaad() %></td>
-                                    <td><%= j.getGkrno() %></td>
-                                    <td style="text-align: right;"><%= Constants.decimalFormat.format(j.getMiktar()) %></td>
+                                    <td><%= sayacbilesen %>
+                                    </td>
+                                    <td><%= j.getIrsaliyeid() %>
+                                    </td>
+                                    <td><%= j.getMamulad() %>
+                                    </td>
+                                    <td><%= j.getMamulkod() %>
+                                    </td>
+                                    <td><%= j.getFirmaad() %>
+                                    </td>
+                                    <td><%= j.getGkrno() %>
+                                    </td>
+                                    <td style="text-align: right;"><%= Constants.decimalFormat.format(j.getMiktar()) %>
+                                    </td>
                                 </tr>
-                                <% }} %><%-- irsaliyebilesen --%>
+                                <% }
+                                } %><%-- irsaliyebilesen --%>
                             </table>
                         </td>
                     </tr>

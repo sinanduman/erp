@@ -48,13 +48,21 @@
         </h2>
 
 
-        <div class="input-group" style="margin-bottom:-1px;width:100%;"><span class="input-group-addon" style="width:50px;"><i class="fa fa-user"></i></span><input type="text" name="username" class="form-control normal" placeholder="Kullanıcı Adı"/></div>
+        <div class="input-group" style="margin-bottom:-1px;width:100%;"><span class="input-group-addon"
+                                                                              style="width:50px;"><i
+                class="fa fa-user"></i></span><input type="text" name="username" class="form-control normal"
+                                                     placeholder="Kullanıcı Adı"/></div>
 
-        <div class="input-group" style="margin-bottom:15px;width:100%;"><span class="input-group-addon" style="width:50px;"><i class="fa fa-key"></i></span><input type="password" name="password" class="form-control normal" placeholder="Şifre"></div>
+        <div class="input-group" style="margin-bottom:15px;width:100%;"><span class="input-group-addon"
+                                                                              style="width:50px;"><i
+                class="fa fa-key"></i></span><input type="password" name="password" class="form-control normal"
+                                                    placeholder="Şifre"></div>
 
 
         <div>
-            <button class="btn btn-success" type="submit" name="submit" style="background-color: #5fb336"><i class="fa fa-sign-in-alt iki-bosluk"></i>Giriş Yap</button>
+            <button class="btn btn-success" type="submit" name="submit" style="background-color: #5fb336"><i
+                    class="fa fa-sign-in-alt iki-bosluk"></i>Giriş Yap
+            </button>
         </div>
 
     </form>

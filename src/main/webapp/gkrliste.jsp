@@ -5,7 +5,7 @@
 <%@ page import="erp.model.BilesenTip" %>
 <%@ page import="erp.util.Util" %>
 <%@ page import="java.util.List" %>
-<%@ page import="org.apache.commons.text.StringEscapeUtils" %>
+<%@ page import="org.apache.commons.lang3.StringUtils" %>
 <!doctype html>
 <html lang="en">
 <head>
@@ -62,18 +62,18 @@
             out.println(delimeter
         + " { id:" + b.getId()
         + ",bilesenid:" + b.getId()
-        + ",bilesenad:'" + StringEscapeUtils.escapeEcmaScript(b.getAd()) + "'"
+        + ",bilesenad:'" + StringUtils.replace(b.getAd(), "'", "\"") + "'"
         + ",bilesenkod:'" + b.getKod() + "'"
         + ",bilesentipid:" + b.getBilesentipid()
         + ",bilesentipad:'" + b.getBilesentipad() + "'"
         + ",firmaid:" + b.getFirmaid()
-        + ",firmaad:'" + StringEscapeUtils.escapeEcmaScript(b.getFirmaad()) + "'" + "}");
+        + ",firmaad:'" + StringUtils.replace(b.getFirmaad(), "'", "\"") + "'" + "}");
             delimeter = ",";
         }%>];
     let bilesen2 = [
         <%delimeter = "";
         for (Bilesen b : hammadde) {
-            out.println(delimeter + " { value:'"+ b.getKod() + "', label:'" + b.getKod() + " [" + StringEscapeUtils.escapeEcmaScript(b.getAd()) +"]',id:" + b.getId() + "}");
+            out.println(delimeter + " { value:'"+ b.getKod() + "', label:'" + b.getKod() + " [" + StringUtils.replace(b.getAd(), "'", "\"") +"]',id:" + b.getId() + "}");
             delimeter = ",";
         }%>];
 
@@ -90,14 +90,16 @@
             <div class="form-group">
                 <label for="bas_tarih" class="text-baslik">Başlangıç Tarihi</label>
                 <div>
-                    <input type="text" style="width:120px;" class="form-control" name="bas_tarih" id="bas_tarih" placeholder="Tarih">
+                    <input type="text" style="width:120px;" class="form-control" name="bas_tarih" id="bas_tarih"
+                           placeholder="Tarih">
                 </div>
             </div>
 
             <div class="form-group">
                 <label for="bit_tarih" class="text-baslik">Bitiş Tarihi</label>
                 <div>
-                    <input type="text" style="width:120px;" class="form-control" name="bit_tarih" id="bit_tarih" placeholder="Tarih">
+                    <input type="text" style="width:120px;" class="form-control" name="bit_tarih" id="bit_tarih"
+                           placeholder="Tarih">
                 </div>
             </div>
 

@@ -7,7 +7,7 @@
 <%@ page import="java.util.HashMap" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Map" %>
-<%@ page import="org.apache.commons.text.StringEscapeUtils" %>
+<%@ page import="org.apache.commons.lang3.StringUtils" %>
 <%@ page contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt" %>
@@ -51,15 +51,15 @@
     Map<Integer, Mamul> mamulmap = (HashMap<Integer, Mamul>) request.getAttribute("mamulmap");
     @SuppressWarnings("unchecked")
     List<Bakim> bakimrapor = (List<Bakim>) request.getAttribute("bakimrapor");
-    String mamulid = request.getAttribute("mamulid")==null?"": (String) request.getAttribute("mamulid");
-    String calisanid = request.getAttribute("calisanid")==null?"": (String)request.getAttribute("calisanid");
+    String mamulid = request.getAttribute("mamulid") == null ? "" : (String) request.getAttribute("mamulid");
+    String calisanid = request.getAttribute("calisanid") == null ? "" : (String) request.getAttribute("calisanid");
     String bas_tarih = (String) request.getAttribute("bas_tarih");
     String bit_tarih = (String) request.getAttribute("bit_tarih");
     String excelsql = (String) request.getAttribute("excelsql");
 
-    if(bas_tarih == null || bas_tarih.isEmpty())
+    if (bas_tarih == null || bas_tarih.isEmpty())
         bas_tarih = Util.convertLocalDateTarihTR(LocalDate.now().minusYears(4)).toString();
-    if(bit_tarih == null || bit_tarih.isEmpty())
+    if (bit_tarih == null || bit_tarih.isEmpty())
         bit_tarih = Util.convertLocalDateTarihTR(LocalDate.now()).toString();
 %>
 
@@ -70,7 +70,7 @@
             out.println(delimeter
         + " { id:" + m.getId()
         + ",bilesenid:" + m.getId()
-        + ",bilesenad:'" + StringEscapeUtils.escapeEcmaScript(m.getAd()) + "'"
+        + ",bilesenad:'" + StringUtils.replace(m.getAd(), "'", "\"") + "'"
         + ",bilesenkod:'" + m.getKod() + "'"
         + ",label:'" + m.getKod() + "'" + "}");
             delimeter = ",";
@@ -80,7 +80,7 @@
     let mamul2 = [
         <%delimeter = "";
         for (Mamul m : mamul) {
-            out.println(delimeter + " { value:'"+ m.getKod() + "', label:'" + m.getKod() + " [" + StringEscapeUtils.escapeEcmaScript(m.getAd()) +"]',id:" + m.getId() + "}");
+            out.println(delimeter + " { value:'"+ m.getKod() + "', label:'" + m.getKod() + " [" + StringUtils.replace(m.getAd(), "'", "\"") +"]',id:" + m.getId() + "}");
             delimeter = ",";
         }%>];
 
@@ -178,7 +178,7 @@
             </script>
             <%
                 for (Bakim r : bakimrapor) {
-                if (sayac++ == 0) {
+                    if (sayac++ == 0) {
             %>
             <tr>
                 <th>Bakıma Kalan Baskı</th>
@@ -194,18 +194,26 @@
             %>
             <tr id="tr<%=r.getId()%>">
                 <%
-                    String formatted = String.format ("%,d", r.getKalanBaski());
-                    if(r.getKalanBaski() < Util.KALAN_BASKI_SAYISI) {
+                    String formatted = String.format("%,d", r.getKalanBaski());
+                    if (r.getKalanBaski() < Util.KALAN_BASKI_SAYISI) {
                         formatted = "<span style='font-weight:bold;color:#d43f3a;'>" + formatted + "</span>";
                     }
                 %>
-                <td nowrap align="right"><%= formatted + " {" + String.format ("%,d", mamulmap.get(r.getMamulid()).getBaskiSayisi()) + "}" %></td>
-                <td nowrap align="right"><%= String.format ("%,d", r.getBaskiSayisi()) %></td>
-                <td nowrap align="right"><%= String.format ("%,d", r.getUretimMiktar()) %></td>
-                <td nowrap><%= mamulmap.get(r.getMamulid()) == null ? "" : mamulmap.get(r.getMamulid()).getKod() %></td>
-                <td nowrap><%= mamulmap.get(r.getMamulid()) == null ? "" : "<form method='post' action='mamul'><input type='hidden' name='stoklisteid' value='1'><input type='hidden' value='"+r.getMamulid()+"' name='mamulidara'><input type='button' value='"+ mamulmap.get(r.getMamulid()).getAd()+"' class='mamullink' onclick='javascript:this.form.submit();'></form>" %></td>
-                <td nowrap><%= calisanmap.get(r.getCalisanid()) == null ? "" : calisanmap.get(r.getCalisanid()).getFullName() %></td>
-                <td nowrap><%= Util.getTarihTR(r.getBakimtarihi()) %></td>
+                <td nowrap
+                    align="right"><%= formatted + " {" + String.format("%,d", mamulmap.get(r.getMamulid()).getBaskiSayisi()) + "}" %>
+                </td>
+                <td nowrap align="right"><%= String.format("%,d", r.getBaskiSayisi()) %>
+                </td>
+                <td nowrap align="right"><%= String.format("%,d", r.getUretimMiktar()) %>
+                </td>
+                <td nowrap><%= mamulmap.get(r.getMamulid()) == null ? "" : mamulmap.get(r.getMamulid()).getKod() %>
+                </td>
+                <td nowrap><%= mamulmap.get(r.getMamulid()) == null ? "" : "<form method='post' action='mamul'><input type='hidden' name='stoklisteid' value='1'><input type='hidden' value='" + r.getMamulid() + "' name='mamulidara'><input type='button' value='" + mamulmap.get(r.getMamulid()).getAd() + "' class='mamullink' onclick='javascript:this.form.submit();'></form>" %>
+                </td>
+                <td nowrap><%= calisanmap.get(r.getCalisanid()) == null ? "" : calisanmap.get(r.getCalisanid()).getFullName() %>
+                </td>
+                <td nowrap><%= Util.getTarihTR(r.getBakimtarihi()) %>
+                </td>
             </tr>
             <% } %>
         </table>

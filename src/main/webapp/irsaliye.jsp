@@ -3,7 +3,7 @@
 <%@ page import="erp.entity.*,erp.util.Util" %>
 <%@ page import="java.text.SimpleDateFormat,java.util.Date" %>
 <%@ page import="java.util.List" %>
-<%@ page import="org.apache.commons.text.StringEscapeUtils" %>
+<%@ page import="org.apache.commons.lang3.StringUtils" %>
 <!doctype html>
 <html lang="en">
 <head>
@@ -72,20 +72,20 @@
             out.println(delimeter
             + " { id:" + s.getId()
             + ",mamulid:" + s.getBilesenid()
-            + ",mamulad:'" + StringEscapeUtils.escapeEcmaScript(s.getBilesenad()) + "'"
+            + ",mamulad:'" + StringUtils.replace(s.getBilesenad(), "'", "\"") + "'"
             + ",mamulkod:'" + s.getBilesenkod() + "'"
             + ",gkrno:'" + s.getGkrnostr() + "'"
             + ",miktar:'" + s.getMiktarstr() + "'"
             + ",stokid:'" + s.getStokidstr() + "'"
             + ",firmaid:" + s.getFirmaid()
-            + ",firmaad:'" + StringEscapeUtils.escapeEcmaScript(s.getFirmaad()) + "'}");
+            + ",firmaad:'" + StringUtils.replace(s.getFirmaad(), "'", "\"") + "'}");
             delimeter = ",";
         }%>];
 
     let mamul2 = [
         <%delimeter = "";
         for (Stok s : stok) {
-            out.println(delimeter + " { value:'"+ s.getBilesenkod() + "', label:'" + s.getBilesenkod() + " ["+ StringEscapeUtils.escapeEcmaScript(s.getBilesenad())  +"]',id:" + s.getBilesenid() + "}");
+            out.println(delimeter + " { value:'"+ s.getBilesenkod() + "', label:'" + s.getBilesenkod() + " ["+ StringUtils.replace(s.getBilesenad(), "'", "\"")  +"]',id:" + s.getBilesenid() + "}");
             delimeter = ",";
         }%>];
 </script>
@@ -95,7 +95,8 @@
         <label class="text-danger rounded">Ürün Sevkiyatı</label>
     </div>
     <div class="row">
-        <form class="form-inline" name="irsaliyeform" id="irsaliyeform" method="post" action="irsaliye" enctype="multipart/form-data">
+        <form class="form-inline" name="irsaliyeform" id="irsaliyeform" method="post" action="irsaliye"
+              enctype="multipart/form-data">
             <%
                 String disabled = "";
                 String readonly = "";
@@ -107,7 +108,8 @@
             <div class="form-group">
                 <label for="tarih" class="text-baslik">Tarih</label>
                 <div>
-                    <input type="text" class="form-control xm" name="tarih" id="tarih" placeholder="Tarih" <%=disabled%> <%=readonly%>>
+                    <input type="text" class="form-control xm" name="tarih" id="tarih"
+                           placeholder="Tarih" <%=disabled%> <%=readonly%>>
                 </div>
             </div>
 
@@ -204,7 +206,7 @@
                 <div>
                     <input type="file" class="form-control-file normal" name="irsaliye_yukle"
                            id="irsaliye_yukle" required pattern=".*\.xls[x]?"
-                            <%= (acikirsaliyeid == 0)? "disabled" : "" %> />
+                            <%= (acikirsaliyeid == 0) ? "disabled" : "" %> />
                 </div>
 
             </div>
@@ -242,13 +244,14 @@
         </form>
     </div>
 
-    <% if (pageflash!= null && !pageflash.toString().isEmpty()) { %>
-        <div class="row alert alert-warning alert-dismissible" role="alert" style="background-color: darkkhaki;">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <strong style="color:green;">BULUNAMAYAN MAMÜL KODLARI</strong>
-            <hr/>
-            <span style="color: #333333;"><%= pageflash %></span>
-        </div>
+    <% if (pageflash != null && !pageflash.toString().isEmpty()) { %>
+    <div class="row alert alert-warning alert-dismissible" role="alert" style="background-color: darkkhaki;">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                aria-hidden="true">&times;</span></button>
+        <strong style="color:green;">BULUNAMAYAN MAMÜL KODLARI</strong>
+        <hr/>
+        <span style="color: #333333;"><%= pageflash %></span>
+    </div>
     <% } %>
 
     <div class="row" style="font-size:12px;">
@@ -276,7 +279,7 @@
                     miktar: "<%=ib.getMiktar()%>",
                     gkrno: "<%=ib.getGkrno()%>",
                     stokid: "<%=ib.getStokid()%>",
-                    not: "<%=(ib.getNot() == null) ? "" : StringEscapeUtils.escapeEcmaScript(ib.getNot()) %>"
+                    not: "<%=(ib.getNot() == null) ? "" : StringUtils.replace(ib.getNot(), "'", "\"") %>"
                 };
                 paket[<%=ib.getId()%>] = pakettemp;
             </script>
@@ -305,7 +308,7 @@
             %>
             <tr id="tr<%=ib.getId()%>">
                 <%
-                    not = (ib.getNot() == null) ? "" : StringEscapeUtils.escapeEcmaScript(ib.getNot());
+                    not = (ib.getNot() == null) ? "" : StringUtils.replace(ib.getNot(), "'", "\"");
                 %>
                 <td nowrap="nowrap"><%=Util.getTarihTR(ib.getOlusturmatarihi())%>
                 </td>

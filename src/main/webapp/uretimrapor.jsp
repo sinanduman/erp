@@ -1,7 +1,7 @@
 <%@ page import="erp.entity.*" %>
 <%@ page import="erp.util.Util" %>
 <%@ page import="java.util.List" %>
-<%@ page import="org.apache.commons.text.StringEscapeUtils" %>
+<%@ page import="org.apache.commons.lang3.StringUtils" %>
 <%@ page contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!doctype html>
@@ -60,7 +60,7 @@
             out.println(delimeter
         + " { id:" + m.getId()
         + ",bilesenid:" + m.getId()
-        + ",bilesenad:'" + StringEscapeUtils.escapeEcmaScript(m.getAd()) + "'"
+        + ",bilesenad:'" + StringUtils.replace(m.getAd(), "'", "\"") + "'"
         + ",bilesenkod:'" + m.getKod() + "'"
         + ",label:'" + m.getKod() + "'" + "}");
             delimeter = ",";
@@ -70,7 +70,7 @@
     let mamul2 = [
         <%delimeter = "";
         for (Mamul m : mamul) {
-            out.println(delimeter + " { value:'"+ m.getKod() + "', label:'" + m.getKod() + " [" + StringEscapeUtils.escapeEcmaScript(m.getAd()) +"]',id:" + m.getId() + "}");
+            out.println(delimeter + " { value:'"+ m.getKod() + "', label:'" + m.getKod() + " [" + StringUtils.replace(m.getAd(), "'", "\"") +"]',id:" + m.getId() + "}");
             delimeter = ",";
         }%>];
 
@@ -230,22 +230,38 @@
                 }
             %>
             <tr id="tr<%=u.getId()%>">
-                <td nowrap><%=u.getTarihTRShort()%></td>
-                <td><%=u.getBasZaman()%></td>
-                <td><%=u.getBitZaman()%></td>
-                <td nowrap><%=u.getMakinaad()%></td>
-                <td><%=u.getCalisanShortName()%></td>
-                <td><%=u.getFirmaad()%></td>
-                <td><%=Util.splitLine(u.getHammaddead(), ";", "<br>")%></td>
-                <td><%=Util.splitLine(u.getHammaddeizlno(), ";", "<br>")%></td>
-                <td><%= u.getMamulkod() %></td>
-                <td><%= u.getMamulad() %></td>
-                <td><%= (u.getMamulizlno() == 0) ? "" : u.getMamulizlno() %></td>
-                <td class="text-right"><%= (u.getPlanlananmiktar() == 0) ? "" : u.getPlanlananmiktar() + " Ad." %></td>
-                <td class="text-right"><%= u.getUretilenmiktar() + " Ad." %></td>
-                <td class="text-right" nowrap><%= (u.getFark() == 0) ? "" : u.getFark() + " Ad." %></td>
-                <td class="text-right"><%= (u.getSapma() == 0) ? "" : "% " + u.getSapma() %></td>
-                <td><%= u.getHataad() %></td>
+                <td nowrap><%=u.getTarihTRShort()%>
+                </td>
+                <td><%=u.getBasZaman()%>
+                </td>
+                <td><%=u.getBitZaman()%>
+                </td>
+                <td nowrap><%=u.getMakinaad()%>
+                </td>
+                <td><%=u.getCalisanShortName()%>
+                </td>
+                <td><%=u.getFirmaad()%>
+                </td>
+                <td><%=Util.splitLine(u.getHammaddead(), ";", "<br>")%>
+                </td>
+                <td><%=Util.splitLine(u.getHammaddeizlno(), ";", "<br>")%>
+                </td>
+                <td><%= u.getMamulkod() %>
+                </td>
+                <td><%= u.getMamulad() %>
+                </td>
+                <td><%= (u.getMamulizlno() == 0) ? "" : u.getMamulizlno() %>
+                </td>
+                <td class="text-right"><%= (u.getPlanlananmiktar() == 0) ? "" : u.getPlanlananmiktar() + " Ad." %>
+                </td>
+                <td class="text-right"><%= u.getUretilenmiktar() + " Ad." %>
+                </td>
+                <td class="text-right" nowrap><%= (u.getFark() == 0) ? "" : u.getFark() + " Ad." %>
+                </td>
+                <td class="text-right"><%= (u.getSapma() == 0) ? "" : "% " + u.getSapma() %>
+                </td>
+                <td><%= u.getHataad() %>
+                </td>
             </tr>
             <% } %>
         </table>

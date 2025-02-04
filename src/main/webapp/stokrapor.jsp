@@ -5,7 +5,7 @@
 <%@ page import="java.util.Map" %>
 <%@ page import="java.util.HashMap" %>
 <%@ page import="erp.model.FiyatTip" %>
-<%@ page import="org.apache.commons.text.StringEscapeUtils" %>
+<%@ page import="org.apache.commons.lang3.StringUtils" %>
 <%@ page contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!doctype html>
@@ -62,10 +62,10 @@
             out.println(delimeter
         + " { id:" + m.getId()
         + ",bilesenid:" + m.getId()
-        + ",bilesenad:'" + StringEscapeUtils.escapeEcmaScript(m.getAd()) + "'"
+        + ",bilesenad:'" + StringUtils.replace(m.getAd(), "'", "\"") + "'"
         + ",bilesenkod:'" + m.getKod() + "'"
         + ",value:'" + m.getKod() + "'"
-        + ",label:'" + m.getKod() + " ["+ StringEscapeUtils.escapeEcmaScript(m.getAd()) + "]'" + "}");
+        + ",label:'" + m.getKod() + " ["+ StringUtils.replace(m.getAd(), "'", "\"") + "]'" + "}");
             delimeter = ",";
         }%>];
     let mamuldef = mamul;
@@ -79,10 +79,10 @@
             out.println(delimeter
         + " { id:" + b.getId()
         + ",bilesenid:" + b.getId()
-        + ",bilesenad:'" + StringEscapeUtils.escapeEcmaScript(b.getAd()) + "'"
+        + ",bilesenad:'" + StringUtils.replace(b.getAd(), "'", "\"") + "'"
         + ",bilesenkod:'" + b.getKod() + "'"
      + ",value:'" + b.getKod() + "'"
-        + ",label:'" + b.getKod() + " ["+ StringEscapeUtils.escapeEcmaScript(b.getAd()) + "]'" + "}");
+        + ",label:'" + b.getKod() + " ["+ StringUtils.replace(b.getAd(), "'", "\"") + "]'" + "}");
             delimeter = ",";
         }%>];
 
@@ -95,10 +95,10 @@
             out.println(delimeter
         + " { id:" + b.getId()
         + ",bilesenid:" + b.getId()
-        + ",bilesenad:'" + StringEscapeUtils.escapeEcmaScript(b.getAd()) + "'"
+        + ",bilesenad:'" + StringUtils.replace(b.getAd(), "'", "\"") + "'"
         + ",bilesenkod:'" + b.getKod() + "'"
      + ",value:'" + b.getKod() + "'"
-        + ",label:'" + b.getKod() + " ["+ StringEscapeUtils.escapeEcmaScript(b.getAd()) + "]'" + "}");
+        + ",label:'" + b.getKod() + " ["+ StringUtils.replace(b.getAd(), "'", "\"") + "]'" + "}");
             delimeter = ",";
         }%>];
 
@@ -146,14 +146,17 @@
             <div class="form-group">
                 <label for="tarih" class="text-baslik">Tarih</label>
                 <div>
-                    <input type="text" style="width:120px;" class="form-control" name="tarih" id="tarih" placeholder="Tarih">
+                    <input type="text" style="width:120px;" class="form-control" name="tarih" id="tarih"
+                           placeholder="Tarih">
                 </div>
             </div>
 
             <div class="form-group">
                 <label for="cbx_azalan" class="text-baslik">Stoğu Azalan</label>
                 <div>
-                    <input type="checkbox" class="form-control" name="cbx_azalan" id="cbx_azalan" <%= ((azalan!=null && azalan.equals("1"))?"checked":"") %> aria-label="Azalan stok raporu al">
+                    <input type="checkbox" class="form-control" name="cbx_azalan"
+                           id="cbx_azalan" <%= ((azalan!=null && azalan.equals("1"))?"checked":"") %>
+                           aria-label="Azalan stok raporu al">
                     <input type="hidden" name="azalan" id="azalan" value="<%=azalan%>">
                 </div>
             </div>
@@ -206,14 +209,15 @@
                 <th>Bileşen Ad</th>
                 <th>Firma</th>
                 <% if (fiyatDetayGoster) { %>
-                    <th>Birim Fiyat</th>
-                    <th>Para Birimi</th>
+                <th>Birim Fiyat</th>
+                <th>Para Birimi</th>
                 <% } %>
                 <th>Son İşlem Tarihi</th>
                 <% if (stokdetay.size() > 0) { %>
-                    <th>Değişim</th>
+                <th>Değişim</th>
                 <% } %>
-                <th nowrap>Kalan Miktar <%=birim%></th>
+                <th nowrap>Kalan Miktar <%=birim%>
+                </th>
             </tr>
             <%
                 }
@@ -226,16 +230,28 @@
                         miktar = m.toString();
                     }
                 %>
-                <td><%=sr.getBilesenkod()%></td>
-                <td nowrap><form class='form-inline' method='post' action='<%=formaction%>'><input type='hidden' name='stoklisteid' value='1'><input type='hidden' value='<%= sr.getBilesenid() %>' name='<%=bilesenidara%>'><button type='button' class='mamullink' onclick='javascript:this.form.submit();'><%= sr.getBilesenad() %></button></form></td>
-                <td><%=sr.getFirmaad()%></td>
+                <td><%=sr.getBilesenkod()%>
+                </td>
+                <td nowrap>
+                    <form class='form-inline' method='post' action='<%=formaction%>'><input type='hidden'
+                                                                                            name='stoklisteid'
+                                                                                            value='1'><input
+                            type='hidden' value='<%= sr.getBilesenid() %>' name='<%=bilesenidara%>'>
+                        <button type='button' class='mamullink'
+                                onclick='javascript:this.form.submit();'><%= sr.getBilesenad() %>
+                        </button>
+                    </form>
+                </td>
+                <td><%=sr.getFirmaad()%>
+                </td>
                 <%
                     if (fiyatDetayGoster) {
                         out.print("<td>" + bilesenmap.get(sr.getBilesenid()).getFiyat() + "</td>");
                         out.print("<td>" + FiyatTip.getAdKod(bilesenmap.get(sr.getBilesenid()).getFiyatId()) + "</td>");
                     }
                 %>
-                <td><%=sr.getTarih()%></td>
+                <td><%=sr.getTarih()%>
+                </td>
                 <td class="text-right-stok">
                     <%
                         if (sr.getIslemyonu() == -1) {
@@ -261,7 +277,8 @@
                             kalan = String.valueOf(k);
                         }
                 %>
-                <td class="text-right-stok"><%=kalan%></td>
+                <td class="text-right-stok"><%=kalan%>
+                </td>
                 <% } %>
             </tr>
             <% } %>

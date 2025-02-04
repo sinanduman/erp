@@ -2,7 +2,7 @@
 <%@ page import="erp.util.Util" %>
 <%@ page import="java.util.List" %>
 <%@ page import="erp.util.Constants" %>
-<%@ page import="org.apache.commons.text.StringEscapeUtils" %>
+<%@ page import="org.apache.commons.lang3.StringUtils" %>
 <%@ page contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!doctype html>
@@ -86,7 +86,7 @@
             out.println(delimeter
         + " { id:" + m.getId()
         + ",bilesenid:" + m.getId()
-        + ",bilesenad:'" + StringEscapeUtils.escapeEcmaScript(m.getAd()) + "'"
+        + ",bilesenad:'" + StringUtils.replace(m.getAd(), "'", "\"") + "'"
         + ",bilesenkod:'" + m.getKod() + "'"
         + ",label:'" + m.getKod() + "'" + "}");
             delimeter = ",";
@@ -95,7 +95,7 @@
     let mamul2 = [
         <%delimeter = "";
         for (Mamul m : mamul) {
-            out.println(delimeter + " { value:'"+ m.getKod() + "', label:'" + m.getKod() + " [" + StringEscapeUtils.escapeEcmaScript(m.getAd()) +"]',id:" + m.getId() + "}");
+            out.println(delimeter + " { value:'"+ m.getKod() + "', label:'" + m.getKod() + " [" + StringUtils.replace(m.getAd(), "'", "\"") +"]',id:" + m.getId() + "}");
             delimeter = ",";
         }%>];
 
@@ -206,14 +206,22 @@
                 }
             %>
             <tr <%=style %>>
-                <td><%= Util.getTarih(j.getGonderimtarihi()) %></td>
-                <td><%= j.getIrsaliyeno() %></td>
-                <td><%= ++sayacbilesen %></td>
-                <td><%= j.getMamulad() %></td>
-                <td><%= j.getMamulkod() %></td>
-                <td><%= j.getFirmaad() %></td>
-                <td><%= j.getGkrno() %></td>
-                <td style="text-align: right;"><%= Constants.decimalFormat.format(j.getMiktar()) %></td>
+                <td><%= Util.getTarih(j.getGonderimtarihi()) %>
+                </td>
+                <td><%= j.getIrsaliyeno() %>
+                </td>
+                <td><%= ++sayacbilesen %>
+                </td>
+                <td><%= j.getMamulad() %>
+                </td>
+                <td><%= j.getMamulkod() %>
+                </td>
+                <td><%= j.getFirmaad() %>
+                </td>
+                <td><%= j.getGkrno() %>
+                </td>
+                <td style="text-align: right;"><%= Constants.decimalFormat.format(j.getMiktar()) %>
+                </td>
             </tr>
             <%
                 yeniIrsaliyeId = irsaliyeId;
@@ -250,7 +258,8 @@
                     Aktar
                 </button>
                 <input type="hidden" value="0" name="excelegonder" id="excelegonder">
-                <input type="hidden" name="excelirsaliyeid" id="excelirsaliyeid" value="<%=(irsaliyeid==null)?"":irsaliyeid%>">
+                <input type="hidden" name="excelirsaliyeid" id="excelirsaliyeid"
+                       value="<%=(irsaliyeid==null)?"":irsaliyeid%>">
                 <input type="hidden" name="excelfirmaid" id="excelfirmaid" value="<%=(firmaid==null)?"":firmaid%>">
                 <input type="hidden" name="excelmamulid" id="excelmamulid" value="<%=(mamulid==null)?"":mamulid%>">
                 <input type="hidden" name="exceltarih" id="exceltarih" value="<%=(tarih==null)?"":tarih%>">

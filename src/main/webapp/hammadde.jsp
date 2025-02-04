@@ -8,7 +8,7 @@
 <%@ page import="erp.model.FiyatTip" %>
 <%@ page import="erp.util.Util" %>
 <%@ page import="java.util.List" %>
-<%@ page import="org.apache.commons.text.StringEscapeUtils" %>
+<%@ page import="org.apache.commons.lang3.StringUtils" %>
 <!doctype html>
 <html lang="en">
 <head>
@@ -61,18 +61,18 @@
             out.println(delimeter
         + " { id:" + b.getId()
         + ",bilesenid:" + b.getId()
-        + ",bilesenad:'" + StringEscapeUtils.escapeEcmaScript(b.getAd()) + "'"
+        + ",bilesenad:'" + StringUtils.replace(b.getAd(), "'", "\"") + "'"
         + ",bilesenkod:'" + b.getKod() + "'"
         + ",bilesentipid:" + b.getBilesentipid()
         + ",bilesentipad:'" + b.getBilesentipad() + "'"
         + ",firmaid:" + b.getFirmaid()
-        + ",firmaad:'" + StringEscapeUtils.escapeEcmaScript(b.getFirmaad()) + "'" + "}");
+        + ",firmaad:'" + StringUtils.replace(b.getFirmaad(), "'", "\"") + "'" + "}");
             delimeter = ",";
         }%>];
     let bilesen2 = [
         <%delimeter = "";
         for (Bilesen b : hammaddetum) {
-            out.println(delimeter + " { label:'" + b.getKod() + " [" + StringEscapeUtils.escapeEcmaScript(b.getAd()) +"]',id:" + b.getId() + "}");
+            out.println(delimeter + " { label:'" + b.getKod() + " [" + StringUtils.replace(b.getAd(), "'", "\"") +"]',id:" + b.getId() + "}");
             delimeter = ",";
         }%>];
 
@@ -90,14 +90,16 @@
                 <div class="form-group">
                     <label for="hamkod" class="col-xs-3 control-label text-baslik">Malzeme Kodu: </label>
                     <div>
-                        <input type="text" class="form-control big" name="hamkod" id="hamkod" placeholder="Malzeme Kodu" autocomplete="off">
+                        <input type="text" class="form-control big" name="hamkod" id="hamkod" placeholder="Malzeme Kodu"
+                               autocomplete="off">
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label for="hamad" class="col-xs-3 control-label text-baslik">Malzeme Adı: </label>
                     <div>
-                        <input type="text" class="form-control big" name="hamad" id="hamad" placeholder="Malzeme Adı" autocomplete="off">
+                        <input type="text" class="form-control big" name="hamad" id="hamad" placeholder="Malzeme Adı"
+                               autocomplete="off">
                     </div>
                 </div>
 
@@ -150,11 +152,11 @@
                     <label for="hamfiyatid" class="col-xs-3 control-label text-baslik">Para Tipi: </label>
                     <div>
                         <select class="form-control big" name="hamfiyatid" id="hamfiyatid">
-                        <%
-                            for (FiyatTip ft : FiyatTip.values()) {
-                                out.println("<option value='" + ft.value() + "'>" + ft.ad() + " ("+ ft.kod() +")</option>");
-                            }
-                        %>
+                            <%
+                                for (FiyatTip ft : FiyatTip.values()) {
+                                    out.println("<option value='" + ft.value() + "'>" + ft.ad() + " (" + ft.kod() + ")</option>");
+                                }
+                            %>
                         </select>
                     </div>
                 </div>
@@ -162,14 +164,16 @@
                 <div class="form-group">
                     <label for="hamfiyat" class="col-xs-3 control-label text-baslik">Birim Fiyat: </label>
                     <div>
-                        <input type="number" class="form-control big" name="hamfiyat" id="hamfiyat" placeholder="Birim Fiyat" autocomplete="off">
+                        <input type="number" class="form-control big" name="hamfiyat" id="hamfiyat"
+                               placeholder="Birim Fiyat" autocomplete="off">
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label for="hamkritikesik" class="col-xs-3 control-label text-baslik">Minimum Stok: </label>
                     <div>
-                        <input type="number" class="form-control big" name="hamkritikesik" id="hamkritikesik" placeholder="Minimum Stok" autocomplete="off">
+                        <input type="number" class="form-control big" name="hamkritikesik" id="hamkritikesik"
+                               placeholder="Minimum Stok" autocomplete="off">
                     </div>
                 </div>
 
@@ -190,7 +194,9 @@
                     </div>
 
                     <div class="form-group col-xs-1">
-                        <button type="button" class="btn btn-danger" name="stokliste" id="stokliste" disabled="disabled">Malzeme Getir</button>
+                        <button type="button" class="btn btn-danger" name="stokliste" id="stokliste"
+                                disabled="disabled">Malzeme Getir
+                        </button>
                         <input type="hidden" name="stoklisteid" id="stoklisteid" value="0">
                     </div>
 
@@ -206,13 +212,13 @@
         if (message.equals("-1")) {
     %>
     <%
-        } else if (message.equals("0")) {
+    } else if (message.equals("0")) {
     %>
     <div class="row alert alert-success">
         <strong>Başarılı</strong> olarak eklendi!
     </div>
     <%
-        } else if (!message.equals("") && message.length() > 1) {
+    } else if (!message.equals("") && message.length() > 1) {
     %>
     <div class="row alert alert-danger">
         <strong>Hata! </strong><%= message %>
@@ -243,15 +249,21 @@
                         if (admin != null && admin.equals("1")) {
                     %>
                     <td><label class="text-success">Aksiyon</label></td>
-                    <%  } %>
+                    <% } %>
                 </tr>
                 <% } %>
                 <form name=action_form<%= h.getId()%> id="action_form<%= h.getId()%>">
-                    <tr id="tr<%=h.getId()%>" <%= (h.getDurum()==0 ? "style='background-color:darkKhaki;'" : "") %>>
+                    <tr id="tr<%=h.getId()%>" <%= (h.getDurum() == 0 ? "style='background-color:darkKhaki;'" : "") %>>
                         <td nowrap><span><%= Util.getTarihEngShort(h.getEklemetarihi()) %></span></td>
-                        <td><input type="text" class="form-control small" value="<%= h.getKod() %>" id="liste_kod<%=h.getId()%>" autocomplete="off"></td>
-                        <td><input type="text" class="form-control" value="<%= StringEscapeUtils.escapeEcmaScript(h.getAd()) %>" id="liste_ad<%=h.getId()%>" autocomplete="off"></td>
-                        <td style="vertical-align: center;"><span><%= h.getBilesentipad() %></span><input type="hidden" id="liste_bilesentipid<%=h.getId()%>" value="<%=h.getBilesentipid()%>"/></td>
+                        <td><input type="text" class="form-control small" value="<%= h.getKod() %>"
+                                   id="liste_kod<%=h.getId()%>" autocomplete="off"></td>
+                        <td><input type="text" class="form-control"
+                                   value="<%= StringUtils.replace(h.getAd(), "'", "\"") %>" id="liste_ad<%=h.getId()%>"
+                                   autocomplete="off"></td>
+                        <td style="vertical-align: center;"><span><%= h.getBilesentipad() %></span><input type="hidden"
+                                                                                                          id="liste_bilesentipid<%=h.getId()%>"
+                                                                                                          value="<%=h.getBilesentipid()%>"/>
+                        </td>
                         <td>
                             <select class="form-control xs" name="liste_birimid" id="liste_birimid">
                                 <%
@@ -272,7 +284,7 @@
                             <select class="form-control" name="liste_firmaid" id="liste_firmaid">
                                 <%
                                     for (Firma f : firma) {
-                                        if (f.getId() == h.getFirmaid()) {
+                                        if (f.getId().intValue() == h.getFirmaid()) {
                                             out.println("<option value='" + f.getId() + "' selected>" + f.getAd() + "</option>");
                                         } else {
                                             out.println("<option value='" + f.getId() + "'>" + f.getAd() + "</option>");
@@ -286,16 +298,18 @@
                                 <%
                                     for (FiyatTip ft : FiyatTip.values()) {
                                         if (ft.value() == h.getFiyatId()) {
-                                            out.println("<option value='" + ft.value() + "' selected>" + ft.ad() + " ("+ ft.kod() +")</option>");
+                                            out.println("<option value='" + ft.value() + "' selected>" + ft.ad() + " (" + ft.kod() + ")</option>");
                                         } else {
-                                            out.println("<option value='" + ft.value() + "'>" + ft.ad() + " ("+ ft.kod() +")</option>");
+                                            out.println("<option value='" + ft.value() + "'>" + ft.ad() + " (" + ft.kod() + ")</option>");
                                         }
                                     }
                                 %>
                             </select>
                         </td>
-                        <td><input type="number" class="form-control xss" value="<%= h.getFiyat() %>" id="fiyat" autocomplete="off"></td>
-                        <td><input type="number" class="form-control xss" value="<%= h.getKritikesik() %>" id="kritikesik" autocomplete="off"></td>
+                        <td><input type="number" class="form-control xss" value="<%= h.getFiyat() %>" id="fiyat"
+                                   autocomplete="off"></td>
+                        <td><input type="number" class="form-control xss" value="<%= h.getKritikesik() %>"
+                                   id="kritikesik" autocomplete="off"></td>
                         <td>
                             <select class="form-control xss" name="liste_bilesendurum" id="liste_bilesendurum">
                                 <%
@@ -314,11 +328,13 @@
                         %>
                         <td>
                             <div id="div<%= h.getId() %>" class="text-center">
-                                <a href='javascript:updateHammaddeGo("hammadde", "<%=h.getId()%>", document.action_form<%=h.getId()%>,1);' title="Güncelle"><span class="fa fa-sync fa-lg text-warning"></span></a>
-                                <a href='javascript:deleteHammaddeGo("hammadde", "<%=h.getId()%>", document.action_form<%=h.getId()%>,3);' title="Sil"><span class="fa fa-minus-circle fa-lg text-danger"></span></a>
+                                <a href='javascript:updateHammaddeGo("hammadde", "<%=h.getId()%>", document.action_form<%=h.getId()%>,1);'
+                                   title="Güncelle"><span class="fa fa-sync fa-lg text-warning"></span></a>
+                                <a href='javascript:deleteHammaddeGo("hammadde", "<%=h.getId()%>", document.action_form<%=h.getId()%>,3);'
+                                   title="Sil"><span class="fa fa-minus-circle fa-lg text-danger"></span></a>
                             </div>
                         </td>
-                        <%  } %>
+                        <% } %>
                     </tr>
                 </form>
                 <% } %>

@@ -133,7 +133,7 @@
                                 <select id="liste_birimid" name="liste_birimid">
                                     <%
                                         for (BirimTip bt : BirimTip.values()) {
-                                            if (bt.value() == y.getBirimid()) {
+                                            if (bt.value().intValue() == y.getBirimid()) {
                                     %>
                                     <option value='<%=bt.value() %>' selected><%=bt.ad()%>
                                     </option>
@@ -153,7 +153,7 @@
                                 <select id="liste_firmaid" name="liste_firmaid">
                                     <%
                                         for (Firma f : firma) {
-                                            if (f.getId() == y.getFirmaid()) {
+                                            if (f.getId().intValue() == y.getFirmaid()) {
                                     %>
                                     <option value='<%=f.getId() %>' selected><%=f.getAd() %>
                                     </option>

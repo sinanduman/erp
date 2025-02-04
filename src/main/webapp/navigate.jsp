@@ -133,7 +133,7 @@
             </ul>
         </div>
 
-        <div class="btn-group" style="width:10px;"> </div>
+        <div class="btn-group" style="width:10px;"></div>
 
         <div class="btn-group">
             <button type="button" class="btn btn-info dropdown-toggle"
@@ -149,38 +149,49 @@
             </ul>
         </div>
 
-        <div class="btn-group" style="width:10px;"> </div>
+        <div class="btn-group" style="width:10px;"></div>
 
         <div class="btn-group">
             <ul class="nav nav-pills" role="tablist">
                 <% if (bakimBadge > 0) { %>
                 <li role="presentation" class="active" style="margin-right:2px;">
                     <form method='post' action='bakimrapor'>
-                        <button type="button" class="btn btn-danger" name="kalipbakim" id="kalipbakim" onclick='javascript:this.form.submit();'>Bakım <span class="badge badge-danger"><%= bakimBadge %></span></button>
+                        <button type="button" class="btn btn-danger" name="kalipbakim" id="kalipbakim"
+                                onclick='javascript:this.form.submit();'>Bakım <span
+                                class="badge badge-danger"><%= bakimBadge %></span></button>
                     </form>
                 </li>
                 <% } %>
 
                 <% if (hammaddeBadge > 0) { %>
                 <li role="presentation" class="active" style="margin-right:2px;">
-                    <form method='post' action='stokrapor'><input type='hidden' name='bilesentipid' value='1'><input type='hidden' value='1' name='azalan'><input type='hidden' value='1' name='raporgetirid'>
-                        <button type="button" class="btn btn-warning" name="hammaddeazalan" id="hammaddeazalan" onclick='javascript:this.form.submit();'>Hammadde <span class="badge badge-warning"><%= hammaddeBadge %></span></button>
+                    <form method='post' action='stokrapor'><input type='hidden' name='bilesentipid' value='1'><input
+                            type='hidden' value='1' name='azalan'><input type='hidden' value='1' name='raporgetirid'>
+                        <button type="button" class="btn btn-warning" name="hammaddeazalan" id="hammaddeazalan"
+                                onclick='javascript:this.form.submit();'>Hammadde <span
+                                class="badge badge-warning"><%= hammaddeBadge %></span></button>
                     </form>
                 </li>
                 <% } %>
 
                 <% if (yarimamulBadge > 0) { %>
                 <li role="presentation" class="active" style="margin-right:2px;">
-                    <form method='post' action='stokrapor'><input type='hidden' name='bilesentipid' value='2'><input type='hidden' value='1' name='azalan'><input type='hidden' value='1' name='raporgetirid'>
-                        <button type="button" class="btn btn-warning" name="yarimamulazalan" id="yarimamulazalan" onclick='javascript:this.form.submit();'>Yarımamül <span class="badge badge-warning"><%= yarimamulBadge %></span></button>
+                    <form method='post' action='stokrapor'><input type='hidden' name='bilesentipid' value='2'><input
+                            type='hidden' value='1' name='azalan'><input type='hidden' value='1' name='raporgetirid'>
+                        <button type="button" class="btn btn-warning" name="yarimamulazalan" id="yarimamulazalan"
+                                onclick='javascript:this.form.submit();'>Yarımamül <span
+                                class="badge badge-warning"><%= yarimamulBadge %></span></button>
                     </form>
                 </li>
                 <% } %>
 
                 <% if (mamulBadge > 0) { %>
                 <li role="presentation" class="active" style="margin-right:2px;">
-                    <form method='post' action='stokrapor'><input type='hidden' name='bilesentipid' value='3'><input type='hidden' value='1' name='azalan'><input type='hidden' value='1' name='raporgetirid'>
-                        <button type="button" class="btn btn-warning" name="mamulazalan" id="mamulazalan" onclick='javascript:this.form.submit();'>Mamül <span class="badge badge-warning"><%= mamulBadge %></span></button>
+                    <form method='post' action='stokrapor'><input type='hidden' name='bilesentipid' value='3'><input
+                            type='hidden' value='1' name='azalan'><input type='hidden' value='1' name='raporgetirid'>
+                        <button type="button" class="btn btn-warning" name="mamulazalan" id="mamulazalan"
+                                onclick='javascript:this.form.submit();'>Mamül <span
+                                class="badge badge-warning"><%= mamulBadge %></span></button>
                     </form>
                 </li>
                 <% } %>
