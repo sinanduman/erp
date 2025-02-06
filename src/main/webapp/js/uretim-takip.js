@@ -150,6 +150,11 @@ function uretimtakipsil(planid){
                     //$("#tr"+id).css("display","none");
                     $("#tr"+planid).css("display","none");
                     OK.show(planid + " No'lu Üretim Takibi SİLİNDİ" );
+
+                    //::sayfa yenilesin 3000ms sonra
+                    setTimeout(() => {
+                        window.location.href = "uretimtakip";
+                    }, 3000);
                 }
                 else{
                     Error.show( msg );
@@ -198,6 +203,11 @@ function uretimtakipok(planid){
                     OK.show( planid + " No'lu Üretim Takibi ONAYLANDI" );
                     $("#div"+planid).html("<span class='text-danger'><strong>onaylandı</strong></span>");
                     $("#uretimiptal").trigger( "click" );
+
+                    //::sayfa yenilesin 3000ms sonra
+                    setTimeout(() => {
+                        window.location.href = "uretimtakip";
+                    }, 3000);
                 }
                 else{
                     alert( msg );
