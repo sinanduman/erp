@@ -125,7 +125,7 @@ public class IrsaliyeDao implements Serializable, BaseDao {
         return retVal;
     }
 
-    public String irsaliyeBilesenGuncelle(int irsaliyeid, int irsaliyebilesenid, int mamulid, int gkrno, int miktar, String not) {
+    public String irsaliyeBilesenGuncelle(int irsaliyeid, int irsaliyebilesenid, int mamulid, long gkrno, int miktar, String not) {
         String retVal = "-1";
         String selectQuery = Fields.SELECT + BaseDao.F_IRSALIYEBILESEN_GUNCELLE + "(?,?,?,?,?,?,?)";
 
@@ -137,7 +137,7 @@ public class IrsaliyeDao implements Serializable, BaseDao {
             pstmt.setInt(1, irsaliyeid);
             pstmt.setInt(2, irsaliyebilesenid);
             pstmt.setInt(3, mamulid);
-            pstmt.setInt(4, gkrno);
+            pstmt.setLong(4, gkrno);
             pstmt.setInt(5, miktar);
             pstmt.setString(6, not);
             rs = pstmt.executeQuery();

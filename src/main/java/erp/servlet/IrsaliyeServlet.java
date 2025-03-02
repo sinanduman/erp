@@ -129,7 +129,7 @@ public class IrsaliyeServlet extends HttpServlet implements Serializable {
                     int irsaliyeid = Integer.parseInt(r_irsaliyeid);
                     int irsaliyebilesenid = Integer.parseInt(r_irsaliyebilesenid);
                     int mamulid = Integer.parseInt(r_mamulid);
-                    int gkrno = Integer.parseInt(r_gkrno);
+                    long gkrno = Long.parseLong(r_gkrno);
                     int miktar = Integer.parseInt(r_miktar);
                     String not = r_not;
 
