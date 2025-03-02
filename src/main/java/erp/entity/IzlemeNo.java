@@ -16,7 +16,7 @@ import java.util.Date;
 public class IzlemeNo implements Serializable {
     private Integer id;
     private Integer mamulid;
-    private Integer gkrno;
+    private Long gkrno;
     private Integer kullanildi;
     private Date kullanildi_tarih;
     private String mamulkod;
@@ -26,7 +26,7 @@ public class IzlemeNo implements Serializable {
     public IzlemeNo(ResultSet rs) throws SQLException {
         this.id = rs.getInt(Fields.ID);
         this.mamulid = rs.getInt(Fields.MAMULID);
-        this.gkrno = rs.getInt(Fields.GKRNO);
+        this.gkrno = rs.getLong(Fields.GKRNO);
         this.kullanildi = rs.getInt(Fields.KULLANILDI);
         this.kullanildi_tarih = rs.getDate(Fields.KULLANILDI_TARIH);
         this.mamulkod = rs.getString(Fields.KOD);
@@ -34,7 +34,7 @@ public class IzlemeNo implements Serializable {
         this.miktar = rs.getInt(Fields.MIKTAR);
     }
 
-    public IzlemeNo(Integer mamulid, Integer gkrno, Date kullanildi_tarih,
+    public IzlemeNo(Integer mamulid, Long gkrno, Date kullanildi_tarih,
                     String mamulkod, String mamulad, Integer miktar, Integer kullanildi) {
         this.gkrno = gkrno;
         this.mamulid = mamulid;

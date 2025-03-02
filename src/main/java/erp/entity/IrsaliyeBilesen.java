@@ -22,7 +22,7 @@ public class IrsaliyeBilesen implements Serializable {
     private Integer mamulid;
     private String mamulad;
     private String mamulkod;
-    private Integer gkrno;
+    private Long gkrno;
     private Integer stokid;
     private Integer miktar;
     private Timestamp olusturmatarihi;
@@ -39,7 +39,7 @@ public class IrsaliyeBilesen implements Serializable {
         this.mamulid = rs.getInt(Fields.MAMULID);
         this.mamulad = rs.getString(Fields.MAMULAD);
         this.mamulkod = rs.getString(Fields.MAMULKOD);
-        this.gkrno = rs.getInt(Fields.GKRNO);
+        this.gkrno = rs.getLong(Fields.GKRNO);
         this.stokid = rs.getInt(Fields.STOKID);
         this.miktar = rs.getInt(Fields.MIKTAR);
         this.olusturmatarihi = rs.getTimestamp("olusturmatarihi");

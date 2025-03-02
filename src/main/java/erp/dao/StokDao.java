@@ -39,7 +39,7 @@ public class StokDao implements Serializable, BaseDao {
         try (Connection conn = connectionManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(selectQuery)) {
             pstmt.setInt(1, Integer.parseInt(bilesenid));
-            pstmt.setInt(2, Integer.parseInt(gkrno));
+            pstmt.setLong(2, Long.parseLong(gkrno));
             long start = System.currentTimeMillis();
             rs = pstmt.executeQuery();
             logger.info(Constants.LOG_FORMAT, pstmt, (System.currentTimeMillis() - start));
@@ -81,9 +81,9 @@ public class StokDao implements Serializable, BaseDao {
             pstmt.setInt(2, Integer.parseInt(bilesenid));
             pstmt.setBigDecimal(3, BigDecimal.valueOf(Double.parseDouble(miktar)));
             if (gkrno != null)
-                pstmt.setInt(4, Integer.parseInt(gkrno));
+                pstmt.setLong(4, Long.parseLong(gkrno));
             else
-                pstmt.setNull(4, Types.INTEGER);
+                pstmt.setNull(4, Types.BIGINT);
             if (irsaliyeno != null)
                 pstmt.setString(5, irsaliyeno);
             else
@@ -122,9 +122,9 @@ public class StokDao implements Serializable, BaseDao {
             pstmt.setInt(2, Integer.parseInt(bilesenid));
             pstmt.setBigDecimal(3, BigDecimal.valueOf(Double.parseDouble(miktar)));
             if (gkrno != null)
-                pstmt.setInt(4, Integer.parseInt(gkrno));
+                pstmt.setLong(4, Long.parseLong(gkrno));
             else
-                pstmt.setNull(4, Types.INTEGER);
+                pstmt.setNull(4, Types.BIGINT);
             if (irsaliyeno != null)
                 pstmt.setString(5, irsaliyeno);
             else

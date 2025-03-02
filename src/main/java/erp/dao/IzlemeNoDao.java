@@ -49,7 +49,7 @@ public class IzlemeNoDao implements Serializable, BaseDao {
             while (rs.next()) {
                 temp.add(new IzlemeNo(
                         rs.getInt(Fields.ID),
-                        rs.getInt(Fields.GKRNO),
+                        rs.getLong(Fields.GKRNO),
                         rs.getDate(Fields.KULLANILDI_TARIH),
                         rs.getString(Fields.KOD),
                         rs.getString(Fields.AD),
@@ -92,7 +92,7 @@ public class IzlemeNoDao implements Serializable, BaseDao {
              PreparedStatement pstmt = conn.prepareStatement(updateQuery)) {
             long start = System.currentTimeMillis();
             pstmt.setInt(1, Integer.parseInt(mamulid));
-            pstmt.setInt(2, Integer.parseInt(gkrno));
+            pstmt.setLong(2, Long.parseLong(gkrno));
             pstmt.executeUpdate();
             logger.info(Constants.LOG_FORMAT, pstmt, (System.currentTimeMillis() - start));
             temp = izlemeNoKontrol(mamulid, kullanildi, null);
@@ -124,7 +124,7 @@ public class IzlemeNoDao implements Serializable, BaseDao {
             while (rs.next()) {
                 temp.add(new IzlemeNo(
                         rs.getInt(Fields.MAMULID),
-                        rs.getInt(Fields.GKRNO),
+                        rs.getLong(Fields.GKRNO),
                         rs.getDate(Fields.KULLANILDI_TARIH),
                         rs.getString(Fields.MAMULKOD),
                         rs.getString(Fields.MAMULAD),
