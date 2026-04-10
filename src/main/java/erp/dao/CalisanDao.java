@@ -31,7 +31,7 @@ public class CalisanDao implements Serializable, BaseDao {
         String searchQuery = Fields.SELECT + "*"
                 + Fields.FROM + BaseDao.CALISAN
                 + durumFilter
-                + Fields.ORDER_BY + "ad "
+                + Fields.ORDER_BY + "durum desc, soyad, ad "
                 + pageFilter;
 
         // connect to DB
