@@ -544,7 +544,7 @@
                                                 name='mamulbilesen_miktar<%= j.getBilesenid() %>'
                                                 id='mamulbilesen_miktar<%= j.getBilesenid() %>'>
                                             <%
-                                                for (int t = 1; t <= 10; t++) {
+                                                for (int t = 1; t <= 20; t++) {
                                                     if (j.getMiktar().intValue() == t) {
                                                         out.print("<option value='" + t + "' selected>" + t + "</option>");
                                                     } else {

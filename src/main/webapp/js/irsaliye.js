@@ -104,7 +104,7 @@ $("#gkrno").change(function(){
 
     let found = false;
     for (i in mamul) {
-        if($("#mamulkod").val() == mamul[i].mamulkod && (!found)){
+        if($("#mamulkod").val() == mamul[i].mamulkod.trim() && (!found)){
             found = true;
             let gkrno  = mamul[i].gkrno.split(";");
             let miktar = mamul[i].miktar.split(";");
@@ -131,8 +131,8 @@ function irsaliyepaketguncelle(sender,bilesenid){
     document.irsaliyeform.tarih.value				= paket[bilesenid].tarihtr;
     document.irsaliyeform.bilesenfirmaid.value		= paket[bilesenid].firmaid;
     document.irsaliyeform.bilesenfirmaad.value		= paket[bilesenid].firmaad;
-    document.irsaliyeform.mamulkod.value			= paket[bilesenid].mamulkod;
-    document.irsaliyeform.mamulad.value				= paket[bilesenid].mamulad;
+    document.irsaliyeform.mamulkod.value			= paket[bilesenid].mamulkod.trim();
+    document.irsaliyeform.mamulad.value				= paket[bilesenid].mamulad.trim();
     document.irsaliyeform.mamulid.value				= paket[bilesenid].mamulid;
     document.irsaliyeform.stokid.value				= paket[bilesenid].stokid;
     document.irsaliyeform.miktar.value				= paket[bilesenid].miktar;
@@ -146,7 +146,7 @@ function irsaliyepaketguncelle(sender,bilesenid){
     let found = false;
     $("#gkrno option").remove();
     for (i in mamul) {
-        if(paket[bilesenid].mamulkod == mamul[i].mamulkod){
+        if(paket[bilesenid].mamulkod.trim() == mamul[i].mamulkod.trim()){
             found = true;
             //console.log(mamul[i].mamulkod);
             let gkrno  = mamul[i].gkrno.split(";");

@@ -37,11 +37,11 @@ function changefunes(elem, id) {
                 continue;
             /* autocomplete alanina birden fazla alan ekler */
             var b = elem.value.split("[");
-            if (b[0].trim() === mamul[j].mamulkod) {
+            if (b[0].trim() === mamul[j].mamulkod.trim()) {
                 found = true;
-                $(mamulKodObje).val(mamul[j].mamulkod);
+                $(mamulKodObje).val(mamul[j].mamulkod.trim());
                 $(mamulIdObje).val(mamul[j].mamulid);
-                $(mamulAdObje).text(mamul[j].mamulad);
+                $(mamulAdObje).text(mamul[j].mamulad.trim());
             }
         }
     }
