@@ -293,7 +293,7 @@ public class IrsaliyeServlet extends HttpServlet implements Serializable {
                 while (cellIter.hasNext() && !emptyLine) {
                     XSSFCell myCell = (XSSFCell) cellIter.next();
 
-                    String cellValue = myCell.getCellType() == XSSFCell.CELL_TYPE_NUMERIC ? String.valueOf(myCell.getRawValue()) : myCell.getStringCellValue();
+                    String cellValue = myCell.getCellType() ==  CellType.NUMERIC ? String.valueOf(myCell.getRawValue()) : myCell.getStringCellValue();
                     switch (myCell.getColumnIndex()) {
                         case 1:
                             if (cellValue.trim().isEmpty()) {
